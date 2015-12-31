@@ -1,4 +1,4 @@
-import json, sublime
+import json, os, sublime
 from .. import utils
 
 
