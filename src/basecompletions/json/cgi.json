@@ -1,0 +1,401 @@
+{
+  "cgi.auth_password": {
+    "header": "CGI.AUTH_PASSWORD",
+    "description": "Sorry! No documentation is available for CGI.AUTH_PASSWORD",
+    "body": "",
+    "links": []
+  },
+  "cgi.auth_type": {
+    "header": "CGI.AUTH_TYPE",
+    "description": "If the server supports user authentication, and the script is protected, the protocol-specific authentication method used to validate the user.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.auth_user": {
+    "header": "CGI.AUTH_USER",
+    "description": "Sorry! No documentation is available for CGI.AUTH_USER",
+    "body": "",
+    "links": []
+  },
+  "cgi.cert_cookie": {
+    "header": "CGI.CERT_COOKIE",
+    "description": "Sorry! No documentation is available for CGI.CERT_COOKIE",
+    "body": "",
+    "links": []
+  },
+  "cgi.cert_flags": {
+    "header": "CGI.CERT_FLAGS",
+    "description": "Sorry! No documentation is available for CGI.CERT_FLAGS",
+    "body": "",
+    "links": []
+  },
+  "cgi.cert_issuer": {
+    "header": "CGI.CERT_ISSUER",
+    "description": "Information about the authority that provided the client certificate, for example:O = \"VeriSign, Inc.\", OU = VeriSign Trust Network, OU = \"www.verisign.com/repository/RPA Incorp. By Ref.,LIAB.LTD(c)98\", CN = VeriSign Class 1 CA Individual Subscriber-Persona Not Validated",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-client-certificate-variables.html",
+        "text": "helpx.adobe.com cgi-client-certificate-variables.html"
+      }
+    ]
+  },
+  "cgi.cert_keysize": {
+    "header": "CGI.CERT_KEYSIZE",
+    "description": "Sorry! No documentation is available for CGI.CERT_KEYSIZE",
+    "body": "",
+    "links": []
+  },
+  "cgi.cert_secretkeysize": {
+    "header": "CGI.CERT_SECRETKEYSIZE",
+    "description": "Sorry! No documentation is available for CGI.CERT_SECRETKEYSIZE",
+    "body": "",
+    "links": []
+  },
+  "cgi.cert_serialnumber": {
+    "header": "CGI.CERT_SERIALNUMBER",
+    "description": "Sorry! No documentation is available for CGI.CERT_SERIALNUMBER",
+    "body": "",
+    "links": []
+  },
+  "cgi.cert_server_issuer": {
+    "header": "CGI.CERT_SERVER_ISSUER",
+    "description": "Sorry! No documentation is available for CGI.CERT_SERVER_ISSUER",
+    "body": "",
+    "links": []
+  },
+  "cgi.cert_server_subject": {
+    "header": "CGI.CERT_SERVER_SUBJECT",
+    "description": "Sorry! No documentation is available for CGI.CERT_SERVER_SUBJECT",
+    "body": "",
+    "links": []
+  },
+  "cgi.cert_subject": {
+    "header": "CGI.CERT_SUBJECT",
+    "description": "Client-specific information provided by the web server. This data typically includes the client's name, e-mail address, and so on, for example:O = \"VeriSign, Inc.\", OU = VeriSign Trust Network, OU = \"www.verisign.com/repository/RPA Incorp. by Ref.,LIAB.LTD(c)98\", OU = Persona Not Validated, OU = Digital ID Class 1 - Microsoft, CN = Matthew Lund, E = mlund@.com",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-client-certificate-variables.html",
+        "text": "helpx.adobe.com cgi-client-certificate-variables.html"
+      }
+    ]
+  },
+  "cgi.cf_template_path": {
+    "header": "CGI.CF_TEMPLATE_PATH",
+    "description": "Sorry! No documentation is available for CGI.CF_TEMPLATE_PATH",
+    "body": "",
+    "links": []
+  },
+  "cgi.content_length": {
+    "header": "CGI.CONTENT_LENGTH",
+    "description": "Length of the content as given by the client.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.content_type": {
+    "header": "CGI.CONTENT_TYPE",
+    "description": "For queries that have attached information, such as HTTP POST and PUT, this is the content type of the data.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.context_path": {
+    "header": "CGI.CONTEXT_PATH",
+    "description": "Sorry! No documentation is available for CGI.CONTEXT_PATH",
+    "body": "",
+    "links": []
+  },
+  "cgi.gateway_interface": {
+    "header": "CGI.GATEWAY_INTERFACE",
+    "description": "CGI specification revision with which this server complies. Format: CGI/revision.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.http_accept": {
+    "header": "CGI.HTTP_ACCEPT",
+    "description": "Sorry! No documentation is available for CGI.HTTP_ACCEPT",
+    "body": "",
+    "links": []
+  },
+  "cgi.http_accept_encoding": {
+    "header": "CGI.HTTP_ACCEPT_ENCODING",
+    "description": "Sorry! No documentation is available for CGI.HTTP_ACCEPT_ENCODING",
+    "body": "",
+    "links": []
+  },
+  "cgi.http_accept_language": {
+    "header": "CGI.HTTP_ACCEPT_LANGUAGE",
+    "description": "Sorry! No documentation is available for CGI.HTTP_ACCEPT_LANGUAGE",
+    "body": "",
+    "links": []
+  },
+  "cgi.http_connection": {
+    "header": "CGI.HTTP_CONNECTION",
+    "description": "Sorry! No documentation is available for CGI.HTTP_CONNECTION",
+    "body": "",
+    "links": []
+  },
+  "cgi.http_cookie": {
+    "header": "CGI.HTTP_COOKIE",
+    "description": "Sorry! No documentation is available for CGI.HTTP_COOKIE",
+    "body": "",
+    "links": []
+  },
+  "cgi.http_host": {
+    "header": "CGI.HTTP_HOST",
+    "description": "Sorry! No documentation is available for CGI.HTTP_HOST",
+    "body": "",
+    "links": []
+  },
+  "cgi.http_if_modified_since": {
+    "header": "CGI.HTTP_IF_MODIFIED_SINCE",
+    "description": "The last time the page was modified. The browser determines whether to set this variable, usually in response to the server having sent the LAST_MODIFIED HTTP header. It can be used to take advantage of browser-side caching.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-client-variables.html",
+        "text": "helpx.adobe.com cgi-client-variables.html"
+      }
+    ]
+  },
+  "cgi.http_referer": {
+    "header": "CGI.HTTP_REFERER",
+    "description": "The referring document that linked to or submitted form data.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-client-variables.html",
+        "text": "helpx.adobe.com cgi-client-variables.html"
+      }
+    ]
+  },
+  "cgi.http_user_agent": {
+    "header": "CGI.HTTP_USER_AGENT",
+    "description": "The browser that the client is currently using to send the request. Format: software/version library/version.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-client-variables.html",
+        "text": "helpx.adobe.com cgi-client-variables.html"
+      }
+    ]
+  },
+  "cgi.https": {
+    "header": "CGI.HTTPS",
+    "description": "Sorry! No documentation is available for CGI.HTTPS",
+    "body": "",
+    "links": []
+  },
+  "cgi.https_keysize": {
+    "header": "CGI.HTTPS_KEYSIZE",
+    "description": "Sorry! No documentation is available for CGI.HTTPS_KEYSIZE",
+    "body": "",
+    "links": []
+  },
+  "cgi.https_secretkeysize": {
+    "header": "CGI.HTTPS_SECRETKEYSIZE",
+    "description": "Sorry! No documentation is available for CGI.HTTPS_SECRETKEYSIZE",
+    "body": "",
+    "links": []
+  },
+  "cgi.https_server_issuer": {
+    "header": "CGI.HTTPS_SERVER_ISSUER",
+    "description": "Sorry! No documentation is available for CGI.HTTPS_SERVER_ISSUER",
+    "body": "",
+    "links": []
+  },
+  "cgi.https_server_subject": {
+    "header": "CGI.HTTPS_SERVER_SUBJECT",
+    "description": "Sorry! No documentation is available for CGI.HTTPS_SERVER_SUBJECT",
+    "body": "",
+    "links": []
+  },
+  "cgi.local_addr": {
+    "header": "CGI.LOCAL_ADDR",
+    "description": "Sorry! No documentation is available for CGI.LOCAL_ADDR",
+    "body": "",
+    "links": []
+  },
+  "cgi.local_host": {
+    "header": "CGI.LOCAL_HOST",
+    "description": "Sorry! No documentation is available for CGI.LOCAL_HOST",
+    "body": "",
+    "links": []
+  },
+  "cgi.path_info": {
+    "header": "CGI.PATH_INFO",
+    "description": "Extra path information, as given by the client. Scripts can be accessed by their virtual pathname, followed by extra information at the end of this path. The extra information is sent as PATH_INFO.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.path_translated": {
+    "header": "CGI.PATH_TRANSLATED",
+    "description": "Translated version of PATH_INFO after any virtual-to-physical mapping.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.query_string": {
+    "header": "CGI.QUERY_STRING",
+    "description": "Query information that follows the ? in the URL that referenced this script.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.remote_addr": {
+    "header": "CGI.REMOTE_ADDR",
+    "description": "IP address of the remote host making the request.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.remote_host": {
+    "header": "CGI.REMOTE_HOST",
+    "description": "Hostname making the request. If the server does not have this information, it sets REMOTE_ADDR and does not set REMOTE_HOST.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.remote_ident": {
+    "header": "CGI.REMOTE_IDENT",
+    "description": "If the HTTP server supports RFC 931 identification, this variable is set to the remote username retrieved from the server. Use this variable for logging only.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.remote_user": {
+    "header": "CGI.REMOTE_USER",
+    "description": "Sorry! No documentation is available for CGI.REMOTE_USER",
+    "body": "",
+    "links": []
+  },
+  "cgi.request_method": {
+    "header": "CGI.REQUEST_METHOD",
+    "description": "Method with which the request was made. For HTTP, this is Get, Head, Post, and so on.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.request_url": {
+    "header": "CGI.REQUEST_URL",
+    "description": "Sorry! No documentation is available for CGI.REQUEST_URL",
+    "body": "",
+    "links": []
+  },
+  "cgi.script_name": {
+    "header": "CGI.SCRIPT_NAME",
+    "description": "Virtual path to the script that is executing; used for self-referencing URLs.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.server_name": {
+    "header": "CGI.SERVER_NAME",
+    "description": "Server's hostname, DNS alias, or IP address as it appears in self-referencing URLs.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.server_port": {
+    "header": "CGI.SERVER_PORT",
+    "description": "Port number to which the request was sent.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.server_port_secure": {
+    "header": "CGI.SERVER_PORT_SECURE",
+    "description": "Sorry! No documentation is available for CGI.SERVER_PORT_SECURE",
+    "body": "",
+    "links": []
+  },
+  "cgi.server_protocol": {
+    "header": "CGI.SERVER_PROTOCOL",
+    "description": "Name and revision of the information protocol this request came in with. Format: protocol/revision.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.server_software": {
+    "header": "CGI.SERVER_SOFTWARE",
+    "description": "Name and version of the information server software answering the request (and running the gateway). Format: name/version.",
+    "body": "",
+    "links": [
+      {
+        "href": "https://helpx.adobe.com/coldfusion/cfml-reference/reserved-words-and-variables/cgi-environment-cgi-scope-variables/cgi-server-variables.html",
+        "text": "helpx.adobe.com cgi-server-variables.html"
+      }
+    ]
+  },
+  "cgi.web_server_api": {
+    "header": "CGI.WEB_SERVER_API",
+    "description": "Sorry! No documentation is available for CGI.WEB_SERVER_API",
+    "body": "",
+    "links": []
+  }
+}

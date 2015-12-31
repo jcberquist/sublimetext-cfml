@@ -1,0 +1,7 @@
+{
+	"auto_complete_triggers": [
+		{"selector": "source.cfml.script - string", "characters": "."},
+		{"selector": "meta.tag.cfml - string - source.cfml.script", "characters": " "},
+		{"selector": "meta.tag.script.cfml - string", "characters": " "}
+	]
+}

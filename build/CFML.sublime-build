@@ -1,0 +1,24 @@
+{
+	"cmd": ["box", "$file_name"],
+	"selector": "embedding.cfml",
+
+	"variants":
+	[
+		{
+			"name": "TestBox: Run Project Tests",
+			"target": "testbox",
+			"test_type": "project"
+		},
+		{
+			"name": "TestBox: Run Directory Tests",
+			"target": "testbox",
+			"test_type": "directory"
+		},
+		{
+			"name": "TestBox: Run Tests",
+			"target": "testbox",
+			"test_type": "cfc"
+		}
+
+	]
+}

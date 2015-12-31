@@ -1,0 +1,1119 @@
+{
+  "assertion": {
+    "assert": {
+      "header": "testbox.system.Assertion.assert():any",
+      "description": "Assert that the passed expression is true",
+      "body": "<ul><li>required <em>boolean</em> <strong>expression</strong><br>The expression to test</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "between": {
+      "header": "testbox.system.Assertion.between():any",
+      "description": "Assert that the passed in actual number or date is between the passed in min and max values",
+      "body": "<ul><li>required <em>any</em> <strong>actual</strong><br>The actual number or date to evaluate</li><li>required <em>any</em> <strong>min</strong><br>The expected min number or date</li><li>required <em>any</em> <strong>max</strong><br>The expected max number or date</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "closeto": {
+      "header": "testbox.system.Assertion.closeTo():any",
+      "description": "Assert that the passed in actual number or date is expected to be close to it within +/- a passed delta and optional datepart",
+      "body": "<ul><li>required <em>any</em> <strong>expected</strong><br>The expected number or date</li><li>required <em>any</em> <strong>actual</strong><br>The actual number or date</li><li>required <em>any</em> <strong>delta</strong><br>The +/- delta to range it</li><li><em>any</em> <strong>datePart</strong><br>If passed in values are dates, then you can use the datepart to evaluate it</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "deepkey": {
+      "header": "testbox.system.Assertion.deepKey():any",
+      "description": "Assert that a given key exists in the passed in struct by searching the entire nested structure",
+      "body": "<ul><li>required <em>struct</em> <strong>target</strong><br>The target object/struct</li><li>required <em>string</em> <strong>key</strong><br>The key to check for existence anywhere in the nested structure</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "fail": {
+      "header": "testbox.system.Assertion.fail():any",
+      "description": "Fail assertion",
+      "body": "<ul><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "getstringname": {
+      "header": "testbox.system.Assertion.getStringName():any",
+      "description": "Get a string name representation of an incoming object.",
+      "body": "<ul><li>required <em>any</em> <strong>obj</strong></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "includes": {
+      "header": "testbox.system.Assertion.includes():any",
+      "description": "Assert that the given \"needle\" argument exists in the incoming string or array with no case-sensitivity",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target object to check if the incoming needle exists in. This can be a string or array</li><li>required <em>any</em> <strong>needle</strong><br>The substring to find in a string or the value to find in an array</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "includeswithcase": {
+      "header": "testbox.system.Assertion.includesWithCase():any",
+      "description": "Assert that the given \"needle\" argument exists in the incoming string or array with case-sensitivity",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target object to check if the incoming needle exists in. This can be a string or array</li><li>required <em>any</em> <strong>needle</strong><br>The substring to find in a string or the value to find in an array</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "instanceof": {
+      "header": "testbox.system.Assertion.instanceOf():any",
+      "description": "Assert that the actual object is of the expected instance type",
+      "body": "<ul><li>required <em>any</em> <strong>actual</strong><br>The actual data to check</li><li>required <em>string</em> <strong>typeName</strong><br>The typename to check</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "isempty": {
+      "header": "testbox.system.Assertion.isEmpty():any",
+      "description": "Assert that a a given string, array, structure or query is empty",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target object to check the length for, this can be a string, array, structure or query</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "isequal": {
+      "header": "testbox.system.Assertion.isEqual():any",
+      "description": "Assert something is equal to each other, no case is required",
+      "body": "<ul><li>required <em>any</em> <strong>expected</strong><br>The expected data</li><li>required <em>any</em> <strong>actual</strong><br>The actual data to test</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "isequalwithcase": {
+      "header": "testbox.system.Assertion.isEqualWithCase():any",
+      "description": "Assert strings are equal to each other with case.",
+      "body": "<ul><li>required <em>string</em> <strong>expected</strong><br>The expected data</li><li>required <em>string</em> <strong>actual</strong><br>The actual data to test</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "isfalse": {
+      "header": "testbox.system.Assertion.isFalse():any",
+      "description": "Assert something is false",
+      "body": "<ul><li>required <em>boolean</em> <strong>actual</strong><br>The actual data to test</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "isgt": {
+      "header": "testbox.system.Assertion.isGT():any",
+      "description": "Assert that the actual value is greater than the target value",
+      "body": "<ul><li>required <em>any</em> <strong>actual</strong><br>The actual value</li><li>required <em>any</em> <strong>target</strong><br>The target value</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "isgte": {
+      "header": "testbox.system.Assertion.isGTE():any",
+      "description": "Assert that the actual value is greater than or equal the target value",
+      "body": "<ul><li>required <em>any</em> <strong>actual</strong><br>The actual value</li><li>required <em>any</em> <strong>target</strong><br>The target value</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "islt": {
+      "header": "testbox.system.Assertion.isLT():any",
+      "description": "Assert that the actual value is less than the target value",
+      "body": "<ul><li>required <em>any</em> <strong>actual</strong><br>The actual value</li><li>required <em>any</em> <strong>target</strong><br>The target value</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "islte": {
+      "header": "testbox.system.Assertion.isLTE():any",
+      "description": "Assert that the actual value is less than or equal the target value",
+      "body": "<ul><li>required <em>any</em> <strong>actual</strong><br>The actual value</li><li>required <em>any</em> <strong>target</strong><br>The target value</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "isnotempty": {
+      "header": "testbox.system.Assertion.isNotEmpty():any",
+      "description": "Assert that a a given string, array, structure or query is not empty",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target object to check the length for, this can be a string, array, structure or query</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "isnotequal": {
+      "header": "testbox.system.Assertion.isNotEqual():any",
+      "description": "Assert something is not equal to each other, no case is required",
+      "body": "<ul><li>required <em>any</em> <strong>expected</strong><br>The expected data</li><li>required <em>any</em> <strong>actual</strong><br>The actual data to test</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "isnotsameinstance": {
+      "header": "testbox.system.Assertion.isNotSameInstance():any",
+      "description": "Assert an object is not the same instance as another object",
+      "body": "<ul><li>required <em>any</em> <strong>expected</strong><br>The expected data</li><li>required <em>any</em> <strong>actual</strong><br>The actual data to test</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "issameinstance": {
+      "header": "testbox.system.Assertion.isSameInstance():any",
+      "description": "Assert an object is the same instance as another object",
+      "body": "<ul><li>required <em>any</em> <strong>expected</strong><br>The expected data</li><li>required <em>any</em> <strong>actual</strong><br>The actual data to test</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "istrue": {
+      "header": "testbox.system.Assertion.isTrue():any",
+      "description": "Assert something is true",
+      "body": "<ul><li>required <em>boolean</em> <strong>actual</strong><br>The actual data to test</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "key": {
+      "header": "testbox.system.Assertion.key():any",
+      "description": "Assert that a given key exists in the passed in struct/object",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target object/struct</li><li>required <em>string</em> <strong>key</strong><br>The key to check for existence</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "lengthof": {
+      "header": "testbox.system.Assertion.lengthOf():any",
+      "description": "Assert the size of a given string, array, structure or query",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target object to check the length for, this can be a string, array, structure or query</li><li>required <em>string</em> <strong>length</strong><br>The length to check</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "match": {
+      "header": "testbox.system.Assertion.match():any",
+      "description": "Assert that the actual data matches the incoming regular expression with no case sensitivity",
+      "body": "<ul><li>required <em>string</em> <strong>actual</strong><br>The actual data to check</li><li>required <em>string</em> <strong>regex</strong><br>The regex to check with</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "matchwithcase": {
+      "header": "testbox.system.Assertion.matchWithCase():any",
+      "description": "Assert that the actual data matches the incoming regular expression with case sensitivity",
+      "body": "<ul><li>required <em>string</em> <strong>actual</strong><br>The actual data to check</li><li>required <em>string</em> <strong>regex</strong><br>The regex to check with</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "notdeepkey": {
+      "header": "testbox.system.Assertion.notDeepKey():any",
+      "description": "Assert that a given key DOES NOT exists in the passed in struct by searching the entire nested structure",
+      "body": "<ul><li>required <em>struct</em> <strong>target</strong><br>The target object/struct</li><li>required <em>string</em> <strong>key</strong><br>The key to check for existence anywhere in the nested structure</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "notincludes": {
+      "header": "testbox.system.Assertion.notIncludes():any",
+      "description": "Assert that the given \"needle\" argument exists in the incoming string or array with no case-sensitivity",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target object to check if the incoming needle exists in. This can be a string or array</li><li>required <em>any</em> <strong>needle</strong><br>The substring to find in a string or the value to find in an array</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "notincludeswithcase": {
+      "header": "testbox.system.Assertion.notIncludesWithCase():any",
+      "description": "Assert that the given \"needle\" argument does not exist in the incoming string or array with case-sensitivity",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target object to check if the incoming needle exists in. This can be a string or array</li><li>required <em>any</em> <strong>needle</strong><br>The substring to find in a string or the value to find in an array</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "notinstanceof": {
+      "header": "testbox.system.Assertion.notInstanceOf():any",
+      "description": "Assert that the actual object is NOT of the expected instance type",
+      "body": "<ul><li>required <em>any</em> <strong>actual</strong><br>The actual data to check</li><li>required <em>string</em> <strong>typeName</strong><br>The typename to check</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "notkey": {
+      "header": "testbox.system.Assertion.notKey():any",
+      "description": "Assert that a given key DOES NOT exist in the passed in struct/object",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target object/struct</li><li>required <em>string</em> <strong>key</strong><br>The key to check for existence</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "notlengthof": {
+      "header": "testbox.system.Assertion.notLengthOf():any",
+      "description": "Assert the size of a given string, array, structure or query",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target object to check the length for, this can be a string, array, structure or query</li><li>required <em>string</em> <strong>length</strong><br>The length to check</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "notmatch": {
+      "header": "testbox.system.Assertion.notMatch():any",
+      "description": "Assert that the actual data does NOT match the incoming regular expression with no case sensitivity",
+      "body": "<ul><li>required <em>string</em> <strong>actual</strong><br>The actual data to check</li><li>required <em>string</em> <strong>regex</strong><br>The regex to check with</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "notnull": {
+      "header": "testbox.system.Assertion.notNull():any",
+      "description": "Assert something is not null",
+      "body": "<ul><li><em>any</em> <strong>actual</strong><br>The actual data to test</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "notthrows": {
+      "header": "testbox.system.Assertion.notThrows():any",
+      "description": "Assert that the passed in function will NOT throw an exception, an exception of a specified type or exception message regex",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target function to execute and check for exceptions</li><li><em>any</em> <strong>type</strong><br>Match this type with the exception thrown</li><li><em>any</em> <strong>regex</strong><br>Match this regex against the message+detail of the exception</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "nottypeof": {
+      "header": "testbox.system.Assertion.notTypeOf():any",
+      "description": "Assert that is NOT a type of the incoming actual data, it uses the internal ColdFusion isValid() function behind the scenes",
+      "body": "<ul><li>required <em>string</em> <strong>type</strong><br>The type to check, valid types are: array, binary, boolean, component, date, time, float, numeric, integer, query, string, struct, url, uuid</li><li>required <em>any</em> <strong>actual</strong><br>The actual data to check</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "null": {
+      "header": "testbox.system.Assertion.null():any",
+      "description": "Assert something is null",
+      "body": "<ul><li><em>any</em> <strong>actual</strong><br>The actual data to test</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "throws": {
+      "header": "testbox.system.Assertion.throws():any",
+      "description": "Assert that the passed in function will throw an exception",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target function to execute and check for exceptions</li><li><em>any</em> <strong>type</strong><br>Match this type with the exception thrown</li><li><em>any</em> <strong>regex</strong><br>Match this regex against the message + detail of the exception</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "typeof": {
+      "header": "testbox.system.Assertion.typeOf():any",
+      "description": "Assert the type of the incoming actual data, it uses the internal ColdFusion isValid() function behind the scenes",
+      "body": "<ul><li>required <em>string</em> <strong>type</strong><br>The type to check, valid types are: array, binary, boolean, component, date, time, float, numeric, integer, query, string, struct, url, uuid</li><li>required <em>any</em> <strong>actual</strong><br>The actual data to check</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    }
+  },
+  "basespec": {
+    "addassertions": {
+      "header": "testbox.system.BaseSpec.addAssertions():any",
+      "description": "Add custom assertions to the $assert object",
+      "body": "<ul><li>required <em>any</em> <strong>assertions</strong><br>The structure of custom assertion functions to register or a path or instance of a CFC containing all the assertion functions to register</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "addmatchers": {
+      "header": "testbox.system.BaseSpec.addMatchers():any",
+      "description": "Add custom matchers to your expectations",
+      "body": "<ul><li>required <em>any</em> <strong>matchers</strong><br>The structure of custom matcher functions to register or a path or instance of a CFC containing all the matcher functions to register</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "aftereach": {
+      "header": "testbox.system.BaseSpec.afterEach():any",
+      "description": "This function is used for BDD test suites to store the afterEach() function to execute for a test suite group",
+      "body": "<ul><li>required <em>any</em> <strong>body</strong><br>The closure function</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "aroundeach": {
+      "header": "testbox.system.BaseSpec.aroundEach():any",
+      "description": "This is used to surround a spec with your own closure code to provide a nice around decoration advice",
+      "body": "<ul><li>required <em>any</em> <strong>body</strong><br>The closure function</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "assert": {
+      "header": "testbox.system.BaseSpec.assert():any",
+      "description": "Assert that the passed expression is true",
+      "body": "<ul><li>required <em>any</em> <strong>expression</strong></li><li><em>any</em> <strong>message</strong></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "beforeeach": {
+      "header": "testbox.system.BaseSpec.beforeEach():any",
+      "description": "This function is used for BDD test suites to store the beforeEach() function to execute for a test suite group",
+      "body": "<ul><li>required <em>any</em> <strong>body</strong><br>The closure function</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "cleardebugbuffer": {
+      "header": "testbox.system.BaseSpec.clearDebugBuffer():any",
+      "description": "Clear the debug array buffer",
+      "body": "<ul><li></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "console": {
+      "header": "testbox.system.BaseSpec.console():any",
+      "description": "Send some information to the console via writedump( output=\"console\" )",
+      "body": "<ul><li>required <em>any</em> <strong>var</strong><br>The data to send</li><li><em>any</em> <strong>top</strong><br>Apply a top to the dump, by default it does 9999 levels</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "createemptymock": {
+      "header": "testbox.system.BaseSpec.createEmptyMock():any",
+      "description": "Create an empty mock",
+      "body": "<ul><li><em>string</em> <strong>className</strong><br>The class name of the object to mock. The mock factory will instantiate it for you</li><li><em>any</em> <strong>object</strong><br>The object to mock, already instantiated</li><li><em>boolean</em> <strong>callLogging</strong><br>Add method call logging for all mocked methods. Defaults to true</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "createmock": {
+      "header": "testbox.system.BaseSpec.createMock():any",
+      "description": "Create a mock with or without clearing implementations, usually not clearing means you want to build object spies",
+      "body": "<ul><li><em>string</em> <strong>className</strong><br>The class name of the object to mock. The mock factory will instantiate it for you</li><li><em>any</em> <strong>object</strong><br>The object to mock, already instantiated</li><li><em>boolean</em> <strong>clearMethods</strong><br>If true, all methods in the target mock object will be removed. You can then mock only the methods that you want to mock. Defaults to false</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "createstub": {
+      "header": "testbox.system.BaseSpec.createStub():any",
+      "description": "Create an empty stub object that you can use for mocking",
+      "body": "<ul><li><em>boolean</em> <strong>callLogging</strong><br>Add method call logging for all mocked methods. Defaults to true</li><li><em>string</em> <strong>extends</strong><br>Make the stub extend from certain CFC</li><li><em>string</em> <strong>implements</strong><br>Make the stub adhere to an interface</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "debug": {
+      "header": "testbox.system.BaseSpec.debug():any",
+      "description": "Debug some information into the TestBox debugger array buffer",
+      "body": "<ul><li><em>any</em> <strong>var</strong><br>The data to debug</li><li><em>string</em> <strong>label</strong><br>The label to add to the debug entry</li><li><em>boolean</em> <strong>deepCopy</strong><br>By default we do not duplicate the incoming information, but you can :)</li><li><em>numeric</em> <strong>top</strong><br>The top numeric number to dump on the screen in the report, defaults to 999</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "describe": {
+      "header": "testbox.system.BaseSpec.describe():any",
+      "description": "The way to describe BDD test suites in TestBox. The title is usually what you are testing or grouping of tests.\r\nThe body is the function that implements the suite.",
+      "body": "<ul><li>required <em>string</em> <strong>title</strong><br>The name of this test suite</li><li>required <em>any</em> <strong>body</strong><br>The closure that represents the test suite</li><li><em>any</em> <strong>labels</strong><br>The list or array of labels this suite group belongs to</li><li><em>boolean</em> <strong>asyncAll</strong><br>If you want to parallelize the execution of the defined specs in this suite group.</li><li><em>any</em> <strong>skip</strong><br>A flag or a closure that tells TestBox to skip this suite group from testing if true. If this is a closure it must return boolean.</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "expect": {
+      "header": "testbox.system.BaseSpec.expect():Expectation",
+      "description": "Start an expectation expression. This returns an instance of Expectation so you can work with its matchers.",
+      "body": "<ul><li><em>any</em> <strong>actual</strong><br>The actual value, it is not required as it can be null.</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "expectedexception": {
+      "header": "testbox.system.BaseSpec.expectedException():any",
+      "description": "Expect an exception from the testing spec",
+      "body": "<ul><li><em>any</em> <strong>type</strong><br>The type to expect</li><li><em>any</em> <strong>regex</strong><br>Optional exception message regular expression to match, by default it matches .*</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "fail": {
+      "header": "testbox.system.BaseSpec.fail():any",
+      "description": "Fail an assertion",
+      "body": "<ul><li><em>any</em> <strong>message</strong></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "feature": {
+      "header": "testbox.system.BaseSpec.feature():any",
+      "description": "The way to describe BDD test suites in TestBox. The feature is an alias for describe usually use when you are writing in a Given-When-Then style\r\nThe body is the function that implements the suite.",
+      "body": "<ul><li>required <em>string</em> <strong>feature</strong><br>The name of this test suite</li><li>required <em>any</em> <strong>body</strong><br>The closure that represents the test suite</li><li><em>any</em> <strong>labels</strong><br>The list or array of labels this suite group belongs to</li><li><em>boolean</em> <strong>asyncAll</strong><br>If you want to parallelize the execution of the defined specs in this suite group.</li><li><em>any</em> <strong>skip</strong><br>A flag or a closure that tells TestBox to skip this suite group from testing if true. If this is a closure it must return boolean.</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "getdebugbuffer": {
+      "header": "testbox.system.BaseSpec.getDebugBuffer():array",
+      "description": "Get the debug array buffer from scope",
+      "body": "<ul><li></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "getmockbox": {
+      "header": "testbox.system.BaseSpec.getMockBox():any",
+      "description": "Get a reference to the MockBox engine",
+      "body": "<ul><li><em>string</em> <strong>generationPath</strong><br>The path to generate the mocks if passed, else uses default location.</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "getproperty": {
+      "header": "testbox.system.BaseSpec.getProperty():any",
+      "description": "Get a private property",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target to get a property from</li><li>required <em>any</em> <strong>name</strong><br>The name of the property to retrieve</li><li><em>any</em> <strong>scope</strong><br>The scope to get it from, defaults to 'variables' scope</li><li><em>any</em> <strong>defaultValue</strong><br>A default value if the property does not exist</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "given": {
+      "header": "testbox.system.BaseSpec.given():any",
+      "description": "The way to describe BDD test suites in TestBox. The given is an alias for describe usually use when you are writing in a Given-When-Then style\r\nThe body is the function that implements the suite.",
+      "body": "<ul><li>required <em>string</em> <strong>given</strong></li><li>required <em>any</em> <strong>body</strong><br>The closure that represents the test suite</li><li><em>any</em> <strong>labels</strong><br>The list or array of labels this suite group belongs to</li><li><em>boolean</em> <strong>asyncAll</strong><br>If you want to parallelize the execution of the defined specs in this suite group.</li><li><em>any</em> <strong>skip</strong><br>A flag or a closure that tells TestBox to skip this suite group from testing if true. If this is a closure it must return boolean.</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "hasexpectedexception": {
+      "header": "testbox.system.BaseSpec.hasExpectedException():boolean",
+      "description": "Check if an expected exception is defined",
+      "body": "<ul><li>required <em>any</em> <strong>specName</strong></li><li>required <em>any</em> <strong>runner</strong></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "isexpectedexception": {
+      "header": "testbox.system.BaseSpec.isExpectedException():boolean",
+      "description": "Check if the incoming exception is expected or not.",
+      "body": "<ul><li>required <em>any</em> <strong>exception</strong></li><li>required <em>any</em> <strong>specName</strong></li><li>required <em>any</em> <strong>runner</strong></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "it": {
+      "header": "testbox.system.BaseSpec.it():any",
+      "description": "The it() function describes a spec or a test in TestBox.  The body argument is the closure that implements\r\nthe test which usually contains one or more expectations that test the state of the code under test.",
+      "body": "<ul><li>required <em>string</em> <strong>title</strong><br>The title of this spec</li><li>required <em>any</em> <strong>body</strong><br>The closure that represents the test</li><li><em>any</em> <strong>labels</strong><br>The list or array of labels this spec belongs to</li><li><em>any</em> <strong>skip</strong><br>A flag or a closure that tells TestBox to skip this spec test from testing if true. If this is a closure it must return boolean.</li><li><em>struct</em> <strong>data</strong><br>A struct of data you would like to bind into the spec so it can be later passed into the executing body function</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "makepublic": {
+      "header": "testbox.system.BaseSpec.makePublic():any",
+      "description": "Make a private method on a CFC public with or without a new name and returns the target object",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target object to expose the method</li><li>required <em>string</em> <strong>method</strong><br>The private method to expose</li><li><em>string</em> <strong>newName</strong><br>If passed, it will expose the method with this name, else just uses the same name</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "preparemock": {
+      "header": "testbox.system.BaseSpec.prepareMock():any",
+      "description": "Prepares an already instantiated object to act as a mock for spying and much more",
+      "body": "<ul><li><em>any</em> <strong>object</strong><br>The object to mock, already instantiated</li><li><em>boolean</em> <strong>callLogging</strong><br>Add method call logging for all mocked methods. Defaults to true</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "print": {
+      "header": "testbox.system.BaseSpec.print():any",
+      "description": "Write some output to the ColdFusion output buffer",
+      "body": "<ul><li>required <em>any</em> <strong>message</strong></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "println": {
+      "header": "testbox.system.BaseSpec.println():any",
+      "description": "Write some output to the ColdFusion output buffer using a <br> attached",
+      "body": "<ul><li>required <em>any</em> <strong>message</strong></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "querysim": {
+      "header": "testbox.system.BaseSpec.querySim():any",
+      "description": "First line are the query columns separated by commas. Then do a consecuent rows separated by line breaks separated by | to denote columns.",
+      "body": "<ul><li>required <em>any</em> <strong>queryData</strong></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "runaftereachclosures": {
+      "header": "testbox.system.BaseSpec.runAfterEachClosures():BaseSpec",
+      "description": "Execute the after each closures in order for a suite and spec",
+      "body": "<ul><li>required <em>any</em> <strong>suite</strong></li><li>required <em>any</em> <strong>spec</strong></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "runaroundeachclosures": {
+      "header": "testbox.system.BaseSpec.runAroundEachClosures():BaseSpec",
+      "description": "Execute the around each closures in order for a suite and spec",
+      "body": "<ul><li>required <em>any</em> <strong>suite</strong></li><li>required <em>any</em> <strong>spec</strong></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "runbeforeeachclosures": {
+      "header": "testbox.system.BaseSpec.runBeforeEachClosures():BaseSpec",
+      "description": "Execute the before each closures in order for a suite and spec",
+      "body": "<ul><li>required <em>any</em> <strong>suite</strong></li><li>required <em>any</em> <strong>spec</strong></li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "runspec": {
+      "header": "testbox.system.BaseSpec.runSpec():any",
+      "description": "Run a BDD test in this target CFC",
+      "body": "<ul><li>required <em>any</em> <strong>spec</strong><br>The spec definition to test</li><li>required <em>any</em> <strong>suite</strong><br>The suite definition this spec belongs to</li><li>required <em>any</em> <strong>testResults</strong><br>The testing results object</li><li>required <em>any</em> <strong>suiteStats</strong><br>The suite stats that the incoming spec definition belongs to</li><li>required <em>any</em> <strong>runner</strong><br>The runner calling this BDD test</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "runtestmethod": {
+      "header": "testbox.system.BaseSpec.runTestMethod():any",
+      "description": "Runs a xUnit style test method in this target CFC",
+      "body": "<ul><li>required <em>any</em> <strong>spec</strong><br>The spec definition to test</li><li>required <em>any</em> <strong>testResults</strong><br>The testing results object</li><li>required <em>any</em> <strong>suiteStats</strong><br>The suite stats that the incoming spec definition belongs to</li><li>required <em>any</em> <strong>runner</strong><br>The runner calling this BDD test</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "scenario": {
+      "header": "testbox.system.BaseSpec.scenario():any",
+      "description": "The way to describe BDD test suites in TestBox. The scenario is an alias for describe usually use when you are writing in a Given-When-Then style\r\nThe body is the function that implements the suite.",
+      "body": "<ul><li>required <em>string</em> <strong>scenario</strong></li><li>required <em>any</em> <strong>body</strong><br>The closure that represents the test suite</li><li><em>any</em> <strong>labels</strong><br>The list or array of labels this suite group belongs to</li><li><em>boolean</em> <strong>asyncAll</strong><br>If you want to parallelize the execution of the defined specs in this suite group.</li><li><em>any</em> <strong>skip</strong><br>A flag or a closure that tells TestBox to skip this suite group from testing if true. If this is a closure it must return boolean.</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "story": {
+      "header": "testbox.system.BaseSpec.story():any",
+      "description": "The way to describe BDD test suites in TestBox. The story is an alias for describe usually use when you are writing using Gherkin-esque language\r\nThe body is the function that implements the suite.",
+      "body": "<ul><li>required <em>string</em> <strong>story</strong><br>The name of this test suite</li><li>required <em>any</em> <strong>body</strong><br>The closure that represents the test suite</li><li><em>any</em> <strong>labels</strong><br>The list or array of labels this suite group belongs to</li><li><em>boolean</em> <strong>asyncAll</strong><br>If you want to parallelize the execution of the defined specs in this suite group.</li><li><em>any</em> <strong>skip</strong><br>A flag or a closure that tells TestBox to skip this suite group from testing if true. If this is a closure it must return boolean.</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "then": {
+      "header": "testbox.system.BaseSpec.then():any",
+      "description": "The then() function describes a spec or a test in TestBox and is an alias for it.  The body argument is the closure that implements\r\nthe test which usually contains one or more expectations that test the state of the code under test.",
+      "body": "<ul><li>required <em>string</em> <strong>then</strong><br>The title of this spec</li><li>required <em>any</em> <strong>body</strong><br>The closure that represents the test</li><li><em>any</em> <strong>labels</strong><br>The list or array of labels this spec belongs to</li><li><em>any</em> <strong>skip</strong><br>A flag or a closure that tells TestBox to skip this spec test from testing if true. If this is a closure it must return boolean.</li><li><em>struct</em> <strong>data</strong><br>A struct of data you would like to bind into the spec so it can be later passed into the executing body function</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "when": {
+      "header": "testbox.system.BaseSpec.when():any",
+      "description": "The way to describe BDD test suites in TestBox. The when is an alias for scenario usually use when you are writing in a Given-When-Then style\r\nThe body is the function that implements the suite.",
+      "body": "<ul><li>required <em>string</em> <strong>when</strong></li><li>required <em>any</em> <strong>body</strong><br>The closure that represents the test suite</li><li><em>any</em> <strong>labels</strong><br>The list or array of labels this suite group belongs to</li><li><em>boolean</em> <strong>asyncAll</strong><br>If you want to parallelize the execution of the defined specs in this suite group.</li><li><em>any</em> <strong>skip</strong><br>A flag or a closure that tells TestBox to skip this suite group from testing if true. If this is a closure it must return boolean.</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "xdescribe": {
+      "header": "testbox.system.BaseSpec.xdescribe():any",
+      "description": "This is a convenience method that makes sure the test suite is skipped from execution",
+      "body": "<ul><li>required <em>string</em> <strong>title</strong><br>The name of this test suite</li><li>required <em>any</em> <strong>body</strong><br>The closure that represents the test suite</li><li><em>any</em> <strong>labels</strong><br>The list or array of labels this suite group belongs to</li><li><em>boolean</em> <strong>asyncAll</strong><br>If you want to parallelize the execution of the defined specs in this suite group.</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "xit": {
+      "header": "testbox.system.BaseSpec.xit():any",
+      "description": "This is a convenience method that makes sure the test spec is skipped from execution",
+      "body": "<ul><li>required <em>string</em> <strong>title</strong><br>The title of this spec</li><li>required <em>any</em> <strong>body</strong><br>The closure that represents the test</li><li><em>any</em> <strong>labels</strong><br>The list or array of labels this spec belongs to</li><li><em>struct</em> <strong>data</strong><br>A struct of data you would like to bind into the spec so it can be later passed into the executing body function</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    }
+  },
+  "expectation": {
+    "tobe": {
+      "header": "testbox.system.Expectation.toBe():Expectation",
+      "description": "Assert something is equal to each other, no case is required",
+      "body": "<ul><li>required <em>any</em> <strong>expected</strong><br>The expected data</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobebetween": {
+      "header": "testbox.system.Expectation.toBeBetween():Expectation",
+      "description": "Assert that the passed in actual number or date is between the passed in min and max values",
+      "body": "<ul><li>required <em>any</em> <strong>min</strong><br>The expected min number or date</li><li>required <em>any</em> <strong>max</strong><br>The expected max number or date</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobecloseto": {
+      "header": "testbox.system.Expectation.toBeCloseTo():Expectation",
+      "description": "Assert that the passed in actual number or date is expected to be close to it within +/- a passed delta and optional datepart",
+      "body": "<ul><li>required <em>any</em> <strong>expected</strong><br>The expected number or date</li><li>required <em>any</em> <strong>delta</strong><br>The +/- delta to range it</li><li><em>any</em> <strong>datePart</strong><br>If passed in values are dates, then you can use the datepart to evaluate it</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobeempty": {
+      "header": "testbox.system.Expectation.toBeEmpty():Expectation",
+      "description": "Assert that a a given string, array, structure or query is empty",
+      "body": "<ul><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobefalse": {
+      "header": "testbox.system.Expectation.toBeFalse():Expectation",
+      "description": "Assert something is false",
+      "body": "<ul><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobegt": {
+      "header": "testbox.system.Expectation.toBeGT():Expectation",
+      "description": "Assert that the actual value is greater than the target value",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target value</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobegte": {
+      "header": "testbox.system.Expectation.toBeGTE():Expectation",
+      "description": "Assert that the actual value is greater than or equal the target value",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target value</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobeinstanceof": {
+      "header": "testbox.system.Expectation.toBeInstanceOf():Expectation",
+      "description": "Assert that the actual object is of the expected instance type",
+      "body": "<ul><li>required <em>string</em> <strong>typeName</strong><br>The typename to check</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobelt": {
+      "header": "testbox.system.Expectation.toBeLT():Expectation",
+      "description": "Assert that the actual value is less than the target value",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target value</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobelte": {
+      "header": "testbox.system.Expectation.toBeLTE():Expectation",
+      "description": "Assert that the actual value is less than or equal the target value",
+      "body": "<ul><li>required <em>any</em> <strong>target</strong><br>The target value</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobenull": {
+      "header": "testbox.system.Expectation.toBeNull():Expectation",
+      "description": "Assert something is null",
+      "body": "<ul><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobetrue": {
+      "header": "testbox.system.Expectation.toBeTrue():Expectation",
+      "description": "Assert something is true",
+      "body": "<ul><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobetypeof": {
+      "header": "testbox.system.Expectation.toBeTypeOf():Expectation",
+      "description": "Assert the type of the incoming actual data, it uses the internal ColdFusion isValid() function behind the scenes",
+      "body": "<ul><li>required <em>string</em> <strong>type</strong><br>The type to check, valid types are: array, binary, boolean, component, date, time, float, numeric, integer, query, string, struct, url, uuid</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tobewithcase": {
+      "header": "testbox.system.Expectation.toBeWithCase():Expectation",
+      "description": "Assert strings are equal to each other with case.",
+      "body": "<ul><li>required <em>string</em> <strong>expected</strong><br>The expected data</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tohavedeepkey": {
+      "header": "testbox.system.Expectation.toHaveDeepKey():Expectation",
+      "description": "Assert that a given key exists in the passed in struct by searching the entire nested structure",
+      "body": "<ul><li>required <em>string</em> <strong>key</strong><br>The key to check for existence anywhere in the nested structure</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tohavekey": {
+      "header": "testbox.system.Expectation.toHaveKey():Expectation",
+      "description": "Assert that a given key exists in the passed in struct/object",
+      "body": "<ul><li>required <em>string</em> <strong>key</strong><br>The key to check for existence</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tohavelength": {
+      "header": "testbox.system.Expectation.toHaveLength():Expectation",
+      "description": "Assert the size of a given string, array, structure or query",
+      "body": "<ul><li>required <em>string</em> <strong>length</strong><br>The length to check</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "toinclude": {
+      "header": "testbox.system.Expectation.toInclude():Expectation",
+      "description": "Assert that the given \"needle\" argument exists in the incoming string or array with no case-sensitivity",
+      "body": "<ul><li>required <em>any</em> <strong>needle</strong><br>The substring to find in a string or the value to find in an array</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "toincludewithcase": {
+      "header": "testbox.system.Expectation.toIncludeWithCase():Expectation",
+      "description": "Assert that the given \"needle\" argument exists in the incoming string or array with case-sensitivity",
+      "body": "<ul><li>required <em>any</em> <strong>needle</strong><br>The substring to find in a string or the value to find in an array</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tomatch": {
+      "header": "testbox.system.Expectation.toMatch():Expectation",
+      "description": "Assert that the actual data matches the incoming regular expression with no case sensitivity",
+      "body": "<ul><li>required <em>string</em> <strong>regex</strong><br>The regex to check with</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tomatchwithcase": {
+      "header": "testbox.system.Expectation.toMatchWithCase():Expectation",
+      "description": "Assert that the actual data matches the incoming regular expression with case sensitivity",
+      "body": "<ul><li>required <em>string</em> <strong>actual</strong><br>The actual data to check</li><li>required <em>string</em> <strong>regex</strong><br>The regex to check with</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    },
+    "tothrow": {
+      "header": "testbox.system.Expectation.toThrow():Expectation",
+      "description": "Assert that the passed in function will throw an exception",
+      "body": "<ul><li><em>any</em> <strong>type</strong><br>Match this type with the exception thrown</li><li><em>any</em> <strong>regex</strong><br>Match this regex against the message of the exception</li><li><em>any</em> <strong>message</strong><br>The message to send in the failure</li></ul>",
+      "links": [
+        {
+          "href": "http://testbox.ortusbooks.com",
+          "text": "testbox.ortusbooks.com"
+        }
+      ]
+    }
+  }
+}

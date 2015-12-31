@@ -1,0 +1,340 @@
+# [PackageDev] target_format: plist, ext: plist
+name: CFML
+scopeName: embedding.cfml
+fileTypes: [cfml, cfm, cfc]
+
+patterns:
+- contentName: source.cfml.script
+  begin: (?i)(?=^\s*(/\*|//|import\b|(component|interface)(\s+|{)))
+  end: (?=not)possible
+  patterns:
+  - include: source.cfml.script
+
+- include: '#comments'
+
+- contentName: source.cfml
+  begin: (?i)(?=<cf(component|interface)\b)
+  end: (?=not)possible
+  patterns:
+  - include: '#cfcomponent'
+  - include: '#cfinterface'
+
+- contentName: text.html.cfml
+  begin: (?=\S)
+  end: (?=not)possible
+  patterns:
+  - include: '#cfml-tags'
+  - include: text.html.cfml
+
+repository:
+  cfcomponent:
+    begin: (?i)(?=<cfcomponent)
+    end: (?i)(</)(cfcomponent)(>)
+    endCaptures:
+      '0': {name: meta.tag.cfml}
+      '1': {name: punctuation.definition.tag.begin.cfml}
+      '2': {name: entity.name.tag.cfml storage.type.class.cfml}
+      '3': {name: punctuation.definition.tag.end.cfml}
+    patterns:
+    - name: meta.tag.cfml meta.class.cfml
+      begin: (?i)(<)(cfcomponent)
+      beginCaptures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.cfml storage.type.class.cfml}
+      end: '>'
+      endCaptures:
+        '0': {name: punctuation.definition.tag.end.cfml}
+      patterns:
+      - contentName: meta.class.inheritance.cfml
+        begin: (?i)\b(extends)\s*(=)\s*"
+        beginCaptures:
+          '1': {name: storage.modifier.extends.cfml}
+          '2': {name: punctuation.separator.key-value.cfml}
+        end: '"'
+        patterns:
+        - name: entity.other.inherited-class.cfml
+          match: ([_$a-zA-Z][$\w]*)
+      - include: '#tag-generic-attribute'
+    - include: '#cfml-tags'
+
+  cffunction:
+    begin: (?i)(?=<cffunction)
+    end: (?i)(</)(cffunction)(>)
+    endCaptures:
+      '0': {name: meta.tag.cfml}
+      '1': {name: punctuation.definition.tag.begin.cfml}
+      '2': {name: entity.name.tag.cfml storage.type.function.cfml}
+      '3': {name: punctuation.definition.tag.end.cfml}
+    patterns:
+    - name: meta.tag.cfml meta.function.cfml
+      begin: (?i)(<)(cffunction)
+      beginCaptures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.cfml storage.type.function.cfml}
+      end: '>'
+      endCaptures:
+        '0': {name: punctuation.definition.tag.end.cfml}
+      patterns:
+      - match: (?i)\b(name)\s*(=)\s*((")([_$a-zA-Z][$\w]*)("))
+        captures:
+          '1': {name: entity.other.attribute-name.cfml}
+          '2': {name: punctuation.separator.key-value.cfml}
+          '3': {name: string.quoted.double.cfml}
+          '4': {name: punctuation.definition.string.begin.cfml}
+          '5': {name: entity.name.function.cfml}
+          '6': {name: punctuation.definition.string.end.cfml}
+      - match: (?i)\b(access)\s*(=)\s*((")([_$a-zA-Z][$\w]*)("))
+        captures:
+          '1': {name: entity.other.attribute-name.cfml}
+          '2': {name: punctuation.separator.key-value.cfml}
+          '3': {name: string.quoted.double.cfml}
+          '4': {name: punctuation.definition.string.begin.cfml}
+          '5': {name: storage.modifier.cfml}
+          '6': {name: punctuation.definition.string.end.cfml}
+      - match: |-
+          (?x)(?i)
+            \b(returntype)\s*(=)\s*((")(
+            (void)
+            |
+            (any|array|binary|boolean|component|date|guid|numeric|query|string|struct|xml|uuid) # return-type.primitive
+            |
+            ([A-Za-z0-9_\.$]+) #return-type component/object (may need additional tokens)
+          )("))
+        captures:
+          '1': {name: entity.other.attribute-name.cfml}
+          '2': {name: punctuation.separator.key-value.cfml}
+          '3': {name: string.quoted.double.cfml}
+          '4': {name: punctuation.definition.string.begin.cfml}
+          '6': {name: storage.type.return-type.void.cfml}
+          '7': {name: storage.type.return-type.primitive.cfml}
+          '8': {name: storage.type.return-type.object.cfml}
+          '9': {name: punctuation.definition.string.end.cfml}
+      - include: '#tag-generic-attribute'
+    - name: text.html.cfml
+      begin: (?<=>)
+      end: (?i)(?=</cffunction>)
+      patterns:
+      - include: '#cfml-tags'
+      - include: text.html.cfml
+
+  cfif:
+    name: meta.tag.cfml
+    contentName: source.cfml.script
+    begin: (?i)(<)(cfif|cfelseif)
+    beginCaptures:
+      '1': {name: punctuation.definition.tag.begin.cfml}
+      '2': {name: entity.name.tag.cfml}
+    end: '>'
+    endCaptures:
+      '0': {name: punctuation.definition.tag.end.cfml}
+    patterns:
+    - include: source.cfml.script
+
+  cfinterface:
+    begin: (?i)(?=<cfinterface)
+    end: (?i)(</)(cfinterface)(>)
+    endCaptures:
+      '0': {name: meta.tag.cfml}
+      '1': {name: punctuation.definition.tag.begin.cfml}
+      '2': {name: entity.name.tag.cfml storage.type.interface.cfml}
+      '3': {name: punctuation.definition.tag.end.cfml}
+    patterns:
+    - name: meta.tag.cfml meta.interface.cfml
+      begin: (?i)(<)(cfinterface)
+      beginCaptures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.cfml storage.type.interface.cfml}
+      end: '>'
+      endCaptures:
+        '0': {name: punctuation.definition.tag.end.cfml}
+      patterns:
+      - contentName: meta.interface.inheritance.cfml
+        begin: (?i)\b(extends)\s*(=)\s*"
+        beginCaptures:
+          '1': {name: storage.modifier.extends.cfml}
+          '2': {name: punctuation.separator.key-value.cfml}
+        end: '"'
+        patterns:
+        - name: entity.other.inherited-interface.cfml
+          match: ([_$a-zA-Z][$\w]*)
+      - include: '#tag-generic-attribute'
+    - include: '#cfml-tags'
+
+  cfml-tags:
+    patterns:
+    - include: '#comments'
+    - include: '#cffunction'
+    - include: '#cfoutput'
+    - include: '#cfquery'
+    - include: '#cfif'
+    - include: '#tags-with-script'
+    - include: '#cfscript'
+    - name: meta.tag.cfml
+      begin: (?i)(<)(cf[a-z]+)
+      beginCaptures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.cfml}
+      end: (/?>)
+      endCaptures:
+        '0': {name: punctuation.definition.tag.end.cfml}
+      patterns:
+      - include: '#tag-generic-attribute'
+    - name: meta.tag.cfml
+      match: (?i)(</)(cf[a-z]+)(>)
+      captures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.cfml}
+        '3': {name: punctuation.definition.tag.end.cfml}
+
+  cfoutput:
+    begin: (?i)(?=<cfoutput)
+    end: (?i)(</)(cfoutput)(>)
+    endCaptures:
+      '0': {name: meta.tag.cfml}
+      '1': {name: punctuation.definition.tag.begin.cfml}
+      '2': {name: entity.name.tag.cfml}
+      '3': {name: punctuation.definition.tag.end.cfml}
+    patterns:
+    - name: meta.tag.cfml
+      begin: (?i)(<)(cfoutput)
+      beginCaptures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.cfml}
+      end: (?=>)
+      patterns:
+      - include: '#tag-generic-attribute'
+    - contentName: meta.scope.cfoutput.cfml text.html.cfml
+      begin: '>'
+      beginCaptures:
+        '0': {name: meta.tag.cfml punctuation.definition.tag.end.cfml.test}
+      end: (?i)(?=</cfoutput>)
+      patterns:
+      - include: '#cfml-tags'
+      - include: text.html.cfml.cfoutput
+
+  cfquery:
+    begin: (?i)(?=<cfquery\b)
+    end: (?i)(</)(cfquery)(>)
+    endCaptures:
+      '0': {name: meta.tag.cfml}
+      '1': {name: punctuation.definition.tag.begin.cfml}
+      '2': {name: entity.name.tag.cfml}
+      '3': {name: punctuation.definition.tag.end.cfml}
+    patterns:
+    - name: meta.tag.cfml
+      begin: (?i)(<)(cfquery)(?=\s|>)
+      beginCaptures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.cfml}
+      end: (?=>)
+      patterns:
+      - include: '#tag-generic-attribute'
+    - contentName: meta.scope.cfquery.cfml source.sql
+      begin: '>'
+      beginCaptures:
+        '0': {name: meta.tag.cfml punctuation.definition.tag.end.cfml}
+      end: (?i)(?=</cfquery>)
+      patterns:
+      - include: '#hash-delimiters'
+      - include: '#cfml-tags'
+      - include: source.sql
+
+  cfscript:
+    contentName: source.cfml.script
+    begin: (?i)(<)(cfscript)(\s+|>)
+    beginCaptures:
+      '0': {name: meta.tag.cfml}
+      '1': {name: punctuation.definition.tag.begin.cfml}
+      '2': {name: entity.name.tag.cfml}
+      '3': {name: punctuation.definition.tag.end.cfml}
+    end: (?i)(</)(cfscript)(>)
+    endCaptures:
+      '0': {name: meta.tag.cfml}
+      '1': {name: punctuation.definition.tag.begin.cfml}
+      '2': {name: entity.name.tag.cfml}
+      '3': {name: punctuation.definition.tag.end.cfml}
+    patterns:
+    - include: '#comments'
+    - include: source.cfml.script
+
+  comments:
+    patterns:
+    - name: comment.line.cfml
+      match: <!---.*?--->
+    - name: comment.block.cfml
+      begin: <!---
+      end: '--->'
+      patterns:
+      - include: '#comments'
+
+  hash-delimiters:
+    patterns:
+    - name: constant.character.escape.hash.cfml
+      match: '##'
+    - contentName: source.cfml.script
+      begin: '#'
+      beginCaptures:
+        '0': {name: constant.character.hash.cfml.start}
+      end: '#'
+      endCaptures:
+        '0': {name: constant.character.hash.cfml.end}
+      patterns:
+      - include: source.cfml.script
+
+  string:
+    patterns:
+    - include: '#string-quoted-single'
+    - include: '#string-quoted-double'
+
+  string-quoted-double:
+    name: string.quoted.double.cfml
+    begin: '"'
+    beginCaptures:
+      '0': {name: punctuation.definition.string.begin.cfml}
+    end: '"(?!")'
+    endCaptures:
+      '0': {name: punctuation.definition.string.end.cfml}
+    patterns:
+    - include: '#hash-delimiters'
+    - name: constant.character.escape.quote.cfml
+      match: '""'
+
+  string-quoted-single:
+    name: string.quoted.single.cfml
+    begin: ''''
+    beginCaptures:
+      '0': {name: punctuation.definition.string.begin.cfml}
+    end: '''(?!'')'
+    endCaptures:
+      '0': {name: punctuation.definition.string.end.cfml}
+    patterns:
+    - include: '#hash-delimiters'
+    - name: constant.character.escape.quote.cfml
+      match: ''''''
+
+  tag-generic-attribute:
+    patterns:
+    - include: '#comments'
+    - match: \b([a-zA-Z0-9:-]+)\b
+      captures:
+        '1': {name: entity.other.attribute-name.cfml}
+    - match: (=)\s*((?:[^\s<>/'"{;]|/(?!/>))+)
+      captures:
+        '1': {name: punctuation.separator.key-value.cfml}
+        '2': {name: string.unquoted.cfml}
+    - name: punctuation.separator.key-value.cfml
+      match: '='
+    - include: '#string'
+
+  tags-with-script:
+    name: meta.tag.cfml
+    contentName: source.cfml.script
+    begin: (?i)(<)(cfset|cfreturn)(?=\s|/?>)
+    beginCaptures:
+      '1': {name: punctuation.definition.tag.begin.cfml}
+      '2': {name: entity.name.tag.cfml}
+    end: (/?>)
+    endCaptures:
+      '0': {name: punctuation.definition.tag.end.cfml}
+    patterns:
+    - include: source.cfml.script

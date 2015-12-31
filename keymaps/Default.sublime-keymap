@@ -1,0 +1,94 @@
+[
+  // ctrl+alt+a <cfabort>/<:abort>
+  {
+    "keys": ["ctrl+alt+a"],
+    "command": "insert_snippet",
+    "args": {"contents": "<cfabort>"},
+    "context": [
+      {"key": "selector", "operator": "equal", "operand": "embedding.cfml"},
+      {"key": "selector", "operator": "not_equal", "operand": "source.cfml.script"}
+    ]
+  },
+  {
+    "keys": ["ctrl+alt+a"],
+    "command": "insert_snippet",
+    "args": {"contents": "abort;"},
+    "context": [
+      {"key": "selector", "operator": "equal", "operand": "source.cfml.script"}
+    ]
+  },
+  // ctrl+alt+d writeDump()/dump();
+  {
+    "keys": ["ctrl+alt+d"],
+    "command": "insert_snippet",
+    "args": {"contents": "writeDump(${0:$SELECTION});"},
+    "context": [
+      {"key": "selector", "operator": "equal", "operand": "source.cfml.script"}
+    ]
+  },
+  // ctrl+alt+d  <cfdump var="##">/<:dump var="##">
+  {
+    "keys": ["ctrl+alt+d"],
+    "command": "insert_snippet",
+    "args": {"contents": "<cfdump var=\"#${1:$SELECTION}#\">"},
+    "context": [
+      {"key": "selector", "operator": "equal", "operand": "embedding.cfml"},
+      {"key": "selector", "operator": "not_equal", "operand": "source.cfml.script"}
+    ]
+  },
+  // ctrl+shift+o  <cfoutput>/<:output>
+  {
+    "keys": ["ctrl+shift+o"],
+    "command": "insert_snippet",
+    "args": {"contents": "<cfoutput>${1:$SELECTION}</cfoutput>"},
+    "context": [
+      {"key": "selector", "operand": "embedding.cfml"},
+      {"key": "selector", "operator": "not_equal", "operand": "source.cfml.script"}
+    ]
+  },
+  // ctrl+shift+o  writeOutput()
+  {
+    "keys": ["ctrl+shift+o"],
+    "command": "insert_snippet",
+    "args": {"contents": "writeOutput(${1:$SELECTION})"},
+    "context": [
+      {"key": "selector", "operand": "source.cfml.script" }
+    ]
+  },
+  // shift+3 wrap selection with hash
+  {
+    "keys": ["#"],
+    "command": "insert_snippet",
+    "args": {"contents": "#${0:$SELECTION}#"},
+    "context": [
+      {"key": "setting.auto_match_enabled", "operator": "equal", "operand":true},
+      {"key": "selection_empty", "operator": "equal", "operand":false, "match_all":true},
+      {"key": "selector", "operator": "equal", "operand": "string.quoted.double.cfml,string.quoted.single.cfml,meta.scope.cfoutput.cfml", "match_all":true}
+    ]
+  },
+  // f1 docs lookup
+  {
+    "keys": ["f1"],
+    "command": "cfml_inline_documentation",
+    "context": [
+      {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
+    ]
+  },
+  // close tags
+  {
+    "keys": ["/"],
+    "command": "close_cfml_tag",
+    "context": [
+      {"key": "selector", "operator": "equal", "operand": "embedding.cfml - string - comment - source.cfml.script", "match_all":true},
+      {"key": "preceding_text", "operator": "regex_match", "operand": ".*<$", "match_all":true},
+      {"key": "setting.auto_close_tags"}
+    ]
+  },
+  {
+    "keys": ["ctrl+f1"],
+    "command": "cfml_toggle_controller_view",
+    "context": [
+      {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
+    ]
+  }
+]

@@ -1,0 +1,146 @@
+{
+	"this": [
+		"applicationTimeout",
+		"authCookie",
+		"bufferOutput",
+		"cache",
+		"cacheFunction",
+		"cacheInclude",
+		"cacheObject",
+		"cacheQuery",
+		"cacheResource",
+		"cacheTemplate",
+		"chartStyleDirectory",
+		"clientCluster",
+		"clientManagement",
+		"clientStorage",
+		"clientTimeout",
+		"compileExtForInclude",
+		"componentPaths",
+		"compression",
+		"customTagPaths",
+		"datasource",
+		"datasources",
+		"debuggingIPAddresses",
+		"defaultDatasource",
+		"enableRobustException",
+		"googleMapKey",
+		"invokeImplicitAccessor",
+		"javaSettings",
+		"localMode",
+		"locale",
+		"loginStorage",
+		"mappings",
+		"name",
+		"ormEnabled",
+		"ormSettings",
+		"requestTimeout",
+		"resourceCharset",
+		"restSettings",
+		"s3",
+		"sameFormFieldsAsArray",
+		"scopeCascading",
+		"scriptProtect",
+		"secureJSON",
+		"secureJSONPrefix",
+		"security",
+		"serialization",
+		"serverSideFormValidation",
+		"sessionCluster",
+		"sessionCookie",
+		"sessionManagement",
+		"sessionStorage",
+		"sessionTimeout",
+		"sessionType",
+		"setClientCookies",
+		"setDomainCookies",
+		"smtpServerSettings",
+		"strictNumberValidation",
+		"suppressRemoteComponentContent",
+		"timeout",
+		"timezone",
+		"triggerDataMember",
+		"typeChecking",
+		"webCharset",
+		"welcomeFileList",
+		"wstype"
+	],
+	"this.authcookie": [
+		"disableUpdate",
+		"timeout"
+	],
+	"this.cache": [
+		"useInternalQueryCache",
+		"querySize"
+	],
+	"this.datasource": [
+		"name",
+		"username",
+		"password"
+	],
+	"this.defaultdatasource": [
+		"name",
+		"username",
+		"password"
+	],
+	"this.inmemoryfilesystem": [
+		"enabled",
+		"size"
+	],
+	"this.javasettings": [
+		"loadColdFusionClassPath",
+		"loadPaths",
+		"reloadOnChange"
+	],
+	"this.ormsettings": [
+		"autoGenMap",
+		"autoManageSession",
+		"cacheConfig",
+		"cacheProvider",
+		"catalog",
+		"cfcLocation",
+		"datasource",
+		"dbCreate",
+		"dialect",
+		"eventHandling",
+		"flushAtRequestEnd",
+		"logSQL",
+		"namingStrategy",
+		"ormConfig",
+		"saveMapping",
+		"schema",
+		"secondaryCacheEnabled",
+		"skipCFCWithError",
+		"sqlScript",
+		"useDBForMapping"
+	],
+	"this.restsettings": [
+		"cfcLocation",
+		"skipCFCWithError"
+	],
+	"this.s3": [
+		"accessKeyId",
+		"awsSecretKey",
+		"defaultLocation"
+	],
+	"this.security": [
+		"antiSamyPolicy"
+	],
+	"this.serialization": [
+		"preserveCaseForStructKey",
+		"preserveCaseForQueryColumn",
+		"serializeQueryAs"
+	],
+	"this.sessioncookie": [
+		"disableUpdate",
+		"domain",
+		"httpOnly",
+		"secure",
+		"timeout"
+	],
+	"this.smtpserversettings": [
+		"password",
+		"server",
+		"username"
+	]
+}

@@ -1,0 +1,20 @@
+[
+	{
+		"caption": "CFML: Default Package Settings",
+		"command": "cfml_default_package_settings"
+	},
+	{
+		"caption": "CFML: User Package Settings",
+		"command": "open_file", "args": {"file": "${packages}/User/cfml_package.sublime-settings"}
+	},
+	// Build tmLanguage file
+	{
+		"caption": "CFML: Build tmLanguage Syntax File",
+		"command": "cfml_build_tmlanguage"
+	},
+	// Toggle CFML tag color scheme styles
+	{
+		"caption": "CFML: Toggle Color Scheme Styles",
+		"command": "cfml_color_scheme_styles"
+	}
+]

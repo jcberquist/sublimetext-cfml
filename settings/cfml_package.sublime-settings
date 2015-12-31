@@ -1,0 +1,52 @@
+{
+
+	// color scheme styles to inject for Lucee/CFML tags
+	// valid keys are "foreground" and "fontStyle"
+	// "foreground": "#RRGGBB", "#RGB" or ""
+	// "fontStyle": "bold", "italic", "bold italic", or ""
+
+	"cfml_tag_style": { "foreground": "#4C9BB0", "fontStyle": "" },
+	"cfml_tag_attribute_style": { "foreground": "#D9995E", "fontStyle": "" },
+
+	// default controller and view folder names that the
+	// toggle_controller_view command looks for when switching
+	// between controller method and corresponding view
+
+	"controller_folders": ["controllers", "handlers"],
+	"view_folders": ["views"],
+
+	// tmlanguage settings
+	// you can override these in your user package settings
+
+	"tmlanguage_html": "Packages/HTML/HTML.tmLanguage",
+	"tmlanguage_javascript": "Packages/JavaScript/JavaScript.tmLanguage",
+	"tmlanguage_css": "Packages/CSS/CSS.tmLanguage",
+	"tmlanguage_sql": "Packages/SQL/SQL.tmLanguage",
+
+	// testbox settings
+	// you can override these in your user package settings
+	// these can also be set on a per project basis
+	// settings contained in a project override the package settings
+
+	"testbox_enabled": true,
+	"testbox_folders": ["tests"],
+
+	// testbox test runner
+	// these settings should be set per project
+
+	"testbox_runner_url": "http://localhost:8888/testbox/system/Testbox.cfc?method=runremote&reporter=json&directory=",
+	"testbox_default_directory": "tests",
+	"testbox_tests_root": "",
+	"testbox_results": {"server_root": "", "sublime_root": ""},
+
+	// framework one settings
+	// you can override these in your user package settings
+	// these can also be set on a per project basis
+	// settings contained in a project override the package settings
+
+	"fw1_enabled": false,
+	"fw1_controller_folders": ["controllers"],
+	"fw1_view_folders": ["views"],
+	"fw1_layout_folders": ["layouts"]
+
+}

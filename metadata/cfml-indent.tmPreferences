@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>cfml-indent</string>
+	<key>scope</key>
+	<string>source.cfml - source.cfml.script</string>
+	<key>settings</key>
+	<dict>
+		<key>decreaseIndentPattern</key>
+		<string>(?x)
+		^\s*
+		(
+		&lt;/(cf)
+		[A-Za-z0-9]+\b[^&gt;]*&gt;
+		|-?--&gt;
+		)</string>
+		<key>increaseIndentPattern</key>
+		<string>(?x)
+			^\s*
+				&lt;
+				(?!
+					(?i:!---?|/|cfset|cfparam|cfdump|cfargument|cfabort
+					|cfimport|cfcontent|cfbreak|cfinclude|cfcatch|cfcontinue
+					|cflocation|cfsetting|cffile|cflog|cfobject|cfinvoke|cfimport
+					|cfforward|cfreturn|cfthrow|cfproperty|cfhtmlhead|cfheader
+					|cftrace
+					)
+				)
+				[^&gt;]*
+				&gt;
+			\s*$
+  	</string>
+  </dict>
+</dict>
+</plist>

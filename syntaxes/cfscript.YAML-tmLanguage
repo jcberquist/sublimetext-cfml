@@ -1,0 +1,729 @@
+# [PackageDev] target_format: plist, ext: plist
+name: CFML Script
+scopeName: source.cfml.script
+
+patterns:
+- include: '#core'
+
+repository:
+  brackets:
+    patterns:
+    - include: '#round-brackets'
+    - include: '#square-brackets'
+    - include: '#curly-brackets'
+
+  comments:
+    patterns:
+    - name: comment.block.documentation.cfml
+      begin: /\*\*(?!/)
+      end: \*/
+      captures:
+        '0': {name: punctuation.definition.comment.cfml}
+    - name: comment.block.cfml
+      begin: /\*
+      end: \*/
+      captures:
+        '0': {name: punctuation.definition.comment.cfml}
+    - name: comment.line.double-slash.cfml
+      match: (//).*$\n?
+      captures:
+        '1': {name: punctuation.definition.comment.cfml}
+
+  component:
+    patterns:
+    - name: meta.class.cfml
+      begin: (?i)^\s*(component)(?=(\s+|{))
+      beginCaptures:
+        '1': {name: storage.type.class.cfml}
+      end: (?={)
+      patterns:
+      - include: '#component-attributes'
+    - name: meta.interface.cfml
+      begin: (?i)^\s*(interface)(?=(\s+|{))
+      beginCaptures:
+        '1': {name: storage.type.interface.cfml}
+      end: (?={)
+      patterns:
+      - include: '#component-attributes'
+
+  component-attributes:
+    patterns:
+    - contentName: meta.class.inheritance.cfml
+      begin: \b(?i:(extends))\b\s*(=)\s*
+      beginCaptures:
+        '1': {name: storage.modifier.extends.cfml}
+      end: (["'])([a-zA-Z0-9:.]+)(["'])|([a-zA-Z0-9:.]+)
+      endCaptures:
+        '1': {name: punctuation.definition.string.begin.cfml}
+        '2': {name: entity.other.inherited-class.cfml}
+        '3': {name: punctuation.definition.string.end.cfml}
+        '4': {name: entity.other.inherited-class.cfml}
+    - include: '#tag-generic-attribute'
+
+  constructor:
+    patterns:
+    - name: meta.instance.constructor
+      begin: (new)\s+(?=[_$a-zA-Z][$\w.]*)
+      beginCaptures:
+        '1': {name: keyword.operator.new.cfml}
+      end: (?![_$a-zA-Z][$\w.]*)
+      patterns:
+      - include: '#support'
+      - match: ([_$a-zA-Z][$\w.]*\.)?([_$a-zA-Z][$\w]*)
+        captures:
+          '2': {name: entity.name.class.cfml}
+
+  core:
+    patterns:
+      - include: '#labels'
+      - include: '#keywords'
+      - include: '#for'
+      - include: '#switch'
+      - include: '#expression'
+      - include: '#punctuation'
+
+  curly-brackets:
+    patterns:
+    - name: meta.group.braces.curly
+      begin: \{
+      beginCaptures:
+        '0': {name: meta.brace.curly.cfml}
+      end: \}
+      endCaptures:
+        '0': {name: meta.brace.curly.cfml}
+      patterns:
+      - include: '#core'
+
+  expression:
+    patterns:
+    - include: '#support'
+    - include: '#function'
+    - include: '#number'
+    - include: '#string'
+    - include: '#language-constant'
+    - include: '#language-variable'
+    - include: '#constructor'
+    - include: '#component'
+    - include: '#method-call'
+    - include: '#function-call'
+    - include: '#comments'
+    - include: '#brackets'
+    - include: '#operators'
+    - include: '#tag-in-script'
+    - include: '#variable'
+
+  for:
+    patterns:
+    - name: meta.for.cfml
+      begin: (?<!\.)\b(for)\b
+      beginCaptures:
+        '1': {name: keyword.control.loop.cfml}
+      end: \)
+      endCaptures:
+        '0': {name: meta.brace.round.cfml}
+      patterns:
+      - begin: \(
+        beginCaptures:
+          '0': {name: meta.brace.round.cfml}
+        end: (?=\))
+        patterns:
+        - include: '#keyword-storage'
+        - include: '#expression'
+        - include: '#punctuation'
+
+  function:
+    patterns:
+    - name: meta.function.cfml
+      begin: |-
+        (?x)
+        (?:
+          (?: # optional access-control modifier and return-type
+            (?i:\b(private|package|public|remote)\s+)? # access-control.modifier
+            (?i:\b
+              (void)\s+
+              |
+              (any|array|binary|boolean|component|date|guid|numeric|query|string|struct|xml|uuid)\s+ # return-type.primitive
+              |
+              ([A-Za-z0-9_\.$]+)\s+ #return-type component/object (may need additional tokens)
+            )?
+          )
+        )
+        (?i:(function)) # storage.function
+        \s+
+        (?:
+          (init) # entity.name.function.contructor
+          |
+          ([_$a-zA-Z][$\w]*) # entity.name.function
+        )\b
+      beginCaptures:
+        '1': {name: storage.modifier.cfml}
+        '2': {name: storage.type.return-type.void.cfml}
+        '3': {name: storage.type.return-type.primitive.cfml}
+        '4': {name: storage.type.return-type.object.cfml}
+        '5': {name: storage.type.function.cfml}
+        '6': {name: entity.name.function.constructor.cfml}
+        '7': {name: entity.name.function.cfml}
+      end: (?={)
+      patterns:
+      - include: '#function-declaration-parameters'
+      - include: '#function-properties'
+    - name: meta.function.cfml
+      begin: (\b[_$a-zA-Z][$\w]*)\s*=\s*(function)(?:(?=\s|[(]))\s*([_$a-zA-Z][$\w]*)?\s*
+      beginCaptures:
+        '1': {name: entity.name.function.cfml}
+        '2': {name: storage.type.cfml}
+        '3': {name: storage.type.function.cfml}
+      end: (?<=\))
+      patterns:
+      - include: '#function-declaration-parameters'
+    - name: meta.function.cfml
+      begin: (?<!\.)\b(function)(?=\s*\()
+      beginCaptures:
+        '1': {name: storage.type.function.cfml}
+      end: (?<=\))
+      patterns:
+      - include: '#function-declaration-parameters'
+
+  function-call:
+    name: meta.function-call.cfml
+    begin: ([_$a-zA-Z][$\w]*)\s*(?=\()
+    beginCaptures:
+      '1': {name: variable.function.cfml}
+    end: (?<=\))
+    patterns:
+    - name: meta.function-call.arguments.cfml
+      begin: \(
+      beginCaptures:
+        '0': {name: punctuation.definition.arguments.begin.cfml}
+      end: \)
+      endCaptures:
+        '0': {name: punctuation.definition.arguments.end.cfml}
+      patterns:
+      - name: punctuation.definition.separator.arguments.cfml
+        match: ','
+      - name: entity.other.function-parameter.cfml
+        match: (?i:(\w+)\s*(?=\=[^\=]))
+      - include: '#expression'
+
+  function-declaration-parameters:
+    patterns:
+    - begin: \(
+      beginCaptures:
+        '0': {name: punctuation.definition.parameters.begin.cfml}
+      end: \)
+      endCaptures:
+        '0': {name: punctuation.definition.parameters.end.cfml}
+      patterns:
+      - name: keyword.other.required.argument.cfml
+        match: (?i:required)
+      - include: '#storage-types'
+      - name: variable.parameter.function.cfml
+        match: '[_$a-zA-Z][$\w]*'
+      - name: punctuation.separator.parameter.function.cfml
+        match: ','
+      - name: meta.parameter.optional.cfml
+        begin: '='
+        beginCaptures:
+          '0': {name: keyword.operator.assignment.cfml}
+        end: (?=[,)])
+        patterns:
+        - include: '#expression'
+      - include: '#comments'
+
+  function-properties:
+    patterns:
+    - include: '#tag-generic-attribute'
+
+  hash-delimiters:
+    patterns:
+    - name: constant.character.escape.hash.cfml
+      match: '##'
+    - contentName: source.cfml.script
+      begin: '#'
+      beginCaptures:
+        '0': {name: constant.character.hash.cfml.start}
+      end: '#'
+      endCaptures:
+        '0': {name: constant.character.hash.cfml.end}
+      patterns:
+      - include: '#core'
+
+
+  keyword-storage:
+    patterns:
+    - name: storage.modifier.cfml
+      match: (?<!\.)\b(var)\b
+
+  keywords:
+    patterns:
+    - include: '#keyword-storage'
+    - name: keyword.control.flow.cfml
+      match: (?<!\.)\b(return)\b
+    - name: keyword.control.conditional.cfml
+      match: (?<!\.)\b(if|else)\b
+    - name: keyword.control.trycatch.cfml
+      match: (?<!\.)\b(catch|finally|rethrow|throw|try)\b
+    - name: keyword.control.loop.cfml
+      match: (?<!\.)\b(break|continue|do|while)\b
+
+  labels:
+    patterns:
+    - begin: |-
+        (?x)
+        (?<!\?)(?<!\?\s)(?=(
+          ((')((?:[^']|\\')*)('))|
+          ((")((?:[^"]|\\")*)("))
+        )\s*:)
+      end: ':'
+      endCaptures:
+        '0': {name: punctuation.separator.key-value.cfml}
+      patterns:
+      - include: '#string'
+    - name: constant.other.object.key.cfml
+      match: (?<!\.|\?|\?\s)([_$a-zA-Z][$\w]*)\s*(:)
+      captures:
+        '1': {name: string.unquoted.label.cfml}
+        '2': {name: punctuation.separator.key-value.cfml}
+
+  language-constant:
+    patterns:
+    - name: constant.language.boolean.true.cfml
+      match: (?<!\.)\b(?i:true)\b
+    - name: constant.language.boolean.false.cfml
+      match: (?<!\.)\b(?i:false)\b
+    - name: constant.language.null.cfml
+      match: (?<!\.)\b(?i:null)\b
+
+  language-variable:
+    patterns:
+    - name: variable.language.super.cfml
+      match: (?<!\.)\b(?i:super)\b
+    - name: variable.language.this.cfml
+      match: (?<!\.)\b(?i:this)\b
+    - name: variable.language.scope.cfml
+      match: (?<!\.)\b(?i:(application|arguments|attributes|caller|cgi|client|cookie|flash|form|local|request|server|session|thistag|thread|thread
+        local|url|variables|self|argumentcollection))\b
+
+  method-call:
+    name: meta.function-call.method.cfml
+    begin: (?<=\.)([_$a-zA-Z][$\w]*)\s*(?=\()
+    end: (?<=\))
+    patterns:
+    - name: meta.function-call.method.arguments.cfml
+      begin: \(
+      beginCaptures:
+        '0': {name: punctuation.definition.arguments.begin.cfml}
+      end: \)
+      endCaptures:
+        '0': {name: punctuation.definition.arguments.end.cfml}
+      patterns:
+      - name: punctuation.definition.separator.arguments.cfml
+        match: ','
+      - name: entity.other.method-parameter.cfml
+        match: (?i:(\w+)\s*(?=\=[^\=]))
+      - include: '#expression'
+
+  number:
+    name: constant.numeric.cfml
+    match: ((\b[0-9]+)|(\.[0-9]+[0-9\.]*)|(0(x|X)[0-9a-fA-F]+)|(\.[0-9]+)((e|E)(\+|-)?[0-9]+)?([LlFfUuDd]|UL|ul)?)\b
+
+  operators:
+    patterns:
+    - name: keyword.operator.cfml
+      match: (?<!\.)\b(in|new|void)\b
+    - name: keyword.operator.logical.cfml
+      match: '!(?!=)|&&|\|\|'
+    - name: keyword.operator.logical.cfml
+      match: \b(?i:(not|and|or|xor|eqv|imp))\b
+    - name: keyword.operator.decision.cfml
+      match: \b(?i:(greater|less|than|equal\s+to|does|contains|equal|eq|neq|lt|lte|le|gt|gte|ge|and|is))\b
+    - name: keyword.operator.assignment.cfml
+      match: =(?!=)
+    - name: keyword.operator.assignment.augmented.cfml
+      match: '%=|&=|\*=|\+=|-=|/='
+    - name: keyword.operator.concat.cfml
+      match: '&'
+    - name: keyword.operator.relational.cfml
+      match: <=|>=|<|>
+    - name: keyword.operator.comparison.cfml
+      match: ==|!=
+    - name: keyword.operator.arithmetic.cfml
+      match: --|\+\+|/|%|\*|\+|-
+    - name: keyword.operator.ternary.cfml
+      match: '\?|:'
+    - name: keyword.operator.accessor.cfml
+      match: \.
+
+  punctuation:
+    patterns:
+    - name: punctuation.terminator.statement.cfml
+      match: ;
+    - name: meta.delimiter.comma.cfml
+      match: ','
+
+  round-brackets:
+    patterns:
+    - name: meta.group.braces.round
+      begin: \(
+      beginCaptures:
+        '0': {name: meta.brace.round.cfml}
+      end: \)
+      endCaptures:
+        '0': {name: meta.brace.round.cfml}
+      patterns:
+      - include: '#expression'
+    - name: invalid.illegal.stray.brace.round.cfml
+      match: \)
+
+  square-brackets:
+    patterns:
+    - name: meta.group.braces.square
+      begin: \[
+      beginCaptures:
+        '0': {name: meta.brace.square.cfml}
+      end: \]
+      endCaptures:
+        '0': {name: meta.brace.square.cfml}
+      patterns:
+      - include: '#expression'
+
+  storage-types:
+    name: storage.type.primitive.cfml
+    match: \b(?i:(function|string|date|struct|array|void|binary|numeric|boolean|query|xml|uuid|any))\b
+
+  string:
+    patterns:
+    - include: '#string-quoted-single'
+    - include: '#string-quoted-double'
+
+  string-quoted-double:
+    name: string.quoted.double.cfml
+    begin: '"'
+    beginCaptures:
+      '1': {name: punctuation.definition.string.begin.cfml}
+    end: '"(?!")'
+    endCaptures:
+      '1': {name: punctuation.definition.string.end.cfml}
+    patterns:
+    - name: constant.character.escape.quote.cfml
+      match: '""'
+    - include: '#hash-delimiters'
+
+  string-quoted-single:
+    name: string.quoted.single.cfml
+    begin: ''''
+    beginCaptures:
+      '1': {name: punctuation.definition.string.begin.cfml}
+    end: '''(?!'')'
+    endCaptures:
+      '1': {name: punctuation.definition.string.end.cfml}
+    patterns:
+    - name: constant.character.escape.quote.cfml
+      match: ''''''
+    - include: '#hash-delimiters'
+
+  support:
+    patterns:
+    - name: meta.support.function-call.cfml
+      contentName: meta.support.function-call.arguments.cfml
+      begin: |-
+        (?x)
+        (?<!\.)\b
+        (?i:
+            (abs|acos|addsoaprequestheader|addsoapresponseheader|ajaxlink|ajaxonload|applicationstarttime
+            |applicationstop|array|arrayappend|arrayavg|arrayclear|arraycontains|arraycontainsnocase
+            |arraydelete|arraydeleteat|arrayeach|arrayevery|arrayfilter|arrayfind|arrayfindall|arrayfindallnocase
+            |arrayfindnocase|arrayfirst|arrayindexexists|arrayinsertat|arrayisdefined|arrayisempty
+            |arraylast|arraylen|arraymap|arraymax|arraymedian|arraymerge|arraymid|arraymin|arraynew|arrayprepend
+            |arrayreduce|arrayresize|arrayreverse|arrayset|arrayslice|arraysome|arraysort|arraysum|arrayswap
+            |arraytolist|arraytostruct|asc|asin|atn|beat|binarydecode|binaryencode|bitand|bitmaskclear|bitmaskread
+            |bitmaskset|bitnot|bitor|bitshln|bitshrn|bitxor|cacheclear|cachecount|cachedelete|cacheget|cachegetall
+            |cachegetallids|cachegetdefaultcachename|cachegetmetadata|cachegetproperties|cacheidexists|cachekeyexists
+            |cacheput|cacheremove|cacheremoveall|cachesetproperties|callstackdump|callstackget|canonicalize|ceiling
+            |cfusion_decrypt|cfusion_encrypt|charsetdecode|charsetencode|chr|cjustify|collectioneach|collectionevery
+            |collectionfilter|collectionmap|collectionreduce|collectionsome|compare|comparenocase|componentcacheclear
+            |componentcachelist|componentinfo|compress|contractpath|cos|createdate|createdatetime|createdynamicproxy
+            |createguid|createobject|createodbcdate|createodbcdatetime|createodbctime|createtime|createtimespan
+            |createuniqueid|createuuid|csrfgeneratetoken|csrfverifytoken|ctcacheclear|ctcachelist
+            |datasourceflushmetacache|dateadd|datecompare|dateconvert|datediff|dateformat|datepart|datetimeformat|day
+            |dayofweek|dayofweekasstring|dayofweekshortasstring|dayofyear|daysinmonth|daysinyear|de|decimalformat
+            |decodefromurl|decrementvalue|decrypt|decryptbinary|deleteclientvariable|deserializejson|directorycopy
+            |directorycreate|directorydelete|directoryexists|directorylist|directoryrename|dollarformat|dump|duplicate
+            |each|echo|empty|encodeforcss|encodefordn|encodeforhtml|encodeforhtmlattribute|encodeforjavascript
+            |encodeforldap|encodeforurl|encodeforxml|encodeforxmlattribute|encodeforxpath|encrypt|encryptbinary|entitydelete
+            |entityload|entityloadbyexample|entityloadbypk|entitymerge|entitynamearray|entitynamelist|entitynew|entityreload
+            |entitysave|entitytoquery|esapidecode|esapiencode|evaluate|exp|expandpath|extract|fileappend|fileclose|filecopy
+            |filedelete|fileexists|filegetmimetype|fileiseof|filemove|fileopen|fileread|filereadbinary|filereadline|fileseek
+            |filesetaccessmode|filesetattribute|filesetlastmodified|fileskipbytes|fileupload|fileuploadall|filewrite
+            |filewriteline|find|findnocase|findoneof|firstdayofmonth|fix|formatbasen|generatesecretkey|getapplicationmetadata
+            |getapplicationsettings|getauthuser|getbasetagdata|getbasetaglist|getbasetemplatepath|getbuiltinfunction
+            |getcanonicalpath|getclasspath|getclientvariableslist|getcomponentmetadata|getcontextroot|getcpuusage
+            |getcurrentcontext|getcurrenttemplatepath|getdirectoryfrompath|getencoding|getfilefrompath|getfileinfo|getfreespace
+            |getfunctioncalledname|getfunctiondata|getfunctionkeywords|getfunctionlist|gethttprequestdata|gethttptimestring
+            |getk2serverdoccount|getk2serverdoccountlimit|getlocale|getlocaledisplayname|getlocalhostip|getluceeid
+            |getmemoryusage|getmetadata|getmetricdata|getnumericdate|getpagecontext|getprinterlist|getprofilesections
+            |getprofilestring|getreadableimageformats|getsoaprequest|getsoaprequestheader|getsoapresponse|getsoapresponseheader
+            |getsystemfreememory|getsystemtotalmemory|gettagdata|gettaglist|gettempdirectory|gettempfile|gettemplatepath
+            |gettickcount|gettimezone|gettimezoneinfo|gettoken|gettotalspace|getuserroles|getvariable|getvfsmetadata
+            |getwriteableimageformats|hash|hash40|hmac|hour|htmlcodeformat|htmleditformat|htmlparse|iif|imageaddborder
+            |imageblur|imageclearrect|imagecopy|imagecrop|imagedrawarc|imagedrawbeveledrect|imagedrawcubiccurve|imagedrawimage
+            |imagedrawline|imagedrawlines|imagedrawoval|imagedrawpoint|imagedrawquadraticcurve|imagedrawrect|imagedrawroundrect
+            |imagedrawtext|imagefilter|imagefiltercolormap|imagefiltercurves|imagefilterkernel|imagefilterwarpgrid|imageflip
+            |imagefonts|imageformats|imagegetblob|imagegetbufferedimage|imagegetexifmetadata|imagegetexiftag|imagegetheight
+            |imagegetiptctag|imagegetwidth|imagegrayscale|imageinfo|imagenegative|imagenew|imageoverlay|imagepaste|imageread
+            |imagereadbase64|imageresize|imagerotate|imagerotatedrawingaxis|imagescaletofit|imagesetantialiasing
+            |imagesetbackgroundcolor|imagesetdrawingalpha|imagesetdrawingcolor|imagesetdrawingstroke|imagesetdrawingtransparency
+            |imagesharpen|imageshear|imagesheardrawingaxis|imagetranslate|imagetranslatedrawingaxis|imagewrite|imagewritebase64
+            |imagexordrawingmode|incrementvalue|inputbasen|insert|int|invoke|isarray|isbinary|isboolean|isclosure
+            |iscustomfunction|isdate|isdebugmode|isdefined|isempty|isimage|isimagefile|isinstanceof|isipinrange|isipv6
+            |isjson|isleapyear|islocalhost|isnotmap|isnull|isnumeric|isnumericdate|isobject|ispdfobject|isquery|issimplevalue
+            |issoaprequest|isstruct|isuserinanyrole|isuserinrole|isuserloggedin|isvalid|isvideofile|iswddx|isxml|isxmlattribute
+            |isxmldoc|isxmlelem|isxmlnode|isxmlroot|iszipfile|javacast|jsstringformat|lcase|left|len|listappend|listavg
+            |listchangedelims|listcompact|listcontains|listcontainsnocase|listdeleteat|listeach|listevery|listfilter|listfind
+            |listfindnocase|listfirst|listgetat|listindexexists|listinsertat|listitemtrim|listlast|listlen|listmap|listprepend
+            |listqualify|listreduce|listremoveduplicates|listrest|listsetat|listsome|listsort|listtoarray|listtrim
+            |listvaluecount|listvaluecountnocase|ljustify|location|log|log10|lscurrencyformat|lsdateformat|lsdatetimeformat
+            |lsdayofweek|lseurocurrencyformat|lsiscurrency|lsisdate|lsisnumeric|lsnumberformat|lsparsecurrency|lsparsedatetime
+            |lsparseeurocurrency|lsparsenumber|lstimeformat|lsweek|ltrim|max|metaphone|mid|millisecond|min|minute|month
+            |monthasstring|monthshortasstring|newline|now|nowserver|nullvalue|numberformat|objectequals|objectload|objectsave
+            |ormclearsession|ormcloseallsessions|ormclosesession|ormevictcollection|ormevictentity|ormevictqueries
+            |ormexecutequery|ormflush|ormgetsession|ormgetsessionfactory|ormreload|pagepoolclear|pagepoollist|paragraphformat
+            |parameterexists|parsedatetime|parsenumber|pi|precisionevaluate|preservesinglequotes|quarter|query|queryaddcolumn
+            |queryaddrow|querycolumnarray|querycolumncount|querycolumndata|querycolumnexists|querycolumnlist|queryconvertforgrid
+            |querycurrentrow|querydeletecolumn|querydeleterow|queryeach|queryevery|queryexecute|queryfilter|querygetcell
+            |querygetrow|querymap|querynew|queryrecordcount|queryreduce|queryrowdata|querysetcell|queryslice|querysome
+            |querysort|quotedvaluelist|rand|randomize|randrange|refind|refindnocase|releasecomobject|rematch|rematchnocase
+            |removechars|repeatstring|replace|replacelist|replacenocase|rereplace|rereplacenocase|restdeleteapplication
+            |restinitapplication|restsetresponse|reverse|right|rjustify|round|rtrim|second|sendgatewaymessage|serialize
+            |serializejson|sessioninvalidate|sessionrotate|sessionstarttime|setencoding|setlocale|setprofilestring|settimezone
+            |setvariable|sgn|sin|sizeof|sleep|soundex|spanexcluding|spanincluding|spreadsheetnew|spreadsheetsetcellvalue
+            |spreadsheetwrite|sqr|sslcertificateinstall|sslcertificatelist|storeaddacl|storegetacl|storesetacl|stringlen|stripcr
+            |structappend|structclear|structcopy|structcount|structdelete|structeach|structevery|structfilter|structfind
+            |structfindkey|structfindvalue|structget|structinsert|structisempty|structkeyarray|structkeyexists|structkeylist
+            |structkeytranslate|structmap|structnew|structreduce|structsome|structsort|structupdate|systemcacheclear|systemoutput
+            |tan|threadjoin|threadterminate|throw|timeformat|tobase64|tobinary|tonumeric|toscript|tostring|trace|transactioncommit
+            |transactionrollback|transactionsetsavepoint|trim|truefalseformat|ucase|ucfirst|unserializejava|urldecode|urlencode
+            |urlencodedformat|urlsessionformat|val|valuearray|valuelist|verifyclient|week|wrap|writedump|writelog|writeoutput
+            |xmlchildpos|xmlelemnew|xmlformat|xmlgetnodetype|xmlnew|xmlparse|xmlsearch|xmltransform|xmlvalidate|year|yesnoformat)
+          )(\()
+      beginCaptures:
+        '1': {name: support.function.cfml}
+        '2': {name: meta.support.function-call.arguments.cfml punctuation.definition.arguments.begin.cfml}
+      end: \)
+      endCaptures:
+        '0': {name: meta.support.function-call.arguments.cfml punctuation.definition.arguments.end.cfml}
+      patterns:
+      - include: '#expression'
+    - name: meta.support.function-call.member.cfml
+      contentName: meta.support.function-call.member.arguments.cfml
+      begin: |-
+        (?x)
+        (\.)
+        (?i:
+          (add|addcolumn|addrow|append|avg|blur|cjustify|clear|clearrect|columnarray|columncount|columndata|columnexists
+          |columnlist|compare|comparenocase|contains|containsnocase|copy|count|crop|currentrow|dateformat|day|dayofweek
+          |dayofyear|daysinmonth|daysinyear|delete|deleteat|deletecolumn|deleterow|diff|drawarc|drawcubiccurve|drawline
+          |drawlines|drawoval|drawpoint|drawquadraticcurve|drawrect|drawroundrect|each|every|filter|find|findall
+          |findallnocase|findkey|findnocase|findoneof|findvalue|first|firstdayofmonth|flip|get|getbufferedimage|getcell
+          |getheight|getrow|gettoken|getwidth|grayscale|hour|indexexists|info|insert|insertat|isdefined|isempty|keyarray
+          |keyexists|keylist|keytranslate|last|lcase|left|len|listappend|listavg|listchangedelims|listcompact|listcontains
+          |listcontainsnocase|listdeleteat|listeach|listevery|listfilter|listfind|listfindnocase|listfirst|listgetat
+          |listindexexists|listinsertat|listitemtrim|listlast|listlen|listmap|listprepend|listqualify|listreduce
+          |listremoveduplicates|listrest|listsetat|listsome|listsort|listtoarray|listvaluecount|listvaluecountnocase
+          |ljustify|lsdateformat|lsdayofweek|ltrim|map|max|median|merge|mid|min|minute|month|overlay|part|paste|prepend
+          |quarter|recordcount|reduce|refind|refindnocase|rematch|rematchnocase|removechars|repeatstring|replace|replacenocase
+          |rereplace|rereplacenocase|resize|reverse|right|rowdata|rtrim|scaletofit|second|set|setantialiasing|setcell
+          |setdrawingstroke|sharpen|slice|some|sort|spanexcluding|spanincluding|stripcr|sum|swap|tolist|tostruct|translate
+          |trim|ucase|update|week|wrap|writebase64|year)
+        )(\()
+      beginCaptures:
+        '1': {name: keyword.operator.accessor.cfml}
+        '2': {name: support.function.member.cfml}
+        '3': {name: meta.support.function-call.member.arguments.cfml punctuation.definition.arguments.begin.cfml}
+      end: \)
+      endCaptures:
+        '0': {name: meta.support.function-call.member.arguments.cfml punctuation.definition.arguments.end.cfml}
+      patterns:
+      - include: '#expression'
+
+  switch:
+    patterns:
+    - name: meta.switch.cfml
+      begin: (?<!\.)\b(switch)\b
+      beginCaptures:
+        '1': {name: keyword.control.switch.cfml}
+      end: \}
+      endCaptures:
+        '0': {name: meta.brace.curly.cfml}
+      patterns:
+      - include: '#round-brackets'
+      - begin: \{
+        beginCaptures:
+          '0': {name: meta.brace.curly.cfml}
+        end: (?=})
+        patterns:
+        - begin: (?<!\.)\b(case|default)\b
+          beginCaptures:
+            '1': {name: keyword.control.switch.cfml}
+          end: (?=:)
+          patterns:
+          - include: '#expression'
+        - include: '#core'
+
+  tag-generic-attribute-script:
+    patterns:
+    - match: \b([a-zA-Z0-9:-]+)\b
+      captures:
+        '1': {name: entity.other.attribute-name.cfml}
+    - begin: '='
+      beginCaptures:
+        '0': {name: punctuation.separator.key-value.cfml}
+      end: (?<=[^\s=])|(?=[;{])
+      patterns:
+      - include: '#expression'
+
+  tag-in-script:
+    patterns:
+    - name: meta.tag.script.cfml
+      begin: (?i)(?<!\.)\b(property)(?!\s+in\b)(\s+(any|array|binary|boolean|component|date|guid|numeric|query|string|struct|xml|uuid|[_$a-zA-Z][$\w]*))?\s+([_$a-zA-Z][$\w]*\b)(?!\s*=)
+      beginCaptures:
+        '1': {name: entity.name.tag.script.cfml}
+        '3': {name: storage.type.cfml}
+        '4': {name: string.unquoted.cfml}
+      end: (?=(;|{))
+      patterns:
+      - include: '#tag-generic-attribute'
+    - name: meta.tag.script.cfml
+      begin: (?i)(?<!\.)\b(property)(?!\s+in\b)(?=(\s+[a-zA-Z]|\s*$|\s*[{;]))
+      beginCaptures:
+        '1': {name: entity.name.tag.script.cfml}
+      end: (?=(;|{))
+      patterns:
+      - include: '#tag-generic-attribute'
+    - name: meta.tag.script.cfml
+      begin: (?i)(?<!\.)\b(param)(?!\s+in\b)(?=\s+(name|default|max|maxLength|min|pattern|type)\s*=)
+      beginCaptures:
+        '1': {name: entity.name.tag.script.cfml}
+      end: (?=[;{])
+      patterns:
+      - include: '#tag-generic-attribute-script'
+    - name: meta.tag.script.cfml
+      begin: (?i)(?<!\.)\b(param)(?!\s+in\b)\s+([_$a-zA-Z][$\w\.]*)(?=\s+(name|default|max|maxLength|min|pattern|type))
+      beginCaptures:
+        '1': {name: entity.name.tag.script.cfml}
+        '2': {name: string.unquoted.cfml}
+      end: (?=[;{])
+      patterns:
+      - include: '#tag-generic-attribute-script'
+    - name: meta.tag.script.cfml
+      begin: (?i)(?<!\.)\b(param)(?!\s+in\b)(\s+([_$a-zA-Z][$\w]*))?\s+([_$a-zA-Z][$\w\.]*\b)
+      beginCaptures:
+        '1': {name: entity.name.tag.script.cfml}
+        '3': {name: storage.type.cfml}
+        '4': {name: string.unquoted.cfml}
+      end: (?=[;{])
+      patterns:
+      - include: '#tag-generic-attribute-script'
+    - name: meta.tag.script.cfml
+      begin: (?i)(?<!\.)\b(param)(?!\s+in\b)(?=(\s+[a-zA-Z]|\s*[{;]|\s*$))
+      beginCaptures:
+        '1': {name: entity.name.tag.script.cfml}
+      end: (?=[;{])
+      patterns:
+      - include: '#tag-generic-attribute-script'
+    - name: meta.tag.script.cfml
+      begin: (?<!\.)(\b)(?i:(abort))(?!s+in\b)(?=(s+[a-zA-Z]|s*;|s*$))
+      beginCaptures:
+        '2': {name: entity.name.tag.script.cfml}
+      end: (?=[;{])
+      patterns:
+      - include: '#tag-generic-attribute-script'
+    - name: meta.tag.script.cfml
+      begin: |-
+        (?x)
+        (?<!\.)(\b)
+        (?i:
+          (ajaximport|ajaxproxy|applet|application|argument|associate|authenticate|break|cache|chart|chartdata
+          |chartseries|col|collection|content|cookie|dbinfo|directory|div|document|documentitem
+          |documentsection|dump|error|execute|exit|feed|file|flush|form|forward|ftp|graph|graphdata
+          |header|htmlbody|htmlhead|http|httpparam|image|imap|import|include|index|input|insert|invoke|invokeargument
+          |layout|layoutarea|ldap|location|lock|log|login|loginuser|logout|loop|mail|mailparam|mailpart|map|mapitem|mediaplayer
+          |module|object|objectcache|output|pageencoding|pdf|pdfparam|pop|processingdirective|procparam|procresult
+          |query|queryparam|registry|rethrow|retry|savecontent|schedule|search|select|servlet|servletparam
+          |setting|silent|sleep|slider|stopwatch|storedproc|table|textinput|thread|throw|timer|trace|transaction
+          |update|video|videoplayer|videoplayerparam|wddx|window|xml|zip|zipparam)
+        )(?!\s+in\b)(?=(\s+[a-zA-Z]|\s*[{]|\s*$))
+      beginCaptures:
+        '2': {name: entity.name.tag.script.cfml}
+      end: (?=[;{])
+      patterns:
+      - include: '#tag-generic-attribute-script'
+
+  tag-generic-attribute:
+    patterns:
+    - match: \b([a-zA-Z0-9:-]+)\b
+      captures:
+        '1': {name: entity.other.attribute-name.cfml}
+    - match: (=)\s*((?:[^\s<>/'"{;]|/(?!/>))+)
+      captures:
+        '1': {name: punctuation.separator.key-value.cfml}
+        '2': {name: string.unquoted.cfml}
+    - name: punctuation.separator.key-value.cfml
+      match: '='
+    - include: '#tag-string'
+
+  tag-string:
+    patterns:
+    - include: '#tag-string-quoted-single'
+    - include: '#string-quoted-double'
+
+  tag-string-quoted-double:
+    name: string.quoted.double.cfml
+    begin: '"'
+    beginCaptures:
+      '0': {name: punctuation.definition.string.begin.cfml}
+    end: '"(?!")'
+    endCaptures:
+      '0': {name: punctuation.definition.string.end.cfml}
+    patterns:
+    - name: constant.character.escape.quote.cfml
+      match: '""'
+    - include: '#hash-delimiters'
+
+  tag-string-quoted-single:
+    name: string.quoted.single.cfml
+    begin: ''''
+    beginCaptures:
+      '0': {name: punctuation.definition.string.begin.cfml}
+    end: '''(?!'')'
+    endCaptures:
+      '0': {name: punctuation.definition.string.end.cfml}
+    patterns:
+    - name: constant.character.escape.quote.cfml
+      match: ''''''
+    - include: '#hash-delimiters'
+
+  variable:
+    patterns:
+    - name: variable.other.constant.cfml
+      match: \b[A-Z][_$\dA-Z]*\b
+    - name: variable.other.dollar.cfml
+      match: \b(\$)[$\w]+
+      captures:
+        '1': {name: punctuation.dollar.cfml}
+    - name: meta.property.class.cfml
+      match: \b([A-Z][$\w]*)\s*(\.)([_$a-zA-Z][$\w]*)
+      captures:
+        '1': {name: variable.other.class.cfml}
+        '2': {name: keyword.operator.accessor.cfml}
+        '3': {name: variable.other.property.static.cfml}
+    - name: variable.other.object.cfml
+      match: (?<!\.)[_$a-zA-Z][$\w]*\s*(?=[\[\.])
+      captures:
+        '1': {name: variable.other.object.cfml}
+    - name: meta.property.object.cfml
+      match: (?<=\.)\s*[_$a-zA-Z][$\w]*
+      captures:
+        '2': {name: variable.other.property.cfml}
+    - name: variable.other.cfml
+      match: '[_$a-zA-Z][$\w]*'

@@ -1,0 +1,65 @@
+<style>
+html {
+	font-size: 10pt;
+}
+body {
+	margin: 0;
+	padding: 0;
+}
+.outer-container {
+
+	background-color: ${side_color};
+	margin: 0;
+	padding: 0;
+}
+.inner-container {
+	background-color: #FFFFFF;
+	margin-left: 3px;
+	padding: 5px;
+	padding-right: 10px;
+}
+h1 {
+	font-size: 1em;
+	margin: 1px;
+	padding: 2px;
+	background-color: ${header_bg_color};
+	color: ${header_color};
+}
+p {
+	margin: 1px;
+	padding: 2px;
+	color: ${text_color};
+}
+.link {
+	margin: 1px;
+	padding: 2px;
+	color: ${side_color};
+}
+.pre {
+	padding: 5px;
+	background-color: #F2F2F2;
+	color: #333333;
+	font-size: 9pt;
+}
+.code {
+	background-color: #F5F5F5;
+	color: #333333;
+}
+.pagination {
+	font-size: 9pt;
+	background-color: #DDDDDD;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+</style>
+<div class="outer-container">
+<div class="inner-container">
+<h1>${header}</h1>
+<p>${description}</p>
+<div>${body}</div>
+<div>${links}</div>
+</div>
+</div>
+${pagination}

@@ -1,0 +1,98 @@
+{
+	"onapplicationstart": {
+		"header": "onApplicationStart()",
+		"description": "This function is triggered when no application context is existing for this Application.cfc, so normally with the first request on this application context. This is normally used to initialize the environment for your application, so for example load data/objects and store them in the application scope. if the the function is returning false or throws a exception the application context is not initialized and the next request will call \"onApplicationStart\" again. \"onApplicationStart\" is thread safe.",
+		"links": [
+			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
+			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/onapplicationstart.html", "text": "helpx.adobe.com onapplicationstart.html"}
+		]
+	},
+	"onapplicationend": {
+		"header": "onApplicationEnd()",
+		"description": "The opposite from \"onApplicationStart\", this function is triggered when the application context ends, means when the timeout of the application context is reached (this.applicationTimeout). This is normally used to finalize the environment of your application, so for example unload data/objects. You get the application scope that ends as argument with the function.",
+		"links": [
+			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
+			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/onapplicationend.html", "text": "helpx.adobe.com onapplicationend.html"}
+		]
+	},
+	"onsessionstart": {
+		"header": "onSessionStart()",
+		"description": "This function is triggered with every request that has no session defined in the current application context. This is normally used to initialize the environment for a specific session, so for example load data/objects and store them in the session scope.",
+		"links": [
+			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
+			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/onsessionstart.html", "text": "helpx.adobe.com onsessionstart.html"}
+		]
+	},
+	"onsessionend": {
+		"header": "onSessionEnd()",
+		"description": "The opposite from \"onSessionStart\", this function is triggered when a specific session context ends, means when the timeout of a session context is reached (this.sessionTimeout). This is normally used to finalize the environment of your application, so for example unload data/objects. You get the related application scope and the session scope that ends, as arguments with the function.",
+		"links": [
+			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
+			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/onsessionend.html", "text": "helpx.adobe.com onsessionend.html"}
+		]
+	},
+	"onrequeststart": {
+		"header": "onRequestStart()",
+		"description": "This function is triggered before every request, so you can prepare the environment for the request, for example produce the HTML header or loads some data/objects used within the request. If the function returns false Lucee stops any further execution of this request and return the result to the client.",
+		"links": [
+			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
+			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/onrequeststart.html", "text": "helpx.adobe.com onrequeststart.html"}
+		]
+	},
+	"onrequestend": {
+		"header": "onRequestEnd()",
+		"description": "This function is triggered after every request, so you can cleanup the environment after the request, for example produce the HTML footer or unload some data/objects used within the request.",
+		"links": [
+			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
+			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/onrequestend.html", "text": "helpx.adobe.com onrequestend.html"}
+		]
+	},
+	"onrequest": {
+		"header": "onRequest()",
+		"description": "If this function exists, Lucee only executes this function and no longer looks for the \"targetPage\" defined with the request. So let's say you have the call \"/index.cfm\", if there is a \"/index.cfm\" in the file system or not, does not matter, it is not executed anyway. (Note: other CFML Engines will complain when the called target page does not exists physically even it is never used!)",
+		"links": [
+			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
+			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/onrequest.html", "text": "helpx.adobe.com onrequest.html"}
+		]
+	},
+	"oncfcrequest": {
+		"header": "onCFCRequest()",
+		"description": "Similar to \"onRequest\", but this function is used to handle remote component calls (HTTP Webservices).",
+		"links": [
+			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
+			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/oncfcrequest.html", "text": "helpx.adobe.com oncfcrequest.html"}
+		]
+	},
+	"onerror": {
+		"header": "onError()",
+		"description": "This method is triggered when a uncaught exception occurs in this application context. As arguments you get the exception (cfcatch block) and the eventName.",
+		"links": [
+			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
+			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/onerror.html", "text": "helpx.adobe.com onerror.html"}
+		]
+	},
+	"onabort": {
+		"header": "onAbort()",
+		"description": "This method is triggered when a request is ended with help of the tag <cfabort>.",
+		"links": [
+			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
+			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/onabort.html", "text": "helpx.adobe.com onabort.html"}
+		]
+	},
+	"ondebug": {
+		"header": "onDebug()",
+		"description": "This method is triggered when debugging is enabled for this request.",
+		"links": [
+			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
+			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/ondebug.html", "text": "helpx.adobe.com ondebug.html"}
+		]
+	},
+	"onmissingtemplate": {
+		"header": "onMissingTemplate()",
+		"description": "This method is triggered when a requested page was not found and no function \"onRequest\" is defined .",
+		"links": [
+			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
+			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/onmissingtemplate.html", "text": "helpx.adobe.com onmissingtemplate.html"}
+		]
+	}
+}

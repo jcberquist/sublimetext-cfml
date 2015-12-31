@@ -1,0 +1,14 @@
+{
+	"onAbort": "(string targetPage) {$0}",
+	"onApplicationEnd": "(struct applicationScope) {$0}",
+	"onApplicationStart": "() {$0}",
+	"onCFCRequest": "(string cfcName, string methodName, struct args) {$0}",
+	"onDebug": "(struct debuggingData) {$0}",
+	"onError": "(struct exception, string eventName) {$0}",
+	"onMissingTemplate": "(string targetPage) {$0}",
+	"onRequest": "(string targetPage) {$0}",
+	"onRequestEnd": "(string targetPage) {$0}",
+	"onRequestStart": "(string targetPage) {$0}",
+	"onSessionEnd": "(struct applicationScope, struct sessionScope) {$0}",
+	"onSessionStart": "() {$0}"
+}

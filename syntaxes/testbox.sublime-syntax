@@ -1,0 +1,38 @@
+%YAML1.2
+---
+name: TestBox
+scope: testbox
+hidden: true
+contexts:
+  main:
+    - match: '[\w\s\.]+\s\(\d+\sms\)$'
+      scope: testbox.header
+    - match: '\->\['
+      push:
+        - meta_scope: testbox.totals
+        - match: \]
+          pop: true
+        - match: 'Pass: ([1-9]\d*)'
+          captures:
+            1: testbox.success
+        - match: 'Failures: ([1-9]\d*)'
+          captures:
+            1: testbox.failure
+        - match: 'Errors: ([1-9]\d*)'
+          captures:
+            1: testbox.error
+        - match: 'Skipped: ([1-9]\d*)'
+          captures:
+            1: testbox.skipped
+    - match: \(\+\).*$
+      scope: testbox.success
+    - match: \(!\).*$
+      scope: testbox.failure
+    - match: \(X\).*$
+      scope: testbox.error
+    - match: \(\-\).*$
+      scope: testbox.skipped    
+    - match: \S.*testbox[\\/]system.*:\d+$
+      scope: testbox.stack.testbox
+    - match: \S.*:\d+$
+      scope: testbox.stack

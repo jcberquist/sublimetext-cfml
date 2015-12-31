@@ -1,0 +1,640 @@
+{
+  "variables.framework.action": {
+    "header": "variables.framework.action",
+    "description": "The URL or form variable used to specify the desired action (<span class=\"code\">?action=section.item</span>).",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.applicationkey": {
+    "header": "variables.framework.applicationKey",
+    "description": "A unique value for each FW/1 application that shares a common ColdFusion application name.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.base": {
+    "header": "variables.framework.base",
+    "description": "Provide this if the application itself is not in the same directory as <span class=\"code\">Application.cfc</span> and <span class=\"code\">index.cfm</span>. It should be the <strong>relative</strong> path to the application from the <span class=\"code\">Application.cfc</span> file, or a <strong>mapped</strong> path to the application. Examples: <span class=\"code\">\"../myapp/\"</span>, <span class=\"code\">\"/appmaping/\"</span>.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.baseurl": {
+    "header": "variables.framework.baseURL",
+    "description": "Normally, <span class=\"code\">redirect()</span> and <span class=\"code\">buildURL()</span> default to using <span class=\"code\">CGI.SCRIPT_NAME</span> as the basis for the URL they construct. This is the right choice for most applications but there are times when the base URL used for your application could be different. You can also specify <span class=\"code\">baseURL = \"useRequestURI\"</span> and instead of <span class=\"code\">CGI.SCRIPT_NAME</span>, the result of <span class=\"code\">getPageContext().getRequest().getRequestURI()</span> will be used to construct URLs. This is the right choice for FW/1 applications embedded inside Mura.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.cachefileexists": {
+    "header": "variables.framework.cacheFileExists",
+    "description": "If you are running on a system where disk access is slow - or you simply want to avoid several calls to <span class=\"code\">fileExists()</span> during requests for performance - you can set this to true and FW/1 will cache all its calls to <span class=\"code\">fileExists()</span>. Be aware that if the result of <span class=\"code\">fileExists()</span> is cached and you add a new layout or a new view, it won't be noticed until you reload the framework.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.cfcbase": {
+    "header": "variables.framework.cfcbase",
+    "description": "Provide this if the <span class=\"code\">controllers</span> and <span class=\"code\">model</span> folders are not in the same folder as the application. It is used as the dotted-path prefix for controller and service CFCs, e.g., if <span class=\"code\">cfcbase = 'com.myapp'</span> then a controller would be <span class=\"code\">com.myapp.controllers.MyController</span>.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.controllersfolder": {
+    "header": "variables.framework.controllersFolder",
+    "description": "The name used for the controllers folder. Must be plural. Defaults to <span class=\"code\">\"controllers\"</span> but could be <span class=\"code\">\"handlers\"</span> for example. <em>New in 3.5.</em>",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.defaultitem": {
+    "header": "variables.framework.defaultItem",
+    "description": "This is the default item to use when none is specified in the URL or form post. It defauts to <span class=\"code\">\"default\"</span>.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.defaultsection": {
+    "header": "variables.framework.defaultSection",
+    "description": "This is the default section to use when none is specified in the URL or form post. It defaults to <span class=\"code\">\"main\"</span>.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.defaultsubsystem": {
+    "header": "variables.framework.defaultSubsystem",
+    "description": "If legacy subsystems are enabled, this is the default subsystem when none is specified in the URL or form post. It defaults to <span class=\"code\">\"home\"</span>. As of release 3.5, it is recommended to use the new style subsystems (and omit this).",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.dicomponent": {
+    "header": "variables.framework.diComponent",
+    "description": "The dotted-path to the CFC used for the bean factory (which has sensible defaults based on <span class=\"code\">diEngine</span>).",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig": {
+    "header": "variables.framework.diConfig",
+    "description": "Any additional configuration needed for the Dependency Injection engine; defaults to <span class=\"code\">{ }</span>.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.constants": {
+    "header": "variables.framework.diConfig.constants",
+    "description": "struct - defaults to <span class=\"code\">{}</span>. DI/1 will use any name/value pairs specified here to provide <em>beans</em> that resolve to the specified values. This can be used to provide resolution for constructor arguments that need values which are not actual beans. See also <span class=\"code\">addBean()</span> in the <strong>Customization</strong> section that follows.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.exclude": {
+    "header": "variables.framework.diConfig.exclude",
+    "description": "array - defaults to <span class=\"code\">[]</span>. DI/1 will ignore any CFCs whose file path contains the strings in this array. DI/1 always excludes paths containing <span class=\"code\">/WEB-INF</span> and <span class=\"code\">/Application.cfc</span>, as well as various FW/1 and DI/1 framework files. The strings are not case-sensitive.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.initmethod": {
+    "header": "variables.framework.diConfig.initMethod",
+    "description": "string - If specified, identifies a method name on beans that DI/1 will attempt to call (with no arguments) on each bean after its dependencies have been injected.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.liberal": {
+    "header": "variables.framework.diConfig.liberal",
+    "description": "boolean - default to <span class=\"code\">false</span>. If <span class=\"code\">true</span>, treat folder names ending in <span class=\"code\">ies</span> as plurals (of names ending in <span class=\"code\">y</span>, e.g., <span class=\"code\">libraries</span> would be treated as the plural of <span class=\"code\">librarie</span> by default, but with <span class=\"code\">liberal : true</span>, it would be treated as the plural of <span class=\"code\">library</span>).",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.loadlistener": {
+    "header": "variables.framework.diConfig.loadListener",
+    "description": "any - If specified, DI/1 will register it as a load listener by calling <span class=\"code\">this.onLoad( loadListener )</span>. It can be a CFC instance, the name of a bean, or a function or closure.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.omitdefaultedproperties": {
+    "header": "variables.framework.diConfig.omitDefaultedProperties",
+    "description": "boolean - defaults to <span class=\"code\">true</span>. If <span class=\"code\">false</span>, property declarations that specify a default will still be treated as dependency declarations and autowired. If <span class=\"code\">true</span>, property declarations that specify a default will be ignored for injection. This is useful when you are using <span class=\"code\">property</span> declarations on transients solely for generating setters and getters, rather than for declaring dependencies. <em>New in 4.0.</em>",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.omitdirectoryaliases": {
+    "header": "variables.framework.diConfig.omitDirectoryAliases",
+    "description": "boolean - defaults to <span class=\"code\">false</span>. If <span class=\"code\">true</span>, use CFC names as bean names directly, without appending the singular directory name as a suffix. If your CFC names are not unique, you will get an exception.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.omittypedproperties": {
+    "header": "variables.framework.diConfig.omitTypedProperties",
+    "description": "boolean - defaults to <span class=\"code\">true</span>. If <span class=\"code\">false</span>, property declarations that specify a type (other than <span class=\"code\">any</span>) will still be treated as dependency declarations and autowired. If <span class=\"code\">true</span>, property declarations that specify a type will be ignored for injection. This is useful when you are working with the ORM (since those property declarations will typeically have types and should not be treated as dependencies). <em>The default changed from <span class=\"code\">false</span> to <span class=\"code\">true</span> in 4.0.</em>",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.recurse": {
+    "header": "variables.framework.diConfig.recurse",
+    "description": "boolean - defaults to <span class=\"code\">true</span>. Controls whether DI/1 searches subfolders recursively or not.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.singletonpattern": {
+    "header": "variables.framework.diConfig.singletonPattern",
+    "description": "string - no default. Specifies a regular expression that DI/1 uses to determine whether a bean is singleton or not, based on its name. The <span class=\"code\">beans</span> folder convention and the <span class=\"code\">transients</span> configuration below still apply so nothing in those folders will be considered a singleton, even if its name matches the pattern.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.singulars": {
+    "header": "variables.framework.diConfig.singulars",
+    "description": "struct - defaults to <span class=\"code\">{}</span>. DI/1 will use any name/value pairs specified here to translate folder names to a singular variety, e.g., <span class=\"code\">pride = 'lion'</span> will convert the <em>plural</em> folder <span class=\"code\">pride</span> to the <em>singular</em> name <span class=\"code\">lion</span> and therefore a <span class=\"code\">simba.cfc</span> within the <span class=\"code\">pride</span> folder will get the alias <span class=\"code\">simbaLion</span>. This also allows for other folders to behave as if they were called <span class=\"code\">beans</span> by treating their singular name as <span class=\"code\">bean</span>. One of the DI/1 unit tests maps <span class=\"code\">sheep</span> to <span class=\"code\">bean</span> for this reason. This won't work if the CFCs in <span class=\"code\">sheep</span> have the same name as the CFCs in a <span class=\"code\">beans</span> folder however.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.strict": {
+    "header": "variables.framework.diConfig.strict",
+    "description": "boolean - defaults to <span class=\"code\">false</span>. If <span class=\"code\">true</span>, DI/1 will throw an exception if it cannot resolve a bean implied by a constructor argument, setter name or property name. If <span class=\"code\">false</span>, DI/1 simply calls <span class=\"code\">logMissingBean()</span> which writes the failure to the Java console. See <span class=\"code\">missingBean()</span> in <strong>Overriding DI/1 Behavior</strong> below for more details.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.transientpattern": {
+    "header": "variables.framework.diConfig.transientPattern",
+    "description": "string - no default. Specifies a regular expression that DI/1 uses to determine whether a bean is transient or not, based on its name. The <span class=\"code\">beans</span> folder convention and the <span class=\"code\">transients</span> configuration below still apply so CFCs in those folders will be still considered transients, in addition to any name that matches the pattern.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diconfig.transients": {
+    "header": "variables.framework.diConfig.transients",
+    "description": "array - defaults to <span class=\"code\">[]</span>. DI/1 will consider any CFCs found in these folders to be transient, rather than singleton. The conversion to a singular form will still take place to create the alias for each CFC. For example, if <span class=\"code\">singulars = { pride = 'lion' }</span> and <span class=\"code\">transients = [ 'pride' ]</span> then any CFCs in the <span class=\"code\">pride</span> folder will be treated as transients and their alias will end in <span class=\"code\">Lion</span>.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.diengine": {
+    "header": "variables.framework.diEngine",
+    "description": "The Dependency Injection framework that FW/1 should use.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.dilocations": {
+    "header": "variables.framework.diLocations",
+    "description": "The list of folders to check for CFCs to manage; defaults to <span class=\"code\">[ \"model\", \"controllers\" ]</span>.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.dioverrideallowed": {
+    "header": "variables.framework.diOverrideAllowed",
+    "description": "If <span class=\"code\">true</span>, FW/1 will throw an exception if you attempt to call <span class=\"code\">setBeanFactory()</span> twice. If <span class=\"code\">false</span>, FW/1 will allow you to call <span class=\"code\">setBeanFactory()</span> twice and override the previous Dependency Injection setting, but it will log a warning to the console. If you want FW/1 to manage your bean factory, use the <span class=\"code\">di*</span> settings above to configure it \u2013 and do not call <span class=\"code\">setBeanFactory()</span> yourself. If you want to manage your bean factory directly, set <span class=\"code\">diEngine</span> to <span class=\"code\">\"none\"</span> so FW/1 doesn't also attempt to do this. <em>New in 3.5.</em>",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.enablejsonpost": {
+    "header": "variables.framework.enableJSONPOST",
+    "description": "Default <span class=\"code\">false</span>. If <span class=\"code\">true</span>, FW/1 will accept JSON POST data and deserialize it automatically into the request context. <em>New in 4.0.</em>",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.environments": {
+    "header": "variables.framework.environments",
+    "description": "An optional struct containing per-tier and per-server configuration that should be merged into FW/1's settings. See <strong><a href=\"http://framework-one.github.io/documentation/4.0/developing-applications.html#environment-control\">Environment Control</a></strong> below for more details.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.error": {
+    "header": "variables.framework.error",
+    "description": "The action to use if an exception occurs. By default this is <span class=\"code\">defaultSection.error</span>.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.generateses": {
+    "header": "variables.framework.generateSES",
+    "description": "If true, causes <span class=\"code\">redirect()</span> and <span class=\"code\">buildURL()</span> to generate SES-style URLs with items separated by <span class=\"code\">/</span> (and the path info in the URL will begin <span class=\"code\">/section/item</span> rather than <span class=\"code\">?action=section.item</span> - see the <a href=\"http://framework-one.github.io/documentation/4.0/reference-manual.html\">Reference Manual</a> for more details).",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.home": {
+    "header": "variables.framework.home",
+    "description": "The default action when it is not specified in the URL or form post. By default, this is <span class=\"code\">defaultSection</span>.<span class=\"code\">defaultItem</span>. If you specify <span class=\"code\">home</span>, you are overriding (and hiding) <span class=\"code\">defaultSection</span> but not <span class=\"code\">defaultItem</span>. If <span class=\"code\">usingSubsystem</span> is <span class=\"code\">true</span>, the default for <span class=\"code\">home</span> is <span class=\"code\">\"home:main.default\"</span>, i.e., <span class=\"code\">defaultSubsystem &amp; subsystemDelimiter &amp; defaultSection &amp; '.' &amp; defaultItem</span>.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.layoutsfolder": {
+    "header": "variables.framework.layoutsFolder",
+    "description": "The name used for the layouts folder. Must be plural. Defaults to <span class=\"code\">\"layouts\"</span> but could be <span class=\"code\">\"wrappers\"</span> for example. <em>New in 3.5.</em>",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.maxnumcontextspreserved": {
+    "header": "variables.framework.maxNumContextsPreserved",
+    "description": "If you expect users to have more than 10 browser windows open at the same time, you'll want to set this value higher. I know, Ryan was very thorough when he implemented multiple flash contexts! Setting <span class=\"code\">maxNumContextsPreserved</span> to <span class=\"code\">1</span> will prevent the URL key from being used for redirects (since FW/1 will not need to track multiple flash contexts).",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.nolowercase": {
+    "header": "variables.framework.noLowerCase",
+    "description": "If <span class=\"code\">true</span>, FW/1 will not force actions to lowercase so subsystem, section and item names will be case sensitive (in particular, filenames for controllers, views and layouts may therefore be mixed case on a case-sensitive operating system). The default is <span class=\"code\">false</span>. Use of this option is <em>not</em> recommended and is not considered good practice.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.optionsaccesscontrol": {
+    "header": "variables.framework.optionsAccessControl",
+    "description": "Default <span class=\"code\">{ }</span>. You can use this to override the default <span class=\"code\">Access-Control-*</span> headers returns by FW/1's <span class=\"code\">OPTIONS</span> support. Valid keys are: <span class=\"code\">origin</span>, <span class=\"code\">headers</span>, <span class=\"code\">credentials</span>, and <span class=\"code\">maxAge</span>. <em>New in 4.0.</em>",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.password": {
+    "header": "variables.framework.password",
+    "description": "The value of the reload URL variable that must be specified, e.g., <span class=\"code\">?reload=true</span> is the default but you could specify <span class=\"code\">reload = 'refresh', password = 'fw1'</span> and then specifying <span class=\"code\">?refresh=fw1</span> would cause a reload.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.perresourceerror": {
+    "header": "variables.framework.perResourceError",
+    "description": "Default <span class=\"code\">true</span>. Controls whether a wildcard route is added to each resouce template. See <strong><a href=\"url-routes\">URL Routes</a></strong> for more details.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.preflightoptions": {
+    "header": "variables.framework.preflightOptions",
+    "description": "Default <span class=\"code\">false</span>. If <span class=\"code\">true</span>, FW/1 will handle HTTP <span class=\"code\">OPTIONS</span> requests for you. See <strong><a href=\"http://framework-one.github.io/documentation/4.0/developing-applications.html#options-support\">OPTIONS Support</a></strong> above for more details. <em>New in 4.0.</em>",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.preservekeyurlkey": {
+    "header": "variables.framework.preserveKeyURLKey",
+    "description": "In order to support multiple, concurrent flash scope uses - across redirects - for a single user, such as when they have multiple browser windows open, this value is used as a URL key that identifies which flash context should be restored for that browser window. If that doesn't make sense, don't worry about it - it's magic! This value just needs to be something unique that won't clash with any of your own URL variables. This will be ignored if you set <span class=\"code\">maxNumContextsPreserved</span> to <span class=\"code\">1</span> because with only one context, FW/1 will not use a URL variable to track flash scope across redirects.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.reload": {
+    "header": "variables.framework.reload",
+    "description": "The URL variable used to force FW/1 to reload its application cache and re-execute <span class=\"code\">setupApplication()</span>.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.reloadapplicationoneveryrequest": {
+    "header": "variables.framework.reloadApplicationOnEveryRequest",
+    "description": "If this is set to <span class=\"code\">true</span> then FW/1 behaves as if you specified the <span class=\"code\">reload</span> URL variable on every request, i.e., at the start of each request, the controller/service cache is cleared and <span class=\"code\">setupApplication()</span> is executed.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.resourceroutetemplates": {
+    "header": "variables.framework.resourceRouteTemplates",
+    "description": "see <strong><a href=\"url-routes\">URL Routes</a></strong> below.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.routes": {
+    "header": "variables.framework.routes",
+    "description": "An array of URL path mappings. This allows you to override the conventional mapping of <span class=\"code\">/section/item</span> to controllers.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.routescasesensitive": {
+    "header": "variables.framework.routesCaseSensitive",
+    "description": "Default <span class=\"code\">true</span>. Controls whether route matches are case-sensitive or not. <em>New in 3.1.</em>",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.sesomitindex": {
+    "header": "variables.framework.SESOmitIndex",
+    "description": "If SES URLs are enabled and this is <span class=\"code\">true</span>, will attempt to omit the base filename in the path when constructing URLs in <span class=\"code\">buildURL()</span> and <span class=\"code\">redirect()</span> which will generally omit <span class=\"code\">/index.cfm</span> from the start of the URL. Again, see the <a href=\"http://framework-one.github.io/documentation/4.0/reference-manual.html\">Reference Manual</a> for more details.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.sitewidelayoutsubsystem": {
+    "header": "variables.framework.siteWideLayoutSubsystem",
+    "description": "If legacy subsystems are enabled, this specifies the subsystem that is used for the (optional) site-wide default layout. It defaults to <span class=\"code\">\"common\"</span>. As of release 3.5, it is recommended to use the new style subsystems (and omit this).",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.subsystemdelimiter": {
+    "header": "variables.framework.subsystemDelimiter",
+    "description": "This specifies the delimiter between the subsystem name and the section in an action. It defaults to <span class=\"code\">\":\"</span>.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.subsystems": {
+    "header": "variables.framework.subsystems",
+    "description": "An optional struct of structs containing per-subsystem configuration data. Each key in the top-level struct is named for a subsystem. The contents of the nested structs can be anything you want for your subsystems. Retrieved by calling <span class=\"code\">getSubsystemConfig()</span>. Currently the only keys used by FW/1 are <span class=\"code\">baseURL</span> and <span class=\"code\">diConfig</span> which can be used to configure per-subsystem values.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.subsystemsfolder": {
+    "header": "variables.framework.subsystemsFolder",
+    "description": "The name used for the subsystems folder. Must be plural. Defaults to <span class=\"code\">\"subsystems\"</span> but could be <span class=\"code\">\"plugins\"</span> for example. <em>New in 3.5.</em>",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.trace": {
+    "header": "variables.framework.trace",
+    "description": "If <span class=\"code\">true</span>, FW/1 will print out debugging / tracing information at the bottom of each page. This can be very useful for debugging your application! If you want to track framework behavior across redirects, you need to enable session management in your application if you use this feature. (Note that FW/1 will not print out debugging / tracing information when the <span class=\"code\">renderData()</span> function is used, unless the content type is <span class=\"code\">\"html\"</span>. You can still access and output debugging / tracing information in such cases by overriding the <span class=\"code\">setupTraceRender()</span> function. See the <a href=\"http://framework-one.github.io/documentation/4.0/reference-manual.html\">Reference Manual</a> for more details.).",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.unhandlederrorcaught": {
+    "header": "variables.framework.unhandledErrorCaught",
+    "description": "By default the framework does not attempt to catch errors raised by unhandled requests but sometimes when you are migrating from a legacy application it is useful to route error handling of legacy (unhandled) requests through FW/1. The default for this option is <span class=\"code\">false</span>. Set it <span class=\"code\">true</span> to have FW/1's error handling apply to unhandled requests.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.unhandledextensions": {
+    "header": "variables.framework.unhandledExtensions",
+    "description": "A list of file extensions that FW/1 should not handle. By default, just requests for CFCs, e.g., <span class=\"code\">some.cfc</span>, are not handled by FW/1. As of release 3.5, Lucee components, with extensions of <span class=\"code\">.lc</span> or <span class=\"code\">.lucee</span> are also not handled by the framework.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.unhandledpaths": {
+    "header": "variables.framework.unhandledPaths",
+    "description": "A list of file paths that FW/1 should not handle. By default, just requests for <span class=\"code\">/flex2gateway</span> are not handled by FW/1 (hey, some people are still using Flex - don't judge!). If you specify a directory path, requests for any files in that directory are then not handled by FW/1. For example, <span class=\"code\">unhandledPaths = '/flex2gateway,/404.cfm,/api'</span> will cause FW/1 to not handle requests from Flex, requests for the <span class=\"code\">/404.cfm</span> page and any requests for files in the <span class=\"code\">/api</span> folder.",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.usingsubsystems": {
+    "header": "variables.framework.usingSubsystems",
+    "description": "Whether or not to use legacy style subsystems - see <strong><a href=\"http://framework-one.github.io/documentation/4.0/developing-applications.html#using-subsystems\">Using Subsystems</a></strong> below. This is automatically set <span class=\"code\">true</span> if you explicitly specify a <span class=\"code\">defaultSubsystem</span>. As of release 3.5, it is recommended to use the new style subsystems (and leave this as <span class=\"code\">false</span> or omit it).",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  },
+  "variables.framework.viewsfolder": {
+    "header": "variables.framework.viewsFolder",
+    "description": "The name used for the views folder. Must be plural. Defaults to <span class=\"code\">\"views\"</span> but could be <span class=\"code\">\"pages\"</span> for example. <em>New in 3.5.</em>",
+    "body": "",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.0/developing-applications.html",
+        "text": "Framework One Developing Applications Manual"
+      }
+    ]
+  }
+}
