@@ -87,41 +87,60 @@ def get_struct_context(view, position):
 
 	return context
 
-def get_last_open_tag(view, pos):
-	open_tags = deque()
-	tag_starts = [r for r in view.find_by_selector("punctuation.definition.tag.begin") if r.end() <= pos]
-	tag_ends = [r for r in view.find_by_selector("punctuation.definition.tag.end") if r.end() <= pos]
+def get_tag_end(view, pos, is_cfml):
+	tag_end = view.find("/?>", pos)
+	if tag_end:
+		if view.match_selector(tag_end.begin(), "punctuation.definition.tag"):
+			tag_end_is_cfml = view.match_selector(tag_end.begin(), "punctuation.definition.tag.end.cfml")
+			if is_cfml == tag_end_is_cfml:
+				return tag_end
+		return get_tag_end(view, tag_end.end(), is_cfml)
+	return None
 
-	# if lengths don't match don't bother trying to find last open tag
-	if len(tag_starts) != len(tag_ends):
-		return None
 
-	for tag_start, tag_end in zip(tag_starts, tag_ends):
-		tag_name_region = sublime.Region(tag_start.end(), view.find_by_class(tag_start.end(), True, sublime.CLASS_WORD_END, "/>"))
+def get_last_open_tag(view, pos, cfml_only):
+	tag_selector = "entity.name.tag.cfml" if cfml_only else "entity.name.tag"
+	closed_tags = []
+	tag_name_regions = reversed([r for r in view.find_by_selector(tag_selector) if r.end() <= pos])
+
+	for tag_name_region in tag_name_regions:
+		# check for closing tag
+		if view.substr(tag_name_region.begin() - 1) == "/":
+			closed_tags.append(view.substr(tag_name_region))
+			continue
+
+		# this is an opening tag
+		is_cfml = view.match_selector(tag_name_region.begin(), "entity.name.tag.cfml")
+		tag_end = get_tag_end(view, tag_name_region.end(), is_cfml)
+
+		# if no tag end then give up
+		if not tag_end: 
+			return None
+
+		# if tag_end is after cursor position, then ignore it
+		if tag_end.begin() > pos:
+			continue
+
+		# if tag_end length is 2 then this is a self closing tag so ignore it
+		if tag_end.size() == 2:
+			continue
+
 		tag_name = view.substr(tag_name_region)
 
-		# if length is 1 then this is a tag opening punctuation
-		if tag_start.size() == 1:
+		if tag_name in closed_tags:
+			closed_tags.remove(tag_name)
+			continue
 
-			if tag_end.size() > 1:
-				# self closing tag has tag end of size 2 "/>" - skip these
-				continue
+		# check to exclude cfml tags that should not have a closing tag
+		if tag_name in ["cfset","cfelse","cfelseif","cfcontinue","cfbreak","cfthrow","cfrethrow"]:
+			continue
+		# check to exclude html tags that should not have a closing tag
+		if tag_name in ["area","base","br","col","command","embed","hr","img","input","link","meta","param","source"]:
+			continue
 
-			# check to exclude cfml tags that should not have a closing tag
-			if tag_name in ["cfset","cfelse","cfelseif","cfcontinue","cfbreak","cfthrow","cfrethrow"]:
-				continue
+		return tag_name
 
-			# check to exclude html tags that should not have a closing tag
-			if tag_name in ["area","base","br","col","command","embed","hr","img","input","link","meta","param","source"]:
-				continue
-
-			open_tags.appendleft(tag_name)
-
-		# if length is 2 then this is a tag closing punctuation
-		if tag_start.size() == 2 and tag_name in open_tags:
-			open_tags.remove(tag_name)
-
-	return open_tags.popleft() if len(open_tags) > 0 else None
+	return None
 
 def get_tag_name(view, pos):
 	tag_scope = "meta.tag.cfml - punctuation.definition.tag.begin,meta.tag.script.cfml - punctuation.definition.tag.begin"
