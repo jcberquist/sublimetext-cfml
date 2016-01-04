@@ -12,28 +12,19 @@ contexts:
     - match: (?i)(?=^\s*(/\*|//|import\b|(component|interface)(\s+|{)))
       push: scope:source.cfml.script
     - include: comments
-    - match: (?i)(?=(</?cf))
+    - match: (?i)(?=<cf(component|interface)\b)
       push:
         - meta_scope: source.cfml
-        - include: cfml
-    - match: (?=<?!?[a-zA-Z0-9:]+)
+        - include: cfcomponent
+        - include: cfinterface
+    - match: (?=\S)
       set: html
       with_prototype:
-        - include: comments
-        - match: (?i)(?=</?cf)
-          push: cfml
+        - include: cfmltags
   html:
-    - meta_scope: text.html.cfml
+    - meta_content_scope: text.html.cfml
     - include: scope:text.html.basic
   cfcomponent:
-    - meta_scope: source.cfml
-    - match: (?i)(</)(cfcomponent)(>)
-      captures:
-        0: meta.tag.cfml
-        1: punctuation.definition.tag.begin.cfml
-        2: entity.name.tag.cfml storage.type.class.cfml
-        3: punctuation.definition.tag.end.cfml
-      pop: true
     - match: (?i)(<)(cfcomponent)
       captures:
         1: punctuation.definition.tag.begin.cfml
@@ -42,7 +33,7 @@ contexts:
         - meta_scope: meta.tag.cfml meta.class.cfml
         - match: ">"
           scope: punctuation.definition.tag.end.cfml
-          pop: true
+          set: cfcomponent-contents
         - match: '(?i)\b(extends)\s*(=)\s*"'
           captures:
             1: storage.modifier.extends.cfml
@@ -54,19 +45,18 @@ contexts:
             - match: '"'
               pop: true
         - include: tag-generic-attribute
-    - include: comments
-    - include: cffunction
-    - match: (?i)(?=</?cf)
-      push: cfmltags
-  cfinterface:
-    - meta_scope: source.cfml
-    - match: (?i)(</)(cfinterface)(>)
+  cfcomponent-contents:
+    - match: (?i)(</)(cfcomponent)(>)
       captures:
         0: meta.tag.cfml
         1: punctuation.definition.tag.begin.cfml
-        2: entity.name.tag.cfml storage.type.interface.cfml
+        2: entity.name.tag.cfml storage.type.class.cfml
         3: punctuation.definition.tag.end.cfml
       pop: true
+    - include: comments
+    - include: cffunction
+    - include: cfmltags
+  cfinterface:
     - match: (?i)(<)(cfinterface)
       captures:
         1: punctuation.definition.tag.begin.cfml
@@ -75,12 +65,11 @@ contexts:
         - meta_scope: meta.tag.cfml meta.interface.cfml
         - match: ">"
           scope: punctuation.definition.tag.end.cfml
-          pop: true
+          set: cfinterface-contents
         - match: '(?i)\b(extends)\s*(=)\s*"'
           captures:
             1: storage.modifier.extends.cfml
             2: punctuation.separator.key-value.cfml
-            3: entity.other.inherited-interface.cfml
           push:
             - meta_content_scope: meta.interface.inheritance.cfml
             - match: '([_$a-zA-Z][$\w]*)'
@@ -88,6 +77,14 @@ contexts:
             - match: '"'
               pop: true
         - include: tag-generic-attribute
+  cfinterface-contents:
+    - match: (?i)(</)(cfinterface)(>)
+      captures:
+        0: meta.tag.cfml
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml storage.type.interface.cfml
+        3: punctuation.definition.tag.end.cfml
+      pop: true
     - include: comments
     - include: cffunction
   cffunction:
@@ -99,7 +96,8 @@ contexts:
         - meta_scope: meta.tag.cfml meta.function.cfml
         - match: ">"
           scope: punctuation.definition.tag.end.cfml
-          set:
+          set: 
+            - meta_content_scope: text.html.cfml
             - include: scope:text.html.basic
           with_prototype:
             - match: (?i)(</)(cffunction)(>)
@@ -109,9 +107,7 @@ contexts:
                 2: entity.name.tag.cfml storage.type.function.cfml
                 3: punctuation.definition.tag.end.cfml
               pop: true
-            - include: comments
-            - match: (?i)(?=</?cf)
-              push: cfml
+            - include: cfmltags
         - match: '(?i)\b(name)\s*(=)\s*((")([_$a-zA-Z][$\w]*)("))'
           captures:
             1: entity.other.attribute-name.cfml
@@ -152,23 +148,16 @@ contexts:
       captures:
         1: punctuation.definition.tag.begin.cfml
         2: entity.name.tag.cfml
-      set:
+      push:
         - meta_scope: meta.tag.cfml
         - meta_content_scope: source.cfml.script
         - match: ">"
           scope: punctuation.definition.tag.end.cfml
           pop: true
         - include: scope:source.cfml.script
-  cfml:
-    - include: comments
-    - match: (?i)(?=<cfcomponent)
-      push: cfcomponent
-    - match: (?i)(?=<cfinterface)
-      push: cfinterface
-    - include: cffunction
-    - include: cfmltags
   cfmltags:
     - include: comments
+    - include: cffunction
     - include: cfoutput
     - include: cfquery
     - include: cfif
@@ -178,7 +167,7 @@ contexts:
       captures:
         1: punctuation.definition.tag.begin.cfml
         2: entity.name.tag.cfml
-      set:
+      push:
         - meta_scope: meta.tag.cfml
         - match: (/?>)
           scope: meta.tag.cfml punctuation.definition.tag.end.cfml
@@ -190,13 +179,12 @@ contexts:
         1: punctuation.definition.tag.begin.cfml
         2: entity.name.tag.cfml
         3: punctuation.definition.tag.end.cfml
-      pop: true
   cfoutput:
     - match: (?i)(?<=('|"))(<)(cfoutput)(?=.*<\/cfoutput>\1)
       captures:
         2: punctuation.definition.tag.begin.cfml
         3: entity.name.tag.cfml
-      set:
+      push:
         - meta_scope: meta.tag.cfml
         - match: ">"
           scope: punctuation.definition.tag.end.cfml
@@ -206,30 +194,26 @@ contexts:
       captures:
         1: punctuation.definition.tag.begin.cfml
         2: entity.name.tag.cfml
-      set:
+      push:
         - meta_scope: meta.tag.cfml
         - match: ">"
           scope: punctuation.definition.tag.end.cfml
           set: cfoutput-contents
+          with_prototype:
+            - match: (?i)(</)(cfoutput)(>)
+              captures:
+                0: meta.tag.cfml
+                1: punctuation.definition.tag.begin.cfml
+                2: entity.name.tag.cfml.end
+                3: punctuation.definition.tag.end.cfml
+              pop: true
+            - include: comments
+            - include: hash-delimiters
+            - include: cfmltags
         - include: tag-generic-attribute
   cfoutput-contents:
-    - meta_content_scope: meta.scope.cfoutput.cfml
-    - match: (?i)(</)(cfoutput)(>)
-      captures:
-        0: meta.tag.cfml
-        1: punctuation.definition.tag.begin.cfml
-        2: entity.name.tag.cfml.end
-        3: punctuation.definition.tag.end.cfml
-      pop: true
-    - match: ""
-      push: html
-      with_prototype:
-        - include: comments
-        - match: (?i)(?=</cfoutput>)
-          pop: true
-        - match: (?i)(?=</?cf)
-          push: cfmltags
-        - include: hash-delimiters
+    - meta_content_scope: meta.scope.cfoutput.cfml text.html.cfml
+    - include: scope:text.html.basic
   cfoutput-string-contents:
     - meta_content_scope: meta.scope.cfoutput.cfml string.quoted
     - match: (?i)(</)(cfoutput)(>)(?=('|"))
@@ -239,40 +223,35 @@ contexts:
         2: entity.name.tag.cfml.end
         3: punctuation.definition.tag.end.cfml
       pop: true
-    - match: (?i)(?=</?cf)
-      push: cfmltags
     - include: hash-delimiters
+    - include: cfmltags
   cfquery:
     - match: (?i)(<)(cfquery)(?=\s|>)
       captures:
         1: punctuation.definition.tag.begin.cfml
         2: entity.name.tag.cfml
-      set:
+      push:
         - meta_scope: meta.tag.cfml
         - match: ">"
           scope: punctuation.definition.tag.end.cfml
           set: cfquery-contents
+          with_prototype:
+            - match: (?i)(</)(cfquery)(>)
+              captures:
+                0: meta.tag.cfml
+                1: punctuation.definition.tag.begin.cfml
+                2: entity.name.tag.cfml.end
+                3: punctuation.definition.tag.end.cfml
+              pop: true
+            - include: comments
+            - include: hash-delimiters
+            - include: cfmltags
         - include: tag-generic-attribute
   cfquery-contents:
-    - meta_content_scope: meta.scope.cfquery.cfml
-    - match: (?i)(</)(cfquery)(>)
-      captures:
-        0: meta.tag.cfml
-        1: punctuation.definition.tag.begin.cfml
-        2: entity.name.tag.cfml.end
-        3: punctuation.definition.tag.end.cfml
-      pop: true
-    - match: ""
-      push: scope:source.sql
-      with_prototype:
-        - match: (?i)(?=</cfquery>)
-          pop: true
-        - include: comments
-        - match: (?i)(?=</?cf)
-          push: cfmltags
-        - include: hash-delimiters
+    - meta_content_scope: meta.scope.cfquery.cfml source.sql
+    - include: scope:source.sql
   cfscript:
-    - match: (?i)(<)(cfscript)(\s+|>)
+    - match: (?i)(<)(cfscript)(>)
       captures:
         0: meta.tag.cfml
         1: punctuation.definition.tag.begin.cfml
@@ -280,17 +259,15 @@ contexts:
         3: punctuation.definition.tag.end.cfml
       push:
         - meta_content_scope: source.cfml.script
-        - match: (?i)(?=</cfscript>)
+        - match: (?i)(</)(cfscript)(>)
+          captures:
+            0: meta.tag.cfml
+            1: punctuation.definition.tag.begin.cfml
+            2: entity.name.tag.cfml
+            3: punctuation.definition.tag.end.cfml
           pop: true
         - include: scope:source.cfml.script#comments
         - include: scope:source.cfml.script
-    - match: (?i)(</)(cfscript)(>)
-      captures:
-        0: meta.tag.cfml
-        1: punctuation.definition.tag.begin.cfml
-        2: entity.name.tag.cfml
-        3: punctuation.definition.tag.end.cfml
-      pop: true
   comments:
     - match: <!---.*?--->
       scope: comment.line.cfml
@@ -309,7 +286,7 @@ contexts:
       push:
         - meta_content_scope: source.cfml.script
         - match: "#"
-          scope: constant.character.hash.cfml
+          scope: constant.character.hash.cfml.start
           pop: true
         - include: scope:source.cfml.script#comments
         - include: scope:source.cfml.script#expression
@@ -358,10 +335,10 @@ contexts:
       captures:
         1: punctuation.definition.tag.begin.cfml
         2: entity.name.tag.cfml
-      set:
+      push:
         - meta_scope: meta.tag.cfml
         - meta_content_scope: source.cfml.script
-        - match: "(/?>)"
+        - match: (/?>)
           scope: punctuation.definition.tag.end.cfml
           pop: true
         - include: scope:source.cfml.script
