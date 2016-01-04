@@ -1,4 +1,4 @@
-import sublime, json, urllib
+import sublime, json, urllib.request, urllib.error
 from .. import utils
 from ..inline_documentation import Documentation
 
@@ -10,6 +10,12 @@ CFDOCS_STYLES = {
 	"header_color": "#C7254E",
 	"header_bg_color": "#F9F2F4",
 	"text_color": "#272B33"
+}
+
+CFDOCS_ENGINES = {
+	"coldfusion": "ColdFusion",
+	"lucee": "Lucee",
+	"openbd": "OpenBD"
 }
 
 def get_inline_documentation(view, position):
@@ -63,21 +69,35 @@ def fetch_cfdoc(function_or_tag):
 
 	return data, True
 
+def build_engine_span(engine, minimum_version):
+	span = "<span class=\"" + engine + "\">&nbsp;" + CFDOCS_ENGINES[engine]
+	if len(minimum_version) > 0:
+		span += " " + minimum_version + "+"
+	span += "&nbsp;</span>&nbsp;"
+	return span
+
 def build_cfdoc(function_or_tag, data):
 	cfdoc = dict(CFDOCS_STYLES)
 	cfdoc["links"] = [{"href": "http://cfdocs.org" + "/" + function_or_tag, "text": "cfdocs.org" + "/" + function_or_tag}]
 	cfdoc["header"] = data["syntax"].replace("<","&lt;").replace(">","&gt;")
-	cfdoc["description"] = data["description"].replace("<","&lt;").replace(">","&gt;").replace("\n","<br>")
-
 	if len(data["returns"]) > 0:
 		cfdoc["header"] += ":" + data["returns"]
+
+	cfdoc["description"] = "<div class=\"engines\">"
+	for engine in sorted(CFDOCS_ENGINES):
+		if engine not in data["engines"]:
+			continue
+		cfdoc["description"] += build_engine_span(engine, data["engines"][engine]["minimum_version"])
+	cfdoc["description"] += "</div>"
+
+	cfdoc["description"] += data["description"].replace("<","&lt;").replace(">","&gt;").replace("\n","<br>")
 
 	cfdoc["body"] = ""
 	if len(data["params"]) > 0:
 		cfdoc["body"] = "<ul>"
 		for param in data["params"]:
 			param_variables = {"name": param["name"], "description": param["description"].replace("\n","<br>"), "values": ""}
-			if len(param["values"]):
+			if "values" in param and len(param["values"]):
 				param_variables["values"] = "<em>values:</em> " + ", ".join([str(value) for value in param["values"]])
 			cfdoc["body"] += "<li>" + sublime.expand_variables(CFDOCS_PARAM_TEMPLATE, param_variables) + "</li>"
 		cfdoc["body"] += "</ul>"
