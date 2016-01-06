@@ -87,6 +87,10 @@ def get_struct_context(view, position):
 
 	return context
 
+def get_setting(setting_key):
+	cfml_settings = sublime.load_settings("cfml_package.sublime-settings")
+	return cfml_settings.get(setting_key)
+
 def get_tag_end(view, pos, is_cfml):
 	tag_end = view.find("/?>", pos)
 	if tag_end:
@@ -97,10 +101,12 @@ def get_tag_end(view, pos, is_cfml):
 		return get_tag_end(view, tag_end.end(), is_cfml)
 	return None
 
-
 def get_last_open_tag(view, pos, cfml_only):
 	tag_selector = "entity.name.tag.cfml" if cfml_only else "entity.name.tag"
 	closed_tags = []
+	cfml_non_closing_tags = get_setting("cfml_non_closing_tags")
+	html_non_closing_tags = get_setting("html_non_closing_tags")
+
 	tag_name_regions = reversed([r for r in view.find_by_selector(tag_selector) if r.end() <= pos])
 
 	for tag_name_region in tag_name_regions:
@@ -114,7 +120,7 @@ def get_last_open_tag(view, pos, cfml_only):
 		tag_end = get_tag_end(view, tag_name_region.end(), is_cfml)
 
 		# if no tag end then give up
-		if not tag_end: 
+		if not tag_end:
 			return None
 
 		# if tag_end is after cursor position, then ignore it
@@ -132,10 +138,10 @@ def get_last_open_tag(view, pos, cfml_only):
 			continue
 
 		# check to exclude cfml tags that should not have a closing tag
-		if tag_name in ["cfset","cfelse","cfelseif","cfcontinue","cfbreak","cfthrow","cfrethrow"]:
+		if tag_name in cfml_non_closing_tags:
 			continue
 		# check to exclude html tags that should not have a closing tag
-		if tag_name in ["area","base","br","col","command","embed","hr","img","input","link","meta","param","source"]:
+		if tag_name in html_non_closing_tags:
 			continue
 
 		return tag_name
