@@ -5,6 +5,7 @@ from . import fw1
 from . import modelcompletions
 from . import testbox
 from .build_cfml_tmlanguage import CfmlBuildTmlanguageCommand
+from .cfc_dotted_path import CfmlCfcDottedPathCommand
 from .controller_view_toggle import CfmlToggleControllerViewCommand
 from .color_scheme_styles import CfmlColorSchemeStylesCommand
 from .inline_documentation import CfmlInlineDocumentationCommand
