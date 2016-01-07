@@ -54,7 +54,7 @@ def get_script_completions(view, prefix, position, info):
 	return None
 
 def get_inline_documentation(view, position):
-	file_name = view.file_name().replace("\\", "/").split("/").pop().lower()
+	file_name = view.file_name().replace("\\", "/").split("/").pop().lower() if view.file_name() else ""
 	if file_name != "application.cfc":
 		return None
 

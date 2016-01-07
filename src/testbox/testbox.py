@@ -55,6 +55,9 @@ def is_testbox_file(view):
 	if extends_testbox(view):
 		return True
 
+	if not view.file_name():
+		return False
+
 	file_path = view.file_name().replace("\\", "/").lower()
 	for folder in get_setting(view, "testbox_folders"):
 		if "/" + folder in file_path:

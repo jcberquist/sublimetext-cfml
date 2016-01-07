@@ -49,6 +49,8 @@ def extends_fw1(view):
 	return False
 
 def get_file_type(view):
+	if not view.file_name():
+		return ""
 	file_path = view.file_name().replace("\\", "/").lower()
 	for file_type in ["view","layout","controller"]:
 		for folder in get_setting(view, "fw1_" + file_type + "_folders"):

@@ -26,7 +26,7 @@ def get_completions(source_type, *args):
 	return full_completion_list
 
 def get_base_info(view):
-	file_name = view.file_name().replace("\\", "/").split("/").pop().lower()
+	file_name = view.file_name().replace("\\", "/").split("/").pop().lower() if view.file_name() else None
 	return {"file_name": file_name}
 
 def get_tag_completions(view, prefix, position):
