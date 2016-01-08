@@ -624,9 +624,9 @@ contexts:
       captures:
         1: entity.name.tag.script.cfml
         3: storage.type.cfml
-        4: string.unquoted.cfml
+        4: string.unquoted.cfml meta.tag.property.name.cfml
       push:
-        - meta_scope: meta.tag.script.cfml
+        - meta_scope: meta.tag.script.cfml meta.tag.property.cfml
         - match: (?=(;|{))
           pop: true
         - include: scope:embedding.cfml#tag-generic-attribute
@@ -634,7 +634,7 @@ contexts:
       captures:
         1: entity.name.tag.script.cfml
       push:
-        - meta_scope: meta.tag.script.cfml
+        - meta_scope: meta.tag.script.cfml meta.tag.property.cfml
         - match: (?=(;|{))
           pop: true
         - include: scope:embedding.cfml#tag-generic-attribute

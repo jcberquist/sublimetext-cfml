@@ -6,16 +6,16 @@ persistent = true {
 //           ^ embedding.cfml source.cfml.script meta.class.cfml string.unquoted.cfml
   property test;
 // <- embedding.cfml source.cfml.script meta.group.braces.curly - meta.tag.script.cfml
-//         ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml string.unquoted.cfml
+//         ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml meta.tag.property.cfml string.unquoted.cfml meta.tag.property.name.cfml
   property test test;
-//         ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml storage.type.cfml
-//              ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml string.unquoted.cfml
+//         ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml meta.tag.property.cfml storage.type.cfml
+//              ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml meta.tag.property.cfml string.unquoted.cfml meta.tag.property.name.cfml
   property test test test;
-//         ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml storage.type.cfml
-//              ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml string.unquoted.cfml
+//         ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml meta.tag.property.cfml storage.type.cfml
+//              ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml meta.tag.property.cfml string.unquoted.cfml meta.tag.property.name.cfml
 //                   ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml entity.other.attribute-name.cfml
   property name="test" required=true;
-//         ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml entity.other.attribute-name.cfml
+//         ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml meta.tag.property.cfml entity.other.attribute-name.cfml
 //               ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml string.quoted.double.cfml
 //                              ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml string.unquoted.cfml
 //                                  ^ embedding.cfml source.cfml.script meta.group.braces.curly punctuation.terminator.statement.cfml
@@ -25,7 +25,7 @@ persistent = true {
 //  ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml entity.other.attribute-name.cfml
 //           ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml string.unquoted.cfml
   property test
-//         ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml string.unquoted.cfml
+//         ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml meta.tag.property.cfml string.unquoted.cfml meta.tag.property.name.cfml
 default="string";
 // <- embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml entity.other.attribute-name.cfml
 //       ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.tag.script.cfml string.quoted.double.cfml

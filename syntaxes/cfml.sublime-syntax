@@ -96,7 +96,7 @@ contexts:
         - meta_scope: meta.tag.cfml meta.function.cfml
         - match: ">"
           scope: punctuation.definition.tag.end.cfml
-          set: 
+          set:
             - meta_content_scope: text.html.cfml
             - include: scope:text.html.basic
           with_prototype:
@@ -163,6 +163,7 @@ contexts:
     - include: cfif
     - include: tags-with-script
     - include: cfscript
+    - include: cfproperty
     - match: (?i)(<)(cf[a-z]+)
       captures:
         1: punctuation.definition.tag.begin.cfml
@@ -170,7 +171,7 @@ contexts:
       push:
         - meta_scope: meta.tag.cfml
         - match: (/?>)
-          scope: meta.tag.cfml punctuation.definition.tag.end.cfml
+          scope: punctuation.definition.tag.end.cfml
           pop: true
         - include: tag-generic-attribute
     - match: (?i)(</)(cf[a-z]+)(>)
@@ -225,6 +226,17 @@ contexts:
       pop: true
     - include: hash-delimiters
     - include: cfmltags
+  cfproperty:
+    - match: (?i)(<)(cfproperty)\b
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
+      push:
+        - meta_scope: meta.tag.cfml meta.tag.property.cfml
+        - match: (/?>)
+          scope: punctuation.definition.tag.end.cfml
+          pop: true
+        - include: tag-generic-attribute
   cfquery:
     - match: (?i)(<)(cfquery)(?=\s|>)
       captures:

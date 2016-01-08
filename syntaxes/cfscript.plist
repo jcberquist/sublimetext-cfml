@@ -1601,13 +1601,13 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.cfml</string>
+							<string>string.unquoted.cfml meta.tag.property.name.cfml</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>(?=(;|{))</string>
 					<key>name</key>
-					<string>meta.tag.script.cfml</string>
+					<string>meta.tag.script.cfml meta.tag.property.cfml</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1630,7 +1630,7 @@
 					<key>end</key>
 					<string>(?=(;|{))</string>
 					<key>name</key>
-					<string>meta.tag.script.cfml</string>
+					<string>meta.tag.script.cfml meta.tag.property.cfml</string>
 					<key>patterns</key>
 					<array>
 						<dict>

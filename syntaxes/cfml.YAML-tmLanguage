@@ -169,6 +169,7 @@ repository:
     - include: '#cfif'
     - include: '#tags-with-script'
     - include: '#cfscript'
+    - include: '#cfproperty'
     - name: meta.tag.cfml
       begin: (?i)(<)(cf[a-z]+)
       beginCaptures:
@@ -211,6 +212,19 @@ repository:
       patterns:
       - include: '#cfml-tags'
       - include: text.html.cfml.cfoutput
+
+  cfproperty:
+    patterns:
+    - name: meta.tag.cfml meta.tag.property.cfml
+      begin: (?i)(<)(cfproperty)\b
+      beginCaptures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.cfml}
+      end: (/?>)
+      endCaptures:
+        '0': {name: punctuation.definition.tag.end.cfml}
+      patterns:
+      - include: '#tag-generic-attribute'
 
   cfquery:
     begin: (?i)(?=<cfquery\b)

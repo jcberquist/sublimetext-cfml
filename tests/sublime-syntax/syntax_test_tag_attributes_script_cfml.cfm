@@ -55,7 +55,7 @@ param rc.testVar = 100;
 <!---    ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml string.unquoted.cfml --->
 <!---              ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml constant.numeric.cfml --->
   param integer testVar = 100;
-<!--- <- embedding.cfml source.cfml.script - meta.tag.script.cfml --->
+<!--- <- embedding.cfml text.html.cfml source.cfml.script - meta.tag.script.cfml --->
 
 transaction {
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->

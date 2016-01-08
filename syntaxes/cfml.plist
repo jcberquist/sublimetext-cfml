@@ -566,6 +566,10 @@
 					<string>#cfscript</string>
 				</dict>
 				<dict>
+					<key>include</key>
+					<string>#cfproperty</string>
+				</dict>
+				<dict>
 					<key>begin</key>
 					<string>(?i)(&lt;)(cf[a-z]+)</string>
 					<key>beginCaptures</key>
@@ -710,6 +714,48 @@
 						<dict>
 							<key>include</key>
 							<string>text.html.cfml.cfoutput</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>cfproperty</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?i)(&lt;)(cfproperty)\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.begin.cfml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.cfml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(/?&gt;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.end.cfml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.tag.cfml meta.tag.property.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#tag-generic-attribute</string>
 						</dict>
 					</array>
 				</dict>

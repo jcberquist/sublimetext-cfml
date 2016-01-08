@@ -584,16 +584,16 @@ repository:
 
   tag-in-script:
     patterns:
-    - name: meta.tag.script.cfml
+    - name: meta.tag.script.cfml meta.tag.property.cfml
       begin: (?i)(?<!\.)\b(property)(?!\s+in\b)(\s+(any|array|binary|boolean|component|date|guid|numeric|query|string|struct|xml|uuid|[_$a-zA-Z][$\w]*))?\s+([_$a-zA-Z][$\w]*\b)(?!\s*=)
       beginCaptures:
         '1': {name: entity.name.tag.script.cfml}
         '3': {name: storage.type.cfml}
-        '4': {name: string.unquoted.cfml}
+        '4': {name: string.unquoted.cfml meta.tag.property.name.cfml}
       end: (?=(;|{))
       patterns:
       - include: '#tag-generic-attribute'
-    - name: meta.tag.script.cfml
+    - name: meta.tag.script.cfml meta.tag.property.cfml
       begin: (?i)(?<!\.)\b(property)(?!\s+in\b)(?=(\s+[a-zA-Z]|\s*$|\s*[{;]))
       beginCaptures:
         '1': {name: entity.name.tag.script.cfml}
