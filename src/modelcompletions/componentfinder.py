@@ -58,7 +58,7 @@ def make_completion(bean_name, function_name, function_params):
 	key_string = function_name + "()"
 	if function_params["returntype"]:
 		key_string += ":" + function_params["returntype"]
-	return (key_string + "\t(" + bean_name + ")", function_name + "(" + make_arguments_string(function_params["arguments"]) + ")")
+	return (key_string + "\t" + bean_name, function_name + "(" + make_arguments_string(function_params["arguments"]) + ")")
 
 def make_arguments_string(arguments):
 	index = 1

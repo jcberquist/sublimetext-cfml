@@ -98,13 +98,19 @@ def get_bean(project_file_name, bean_name):
 def get_dot_completions(view, prefix, position, info):
 	#are we in a project
 	project_file_name = view.window().project_file_name()
-	if project_file_name:
-		# get context
-		for symbol in info["dot_context"]:
-			if not symbol.is_function:
-				if has_bean(project_file_name, symbol.name):
-					return CompletionList(get_bean(project_file_name, symbol.name).completions, 1, True)
-				break
+	if not project_file_name or len(info["dot_context"]) == 0:
+		return None
+	# check for known bean name
+	for symbol in info["dot_context"]:
+		if not symbol.is_function:
+			if has_bean(project_file_name, symbol.name):
+				return CompletionList(get_bean(project_file_name, symbol.name).completions, 1, True)
+			break
+	# also check for getter being used to access property
+	symbol = info["dot_context"][-1]
+	if symbol.is_function and symbol.name.startswith("get"):
+		if has_bean(project_file_name, symbol.name[3:]):
+			return CompletionList(get_bean(project_file_name, symbol.name[3:]).completions, 1, True)
 
 	return None
 
@@ -124,15 +130,24 @@ def get_inline_documentation(view, position):
 		function_name, function_name_region, function_args_region = utils.get_function_call(view, position)
 		if view.substr(function_name_region.begin() - 1) == ".":
 			dot_context = utils.get_dot_context(view, function_name_region.begin() - 1)
+			symbol_name = None
+			# check for known bean name
 			for symbol in dot_context:
-				if not symbol.is_function:
-					if has_bean(project_file_name, symbol.name):
-						bean = get_bean(project_file_name, symbol.name)
-						if function_name in bean.functions:
-							bean_function_name, bean_function_metadata = bean.functions[function_name]
-							doc = get_documentation(symbol.name, bean.file_path, bean_function_name, bean_function_metadata)
-							callback = partial(on_navigate, view, bean.file_path, bean_function_name)
-							return Documentation(doc, callback, 2)
+				if not symbol.is_function and has_bean(project_file_name, symbol.name):
+					symbol_name = symbol.name
 					break
+			# also check for getter being used to access bean
+			if not symbol_name:
+				symbol = dot_context[-1]
+				if symbol.is_function and symbol.name.startswith("get") and has_bean(project_file_name, symbol.name[3:]):
+					symbol_name = symbol.name[3:]
+
+			if symbol_name:
+				bean = get_bean(project_file_name, symbol_name)
+				if function_name in bean.functions:
+					bean_function_name, bean_function_metadata = bean.functions[function_name]
+					doc = get_documentation(symbol_name, bean.file_path, bean_function_name, bean_function_metadata)
+					callback = partial(on_navigate, view, bean.file_path, bean_function_name)
+					return Documentation(doc, callback, 2)
 
 	return None
