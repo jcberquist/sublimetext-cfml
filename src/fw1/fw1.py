@@ -59,10 +59,10 @@ def get_file_type(view):
 	return ""
 
 def get_dot_completions(view, prefix, position, info):
-	if not get_setting(view, "fw1_enabled"):
+	if not get_setting(view, "fw1_enabled") or len(info["dot_context"]) == 0:
 		return None
 
-	if extends_fw1(view) and len(info["dot_context"]) > 0:
+	if extends_fw1(view):
 		if info["dot_context"][-1].name == "variables":
 			key = ".".join([symbol.name for symbol in reversed(info["dot_context"])])
 			if key in fw1["settings"]:
