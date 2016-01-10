@@ -58,7 +58,7 @@ class TestboxCommand(sublime_plugin.WindowCommand):
 		self.output_view.settings().set("line_numbers", False)
 		self.output_view.settings().set("gutter", False)
 		self.output_view.settings().set("scroll_past_end", False)
-		self.output_view.settings().set("color_scheme", "Packages/" + utils.get_plugin_name() + "/color-schemes/testbox.tmTheme")
+		self.output_view.settings().set("color_scheme", "Packages/" + utils.get_plugin_name() + "/color-schemes/testbox.hidden-tmTheme")
 		self.output_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/testbox." + SYNTAX_EXT)
 
 		# As per Default/exec.py
