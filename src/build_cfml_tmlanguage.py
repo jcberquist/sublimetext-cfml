@@ -25,13 +25,16 @@ def get_setting(key):
 	return package_settings.get(key)
 
 def create_directory_if_not_exists(directory_path):
-	if not os.path.exists(directory_path):
-		try:
-			os.makedirs(directory_path)
-		except:
-			print("CFML: unable to create directory: " + directory_path)
-			return False
-	return True
+	if os.path.exists(directory_path):
+		return True
+
+	try:
+		os.makedirs(directory_path)
+		print("CFML: created directory - " + directory_path)
+		return True
+	except:
+		print("CFML: unable to create directory - " + directory_path)
+		return False
 
 def prefix_includes(pattern, prefix):
 	new_pattern = dict(pattern)
@@ -94,15 +97,30 @@ def inject_include_into_syntax(syntax, scope_key):
 		syntax["repository"] = {k: inject_include_into_pattern(v, scope_key) for k, v in syntax["repository"].items()}
 	return syntax
 
+def load_plist(relative_path):
+	try:
+		plist_data = plistlib.readPlistFromBytes(sublime.load_binary_resource(relative_path))
+		print("CFML: loaded plist file - " + relative_path)
+		return plist_data
+	except:
+		print("CFML: unable to load plist file - " + relative_path)
+		return None
+
 class CfmlBuildTmlanguageCommand(sublime_plugin.ApplicationCommand):
 
 	def run(self):
+		print("CFML: building cfml.tmLanguage")
+
 		# cfml
-		cfml = plistlib.readPlistFromBytes(sublime.load_binary_resource("Packages/" + utils.get_plugin_name() + '/syntaxes/cfml.plist'))
-		cfscript = plistlib.readPlistFromBytes(sublime.load_binary_resource("Packages/" + utils.get_plugin_name() + '/syntaxes/cfscript.plist'))
+		cfml = load_plist("Packages/" + utils.get_plugin_name() + "/syntaxes/cfml.plist")
+		cfscript = load_plist("Packages/" + utils.get_plugin_name() + "/syntaxes/cfscript.plist")
 
 		# html
-		html = plistlib.readPlistFromBytes(sublime.load_binary_resource(get_setting("tmlanguage_html")))
+		html = load_plist(get_setting("tmlanguage_html"))
+		if not html:
+			sublime.message_dialog("CFML: unable to build cfml.tmLanguage - see console for details")
+			return
+		print("CFML: building text.html.cfml")
 		html = filter_syntax(html, "#embedded-code")
 
 		text_html_cfml = dict(html)
@@ -116,7 +134,11 @@ class CfmlBuildTmlanguageCommand(sublime_plugin.ApplicationCommand):
 		text_html_cfml_output = inject_include_into_syntax(text_html_cfml_output, "#cfml")
 
 		# javascript
-		javascript = plistlib.readPlistFromBytes(sublime.load_binary_resource(get_setting("tmlanguage_javascript")))
+		javascript = load_plist(get_setting("tmlanguage_javascript"))
+		if not javascript:
+			sublime.message_dialog("CFML: unable to build cfml.tmLanguage - see console for details")
+			return
+		print("CFML: building source.js")
 
 		javascript_cfml = dict(javascript)
 		javascript_cfml = inject_include_into_syntax(javascript_cfml, "#cfml")
@@ -126,7 +148,11 @@ class CfmlBuildTmlanguageCommand(sublime_plugin.ApplicationCommand):
 		javascript_cfml_output = inject_include_into_syntax(javascript_cfml_output, "#cfml")
 
 		# css
-		css = plistlib.readPlistFromBytes(sublime.load_binary_resource(get_setting("tmlanguage_css")))
+		css = load_plist(get_setting("tmlanguage_css"))
+		if not css:
+			sublime.message_dialog("CFML: unable to build cfml.tmLanguage - see console for details")
+			return
+		print("CFML: building source.css")
 
 		css_cfml = dict(css)
 		css_cfml = inject_include_into_syntax(css_cfml, "#cfml")
@@ -136,12 +162,18 @@ class CfmlBuildTmlanguageCommand(sublime_plugin.ApplicationCommand):
 		css_cfml_output = inject_include_into_syntax(css_cfml_output, "#cfml")
 
 		# sql
-		sql = plistlib.readPlistFromBytes(sublime.load_binary_resource(get_setting("tmlanguage_sql")))
+		sql = load_plist(get_setting("tmlanguage_sql"))
+		if not sql:
+			sublime.message_dialog("CFML: unable to build cfml.tmLanguage - see console for details")
+			return
+		print("CFML: building source.sql")
+		# remove single line string matches as they do not allow pattern injection
 		sql["repository"]["strings"]["patterns"] = [pattern for pattern in sql["repository"]["strings"]["patterns"] if "patterns" in pattern]
 		sql_cfml = inject_include_into_syntax(sql, "#cfml")
 
 
 		# merge syntaxes
+		print("CFML: merging syntaxes...")
 		cfml_tmlanguage = merge_into_syntax(cfscript, cfml)
 		cfml_tmlanguage = merge_into_syntax(text_html_cfml, cfml_tmlanguage)
 		cfml_tmlanguage = merge_into_syntax(text_html_cfml_output, cfml_tmlanguage)
@@ -151,7 +183,7 @@ class CfmlBuildTmlanguageCommand(sublime_plugin.ApplicationCommand):
 		cfml_tmlanguage = merge_into_syntax(css_cfml_output, cfml_tmlanguage)
 		cfml_tmlanguage = merge_into_syntax(sql_cfml, cfml_tmlanguage)
 
-
+		# need to match tag comment syntax in script as script could be inline with <cfscript>
 		cfml_tmlanguage["repository"]["source-cfml-script-comments"]["patterns"].append({"include": "#comments"})
 
 		cfml_tmlanguage = rename_include(cfml_tmlanguage, "#text-html-cfml-cfml", "#cfml-tags")
@@ -166,5 +198,15 @@ class CfmlBuildTmlanguageCommand(sublime_plugin.ApplicationCommand):
 		cfml_tmlanguage["repository"]["cfoutput-injection"] = CFOUTPUT_INJECTION
 
 		syntax_path = sublime.packages_path().replace("\\","/") + "/" + utils.get_plugin_name() + "/syntaxes"
-		create_directory_if_not_exists(syntax_path)
-		plistlib.writePlist(cfml_tmlanguage, syntax_path + "/cfml.tmLanguage")
+		directory_exists = create_directory_if_not_exists(syntax_path)
+
+		if not directory_exists:
+			print("CFML: unable to write cfml.tmLanguage")
+			sublime.message_dialog("CFML: unable to build cfml.tmLanguage - see console for details")
+			return
+
+		syntax_path += "/cfml.tmLanguage"
+		print("CFML: writing plist file - " + syntax_path)
+		plistlib.writePlist(cfml_tmlanguage, syntax_path)
+		print("CFML: cfml.tmLanguage build complete")
+		sublime.message_dialog("CFML: cfml.tmLanguage build complete")
