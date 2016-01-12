@@ -2,9 +2,11 @@
 
 This package provides CFML syntax highlighting as well as function and tag completions. It recognizes the following file extensions: `cfm,cfml,cfc`. Please see below for more of the features included in this package.
 
-*Note: Please ensure that you are running at least the latest beta build of Sublime Text 3 (3083), as some of the features of the package will not work otherwise. If you are on the latest dev builds (3092+) the package will used the new `sublime-syntax` syntax highlighting.*
+*Note: Please ensure that you are running at least the latest beta build of Sublime Text 3 (3083), as some of the features of the package will not work otherwise. If you are on the latest dev builds (3092+) the package will use the new `sublime-syntax` syntax highlighting.*
 
-Installation must currently be done manually by downloading the repository and placing it in a folder within your Sublime packages folder. (See below for more information.)
+You can install this package via [Package Control](https://packagecontrol.io/). Please restart Sublime Text after installation. 
+
+Manual installation is also possible by downloading the repository and placing it in a folder within your Sublime packages folder. (See below for more information.)
 
 ### Acknowledgements
 
