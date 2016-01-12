@@ -10,7 +10,7 @@
 	<dict>
 		<key>shellVariables</key>
 		<array>
-				<dict>
+			<dict>
 				<key>name</key>
 				<string>TM_COMMENT_START</string>
 				<key>value</key>
@@ -33,17 +33,8 @@
 				<string>TM_LINE_TERMINATOR</string>
 				<key>value</key>
 				<string>;</string>
-	        </dict>
+      </dict>
 		</array>
 	</dict>
-  <key>decreaseIndentPattern</key>
-  <string>^(.*\*/)?\s*\}.*$</string>
-  <key>increaseIndentPattern</key>
-  <string>^.*\{[^}"']*$</string>
-  <key>bracketIndentNextLinePattern</key>
-  <string>(?x)
-	  ^ \s* \b(if|while|else)\b [^;]* $
-	  | ^ \s* \b(for)\b .* $
-  </string>
 </dict>
 </plist>
