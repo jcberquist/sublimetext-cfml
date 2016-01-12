@@ -32,9 +32,9 @@ script_arguments_regex = re.compile(r'(?:^|,)\s*(required)?\s*(\b\w+\b)?\s*(\b\w
 
 function_block_regex = re.compile('<cffunction.*?</cffunction>', re.I | re.DOTALL)
 function_regex = {}
-function_regex["name"] = re.compile(r'<cffunction.*?name\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1).*?>', re.I | re.DOTALL)
-function_regex["access"] = re.compile(r'<cffunction.*?access\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1).*?>', re.I | re.DOTALL)
-function_regex["returntype"] = re.compile(r'<cffunction.*?returntype\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1).*?>', re.I | re.DOTALL)
+function_regex["name"] = re.compile(r'<cffunction[^>]+name\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1)[^>]*>', re.I | re.DOTALL)
+function_regex["access"] = re.compile(r'<cffunction[^>]+access\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1)[^>]*>', re.I | re.DOTALL)
+function_regex["returntype"] = re.compile(r'<cffunction[^>]+returntype\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1)[^>]*>', re.I | re.DOTALL)
 
 argument_block_regex = re.compile('<cfargument[^>]*>', re.I)
 argument_regex = {}
@@ -69,13 +69,14 @@ def find_script_function_argument(arg_required, arg_type, arg_name, arg_default)
 	return (arg_name, argument)
 
 def find_tag_functions(file_string):
-	return [find_tag_function(function_string) for function_string in re.findall(function_block_regex,file_string)]
+	return filter(lambda x: x, [find_tag_function(function_string) for function_string in re.findall(function_block_regex,file_string)])
 
 def find_tag_function(function_string):
 	function_matches = {}
 	for key in function_regex:
 		function_matches[key] = re.search(function_regex[key], function_string)
 	if not function_matches["name"]:
+		print("CFML: could not find function name while indexing...\n" + function_string)
 		return None
 	function = {}
 	function["access"] = function_matches["access"].group(2) if function_matches["access"] else "public"
