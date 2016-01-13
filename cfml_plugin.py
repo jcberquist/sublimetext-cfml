@@ -61,6 +61,31 @@ class CloseCfmlTagCommand(sublime_plugin.TextCommand):
 			# if there is no open tag print "/"
 			self.view.insert(edit,pt,"/")
 
+class CfmlAutoInsertClosingTagCommand(sublime_plugin.TextCommand):
+
+	def run(self, edit):
+		pt = self.view.sel()[0].begin()
+		if utils.get_setting("cfml_auto_insert_closing_tag"):
+			cfml_non_closing_tags = utils.get_setting("cfml_non_closing_tags")
+			tag_name = utils.get_tag_name(self.view, pt)
+			if tag_name and tag_name not in cfml_non_closing_tags:
+				next_char = utils.get_next_character(self.view, pt)
+				tag_close_search_region = self.view.find("</" + tag_name + ">", pt)
+				if next_char != tag_close_search_region.begin():
+					self.view.run_command("insert_snippet", {"contents": ">$0</" + tag_name + ">"})
+					return
+		self.view.insert(edit,pt,">")
+
+class CfmlBetweenTagPairCommand(sublime_plugin.TextCommand):
+
+	def run(self, edit):
+		pt = self.view.sel()[0].begin()
+		cfml_between_tag_pair = utils.get_setting("cfml_between_tag_pair")
+		if cfml_between_tag_pair in ["newline","indent"] and utils.between_cfml_tag_pair(self.view, pt):
+			self.view.run_command("insert_snippet", {"contents": "\n" + ("\t" if cfml_between_tag_pair == "indent" else "") + "$0\n"})
+			return
+		self.view.insert(edit,pt,"\n")
+
 class CfmlDefaultPackageSettingsCommand(sublime_plugin.WindowCommand):
 
 	def run(self):

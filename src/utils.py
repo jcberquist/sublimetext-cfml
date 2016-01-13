@@ -15,6 +15,11 @@ def get_previous_character(view, position):
 		position = view.find_by_class(position, False, sublime.CLASS_WORD_END | sublime.CLASS_PUNCTUATION_END)
 	return position - 1
 
+def get_next_character(view, position):
+	if view.substr(position) in [" ", "\t", "\n"]:
+		position = view.find_by_class(position, True, sublime.CLASS_WORD_START | sublime.CLASS_PUNCTUATION_START)
+	return position
+
 def get_previous_word(view, position):
 	previous_character = get_previous_character(view, position)
 	return view.substr(view.word(previous_character)).lower()
@@ -172,6 +177,15 @@ def get_tag_attribute_name(view, pos):
 	if view.match_selector(previous_char, full_scope):
 		return get_previous_word(view, previous_char)
 	return None
+
+def between_cfml_tag_pair(view, pos):
+	if not view.substr(pos - 1) == ">" or not view.substr(sublime.Region(pos, pos + 2)) == "</":
+		return False
+	if not view.match_selector(pos - 1, "meta.tag.cfml") or not view.match_selector(pos + 2, "meta.tag.cfml"):
+		return False
+	if get_tag_name(view, pos - 1) != get_tag_name(view, pos + 2):
+		return False
+	return True
 
 def get_function(view, pt):
 	function_scope = "meta.function.cfml"
