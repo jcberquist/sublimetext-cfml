@@ -4,7 +4,7 @@ This package provides CFML syntax highlighting as well as function and tag compl
 
 *Note: Please ensure that you are running at least the latest beta build of Sublime Text 3 (3083), as some of the features of the package will not work otherwise. If you are on the latest dev builds (3092+) the package will use the new `sublime-syntax` syntax highlighting.*
 
-You can install this package via [Package Control](https://packagecontrol.io/). Please restart Sublime Text after installation. 
+You can install this package via [Package Control](https://packagecontrol.io/). Please restart Sublime Text after installation.
 
 Manual installation is also possible by downloading the repository and placing it in a folder within your Sublime packages folder. (See below for more information.)
 
@@ -34,6 +34,10 @@ If the documentation command is run when the cursor is within a built-in functio
 
 Inline documentation is also available for `Application.cfc` settings and methods as well as method calls that have been indexed via the model completions functionality (see above). In the latter case documentation of the function signature, file location, and argument list is provided.
 
+### Package Settings
+
+There are a number of package settings that control the behavior of the package. You can see the default settings from the menu under `Package Settings -> CFML -> Package Settings - Default` or via the command palette: `CFML: Default Package Settings`. To override any of these settings, use the user package settings file. This can be found under the menu `Package Settings -> CFML -> Package Settings - User` or via the command palette: `CFML: User Package Settings`. These settings control much of the functionality of the package mentioned in what follows.
+
 ### Key Bindings
 
 In tag attributes, script strings, and between `cfoutput` tags, pressing `#` when text is selected will wrap the currently selected text `#selected#`.
@@ -44,13 +48,15 @@ In tag attributes, script strings, and between `cfoutput` tags, pressing `#` whe
 
 <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>A</kbd> will output a `<cfabort>` tag or `abort;` in CFML script.
 
-If SublimeText's `auto_close_tags` setting is true, when a closing tag's `/` has been pressed, the closing tag will be completed. (Hopefully not closing `cfset` tags and the like.)
+If Sublime Text's `auto_close_tags` setting is true, when a closing tag's `/` has been pressed, the closing tag will be completed. There are two package settings that control which CFML and HTML tags should not be closed: `cfml_non_closing_tags` and `html_non_closing_tags`.
+
+If the package setting `cfml_auto_insert_closing_tag` is set to `true` (by default it is `false`), when `>` is pressed in a tag, the corresponding closing tag will be automatically inserted after the cursor position. The package setting `cfml_non_closing_tags` controls which CFML tags will not get a closing tag auto inserted.
+
+The package setting `cfml_between_tag_pair` controls the behavior of the editor when <kbd>ENTER</kbd> is pressed while the cursor is between a CFML tag pair (e.g. `<cfoutput>|</cfoutput>`). By default only a single new line is inserted. This can be changed to have an extra new line auto inserted between the tag pair (with an optional indent), and the cursor placed there. See the default settings for more information.
 
 ### Custom Coloring for CFML Tags
 
-Unless you are using a specialized color scheme, CFML and HTML tags will receive the same coloring. This can make it a bit harder to distinguish between the two types of tags when embedding CFML tags in HTML. This package has a command you can run from the command palette that will inject custom colors for CFML tags into your current color scheme (or remove them if they are already there). Press <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> to bring up the command palette (<kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac) and run `CFML: Toggle Color Scheme Styles`. You can edit the styles that will be injected via the user settings for this package. This can be found under the menu `Package Settings -> CFML -> Package Settings - User` or via the command palette: `CFML: User Package Settings`. See the default settings file for the settings to use (`Package Settings -> CFML -> Package Settings - Default` or via the command palette: `CFML: Default Color Scheme Styles`).
-
-*Note:* Do not edit the default settings to change the color scheme styles, but rather place your custom settings in the user settings file, as this will not be overwritten when the package is upgraded.
+Unless you are using a specialized color scheme, CFML and HTML tags will receive the same coloring. This can make it a bit harder to distinguish between the two types of tags when embedding CFML tags in HTML. This package has a command you can run from the command palette that will inject custom colors for CFML tags into your current color scheme (or remove them if they are already there). Press <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> to bring up the command palette (<kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac) and run `CFML: Toggle Color Scheme Styles`. You can edit the styles that will be injected via the user settings for this package.
 
 *Caveat:* This feature works by either overriding or modifying your active color scheme file. Because of this, it may not work well with other packages that also modify the active color scheme in some way. Also, if the package containing your active color scheme is updated, it is likely that you will need to toggle the custom tag coloring off and then on again to pick up any changes.
 
@@ -78,7 +84,7 @@ All of the settings for TestBox can be seen in the default package settings.
 
 Framework One (https://github.com/framework-one/fw1) function completions and `variables.framework` setting completions are available. They are disabled by default, but can be enabled globally by adding `"fw1_enabled": true` to your CFML user package settings, or on a per project basis by adding the same setting to a project settings file. (Project based settings will override global settings. The default package settings for Framework One can be viewed in the CFML default package settings file.) The completions are offered in `Application.cfc` as well as in Framework One controller, view and layout files. (The folder names can be specified in the settings.) In controllers, Framework One method completions are offered after typing `framework.` and `fw.`.
 
-### Installation
+### Manual Installation
 
 Locate your Sublime Text 3 packages directory. This can be easily done by opening the command palette in Sublime Text (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on Windows, <kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac), and running `Preferences: Browse Packages`.
 
@@ -100,6 +106,6 @@ That's it, restart Sublime Text 3 - if you want to update the code to match this
 
     git pull origin master
 
-#### Manually
+#### Via ZIP Download
 
 Use the `Download ZIP` option to download a zip of the repository to your computer. Unzip this, and copy the repository folder into your Sublime Text packages directory. You can leave the folder name as is, or rename it (e.g. to `CFML`).
