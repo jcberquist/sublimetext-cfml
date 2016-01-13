@@ -1,0 +1,9 @@
+CFML v0.2.0 Changelog:
+
+- Added auto insert of closing tag when `>` is pressed
+	This can be enabled via the `cfml_auto_insert_closing_tag` setting
+	See the readme for more detail - https://github.com/jcberquist/sublimetext-cfml
+
+- Added ability to insert an extra newline + indent when `ENTER` is pressed between a CFML tag pair
+	This can be enabled via the `cfml_between_tag_pair` setting
+	See the readme for more detail - https://github.com/jcberquist/sublimetext-cfml
