@@ -1,0 +1,10 @@
+CFML v0.3.0 Changelog:
+
+- Added tmPreferences file that marks CFML files as source files for sidebar icons
+  This ensures that the file_type_source icon in themes is applied to CFML files
+
+  See https://github.com/jcberquist/sublimetext-cfml/blob/master/metadata/cfml-icon.tmPreferences
+  If a copy of this file is placed in your User package folder, you can override
+  `file_type_source` with another icon type, depending on what your active theme supports.
+  For example, Material Theme (https://github.com/equinusocio/material-theme) has two
+  icon types for CFML files: `file_type_cfc` and `file_type_cfm`.
