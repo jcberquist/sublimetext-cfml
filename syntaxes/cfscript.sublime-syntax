@@ -139,32 +139,36 @@ contexts:
     - match: |-
         (?x)
         (?:
-          (?: # optional access-control modifier and return-type
-            (?i:\b(private|package|public|remote)\s+)? # access-control.modifier
+          (?:
+            (?i:\b(private|package|public|remote)\s+)?
             (?i:\b
               (void)\s+
               |
-              (any|array|binary|boolean|component|date|guid|numeric|query|string|struct|xml|uuid)\s+ # return-type.primitive
+              (any|array|binary|boolean|component|date|guid|numeric|query|string|struct|xml|uuid)\s+
               |
-              ([A-Za-z0-9_\.$]+)\s+ #return-type component/object (may need additional tokens)
+              ([A-Za-z0-9_\.$]+)\s+
+              |
+              ([A-Za-z0-9_\.$]+)(\[\])?\s+
             )?
           )
         )
-        (?i:(function)) # storage.function
+        (?i:(function))
         \s+
         (?:
-          (init) # entity.name.function.contructor
+          (init)
           |
-          ([_$a-zA-Z][$\w]*) # entity.name.function
+          ([_$a-zA-Z][$\w]*)
         )\b
       captures:
         1: storage.modifier.cfml
         2: storage.type.return-type.void.cfml
         3: storage.type.return-type.primitive.cfml
         4: storage.type.return-type.object.cfml
-        5: storage.type.function.cfml
-        6: entity.name.function.constructor.cfml
-        7: entity.name.function.cfml
+        5: storage.type.return-type.object.array.cfml
+        6: meta.group.braces.square meta.brace.square.cfml
+        7: storage.type.function.cfml
+        8: entity.name.function.constructor.cfml
+        9: entity.name.function.cfml
       push:
         - meta_scope: meta.function.cfml
         - match: (?<=\))

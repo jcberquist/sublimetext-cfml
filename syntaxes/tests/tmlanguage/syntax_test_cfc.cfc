@@ -67,4 +67,9 @@ default="string";
 //                   ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.group.braces.curly variable.other.cfml
   }
 
+  public User[] function getUser(){}
+//^ meta.function.cfml storage.modifier.cfml
+//       ^ meta.function.cfml storage.type.return-type.object.array.cfml
+//           ^ meta.function.cfml meta.group.braces.square meta.brace.square.cfml
+
 }

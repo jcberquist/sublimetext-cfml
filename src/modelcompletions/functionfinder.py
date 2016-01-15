@@ -27,14 +27,14 @@
 
 import re
 
-script_function_regex = re.compile('(?:(private|package|public|remote)\s+)?([A-Za-z0-9_\.$]+)?\s*function\s+([_$a-zA-Z][$\w]*)\s*(?:\(\s*([^)]*)\))', re.I)
+script_function_regex = re.compile('(?:(private|package|public|remote)\s+)?([A-Za-z0-9_\.$]+(?:\[\])?)?\s*function\s+([_$a-zA-Z][$\w]*)\s*(?:\(\s*([^)]*)\))', re.I)
 script_arguments_regex = re.compile(r'(?:^|,)\s*(required)?\s*(\b\w+\b)?\s*(\b\w+\b)(?:\s*=\s*(\{[^\}]*\}|\[[^\]]*\]|[^,\)]+))?', re.I)
 
 function_block_regex = re.compile('<cffunction.*?</cffunction>', re.I | re.DOTALL)
 function_regex = {}
 function_regex["name"] = re.compile(r'<cffunction[^>]+name\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1)[^>]*>', re.I | re.DOTALL)
 function_regex["access"] = re.compile(r'<cffunction[^>]+access\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1)[^>]*>', re.I | re.DOTALL)
-function_regex["returntype"] = re.compile(r'<cffunction[^>]+returntype\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1)[^>]*>', re.I | re.DOTALL)
+function_regex["returntype"] = re.compile(r'<cffunction[^>]+returntype\s*=\s*(\'|")([_$a-zA-Z][$\w]*(?:\[\])?)(\1)[^>]*>', re.I | re.DOTALL)
 
 argument_block_regex = re.compile('<cfargument[^>]*>', re.I)
 argument_regex = {}

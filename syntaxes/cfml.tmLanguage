@@ -1465,23 +1465,25 @@
 					<key>begin</key>
 					<string>(?x)
 (?:
-  (?: # optional access-control modifier and return-type
-    (?i:\b(private|package|public|remote)\s+)? # access-control.modifier
+  (?:
+    (?i:\b(private|package|public|remote)\s+)?
     (?i:\b
       (void)\s+
       |
-      (any|array|binary|boolean|component|date|guid|numeric|query|string|struct|xml|uuid)\s+ # return-type.primitive
+      (any|array|binary|boolean|component|date|guid|numeric|query|string|struct|xml|uuid)\s+
       |
-      ([A-Za-z0-9_\.$]+)\s+ #return-type component/object (may need additional tokens)
+      ([A-Za-z0-9_\.$]+)\s+
+      |
+      ([A-Za-z0-9_\.$]+)(\[\])?\s+
     )?
   )
 )
-(?i:(function)) # storage.function
+(?i:(function))
 \s+
 (?:
-  (init) # entity.name.function.contructor
+  (init)
   |
-  ([_$a-zA-Z][$\w]*) # entity.name.function
+  ([_$a-zA-Z][$\w]*)
 )\b</string>
 					<key>beginCaptures</key>
 					<dict>
@@ -1508,14 +1510,24 @@
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>storage.type.function.cfml</string>
+							<string>storage.type.return-type.object.array.cfml</string>
 						</dict>
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.constructor.cfml</string>
+							<string>meta.group.braces.square meta.brace.square.cfml</string>
 						</dict>
 						<key>7</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.function.cfml</string>
+						</dict>
+						<key>8</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.constructor.cfml</string>
+						</dict>
+						<key>9</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.function.cfml</string>
