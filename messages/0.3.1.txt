@@ -1,0 +1,6 @@
+CFML v0.3.1 Changelog:
+
+- Added `cfargument` to the list of tags that do not need a closing tag
+
+- Syntax now correctly allows for a function return type of an object array
+  (e.g. public User[] function getUser(){})
