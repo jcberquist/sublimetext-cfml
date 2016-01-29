@@ -27,6 +27,18 @@
 									"file": "${packages}/User/cfml_package.sublime-settings"
 								},
 								"caption": "Package Settings – User"
+							},
+                            { "caption": "-" },
+							{
+								"command": "cfml_default_package_keymap",
+								"caption": "Key Bindings – Default"
+							},
+							{
+								"command": "open_file", "args":
+								{
+									"file": "${packages}/User/cfml_package.sublime-keymap"
+								},
+								"caption": "Key Bindings – User"
 							}
 						]
 					}
