@@ -45,15 +45,7 @@ repository:
       endCaptures:
         '0': {name: punctuation.definition.tag.end.cfml}
       patterns:
-      - contentName: meta.class.inheritance.cfml
-        begin: (?i)\b(extends)\s*(=)\s*"
-        beginCaptures:
-          '1': {name: storage.modifier.extends.cfml}
-          '2': {name: punctuation.separator.key-value.cfml}
-        end: '"'
-        patterns:
-        - name: entity.other.inherited-class.cfml
-          match: ([_$a-zA-Z][$\w]*)
+      - include: '#extends'
       - include: '#tag-generic-attribute'
     - include: '#cfml-tags'
 
@@ -148,15 +140,7 @@ repository:
       endCaptures:
         '0': {name: punctuation.definition.tag.end.cfml}
       patterns:
-      - contentName: meta.interface.inheritance.cfml
-        begin: (?i)\b(extends)\s*(=)\s*"
-        beginCaptures:
-          '1': {name: storage.modifier.extends.cfml}
-          '2': {name: punctuation.separator.key-value.cfml}
-        end: '"'
-        patterns:
-        - name: entity.other.inherited-interface.cfml
-          match: ([_$a-zA-Z][$\w]*)
+      - include: '#extends'
       - include: '#tag-generic-attribute'
     - include: '#cfml-tags'
 
@@ -224,6 +208,19 @@ repository:
       endCaptures:
         '0': {name: punctuation.definition.tag.end.cfml}
       patterns:
+      - match: (?i)\b(name)\s*(=)\s*(?:((")([^<>"']*)("))|((')([^<>"']*)('))|([^<>"'\s]*))
+        captures:
+          '1': {name: entity.other.attribute-name.cfml}
+          '2': {name: punctuation.separator.key-value.cfml}
+          '3': {name: string.quoted.double.cfml}
+          '4': {name: punctuation.definition.string.begin.cfml}
+          '5': {name: meta.tag.property.name.cfml}
+          '6': {name: punctuation.definition.string.end.cfml}
+          '7': {name: string.quoted.single.cfml}
+          '8': {name: punctuation.definition.string.begin.cfml}
+          '9': {name: meta.tag.property.name.cfml}
+          '10': {name: punctuation.definition.string.end.cfml}
+          '11': {name: string.unquoted.cfml meta.tag.property.name.cfml}
       - include: '#tag-generic-attribute'
 
   cfquery:
@@ -280,6 +277,24 @@ repository:
       end: '--->'
       patterns:
       - include: '#comments'
+
+  extends:
+    name: meta.class.inheritance.cfml
+    begin: (?i)\b(extends)\s*(=)\s*
+    beginCaptures:
+      '1': {name: storage.modifier.extends.cfml}
+      '2': {name: punctuation.separator.key-value.cfml}
+    end: ((")([a-zA-Z0-9:.]+)?("))|((')([a-zA-Z0-9:.]+)?('))|([a-zA-Z0-9:.]+)|(?=[^a-zA-Z0-9:.])
+    endCaptures:
+      '1': {name: string.quoted.double.cfml}
+      '2': {name: punctuation.definition.string.begin.cfml}
+      '3': {name: entity.other.inherited-class.cfml}
+      '4': {name: punctuation.definition.string.end.cfml}
+      '5': {name: string.quoted.single.cfml}
+      '6': {name: punctuation.definition.string.begin.cfml}
+      '7': {name: entity.other.inherited-class.cfml}
+      '8': {name: punctuation.definition.string.end.cfml}
+      '9': {name: string.unquoted.cfml entity.other.inherited-class.cfml}
 
   hash-delimiters:
     patterns:

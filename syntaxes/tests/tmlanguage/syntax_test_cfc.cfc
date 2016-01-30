@@ -1,5 +1,22 @@
 // SYNTAX TEST "cfml.tmLanguage"
 component extends = "root.model.text"
+//        ^ meta.class.inheritance.cfml storage.modifier.extends.cfml
+//                ^ meta.class.inheritance.cfml punctuation.separator.key-value.cfml
+//                  ^ meta.class.inheritance.cfml string.quoted.double.cfml punctuation.definition.string.begin.cfml
+//                   ^ meta.class.inheritance.cfml string.quoted.double.cfml entity.other.inherited-class.cfml
+//                                   ^ embedding.cfml source.cfml.script meta.class.cfml
+extends = 'root.model.text'
+// <- meta.class.inheritance.cfml storage.modifier.extends.cfml
+//      ^ meta.class.inheritance.cfml punctuation.separator.key-value.cfml
+//        ^ meta.class.inheritance.cfml string.quoted.single.cfml punctuation.definition.string.begin.cfml
+//         ^ meta.class.inheritance.cfml string.quoted.single.cfml entity.other.inherited-class.cfml
+//                         ^ embedding.cfml source.cfml.script meta.class.cfml
+extends = root.model.text
+// <- meta.class.inheritance.cfml storage.modifier.extends.cfml
+//      ^ meta.class.inheritance.cfml punctuation.separator.key-value.cfml
+//        ^ meta.class.inheritance.cfml string.unquoted.cfml entity.other.inherited-class.cfml
+//                       ^ embedding.cfml source.cfml.script meta.class.cfml
+
 // random comment
 persistent = true {
 // <- embedding.cfml source.cfml.script meta.class.cfml entity.other.attribute-name.cfml
@@ -59,6 +76,24 @@ default="string";
     test.foo( myvar == test );
 //            ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.group.braces.curly meta.function-call.method.cfml meta.function-call.method.arguments.cfml variable.other.cfml
 
+    foo.method(test = true, random = "string");
+//      ^ meta.function-call.method.cfml
+//            ^ meta.function-call.method.cfml meta.function-call.method.arguments.cfml punctuation.definition.arguments.begin.cfml
+//             ^ meta.function-call.method.cfml meta.function-call.method.arguments.cfml entity.other.method-parameter.cfml
+//                  ^ meta.function-call.method.cfml meta.function-call.method.arguments.cfml keyword.operator.assignment.cfml
+    var mycfc = createObject( 'component', 'path.to.cfc' );
+//              ^ meta.support.function-call.cfml meta.support.function-call.createcomponent.cfml support.function.cfml
+    var mycfc = new path.to.cfc(test = true, random = "string");
+//              ^ meta.instance.constructor keyword.operator.new.cfml
+//                          ^ meta.instance.constructor entity.name.class.cfml
+//                             ^ meta.instance.constructor meta.function-call.method.arguments.cfml punctuation.definition.arguments.begin.cfml
+//                              ^ meta.instance.constructor meta.function-call.method.arguments.cfml entity.other.method-parameter.cfml
+//                                   ^  meta.instance.constructor meta.function-call.method.arguments.cfml keyword.operator.assignment.cfml
+    new path.to.cfc().callmethod();
+//                   ^ keyword.operator.accessor.cfml
+//                    ^ meta.function-call.method.cfml
+    var mystring = createobject( "java", "java.lang.String" );
+//                 ^ meta.support.function-call.cfml meta.support.function-call.createjavaobject.cfml support.function.cfml
     return result = foo;
 //         ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.group.braces.curly variable.other.cfml
 //                  ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.group.braces.curly variable.other.cfml

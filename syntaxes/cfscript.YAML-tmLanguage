@@ -48,30 +48,48 @@ repository:
 
   component-attributes:
     patterns:
-    - contentName: meta.class.inheritance.cfml
-      begin: \b(?i:(extends))\b\s*(=)\s*
+    - name: meta.class.inheritance.cfml
+      begin: (?i)\b(extends)\s*(=)\s*
       beginCaptures:
         '1': {name: storage.modifier.extends.cfml}
-      end: (["'])([a-zA-Z0-9:.]+)(["'])|([a-zA-Z0-9:.]+)
+        '2': {name: punctuation.separator.key-value.cfml}
+      end: ((")([a-zA-Z0-9:.]+)?("))|((')([a-zA-Z0-9:.]+)?('))|([a-zA-Z0-9:.]+)|(?=[^a-zA-Z0-9:.])
       endCaptures:
-        '1': {name: punctuation.definition.string.begin.cfml}
-        '2': {name: entity.other.inherited-class.cfml}
-        '3': {name: punctuation.definition.string.end.cfml}
-        '4': {name: entity.other.inherited-class.cfml}
+        '1': {name: string.quoted.double.cfml}
+        '2': {name: punctuation.definition.string.begin.cfml}
+        '3': {name: entity.other.inherited-class.cfml}
+        '4': {name: punctuation.definition.string.end.cfml}
+        '5': {name: string.quoted.single.cfml}
+        '6': {name: punctuation.definition.string.begin.cfml}
+        '7': {name: entity.other.inherited-class.cfml}
+        '8': {name: punctuation.definition.string.end.cfml}
+        '9': {name: string.unquoted.cfml entity.other.inherited-class.cfml}
     - include: '#tag-generic-attribute'
 
   constructor:
     patterns:
     - name: meta.instance.constructor
-      begin: (new)\s+(?=[_$a-zA-Z][$\w.]*)
+      begin: \b(new)\s+
       beginCaptures:
         '1': {name: keyword.operator.new.cfml}
-      end: (?![_$a-zA-Z][$\w.]*)
+      end: (?<=\))|(?=[^_$\w.\(])
       patterns:
-      - include: '#support'
-      - match: ([_$a-zA-Z][$\w.]*\.)?([_$a-zA-Z][$\w]*)
+      - match: ([_$\w.]*\.)?([_$\w]*)(?=\()
         captures:
           '2': {name: entity.name.class.cfml}
+      - name: meta.function-call.method.arguments.cfml
+        begin: \(
+        beginCaptures:
+          '0': {name: punctuation.definition.arguments.begin.cfml}
+        end: \)
+        endCaptures:
+          '0': {name: punctuation.definition.arguments.end.cfml}
+        patterns:
+        - name: punctuation.definition.separator.arguments.cfml
+          match: ','
+        - name: entity.other.method-parameter.cfml
+          match: (?i:(\w+)\s*(?=\=[^\=]))
+        - include: '#expression'
 
   core:
     patterns:
@@ -428,6 +446,28 @@ repository:
 
   support:
     patterns:
+    - name: meta.support.function-call.cfml meta.support.function-call.createcomponent.cfml
+      contentName: meta.support.function-call.arguments.cfml
+      begin: (?i)(?<!\.)\b(createobject)(?=\((?:\s*type\s*=)?\s*["']component["']\s*,)
+      beginCaptures:
+        '1': {name: support.function.cfml}
+        '2': {name: meta.support.function-call.arguments.cfml punctuation.definition.arguments.begin.cfml}
+      end: \)
+      endCaptures:
+        '0': {name: meta.support.function-call.arguments.cfml punctuation.definition.arguments.end.cfml}
+      patterns:
+      - include: '#expression'
+    - name: meta.support.function-call.cfml meta.support.function-call.createjavaobject.cfml
+      contentName: meta.support.function-call.arguments.cfml
+      begin: (?i)(?<!\.)\b(createobject)(?=\((?:\s*type\s*=)?\s*["']java["']\s*,)
+      beginCaptures:
+        '1': {name: support.function.cfml}
+        '2': {name: meta.support.function-call.arguments.cfml punctuation.definition.arguments.begin.cfml}
+      end: \)
+      endCaptures:
+        '0': {name: meta.support.function-call.arguments.cfml punctuation.definition.arguments.end.cfml}
+      patterns:
+      - include: '#expression'
     - name: meta.support.function-call.cfml
       contentName: meta.support.function-call.arguments.cfml
       begin: |-

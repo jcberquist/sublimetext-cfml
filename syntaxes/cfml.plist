@@ -134,34 +134,8 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>begin</key>
-							<string>(?i)\b(extends)\s*(=)\s*"</string>
-							<key>beginCaptures</key>
-							<dict>
-								<key>1</key>
-								<dict>
-									<key>name</key>
-									<string>storage.modifier.extends.cfml</string>
-								</dict>
-								<key>2</key>
-								<dict>
-									<key>name</key>
-									<string>punctuation.separator.key-value.cfml</string>
-								</dict>
-							</dict>
-							<key>contentName</key>
-							<string>meta.class.inheritance.cfml</string>
-							<key>end</key>
-							<string>"</string>
-							<key>patterns</key>
-							<array>
-								<dict>
-									<key>match</key>
-									<string>([_$a-zA-Z][$\w]*)</string>
-									<key>name</key>
-									<string>entity.other.inherited-class.cfml</string>
-								</dict>
-							</array>
+							<key>include</key>
+							<string>#extends</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -492,34 +466,8 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>begin</key>
-							<string>(?i)\b(extends)\s*(=)\s*"</string>
-							<key>beginCaptures</key>
-							<dict>
-								<key>1</key>
-								<dict>
-									<key>name</key>
-									<string>storage.modifier.extends.cfml</string>
-								</dict>
-								<key>2</key>
-								<dict>
-									<key>name</key>
-									<string>punctuation.separator.key-value.cfml</string>
-								</dict>
-							</dict>
-							<key>contentName</key>
-							<string>meta.interface.inheritance.cfml</string>
-							<key>end</key>
-							<string>"</string>
-							<key>patterns</key>
-							<array>
-								<dict>
-									<key>match</key>
-									<string>([_$a-zA-Z][$\w]*)</string>
-									<key>name</key>
-									<string>entity.other.inherited-interface.cfml</string>
-								</dict>
-							</array>
+							<key>include</key>
+							<string>#extends</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -754,6 +702,68 @@
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>entity.other.attribute-name.cfml</string>
+								</dict>
+								<key>10</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.end.cfml</string>
+								</dict>
+								<key>11</key>
+								<dict>
+									<key>name</key>
+									<string>string.unquoted.cfml meta.tag.property.name.cfml</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.key-value.cfml</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>string.quoted.double.cfml</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.begin.cfml</string>
+								</dict>
+								<key>5</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.property.name.cfml</string>
+								</dict>
+								<key>6</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.end.cfml</string>
+								</dict>
+								<key>7</key>
+								<dict>
+									<key>name</key>
+									<string>string.quoted.single.cfml</string>
+								</dict>
+								<key>8</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.begin.cfml</string>
+								</dict>
+								<key>9</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.property.name.cfml</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(?i)\b(name)\s*(=)\s*(?:((")([^&lt;&gt;"']*)("))|((')([^&lt;&gt;"']*)('))|([^&lt;&gt;"'\s]*))</string>
+						</dict>
+						<dict>
 							<key>include</key>
 							<string>#tag-generic-attribute</string>
 						</dict>
@@ -945,6 +955,76 @@
 					</array>
 				</dict>
 			</array>
+		</dict>
+		<key>extends</key>
+		<dict>
+			<key>begin</key>
+			<string>(?i)\b(extends)\s*(=)\s*</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.extends.cfml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.key-value.cfml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>((")([a-zA-Z0-9:.]+)?("))|((')([a-zA-Z0-9:.]+)?('))|([a-zA-Z0-9:.]+)|(?=[^a-zA-Z0-9:.])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.double.cfml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.cfml</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.other.inherited-class.cfml</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.cfml</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.single.cfml</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.cfml</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>entity.other.inherited-class.cfml</string>
+				</dict>
+				<key>8</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.cfml</string>
+				</dict>
+				<key>9</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.cfml entity.other.inherited-class.cfml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.class.inheritance.cfml</string>
 		</dict>
 		<key>hash-delimiters</key>
 		<dict>
