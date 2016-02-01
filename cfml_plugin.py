@@ -16,8 +16,9 @@ class CfmlEventListener(sublime_plugin.EventListener):
 	def on_post_text_command(self, view, command_name, args):
 		if command_name == "commit_completion":
 			pos = view.sel()[0].begin()
-			if view.match_selector(pos, "embedding.cfml meta.tag.cfml - source.cfml.script, embedding.cfml meta.tag.script.cfml"):
-				view.run_command("auto_complete", {"api_completions_only": True})
+			if view.match_selector(pos, "meta.tag.cfml - source.cfml.script, meta.tag.script.cfml, meta.tag.script.cf.cfml, meta.class.cfml - meta.class.inheritance.cfml"):
+				if view.substr(pos - 1) in [" ", "\"", "'", "="]:
+					view.run_command("auto_complete", {"api_completions_only": True})
 
 	def on_query_completions(self, view, prefix, locations):
 		if not view.match_selector(locations[0], "embedding.cfml"):
@@ -36,7 +37,7 @@ class CfmlEventListener(sublime_plugin.EventListener):
 			completion_list = completions.get_dot_completions(view, prefix, locations[0])
 			return completion_list
 
-		#tag in script attribute completions
+		# tag in script attribute completions
 		if view.match_selector(prefix_start, base_script_scope + " meta.tag, " + base_script_scope + " meta.class"):
 			attribute_completions = completions.get_script_tag_attributes(view, prefix, locations[0])
 			return attribute_completions
