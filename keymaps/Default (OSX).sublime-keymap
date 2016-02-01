@@ -65,7 +65,7 @@
       {"key": "selection_empty", "operator": "equal", "operand":false, "match_all":true},
       {"key": "selector", "operator": "equal", "operand": "string.quoted.double.cfml,string.quoted.single.cfml,meta.scope.cfoutput.cfml", "match_all":true}
     ]
-  }
+  },
   // f1 docs lookup
   {
     "keys": ["f1"],
@@ -101,7 +101,7 @@
       {"key": "selector", "operator": "equal", "operand": "meta.tag.cfml - comment - source.cfml.script", "match_all":true},
       {"key": "selection_empty", "operator": "equal", "operand": true, "match_all": true},
       {"key": "preceding_text", "operator": "regex_match", "operand": ".*>$", "match_all":true},
-      {"key": "following_text", "operator": "regex_match", "operand": "^</.*", "match_all":true},
+      {"key": "following_text", "operator": "regex_match", "operand": "^</.*", "match_all":true}
     ]
   },
   {

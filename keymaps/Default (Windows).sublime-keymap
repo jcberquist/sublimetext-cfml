@@ -101,7 +101,7 @@
       {"key": "selector", "operator": "equal", "operand": "meta.tag.cfml - comment - source.cfml.script", "match_all":true},
       {"key": "selection_empty", "operator": "equal", "operand": true, "match_all": true},
       {"key": "preceding_text", "operator": "regex_match", "operand": ".*>$", "match_all":true},
-      {"key": "following_text", "operator": "regex_match", "operand": "^</.*", "match_all":true},
+      {"key": "following_text", "operator": "regex_match", "operand": "^</.*", "match_all":true}
     ]
   },
   {
