@@ -100,6 +100,9 @@ default="string";
     return result == test ? 'one' : 2;
 //         ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.group.braces.curly variable.other.cfml
 //                   ^ embedding.cfml source.cfml.script meta.group.braces.curly meta.group.braces.curly variable.other.cfml
+
+    throw( message = "test error message" );
+//  ^ meta.support.function-call.cfml support.function.cfml
   }
 
   public User[] function getUser(){}

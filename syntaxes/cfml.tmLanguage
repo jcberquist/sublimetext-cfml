@@ -1223,6 +1223,10 @@
 					<array>
 						<dict>
 							<key>include</key>
+							<string>#source-cfml-script-comments</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#source-cfml-script-component-attributes</string>
 						</dict>
 					</array>
@@ -1517,6 +1521,10 @@
 				<dict>
 					<key>include</key>
 					<string>#source-cfml-script-method-call</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#source-cfml-script-tag-in-script-cf</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1986,7 +1994,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;!\.)\b(catch|finally|rethrow|throw|try)\b</string>
+					<string>(?&lt;!\.)\b(catch|finally|rethrow|throw|try)\b(?!\()</string>
 					<key>name</key>
 					<string>keyword.control.trycatch.cfml</string>
 				</dict>
@@ -2090,7 +2098,13 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;!\.)\b(?i:(application|arguments|attributes|caller|cgi|client|cookie|flash|form|local|request|server|session|thistag|thread|thread local|url|variables|self|argumentcollection))\b</string>
+					<string>(?&lt;!\.)\b(?i:thread)\b(?=[\[.])</string>
+					<key>name</key>
+					<string>variable.language.scope.cfml</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?&lt;!\.)\b(?i:(application|arguments|attributes|caller|cgi|client|cookie|flash|form|local|request|server|session|thistag|url|variables|self|argumentcollection))\b</string>
 					<key>name</key>
 					<string>variable.language.scope.cfml</string>
 				</dict>
@@ -2437,7 +2451,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(?i)(?&lt;!\.)\b(createobject)(?=\((?:\s*type\s*=)?\s*["']component["']\s*,)</string>
+					<string>(?i)(?&lt;!\.)\b(createobject)(\()(?=(?:\s*type\s*=)?\s*["']component["']\s*,)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -2475,7 +2489,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?i)(?&lt;!\.)\b(createobject)(?=\((?:\s*type\s*=)?\s*["']java["']\s*,)</string>
+					<string>(?i)(?&lt;!\.)\b(createobject)(\()(?=(?:\s*type\s*=)?\s*["']java["']\s*,)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -3075,6 +3089,64 @@
 						<dict>
 							<key>include</key>
 							<string>#source-cfml-script-tag-generic-attribute-script</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>source-cfml-script-tag-in-script-cf</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?i)(cf[\w]+)\(</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.script.cfml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\)</string>
+					<key>name</key>
+					<string>meta.tag.script.cf.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>entity.other.attribute-name.cfml</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>\b([a-zA-Z0-9:-]+)\b</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>=</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.key-value.cfml</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?&lt;=[^\s=])|(?=\))</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#source-cfml-script-expression</string>
+								</dict>
+							</array>
 						</dict>
 					</array>
 				</dict>

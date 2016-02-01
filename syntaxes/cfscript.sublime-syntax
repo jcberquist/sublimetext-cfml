@@ -130,6 +130,7 @@ contexts:
     - include: constructor
     - include: component
     - include: method-call
+    - include: tag-in-script-cf
     - include: function-call
     - include: brackets
     - include: operators
@@ -268,7 +269,7 @@ contexts:
       scope: keyword.control.flow.cfml
     - match: (?<!\.)\b(if|else)\b
       scope: keyword.control.conditional.cfml
-    - match: (?<!\.)\b(catch|finally|rethrow|throw|try)\b
+    - match: (?<!\.)\b(catch|finally|rethrow|throw|try)\b(?!\()
       scope: keyword.control.trycatch.cfml
     - match: (?<!\.)\b(break|continue|do|while)\b
       scope: keyword.control.loop.cfml
@@ -301,12 +302,13 @@ contexts:
       scope: variable.language.super.cfml
     - match: (?<!\.)\b(?i:this)\b
       scope: variable.language.this.cfml
+    - match: (?<!\.)\b(?i:thread)\b(?=[\[.])
+      scope: variable.language.scope.cfml
     - match: |-
         (?x)
           (?<!\.)\b(?i:(
           application|arguments|attributes|caller|cgi|client|cookie|flash|form|
-          local|request|server|session|thistag|thread|thread local|url|variables|
-          self|argumentcollection
+          local|request|server|session|thistag|url|variables|self|argumentcollection
         ))\b
       scope: variable.language.scope.cfml
   method-call:
@@ -713,6 +715,25 @@ contexts:
       captures:
         2: entity.name.tag.script.cfml
       push: tag-generic-attribute-script
+  tag-in-script-cf:
+    - match: (?i)(cf[\w]+)\(
+      captures:
+        1: entity.name.tag.script.cfml
+      push:
+        - meta_scope: meta.tag.script.cf.cfml
+        - match: \)
+          pop: true
+        - match: '\b([a-zA-Z0-9:-]+)\b'
+          captures:
+            1: entity.other.attribute-name.cfml
+        - match: =
+          scope: punctuation.separator.key-value.cfml
+          push:
+            - match: (?=\))
+              pop: true
+            - match: (?<=[^\s=])
+              pop: true
+            - include: expression
   variable:
     - match: '\b[A-Z][_$\dA-Z]*\b'
       scope: variable.other.constant.cfml
