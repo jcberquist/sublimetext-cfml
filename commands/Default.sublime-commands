@@ -1,11 +1,33 @@
 [
 	{
-		"caption": "CFML: Default Package Settings",
-		"command": "cfml_default_package_settings"
+		"caption": "CFML: Settings - Default",
+		"command": "cfml_open_package_file", "args":
+			{
+				"file": "${packages}/{cfml_package_name}/settings/cfml_package.sublime-settings"
+			}
 	},
 	{
-		"caption": "CFML: User Package Settings",
-		"command": "open_file", "args": {"file": "${packages}/User/cfml_package.sublime-settings"}
+		"caption": "CFML: Settings - User",
+		"command": "open_file", "args":
+			{
+				"file": "${packages}/User/cfml_package.sublime-settings",
+				"contents": "{\n\t$0\n}\n"
+			}
+	},
+	{
+		"caption": "CFML: Key Bindings - Default",
+		"command": "cfml_open_package_file", "args":
+			{
+				"file": "${packages}/{cfml_package_name}/keymaps/Default ($platform).sublime-keymap"
+			}
+	},
+	{
+		"caption": "CFML: Key Bindings - User",
+		"command": "open_file", "args":
+			{
+				"file": "${packages}/User/Default ($platform).sublime-keymap",
+				"contents": "[\n\t$0\n]\n"
+			}
 	},
 	// Build tmLanguage file
 	{

@@ -88,7 +88,8 @@ class CfmlBetweenTagPairCommand(sublime_plugin.TextCommand):
 			return
 		self.view.run_command("insert_snippet", {"contents": "\n"})
 
-class CfmlDefaultPackageSettingsCommand(sublime_plugin.WindowCommand):
+class CfmlOpenPackageFileCommand(sublime_plugin.WindowCommand):
 
-	def run(self):
-		self.window.run_command("open_file", {"file": "${packages}/" + utils.get_plugin_name() + "/settings/cfml_package.sublime-settings"})
+	def run(self, file):
+		package_file = file.replace("{cfml_package_name}", utils.get_plugin_name())
+		self.window.run_command("open_file", {"file": package_file})

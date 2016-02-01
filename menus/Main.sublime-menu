@@ -14,19 +14,38 @@
 					{
 						"caption": "CFML",
 						"mnemonic": "C",
-						"id": "cfml",
 						"children":
 						[
 							{
-								"command": "cfml_default_package_settings",
-								"caption": "Package Settings – Default"
+								"command": "cfml_open_package_file", "args":
+								{
+									"file": "${packages}/{cfml_package_name}/settings/cfml_package.sublime-settings"
+								},
+								"caption": "Settings – Default"
 							},
 							{
 								"command": "open_file", "args":
 								{
-									"file": "${packages}/User/cfml_package.sublime-settings"
+									"file": "${packages}/User/cfml_package.sublime-settings",
+									"contents": "{\n\t$0\n}\n"
 								},
-								"caption": "Package Settings – User"
+								"caption": "Settings – User"
+							},
+							{ "caption": "-" },
+							{
+								"command": "cfml_open_package_file", "args":
+								{
+									"file": "${packages}/{cfml_package_name}/keymaps/Default ($platform).sublime-keymap"
+								},
+								"caption": "Key Bindings – Default"
+							},
+							{
+								"command": "open_file", "args":
+								{
+									"file": "${packages}/User/Default ($platform).sublime-keymap",
+									"contents": "[\n\t$0\n]\n"
+								},
+								"caption": "Key Bindings – User"
 							}
 						]
 					}
