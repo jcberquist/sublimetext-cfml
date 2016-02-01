@@ -1,0 +1,9 @@
+CFML v0.4.0 Changelog:
+
+- Added support for ColdFusion style tags in cfscript
+  e.g. 'cfcontent( type="text/html" );'
+
+- Added menu items for key binding files to the package settings menu
+
+- bug fixes for incorrect syntax highlighting, for more see
+  https://github.com/jcberquist/sublimetext-cfml/commit/3f73f74c2ce7dd8b3d04fbf000a3c3e66fec108f
