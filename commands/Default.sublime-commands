@@ -7,6 +7,14 @@
 		"caption": "CFML: User Package Settings",
 		"command": "open_file", "args": {"file": "${packages}/User/cfml_package.sublime-settings"}
 	},
+	{
+		"caption": "CFML: Default Package Key Bindings",
+		"command": "cfml_default_package_keymap"
+	},
+	{
+		"caption": "CFML: User Package Key Bindings",
+		"command": "open_file", "args": {"file": "${packages}/User/cfml_package.sublime-keymap"}
+	},
 	// Build tmLanguage file
 	{
 		"caption": "CFML: Build tmLanguage Syntax File",

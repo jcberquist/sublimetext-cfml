@@ -92,3 +92,8 @@ class CfmlDefaultPackageSettingsCommand(sublime_plugin.WindowCommand):
 
 	def run(self):
 		self.window.run_command("open_file", {"file": "${packages}/" + utils.get_plugin_name() + "/settings/cfml_package.sublime-settings"})
+
+class CfmlDefaultPackageKeymapCommand(sublime_plugin.WindowCommand):
+
+	def run(self):
+		self.window.run_command("open_file", {"file": "${packages}/" + utils.get_plugin_name() + "/keymaps/Default" + (" (OSX)" if sublime.platform() == "osx" else "") + ".sublime-keymap"})
