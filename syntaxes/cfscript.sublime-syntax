@@ -53,40 +53,57 @@ contexts:
           pop: true
         - include: component-attributes
   component-attributes:
-    - match: \b(?i:(extends))\b\s*(=)\s*
+    - match: (?i)\b(extends)\s*(=)\s*
       captures:
         1: storage.modifier.extends.cfml
+        2: punctuation.separator.key-value.cfml
       push:
-        - meta_content_scope: meta.class.inheritance.cfml
-        - match: '(")([a-zA-Z0-9:.]+)?(")'
+        - meta_scope: meta.class.inheritance.cfml
+        - match: (")([a-zA-Z0-9:.]+)?(")
           captures:
+            0: string.quoted.double.cfml
             1: punctuation.definition.string.begin.cfml
             2: entity.other.inherited-class.cfml
             3: punctuation.definition.string.end.cfml
           pop: true
-        - match: "(')([a-zA-Z0-9:.]+)?(')"
+        - match: (')([a-zA-Z0-9:.]+)?(')
           captures:
+            0: string.quoted.single.cfml
             1: punctuation.definition.string.begin.cfml
             2: entity.other.inherited-class.cfml
             3: punctuation.definition.string.end.cfml
           pop: true
         - match: ([a-zA-Z0-9:.]+)
           captures:
+            0: string.unquoted.cfml
             1: entity.other.inherited-class.cfml
+          pop: true
+        - match: (?=[^a-zA-Z0-9:.])
           pop: true
     - include: scope:embedding.cfml#tag-generic-attribute
   constructor:
-    - match: '(new)\s+(?=[_$a-zA-Z][$\w.]*)'
+    - match: '\b(new)\s+'
       captures:
         1: keyword.operator.new.cfml
       push:
         - meta_scope: meta.instance.constructor
-        - match: '(?![_$a-zA-Z][$\w.]*)'
+        - match: '(?<=\))|(?=[^_$\w.\(])'
           pop: true
-        - include: support
-        - match: '([_$a-zA-Z][$\w.]*\.)?([_$a-zA-Z][$\w]*)'
+        - match: '([_$\w.]*\.)?([_$\w]*)(?=\()'
           captures:
             2: entity.name.class.cfml
+        - match: \(
+          scope: punctuation.definition.arguments.begin.cfml
+          push:
+            - meta_scope: meta.function-call.method.arguments.cfml
+            - match: \)
+              scope: punctuation.definition.arguments.end.cfml
+              pop: true
+            - match: ","
+              scope: punctuation.definition.separator.arguments.cfml
+            - match: (?i:(\w+)\s*(?=\=[^\=]))
+              scope: entity.other.method-parameter.cfml
+            - include: expression
   core:
     - include: labels
     - include: keywords
@@ -113,6 +130,7 @@ contexts:
     - include: constructor
     - include: component
     - include: method-call
+    - include: tag-in-script-cf
     - include: function-call
     - include: brackets
     - include: operators
@@ -251,7 +269,7 @@ contexts:
       scope: keyword.control.flow.cfml
     - match: (?<!\.)\b(if|else)\b
       scope: keyword.control.conditional.cfml
-    - match: (?<!\.)\b(catch|finally|rethrow|throw|try)\b
+    - match: (?<!\.)\b(catch|finally|rethrow|throw|try)\b(?!\()
       scope: keyword.control.trycatch.cfml
     - match: (?<!\.)\b(break|continue|do|while)\b
       scope: keyword.control.loop.cfml
@@ -284,12 +302,13 @@ contexts:
       scope: variable.language.super.cfml
     - match: (?<!\.)\b(?i:this)\b
       scope: variable.language.this.cfml
+    - match: (?<!\.)\b(?i:thread)\b(?=[\[.])
+      scope: variable.language.scope.cfml
     - match: |-
         (?x)
           (?<!\.)\b(?i:(
           application|arguments|attributes|caller|cgi|client|cookie|flash|form|
-          local|request|server|session|thistag|thread|thread local|url|variables|
-          self|argumentcollection
+          local|request|server|session|thistag|url|variables|self|argumentcollection
         ))\b
       scope: variable.language.scope.cfml
   method-call:
@@ -440,6 +459,18 @@ contexts:
       pop: true
     - include: scope:embedding.cfml#hash-delimiters
   support:
+    - match: (?i)(?<!\.)\b(createobject)(?=\((?:\s*type\s*=)?\s*["']component["']\s*,)
+      captures:
+        1: support.function.cfml
+      push:
+        - meta_scope: meta.support.function-call.cfml meta.support.function-call.createcomponent.cfml
+        - include: support-arguments
+    - match: (?i)(?<!\.)\b(createobject)(?=\((?:\s*type\s*=)?\s*["']java["']\s*,)
+      captures:
+        1: support.function.cfml
+      push:
+        - meta_scope: meta.support.function-call.cfml meta.support.function-call.createjavaobject.cfml
+        - include: support-arguments
     - match: |-
         (?x)
           (?<!\.)\b
@@ -540,16 +571,7 @@ contexts:
         1: support.function.cfml
       push:
         - meta_scope: meta.support.function-call.cfml
-        - match: (?<=\))
-          pop: true
-        - match: \(
-          scope: punctuation.definition.arguments.begin.cfml
-          push:
-            - meta_scope: meta.support.function-call.arguments.cfml
-            - match: \)
-              scope: punctuation.definition.arguments.end.cfml
-              pop: true
-            - include: expression
+        - include: support-arguments
     - match: |-
         (?x)
             (\.)
@@ -585,6 +607,17 @@ contexts:
               scope: punctuation.definition.arguments.end.cfml
               pop: true
             - include: expression
+  support-arguments:
+    - match: (?<=\))
+      pop: true
+    - match: \(
+      scope: punctuation.definition.arguments.begin.cfml
+      push:
+        - meta_scope: meta.support.function-call.arguments.cfml
+        - match: \)
+          scope: punctuation.definition.arguments.end.cfml
+          pop: true
+        - include: expression
   switch:
     - match: (?<!\.)\b(switch)\b
       captures:
@@ -682,6 +715,25 @@ contexts:
       captures:
         2: entity.name.tag.script.cfml
       push: tag-generic-attribute-script
+  tag-in-script-cf:
+    - match: (?i)(cf[\w]+)\(
+      captures:
+        1: entity.name.tag.script.cfml
+      push:
+        - meta_scope: meta.tag.script.cf.cfml
+        - match: \)
+          pop: true
+        - match: '\b([a-zA-Z0-9:-]+)\b'
+          captures:
+            1: entity.other.attribute-name.cfml
+        - match: =
+          scope: punctuation.separator.key-value.cfml
+          push:
+            - match: (?=\))
+              pop: true
+            - match: (?<=[^\s=])
+              pop: true
+            - include: expression
   variable:
     - match: '\b[A-Z][_$\dA-Z]*\b'
       scope: variable.other.constant.cfml

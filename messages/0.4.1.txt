@@ -1,0 +1,4 @@
+CFML v0.4.1 Changelog:
+
+- fix for invalid JSON in OSX keymap file
+  Sorry!

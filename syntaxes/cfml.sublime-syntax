@@ -34,16 +34,7 @@ contexts:
         - match: ">"
           scope: punctuation.definition.tag.end.cfml
           set: cfcomponent-contents
-        - match: '(?i)\b(extends)\s*(=)\s*"'
-          captures:
-            1: storage.modifier.extends.cfml
-            2: punctuation.separator.key-value.cfml
-          push:
-            - meta_content_scope: meta.class.inheritance.cfml
-            - match: '([_$a-zA-Z][$\w]*)'
-              scope: entity.other.inherited-class.cfml
-            - match: '"'
-              pop: true
+        - include: extends
         - include: tag-generic-attribute
   cfcomponent-contents:
     - match: (?i)(</)(cfcomponent)(>)
@@ -66,16 +57,7 @@ contexts:
         - match: ">"
           scope: punctuation.definition.tag.end.cfml
           set: cfinterface-contents
-        - match: '(?i)\b(extends)\s*(=)\s*"'
-          captures:
-            1: storage.modifier.extends.cfml
-            2: punctuation.separator.key-value.cfml
-          push:
-            - meta_content_scope: meta.interface.inheritance.cfml
-            - match: '([_$a-zA-Z][$\w]*)'
-              scope: entity.other.inherited-interface.cfml
-            - match: '"'
-              pop: true
+        - include: extends
         - include: tag-generic-attribute
   cfinterface-contents:
     - match: (?i)(</)(cfinterface)(>)
@@ -87,6 +69,34 @@ contexts:
       pop: true
     - include: comments
     - include: cffunction
+  extends:
+    - match: (?i)\b(extends)\s*(=)\s*
+      captures:
+        1: storage.modifier.extends.cfml
+        2: punctuation.separator.key-value.cfml
+      push:
+        - meta_scope: meta.class.inheritance.cfml
+        - match: (")([a-zA-Z0-9:.]+)?(")
+          captures:
+            0: string.quoted.double.cfml
+            1: punctuation.definition.string.begin.cfml
+            2: entity.other.inherited-class.cfml
+            3: punctuation.definition.string.end.cfml
+          pop: true
+        - match: (')([a-zA-Z0-9:.]+)?(')
+          captures:
+            0: string.quoted.single.cfml
+            1: punctuation.definition.string.begin.cfml
+            2: entity.other.inherited-class.cfml
+            3: punctuation.definition.string.end.cfml
+          pop: true
+        - match: ([a-zA-Z0-9:.]+)
+          captures:
+            0: string.unquoted.cfml
+            1: entity.other.inherited-class.cfml
+          pop: true
+        - match: (?=[^a-zA-Z0-9:.])
+          pop: true
   cffunction:
     - match: (?i)(<)(cffunction)
       captures:
@@ -236,6 +246,19 @@ contexts:
         - match: (/?>)
           scope: punctuation.definition.tag.end.cfml
           pop: true
+        - match: (?i)\b(name)\s*(=)\s*(?:((")([^<>"']*)("))|((')([^<>"']*)('))|([^<>"'\s]*))
+          captures:
+            1: entity.other.attribute-name.cfml
+            2: punctuation.separator.key-value.cfml
+            3: string.quoted.double.cfml
+            4: punctuation.definition.string.begin.cfml
+            5: meta.tag.property.name.cfml
+            6: punctuation.definition.string.end.cfml
+            7: string.quoted.single.cfml
+            8: punctuation.definition.string.begin.cfml
+            9: meta.tag.property.name.cfml
+            10: punctuation.definition.string.end.cfml
+            11: string.unquoted.cfml meta.tag.property.name.cfml
         - include: tag-generic-attribute
   cfquery:
     - match: (?i)(<)(cfquery)(?=\s|>)

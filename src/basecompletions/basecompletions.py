@@ -23,7 +23,7 @@ def get_tag_attributes(view, prefix, position, info):
 	if not info["tag_name"]:
 		return None
 
-	if info["tag_in_script"]:
+	if info["tag_in_script"] and not info["tag_name"].startswith("cf"):
 		 info["tag_name"] = "cf" + info["tag_name"]
 
 	# tag attribute value completions
@@ -37,7 +37,7 @@ def get_tag_attributes(view, prefix, position, info):
 	# tag attribute completions
 	prefix_start = position - len(prefix)
 	ch = view.substr(prefix_start - 1)
-	if ch in [" ", "\t", "\n"]:
+	if ch in [" ", "(", "\t", "\n"]:
 		completion_list = completions["cfml_tag_attributes"].get(info["tag_name"], None)
 		return CompletionList(completion_list, 0, False)
 
@@ -46,6 +46,7 @@ def get_tag_attributes(view, prefix, position, info):
 def get_script_completions(view, prefix, position, info):
 	completion_list = []
 	completion_list.extend(completions["cfml_functions"])
+	completion_list.extend(completions["cfml_cf_tags_in_script"])
 	completion_list.extend(completions["cfml_tags_in_script"])
 	return CompletionList(completion_list, 0, False)
 
@@ -78,6 +79,7 @@ def load_completions():
 	# tags
 	completions["cfml_tags"] = []
 	completions["cfml_tags_in_script"] = []
+	completions["cfml_cf_tags_in_script"] = []
 	completions["cfml_tag_attributes"] = {}
 	completions["cfml_tag_attribute_values"] = {}
 	for tag_name in sorted(completions_data["cfml_tags"].keys()):
@@ -86,6 +88,7 @@ def load_completions():
 		tag_attributes = completions_data["cfml_tags"][tag_name]["attributes"]
 		completions["cfml_tags"].append(make_tag_completion(tag_name, tag_attributes[0]))
 		completions["cfml_tags_in_script"].append(make_tag_completion(tag_name[2:], tag_attributes[0]))
+		completions["cfml_cf_tags_in_script"].append(make_cf_script_tag_completion(tag_name, tag_attributes[0]))
 		completions["cfml_tag_attributes"][tag_name] = [(a + '\trequired', a + '="$1"') for a in tag_attributes[0]]
 		completions["cfml_tag_attributes"][tag_name].extend([(a + '\toptional', a + '="$1"') for a in tag_attributes[1]])
 		# attribute values
@@ -117,3 +120,9 @@ def make_tag_completion(tag, required_attrs):
 	for index, attr in enumerate(required_attrs, 1):
 		attrs += ' ' + attr + '="$' + str(index) + '"'
 	return (tag + '\ttag (cfml)', tag + attrs)
+
+def make_cf_script_tag_completion(tag, required_attrs):
+	attrs = []
+	for index, attr in enumerate(required_attrs, 1):
+		attrs.append(' ' + attr + '="$' + str(index) + '"')
+	return (tag + '\ttag (cfml)', tag + "(" + ",".join(attrs) + "$0 )")

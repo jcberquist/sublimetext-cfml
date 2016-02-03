@@ -1,7 +1,7 @@
 [
-  // super+alt+a <cfabort>/<:abort>
+  // ctrl+alt+a <cfabort>/<:abort>
   {
-    "keys": ["super+alt+a"],
+    "keys": ["ctrl+alt+a"],
     "command": "insert_snippet",
     "args": {"contents": "<cfabort>"},
     "context": [
@@ -10,25 +10,25 @@
     ]
   },
   {
-    "keys": ["super+alt+a"],
+    "keys": ["ctrl+alt+a"],
     "command": "insert_snippet",
     "args": {"contents": "abort;"},
     "context": [
       {"key": "selector", "operator": "equal", "operand": "source.cfml.script"}
     ]
   },
-  // super+alt+d writeDump()/dump();
+  // ctrl+alt+d writeDump()/dump();
   {
-    "keys": ["super+alt+d"],
+    "keys": ["ctrl+alt+d"],
     "command": "insert_snippet",
     "args": {"contents": "writeDump(${0:$SELECTION});"},
     "context": [
       {"key": "selector", "operator": "equal", "operand": "source.cfml.script"}
     ]
   },
-  // super+alt+d  <cfdump var="##">/<:dump var="##">
+  // ctrl+alt+d  <cfdump var="##">/<:dump var="##">
   {
-    "keys": ["super+alt+d"],
+    "keys": ["ctrl+alt+d"],
     "command": "insert_snippet",
     "args": {"contents": "<cfdump var=\"#${1:$SELECTION}#\">"},
     "context": [
@@ -38,7 +38,7 @@
   },
   // ctrl+shift+o  <cfoutput>/<:output>
   {
-    "keys": ["super+shift+o"],
+    "keys": ["ctrl+shift+o"],
     "command": "insert_snippet",
     "args": {"contents": "<cfoutput>${1:$SELECTION}</cfoutput>"},
     "context": [
@@ -48,7 +48,7 @@
   },
   // ctrl+shift+o  writeOutput()
   {
-    "keys": ["super+shift+o"],
+    "keys": ["ctrl+shift+o"],
     "command": "insert_snippet",
     "args": {"contents": "writeOutput(${1:$SELECTION})"},
     "context": [
@@ -105,7 +105,7 @@
     ]
   },
   {
-    "keys": ["super+f1"],
+    "keys": ["ctrl+f1"],
     "command": "cfml_toggle_controller_view",
     "context": [
       {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
