@@ -173,7 +173,9 @@ def gen_suite_report(suiteStats, level=0):
 
 		if spec["status"] == "Error":
 			report += tabs + "  -> Error: " + spec["error"]["message"] + "\n"
-			report += build_stacktrace(spec["error"]["tagcontext"], tabs)
+			
+			if "tagcontext" in spec["error"]:
+				report += build_stacktrace(spec["error"]["tagcontext"], tabs)
 
 	for nestedSuite in suiteStats["suitestats"]:
 		report += gen_suite_report(nestedSuite, level + 1) + "\n"
