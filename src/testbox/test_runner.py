@@ -7,7 +7,6 @@ from .. import utils
 
 SYNTAX_EXT = "sublime-syntax" if int(sublime.version()) >= 3092 else "hidden-tmLanguage"
 RESULTS_TEMPLATES = {"logo": "","bundle": "", "results": "","global_exception": "", "legend": ""}
-RESULT_FILE_REGEX = "(\\S+):([0-9]+)$"
 
 def plugin_loaded():
 	sublime.set_timeout_async(load)
@@ -52,7 +51,7 @@ class TestboxCommand(sublime_plugin.WindowCommand):
 
 		testbox_results = {k: self.normalize_directory(v) for k, v in self.get_setting("testbox_results").items()}
 
-		self.output_view.settings().set("result_file_regex", testbox_results["server_root"] + RESULT_FILE_REGEX)
+		self.output_view.settings().set("result_file_regex", testbox_results["server_root"] + "([^\\s].*):([0-9]+)$")
 		self.output_view.settings().set("result_base_dir", testbox_results["sublime_root"])
 		self.output_view.settings().set("word_wrap", True)
 		self.output_view.settings().set("line_numbers", False)
@@ -145,7 +144,7 @@ def filter_stats_dict(source):
 
 def filter_exception_dict(source):
 	exception_keys = ["type","message","detail","stacktrace"]
-	return {key: str(source[key]) for key in stat_keys if key in source}
+	return {key: str(source[key]) for key in exception_keys if key in source}
 
 def get_status_bit(status):
 	status_dict = {"Failed": "!", "Error": "X", "Skipped": "-"}
@@ -173,7 +172,8 @@ def gen_suite_report(suiteStats, level=0):
 
 		if spec["status"] == "Error":
 			report += tabs + "  -> Error: " + spec["error"]["message"] + "\n"
-			report += build_stacktrace(spec["error"]["tagcontext"], tabs)
+			if "tagcontext" in spec["error"]:
+				report += build_stacktrace(spec["error"]["tagcontext"], tabs)
 
 	for nestedSuite in suiteStats["suitestats"]:
 		report += gen_suite_report(nestedSuite, level + 1) + "\n"
