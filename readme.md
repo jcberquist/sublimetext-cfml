@@ -32,6 +32,8 @@ In addition, there is the ability on a per project basis, via the `.sublime-proj
 
 If the documentation command is run when the cursor is within a built-in function or tag it will load the cfdocs.org documentation for that function or tag. Thus, having the cursor anywhere within `dateFormat(myDate, "yyyy-mm-dd")` and pressing <kbd>F1</kbd> (by default) will trigger a popup displaying the documentation for `dateFormat`. Similarly, having the cursor anywhere within `<cfinclude template="myOtherTemplate.cfm">` and pressing <kbd>F1</kbd> will trigger the display of the documention for `cfinclude`.
 
+If you have a copy of the cfdocs.org GitHub repository on your file system, there is a package setting, `"cfdocs_path"`, which can be set to the data directory of that repository (e.g. `"cfdocs_path": "C:/github/cfdocs/data/en/"`). If this is set, the cfdocs.org documentation will be loaded from the file system instead of being fetched via HTTP request. (See below for more information on package settings.)
+
 Inline documentation is also available for `Application.cfc` settings and methods as well as method calls that have been indexed via the model completions functionality (see above). In the latter case documentation of the function signature, file location, and argument list is provided.
 
 ### Package Settings

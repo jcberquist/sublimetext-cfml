@@ -1,0 +1,16 @@
+CFML v0.4.2 Changelog:
+
+- Fixed some bugs in the Testbox test runner code
+
+- After a tag attribute value completion has been inserted (between ""),
+  the cursor is now automatically advanced past the second double quote
+
+- Added a package setting, "cfdocs_path", which is for use when you have a
+  copy of the cfdocs.org GitHub repository on your file system (or at least
+  its data directory). It should be set to the local file system path to the
+  data directory of the cfdocs.org git repository. For example:
+
+  "cfdocs_path": "C:/github/cfdocs/data/en/"
+
+  When this is set, the F1 documentation command will load cfdocs.org data from
+  the file system instead of fetching it via http request.
