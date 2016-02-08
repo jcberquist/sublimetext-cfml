@@ -18,6 +18,10 @@
 	"cfml_non_closing_tags": ["cfabort","cfargument","cfbreak","cfcontinue","cfelse","cfelseif","cfproperty","cfqueryparam","cfrethrow","cfreturn","cfset","cfthrow"],
 	"html_non_closing_tags": ["area","base","br","col","command","embed","hr","img","input","link","meta","param","source"],
 
+	// file path to local version of cfdocs json data folder
+	// should end with trailing "/" - e.g. 'C:/github/cfdocs/data/en/'
+	"cfdocs_path": null,
+
 	// color scheme styles to inject for Lucee/CFML tags
 	// valid keys are "foreground" and "fontStyle"
 	// "foreground": "#RRGGBB", "#RGB" or ""

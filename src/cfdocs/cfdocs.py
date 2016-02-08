@@ -47,7 +47,10 @@ def get_inline_documentation(view, position):
 	return None
 
 def get_cfdoc(function_or_tag, doc_priority):
-	data, success = fetch_cfdoc(function_or_tag)
+	if utils.get_setting("cfdocs_path"):
+		data, success = load_cfdoc(function_or_tag)
+	else:
+		data, success = fetch_cfdoc(function_or_tag)
 	if success:
 		return Documentation(build_cfdoc(function_or_tag, data), None, doc_priority)
 	return Documentation(build_cfdoc_error(function_or_tag, data), None, doc_priority)
@@ -61,6 +64,22 @@ def fetch_cfdoc(function_or_tag):
 		data = {"error_message": "Unable to fetch " + function_or_tag + ".json<br>" + str(e)}
 		return data, False
 
+	try:
+		data = json.loads(json_string)
+	except ValueError as e:
+		data = {"error_message": "Unable to decode " + function_or_tag + ".json<br>ValueError: " + str(e)}
+		return data, False
+
+	return data, True
+
+def load_cfdoc(function_or_tag):
+	file_path = utils.get_setting("cfdocs_path") + function_or_tag  + ".json"
+	try:
+		with open(file_path, 'r') as f:
+			json_string = f.read()
+	except:
+		data = {"error_message": "Unable to read " + function_or_tag + ".json"}
+		return data, False
 	try:
 		data = json.loads(json_string)
 	except ValueError as e:
