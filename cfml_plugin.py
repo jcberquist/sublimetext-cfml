@@ -19,6 +19,10 @@ class CfmlEventListener(sublime_plugin.EventListener):
 			if view.match_selector(pos, "meta.tag.cfml - source.cfml.script, meta.tag.script.cfml, meta.tag.script.cf.cfml, meta.class.cfml - meta.class.inheritance.cfml"):
 				if view.substr(pos - 1) in [" ", "\"", "'", "="]:
 					view.run_command("auto_complete", {"api_completions_only": True})
+				elif view.substr(pos) == "\"":
+					# an attribute completion was most likely just inserted
+					# advance cursor past double quote character
+					view.run_command("move", {"by": "characters", "forward": True})
 
 	def on_query_completions(self, view, prefix, locations):
 		if not view.match_selector(locations[0], "embedding.cfml"):
