@@ -1,0 +1,24 @@
+CFML v0.5.0 Changelog:
+
+- Breaking change:
+  The per project "model_completion_folders" setting has been replaced with a "cfc_folders" setting.
+  This update includes improvements to how CFCs are indexed, and allows for greater customization of
+  the variable names for which it will provide CFC method completions. For complete information on
+  this update please see:
+  https://github.com/jcberquist/sublimetext-cfml#cfc-indexing-and-dot-paths
+
+  The short version:
+  If you were using "model_completion_folders", to restore the current behavior you will need to make
+  the following change:
+
+  from
+  "model_completion_folders": [ "C:/full/path/to/model" ]
+
+  to
+  "cfc_folders": [{"path": "C:/full/path/to/model", "variable_names": ["{cfc}","{cfc}{cfc_folder_singularized}"], "accessors": false}]
+
+- Added support for per project mappings
+  These are used to convert file system paths to CFC dot paths and the reverse. They are also used
+  in conjunction with CFC folder indexing to resolve dot paths in the extends attribute of indexed
+  CFCs. For complete information on this feature please see:
+  https://github.com/jcberquist/sublimetext-cfml#cfc-indexing-and-dot-paths
