@@ -13,14 +13,14 @@ def toggle_controller_view(view, position):
 	if file_type == "controller":
 		function_name = get_controller_function(view, position)
 		if function_name:
-			view_path, view_exists = get_verified_path(root_path + "/" + containing_folder, relative_path + "/" + function_name + get_file_extension("view"))
+			view_path, view_exists = utils.get_verified_path(root_path + "/" + containing_folder, relative_path + "/" + function_name + get_file_extension("view"))
 			if not view_exists:
 				view_exists = sublime.ok_cancel_dialog(containing_folder + "/" + view_path + " does not exist, do you want to create it?", "Create")
 			if view_exists:
 				view.window().open_file(root_path + "/" + containing_folder + "/" + view_path, sublime.FORCE_GROUP)
 
 	if file_type == "view":
-		controller_path, controller_exists = get_verified_path(root_path + "/" + containing_folder, relative_path + get_file_extension("controller"))
+		controller_path, controller_exists = utils.get_verified_path(root_path + "/" + containing_folder, relative_path + get_file_extension("controller"))
 		if controller_exists:
 			file_path = root_path + "/" + containing_folder + "/" + controller_path
 			if file_path[1] == ":":
@@ -62,7 +62,7 @@ def get_file_info(filename):
 
 def get_folder_name(root_path, folders):
 	for folder_name in folders:
-		verified_path, path_exists = get_verified_path(root_path, folder_name)
+		verified_path, path_exists = utils.get_verified_path(root_path, folder_name)
 		if path_exists:
 			return verified_path
 	return ""
@@ -94,16 +94,3 @@ def get_controller_function(view, position):
 		return view.substr(utils.get_function(view, function_position)[1])
 
 	return None
-
-def get_verified_path(root_path, rel_path):
-	normalized_root_path = root_path.replace("\\","/")
-	rel_path_elements = rel_path.replace("\\","/").split("/")
-	verified_path_elements = [ ]
-
-	for elem in rel_path_elements:
-		dir_map = {f.lower(): f for f in os.listdir(normalized_root_path + "/" + "/".join(verified_path_elements))}
-		if elem.lower() not in dir_map:
-			return rel_path, False
-		verified_path_elements.append(dir_map[elem.lower()])
-
-	return "/".join(verified_path_elements), True

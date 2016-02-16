@@ -1,23 +1,23 @@
-# This module, via find_functions(), takes in a cfml source file string and
-# returns a python list containing tuples of the function name and a map of data
-# about the function.
+# This module, via index(), takes in a cfml source file string and
+# returns a python dict of the function names mapped to a dict
+# containing data about the function.
 
 # The structure looks like this:
-# [
-#   ("function_name", {
+# {
+#   "function_name": {
 #     "access": "public/private/etc",
 #     "returntype": "any/string/numeric/etc",
 #     "arguments": [
-#       ("argument_name", {
+#       { "name", "argument_name"
 #         "required": True/False,
 #         "type": "any/string/numeric/etc" or None,
 #         "default": "defaultvalue" or None
-#       }),
+#       },
 #       ...
 #     ]
-#   }),
+#   },
 #   ...
-# ]
+# }
 
 # Known Limitations:
 # - script function parameters are matched via opening and closing ( ), so if any parameter
@@ -27,14 +27,14 @@
 
 import re
 
-script_function_regex = re.compile('(?:(private|package|public|remote)\s+)?([A-Za-z0-9_\.$]+(?:\[\])?)?\s*function\s+([_$a-zA-Z][$\w]*)\s*(?:\(\s*([^)]*)\))', re.I)
+script_function_regex = re.compile('(?:(private|package|public|remote)\s+)?([A-Za-z0-9_\.$]+)?\s*function\s+([_$a-zA-Z][$\w]*)\s*(?:\(\s*([^)]*)\))', re.I)
 script_arguments_regex = re.compile(r'(?:^|,)\s*(required)?\s*(\b\w+\b)?\s*(\b\w+\b)(?:\s*=\s*(\{[^\}]*\}|\[[^\]]*\]|[^,\)]+))?', re.I)
 
 function_block_regex = re.compile('<cffunction.*?</cffunction>', re.I | re.DOTALL)
 function_regex = {}
 function_regex["name"] = re.compile(r'<cffunction[^>]+name\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1)[^>]*>', re.I | re.DOTALL)
 function_regex["access"] = re.compile(r'<cffunction[^>]+access\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1)[^>]*>', re.I | re.DOTALL)
-function_regex["returntype"] = re.compile(r'<cffunction[^>]+returntype\s*=\s*(\'|")([_$a-zA-Z][$\w]*(?:\[\])?)(\1)[^>]*>', re.I | re.DOTALL)
+function_regex["returntype"] = re.compile(r'<cffunction[^>]+returntype\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1)[^>]*>', re.I | re.DOTALL)
 
 argument_block_regex = re.compile('<cfargument[^>]*>', re.I)
 argument_regex = {}
@@ -43,9 +43,9 @@ argument_regex["required"] = re.compile(r'required\s*=\s*(\'|")(\w*)(\1)', re.I)
 argument_regex["default"] = re.compile(r'default\s*(=\s*(\'|")#?([^\2]*?)#?(\2))', re.I)
 argument_regex["type"] = re.compile(r'type\s*=\s*(\'|")([^\1]*?)(\1)', re.I)
 
-def find_functions(file_string):
-	functions = [function_tuple for function_tuple in find_script_functions(file_string) if function_tuple[0] != "init"]
-	functions.extend([function_tuple for function_tuple in find_tag_functions(file_string) if function_tuple[0] != "init"])
+def index(file_string):
+	functions = {function_tuple[0]: function_tuple[1] for function_tuple in find_script_functions(file_string)}
+	functions.update({function_tuple[0]: function_tuple[1] for function_tuple in find_tag_functions(file_string)})
 	return functions
 
 def find_script_functions(file_string):
@@ -63,10 +63,11 @@ def find_script_function_arguments(arguments_string):
 
 def find_script_function_argument(arg_required, arg_type, arg_name, arg_default):
 	argument = {}
+	argument["name"] = arg_name
 	argument["required"] = True if len(arg_required) else False
 	argument["type"] = arg_type if len(arg_type) else None
 	argument["default"] = arg_default.strip() if len(arg_default) else None
-	return (arg_name, argument)
+	return argument
 
 def find_tag_functions(file_string):
 	return filter(lambda x: x, [find_tag_function(function_string) for function_string in re.findall(function_block_regex,file_string)])
@@ -92,9 +93,11 @@ def find_tag_argument(argument_string):
 	for key in argument_regex:
 		argument_matches[key] = re.search(argument_regex[key], argument_string)
 	if not argument_matches["name"]:
+		print("CFML: could not find function name while indexing...\n" + argument_string)
 		return None
 	argument = {}
+	argument["name"] = argument_matches["name"].group(2)
 	argument["required"] = True if argument_matches["required"] else False
 	argument["type"] = argument_matches["type"].group(2) if argument_matches["type"] else None
 	argument["default"] = argument_matches["default"].group(2) if argument_matches["default"] else None
-	return (argument_matches["name"].group(2), argument)
+	return argument

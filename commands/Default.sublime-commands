@@ -18,7 +18,7 @@
 		"caption": "CFML: Key Bindings - Default",
 		"command": "cfml_open_package_file", "args":
 			{
-				"file": "${packages}/{cfml_package_name}/keymaps/Default ($platform).sublime-keymap"
+				"file": "${packages}/{cfml_package_name}/inputmaps/Default ($platform).sublime-keymap"
 			}
 	},
 	{
@@ -26,6 +26,21 @@
 		"command": "open_file", "args":
 			{
 				"file": "${packages}/User/Default ($platform).sublime-keymap",
+				"contents": "[\n\t$0\n]\n"
+			}
+	},
+	{
+		"caption": "CFML: Mouse Bindings - Default",
+		"command": "cfml_open_package_file", "args":
+			{
+				"file": "${packages}/{cfml_package_name}/inputmaps/Default ($platform).sublime-mousemap"
+			}
+	},
+	{
+		"caption": "CFML: Mouse Bindings - User",
+		"command": "open_file", "args":
+			{
+				"file": "${packages}/User/Default ($platform).sublime-mousemap",
 				"contents": "[\n\t$0\n]\n"
 			}
 	},

@@ -1,14 +1,52 @@
 import sublime
 from collections import deque, namedtuple
-from os.path import dirname, realpath
+from os import listdir
+from os.path import dirname, realpath, splitext
 
 path_parts = dirname(realpath(__file__)).replace("\\", "/").split("/")
 CFML_PLUGIN_NAME = path_parts[-1].split(".")[0] if "Installed Packages" in path_parts else path_parts[-2]
 
-Symbol = namedtuple('Symbol', 'name is_function function_region args_region')
+Symbol = namedtuple('Symbol', 'name is_function function_region args_region, name_region')
 
 def get_plugin_name():
 	return CFML_PLUGIN_NAME
+
+def get_project_list():
+	return [(extract_project_name(window.project_file_name()), window.project_data()) for window in sublime.windows() if window.project_file_name()]
+
+def get_project_name(view):
+	project_file_name = view.window().project_file_name()
+	if project_file_name:
+		return extract_project_name(project_file_name)
+	return None
+
+def get_project_name_from_window(window):
+	project_file_name = window.project_file_name()
+	if project_file_name:
+		return extract_project_name(project_file_name)
+	return None
+
+def extract_project_name(project_file_name):
+	project_file = project_file_name.replace("\\","/").split("/").pop()
+	project_name, ext = splitext(project_file)
+	return project_name
+
+def normalize_path(path):
+	normalized_path = path.replace("\\","/")
+	if normalized_path[-1] == "/":
+		normalized_path = normalized_path[:-1]
+	return normalized_path
+
+def normalize_mapping(mapping):
+	normalized_mapping = {}
+	normalized_mapping["path"] = normalize_path(mapping["path"])
+	normalized_mapping_path = mapping["mapping"].replace("\\", "/")
+	if normalized_mapping_path[0] != "/":
+		normalized_mapping_path = "/" + normalized_mapping_path
+	if normalized_mapping_path[-1] == "/":
+		normalized_mapping_path = normalized_mapping_path[:-1]
+	normalized_mapping["mapping"] = normalized_mapping_path
+	return normalized_mapping
 
 def get_previous_character(view, position):
 	if view.substr(position - 1) in [" ", "\t", "\n"]:
@@ -55,12 +93,12 @@ def get_dot_context(view, dot_position):
 		scope_to_find = " ".join([scope_name] * (base_scope_count + 1))
 		if view.match_selector(dot_position - 1, scope_to_find):
 			function_name, name_region, function_args_region = get_function_call(view, dot_position - 1, scope_name == "meta.support.function-call")
-			context.append(Symbol(function_name, True, name_region, function_args_region))
+			context.append(Symbol(function_name, True, name_region, function_args_region, name_region))
 			break
 	else:
-		if view.match_selector(dot_position - 1, "variable, meta.property.object"):
+		if view.match_selector(dot_position - 1, "variable, meta.property.object, meta.instance.constructor"):
 			name_region = view.word(dot_position)
-			context.append(Symbol(view.substr(name_region).lower(), False, None, None))
+			context.append(Symbol(view.substr(name_region).lower(), False, None, None, name_region))
 
 	if len(context) > 0:
 		context.extend(get_dot_context(view, name_region.begin() - 1))
@@ -83,7 +121,7 @@ def get_struct_context(view, position):
 		return context
 
 	name_region = view.word(previous_char_point)
-	context.append(Symbol(view.substr(name_region).lower(), False, None, None))
+	context.append(Symbol(view.substr(name_region).lower(), False, None, None, name_region))
 
 	if view.match_selector(previous_char_point, "meta.property.object.cfml"):
 		context.extend(get_dot_context(view, name_region.begin() - 1))
@@ -206,3 +244,22 @@ def get_function_call(view, pt, support_function = False):
 		function_args_region = sublime.Region(function_name_region.end(), function_region.end())
 		return view.substr(function_name_region).lower(), function_name_region, function_args_region
 	return None
+
+def get_verified_path(root_path, rel_path):
+	"""
+	Given a valid root path and an unverified relative path out from that root
+	path, searches to see if the full path exists. This search is case insensitive,
+	but the returned relative path is cased accurately if it is found.
+	returns a tuple of (rel_path, exists)
+	"""
+	normalized_root_path = normalize_path(root_path)
+	rel_path_elements = normalize_path(rel_path).split("/")
+	verified_path_elements = [ ]
+
+	for elem in rel_path_elements:
+		dir_map = {f.lower(): f for f in listdir(normalized_root_path + "/" + "/".join(verified_path_elements))}
+		if elem.lower() not in dir_map:
+			return rel_path, False
+		verified_path_elements.append(dir_map[elem.lower()])
+
+	return "/".join(verified_path_elements), True

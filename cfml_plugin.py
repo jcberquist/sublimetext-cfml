@@ -16,6 +16,7 @@ class CfmlEventListener(sublime_plugin.EventListener):
 	def on_post_text_command(self, view, command_name, args):
 		if command_name == "commit_completion":
 			pos = view.sel()[0].begin()
+
 			if view.match_selector(pos, "meta.tag.cfml - source.cfml.script, meta.tag.script.cfml, meta.tag.script.cf.cfml, meta.class.cfml - meta.class.inheritance.cfml"):
 				if view.substr(pos - 1) in [" ", "\"", "'", "="]:
 					view.run_command("auto_complete", {"api_completions_only": True})
@@ -23,6 +24,12 @@ class CfmlEventListener(sublime_plugin.EventListener):
 					# an attribute completion was most likely just inserted
 					# advance cursor past double quote character
 					view.run_command("move", {"by": "characters", "forward": True})
+
+			if view.substr(pos - 1) == "." and view.match_selector(pos - 1, "meta.support.function-call.createcomponent.cfml string.quoted, entity.other.inherited-class.cfml, meta.instance.constructor"):
+				view.run_command("auto_complete", {"api_completions_only": True})
+
+	def on_post_window_command(self, window, command_name, args):
+		events.trigger('on_post_window_command', window, command_name, args)
 
 	def on_query_completions(self, view, prefix, locations):
 		if not view.match_selector(locations[0], "embedding.cfml"):
