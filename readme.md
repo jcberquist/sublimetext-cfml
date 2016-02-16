@@ -1,12 +1,12 @@
 # CFML Package for Sublime Text 3
 
-This package provides CFML syntax highlighting as well as function and tag completions. It recognizes the following file extensions: `cfm,cfml,cfc`. Please see below for more of the features included in this package.
-
-*Note: Please ensure that you are running at least the latest beta build of Sublime Text 3 (3083), as some of the features of the package will not work otherwise. If you are on the latest dev builds (3092+) the package will use the new `sublime-syntax` syntax highlighting.*
+This package provides CFML syntax highlighting as well as function and tag completions. It also has a number of other features, please see below for more information.
 
 You can install this package via [Package Control](https://packagecontrol.io/). Please restart Sublime Text after installation.
 
 Manual installation is also possible by downloading the repository and placing it in a folder within your Sublime packages folder. (See below for more information.)
+
+*Please ensure that you are running at least build 3083 of Sublime Text 3, as some of the features of the package will not work otherwise. If you are on build 3092+ the package will use the new `sublime-syntax` syntax highlighting.*
 
 ### Acknowledgements
 
@@ -18,29 +18,51 @@ This package was developed from the following packages:
 
 Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](http://cfdocs.org), from which this package gets its function and tag data. Also, thanks to [@mjhagen](https://github.com/mjhagen) who helped me get this package off the ground.
 
+### Table of Contents
+
+- [Completions](#completions)
+- [Inline Documentation](#inline-documentation)
+- [A Note about Settings](#a-note-about-settings)
+- [Default Key Bindings](#default-key-bindings)
+- [CFC Indexing and Dot Paths](#cfc-indexing-and-dot-paths)
+- [Custom Coloring for CFML Tags](#custom-coloring-for-cfml-tags)
+- [Controller/View Toggle](#controllerview-toggle)
+- [CommandBox](#commandbox)
+- [TestBox](#testbox)
+- [Framework One](#framework-one)
+- [Manual Installation](#manual-installation)
+
 ### Completions
 
 Completions are included for tags and tag attributes, as well for built-in functions and member functions. Completions are also available for `Application.cfc` settings and methods.
-
-In addition, there is the ability on a per project basis, via the `.sublime-project` file, to index folders of components, and then completions will be offered after typing a `.` if the preceding text matches a component file, or component file and containing directory (as DI/1 has it). So, for example, if a `services/user.cfc` file is found, then when typing either `user.` or `userService.`, the functions from that cfc will be offered as completions. To set this up you add the following setting to your project file: `"model_completion_folders":    [ "/full/path/to/model", "/another/full/path/to/index" ]`.
 
 ### Inline Documentation
 
 <kbd>F1</kbd> is mapped to an inline documentation command that provides an inline documentation popup based on the cursor position.
 
-*Note: You can always override the default key binding in your user key bindings file.*
+*You can always override the default key binding in your user key bindings file.*
 
-If the documentation command is run when the cursor is within a built-in function or tag it will load the cfdocs.org documentation for that function or tag. Thus, having the cursor anywhere within `dateFormat(myDate, "yyyy-mm-dd")` and pressing <kbd>F1</kbd> (by default) will trigger a popup displaying the documentation for `dateFormat`. Similarly, having the cursor anywhere within `<cfinclude template="myOtherTemplate.cfm">` and pressing <kbd>F1</kbd> will trigger the display of the documention for `cfinclude`.
+If the documentation command is run when the cursor is within a built-in function or tag it will load the [cfdocs.org](http://cfdocs.org) documentation for that function or tag. Thus, having the cursor anywhere within `dateFormat(myDate, "yyyy-mm-dd")` and pressing <kbd>F1</kbd> (by default) will trigger a popup displaying the documentation for `dateFormat`. Similarly, having the cursor anywhere within `<cfinclude template="myOtherTemplate.cfm">` and pressing <kbd>F1</kbd> will trigger the display of the documention for `cfinclude`. Inline documentation is also available for `Application.cfc` settings and methods.
 
-If you have a copy of the cfdocs.org GitHub repository on your file system, there is a package setting, `"cfdocs_path"`, which can be set to the data directory of that repository (e.g. `"cfdocs_path": "C:/github/cfdocs/data/en/"`). If this is set, the cfdocs.org documentation will be loaded from the file system instead of being fetched via HTTP request. (See below for more information on package settings.)
+*If you have a copy of the cfdocs.org GitHub repository on your file system, there is a package setting, `"cfdocs_path"`, which can be set to the data directory of that repository (e.g. `"cfdocs_path": "C:/github/cfdocs/data/en/"`). If this is set, the cfdocs.org documentation will be loaded from the file system instead of being fetched via HTTP request. (See below for more information on package settings.)*
 
-Inline documentation is also available for `Application.cfc` settings and methods as well as method calls that have been indexed via the model completions functionality (see above). In the latter case documentation of the function signature, file location, and argument list is provided.
+### A Note about Settings
 
-### Package Settings
+There are several settings files that you should be aware of, as they control much of the functionality of the package. It is important to know how to access them. There are two ways to access each file, the first being through the menus, and the second being via the command palette, which you open with <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on Windows (<kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac).
 
-There are a number of package settings that control the behavior of the package. You can see the default settings from the menu under `Package Settings -> CFML -> Package Settings - Default` or via the command palette: `CFML: Default Package Settings`. To override any of these settings, use the user package settings file. This can be found under the menu `Package Settings -> CFML -> Package Settings - User` or via the command palette: `CFML: User Package Settings`. These settings control much of the functionality of the package mentioned in what follows.
+**Package Settings**
 
-### Key Bindings
+You can access the default package settings from the menu under `Package Settings -> CFML -> Package Settings - Default` or via the command palette: `CFML: Package Settings - Default`. To override any of these settings, use the user package settings file. This can be accessed under the menu `Package Settings -> CFML -> Package Settings - User` or via the command palette: `CFML: Package Settings - User`.
+
+**Project Settings**
+
+Some settings are also (or only) able to be set on a per project basis. These settings control the behavior of the package for a given project. You can access and edit project files from the menu under `Project -> Edit Project` or via the command palette: `Project: Edit Project`. (These will only be accessible after you have saved a project: `Project -> Save Project As` or `Project: Save As`.)
+
+**Bindings**
+
+The default keyboard and mouse binding files are available in the menu under `Package Settings -> CFML -> Key Bindings - Default` and `Package Settings -> CFML -> Mouse Bindings - Default`. Or via the command palette at `CFML: Key Bindings - Default` and `CFML: Mouse Bindings - Default`. The user key and mouse  binding files are available in the same locations.
+
+### Default Key Bindings
 
 In tag attributes, script strings, and between `cfoutput` tags, pressing `#` when text is selected will wrap the currently selected text `#selected#`.
 
@@ -54,7 +76,48 @@ If Sublime Text's `auto_close_tags` setting is true, when a closing tag's `/` ha
 
 If the package setting `cfml_auto_insert_closing_tag` is set to `true` (by default it is `false`), when `>` is pressed in a tag, the corresponding closing tag will be automatically inserted after the cursor position. The package setting `cfml_non_closing_tags` controls which CFML tags will not get a closing tag auto inserted.
 
-The package setting `cfml_between_tag_pair` controls the behavior of the editor when <kbd>ENTER</kbd> is pressed while the cursor is between a CFML tag pair (e.g. `<cfoutput>|</cfoutput>`). By default only a single new line is inserted. This can be changed to have an extra new line auto inserted between the tag pair (with an optional indent), and the cursor placed there. See the default settings for more information.
+The package setting `cfml_between_tag_pair` controls the behavior of the editor when <kbd>ENTER</kbd> is pressed while the cursor is between a CFML tag pair (e.g. `<cfoutput>|</cfoutput>`). By default only a single new line is inserted. This can be changed to have an extra new line auto inserted between the tag pair (with an optional indent), and the cursor placed there. See the default package settings file for more information.
+
+### CFC Indexing and Dot Paths
+
+There are two settings that are set on a per project basis in a project file, `cfc_folders` and `mappings`. Here is an example (a real project file will have other settings in it as well):
+
+```
+{
+    "mappings": [
+        {"mapping": "/framework", "path": "C:/myprojects/projectname/framework"},
+        {"mapping": "/model", "path": "C:/myprojects/projectname/app/model"}
+    ],
+    "cfc_folders": [
+        {
+            "path": "C:/myprojects/projectname/app/model",
+            "variable_names": ["{cfc}", "{cfc}{cfc_folder_singularized}"],
+            "accessors": false
+        }
+    ]
+}
+```
+
+The specified mappings are used to resolve file paths to dot paths when right clicking on a CFC file in the sidebar and selecting `Copy CFC Dotted Path`. If more than one mapping matches, you will be given a choice, and if none match, it will fall back to using the base folder of the project as a dot path root. The mappings are also used to resolve dot paths specified in the `extends` attribute in a component, the `createObject` function, and when using the `new` operator to instantiate a component (e.g. `new dot.path.to.component()`). If the <kbd>F1</kbd> command is used when the cursor is in any of these, you will get a popup with the file path for the component (plus more information about the component if it is one that has been indexed). You can click on the file path to jump to the component file. You can also <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> (<kbd>CMD</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> on a Mac) on any of these to jump straight to the component file without going through the popup. In addition, these same commands will work in any quoted string that is used as a function call argument if it contains a dot path that can be resolved.
+
+*You can see the structure of this mouse binding in the `Mouse Bindings - Default` file. Use the `Mouse Bindings - User` file to create your own.*
+
+*__Important__: mouse bindings are global throughout Sublime Text, so use caution to ensure you don't override a default Sublime Text mouse binding (such as <kbd>CTRL</kbd>+<kbd>Left Click</kbd> which adds a new cursor at the position clicked).*
+
+The `cfc_folders` array contains objects with one required key: `path`. Folders specified here are recursively searched for CFC files and those files are indexed. The `variable_names` setting is an array of strings, where each string specifies a variable name to associate each indexed CFC with. The names are determined via substitution as follows:
+
+| Key                       | Substitution                                                |
+|:--------------------------|:------------------------------------------------------------|
+| {cfc}                     | CFC name                                                    |
+| {entityname}              | entity name of CFC if it has one, otherwise CFC name        |
+| {cfc_folder}              | name of folder containing the CFC                           |
+| {cfc_folder_singularized} | name of folder containing the CFC with trailing 's' removed |
+
+Any other text in the string will be left in place - this allows for specifying a prefix or suffix to use in the variable names. Then, if that variable name is typed in your code and followed with a <kbd>.</kbd>, method completions from the corresponding CFC will be offered. You can also use the <kbd>F1</kbd> documentation command on these variable names as well as their methods calls to view documention regarding the CFC and its methods. (Note: the <kbd>F1</kbd> command also works on property names, if they match a cfc variable name, to work with DI frameworks like DI/1 that inject beans into properties of the same name.) In addition, you can use <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> to jump to the CFC or to the specific method in the CFC.
+
+By default, implicit accessors are included in the completions.The `accessors` key, if present and set to false, will remove implicit property accessors from the completions offered (explicit accessors will always be included).
+
+These two settings work together, such that when a base CFC as well as another CFC that extends it are both indexed, and a mapping is specified such that the dot path in the `extends` can be resolved, the documentation and completions for the child CFC will include properties and methods from the base CFC. In addition, the dot paths of all indexed CFCs will be offered as completions in the `extends` attribute, the `createObject` function (where the type is `component`), as well as when using `new` to instantiate a CFC.
 
 ### Custom Coloring for CFML Tags
 
@@ -72,9 +135,9 @@ CommandBox (https://www.ortussolutions.com/products/commandbox) has been added a
 
 ### TestBox
 
-TestBox (https://www.ortussolutions.com/products/testbox) completions and inline documentation are available for `BaseSpec` components. They are enabled by default, but can be disabled globally by adding `"testbox_enabled": false` to your CFML user package settings, or on a per project basis by adding the same setting to a project settings file. The completions and documentation are offered in any cfc that is contained under a folder named `tests` (alternate folders can be specified in the settings), as well as in any cfc that extends `testbox.system.BaseSpec`.
+TestBox (https://www.ortussolutions.com/products/testbox) completions and inline documentation are available for `BaseSpec` components. They are enabled by default, but can be disabled globally by adding `"testbox_enabled": false` to your CFML user package settings, or on a per project basis by adding the same setting to a project settings file. The completions and documentation are offered in any CFC that is contained under a folder named `tests` (alternate folders can be specified in the settings), as well as in any CFC that extends `testbox.system.BaseSpec`.
 
-There are three build system variants for running TestBox tests from within Sublime Text. The first is for running all of a project's tests, which can be used no matter what project files are open, so long as the active file is a CFML one. The next variant is for running all of the tests in the directory of the currently active file, while the last variant runs the tests in the currently active test cfc only. <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>B</kbd> calls up the build system menu, from which these options can be selected. Once one of the variants has been run, <kbd>CTRL</kbd>+<kbd>B</kbd> can used to run the last selected option again, without having to go through the menu.
+There are three build system variants for running TestBox tests from within Sublime Text. The first is for running all of a project's tests, which can be used no matter what project files are open, so long as the active file is a CFML one. The next variant is for running all of the tests in the directory of the currently active file, while the last variant runs the tests in the currently active test CFC only. <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>B</kbd> calls up the build system menu, from which these options can be selected. Once one of the variants has been run, <kbd>CTRL</kbd>+<kbd>B</kbd> can used to run the last selected option again, without having to go through the menu.
 
 Several settings need to be set in a project in order for these build systems to function. The first setting is `testbox_runner_url`, which should be the URL to a TestBox runner which runs tests and returns results in JSON. This needs to be setup so that a dot delimited directory of tests to run can be appended to it. An example URL that does this might be the following: `http://localhost:8888/testbox/system/Testbox.cfc?method=runremote&reporter=json&directory=`. The second setting is `testbox_default_directory`, which is the dot delimited directory that will be appended to the `testbox_runner_url` when the build variant for running all of a project's tests is selected. The last setting is `testbox_tests_root`, which is the root directory path that is used to determine the dot delimited path to a test directory when running the tests in a particular folder or file. (This could be the path to your project's webroot if your tests are contained under the webroot, but might not be if mappings are used.)
 
