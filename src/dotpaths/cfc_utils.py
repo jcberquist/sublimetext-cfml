@@ -3,7 +3,7 @@ from .. import model_index
 from .. import utils
 
 component_name_re = re.compile("[\"']component[\"']\s*,\s*(?:class\s*=\s*)?[\"']([$_\w.]+)[\"']", re.I)
-cfc_dot_path_re = re.compile("^[\w\-][\w.\-]+$")
+cfc_dot_path_re = re.compile("^[\w\-_][\w.\-_]+$")
 
 def get_component_name(source_string):
 	cn = re.search(component_name_re, source_string)

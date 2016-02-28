@@ -1,0 +1,13 @@
+CFML v0.5.1 Changelog:
+
+- Added 'cfdump', 'cfinclude', and 'cfprocessingdirective' to the default list
+  of tags that do not receive a closing tag
+
+- The default mouse binding on the Mac for opening component files has been
+  changed from CMD+ALT+Click to CTRL+ALT+Click. This was done because
+  CMD+ALT+Click is the default mouse binding for selecting text by column
+  on the Mac.
+
+- The click to open component file and F1 documentation commands should now work
+  on any quoted string containing a dot path to a component. (Assuming the correct
+  mapping has been set up in a project file.)

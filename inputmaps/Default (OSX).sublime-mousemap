@@ -1,6 +1,6 @@
 [
 	{
-		"button": "button1", "modifiers": ["super", "alt"],
+		"button": "button1", "modifiers": ["ctrl", "alt"],
 		"command": "cfml_goto_cfc"
 	}
 ]

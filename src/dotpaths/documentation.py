@@ -88,8 +88,10 @@ def find_cfc(view, position, project_name):
 		file_path, dot_path = get_cfc_file_info(view, project_name, cfc_path)
 		return cfc_path, file_path, dot_path, None
 
-	if view.match_selector(position, "meta.support.function-call.member.arguments.cfml string.quoted, meta.function-call.method.arguments.cfml string.quoted, meta.function-call.arguments.cfml string.quoted"):
-		cfc_path = view.substr(view.extract_scope(position))[1:-1]
+	if view.match_selector(position, "string.quoted.single.cfml, string.quoted.double.cfml"):
+		cfc_path = view.substr(view.extract_scope(position))
+		if cfc_path[0] in ["\"", "'"]:
+			cfc_path = cfc_path[1:-1]
 		if cfc_utils.is_cfc_dot_path(cfc_path):
 			file_path, dot_path = get_cfc_file_info(view, project_name, cfc_path)
 			return cfc_path, file_path, dot_path, None
