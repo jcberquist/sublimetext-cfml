@@ -82,8 +82,8 @@ def find_cfc(view, position, project_name):
 		file_path, dot_path = get_cfc_file_info(view, project_name, cfc_path)
 		return cfc_path, file_path, dot_path, None
 
-	if view.match_selector(position, "meta.instance.constructor"):
-		r = utils.get_scope_region_containing_point(view, position, "meta.instance.constructor")
+	if view.match_selector(position, "meta.instance.constructor.cfml"):
+		r = utils.get_scope_region_containing_point(view, position, "meta.instance.constructor.cfml")
 		cfc_path = view.substr(r)[4:].split("(")[0]
 		file_path, dot_path = get_cfc_file_info(view, project_name, cfc_path)
 		return cfc_path, file_path, dot_path, None
@@ -101,8 +101,8 @@ def find_cfc(view, position, project_name):
 		if view.substr(function_name_region.begin() - 1) == ".":
 			dot_context = utils.get_dot_context(view, function_name_region.begin() - 1)
 
-			if view.match_selector(dot_context[-1].name_region.begin(), "meta.instance.constructor"):
-				r = utils.get_scope_region_containing_point(view, dot_context[-1].name_region.begin(), "meta.instance.constructor")
+			if view.match_selector(dot_context[-1].name_region.begin(), "meta.instance.constructor.cfml"):
+				r = utils.get_scope_region_containing_point(view, dot_context[-1].name_region.begin(), "meta.instance.constructor.cfml")
 				cfc_path = view.substr(r)[4:].split("(")[0]
 				file_path, dot_path = get_cfc_file_info(view, project_name, cfc_path)
 				return cfc_path, file_path, dot_path, function_name

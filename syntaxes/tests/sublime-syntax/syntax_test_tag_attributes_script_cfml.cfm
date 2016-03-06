@@ -12,7 +12,7 @@ param name = "test" default = (now() * then);
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->
 <!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.other.attribute-name.cfml --->
 <!---                          ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml support.function.cfml --->
-<!---                                  ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml variable.other.cfml --->
+<!---                                  ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml variable.other.readwrite.cfml --->
 param name = "test" default = now() then;
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->
 <!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.other.attribute-name.cfml --->
@@ -62,14 +62,15 @@ transaction {
 }
 
 lock timeout="30"{
-<!---            ^ embedding.cfml text.html.cfml source.cfml.script meta.group.braces.curly meta.brace.curly.cfml - meta.tag.script.cfml --->
+<!---            ^ embedding.cfml text.html.cfml source.cfml.script meta.block.cfml meta.brace.curly.cfml - meta.tag.script.cfml --->
 }
 
 thread action="run" name="threadName" {
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->
+<!--- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.tag.script.cfml  --->
 
   thread.varName = "test";
-  <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.group.braces.curly variable.language.scope.cfml --->
+  <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.block.cfml variable.language.scope.cfml --->
 }
 
 cfhttp( url = "www.google.com" );

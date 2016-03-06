@@ -1,0 +1,10 @@
+CFML v0.6.0 Changelog:
+
+- The CFScript syntax has been overhauled.
+  It is now a mod on top of Will Bond's amazing JavaScript syntax rewrite at
+  https://github.com/sublimehq/Packages/blob/master/JavaScript/JavaScript.sublime-syntax
+
+  The new syntax is more accurate, and file parsing is significantly faster. The
+  previous version of the CFScript syntax took ~150ms to parse FW/1's `one.cfc`
+  (at 2883 lines) on my desktop and ~210ms on my laptop. The new version takes
+  ~45ms on my desktop and ~70ms on my laptop.

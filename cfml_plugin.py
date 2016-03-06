@@ -17,7 +17,7 @@ class CfmlEventListener(sublime_plugin.EventListener):
 		if command_name == "commit_completion":
 			pos = view.sel()[0].begin()
 
-			if view.match_selector(pos, "meta.tag.cfml - source.cfml.script, meta.tag.script.cfml, meta.tag.script.cf.cfml, meta.class.cfml - meta.class.inheritance.cfml"):
+			if view.match_selector(pos, "meta.tag.cfml - source.cfml.script, meta.tag.script.cfml, meta.tag.script.cf.cfml, meta.class.declaration.cfml - meta.class.inheritance.cfml"):
 				if view.substr(pos - 1) in [" ", "\"", "'", "="]:
 					view.run_command("auto_complete", {"api_completions_only": True})
 				elif view.substr(pos) == "\"":
@@ -25,7 +25,7 @@ class CfmlEventListener(sublime_plugin.EventListener):
 					# advance cursor past double quote character
 					view.run_command("move", {"by": "characters", "forward": True})
 
-			if view.substr(pos - 1) == "." and view.match_selector(pos - 1, "meta.support.function-call.createcomponent.cfml string.quoted, entity.other.inherited-class.cfml, meta.instance.constructor"):
+			if view.substr(pos - 1) == "." and view.match_selector(pos - 1, "meta.support.function-call.createcomponent.cfml string.quoted, entity.other.inherited-class.cfml, meta.instance.constructor.cfml"):
 				view.run_command("auto_complete", {"api_completions_only": True})
 
 	def on_post_window_command(self, window, command_name, args):
@@ -44,12 +44,12 @@ class CfmlEventListener(sublime_plugin.EventListener):
 			return tag_completions
 
 		# dot completions (member and model function completions)
-		if view.match_selector(prefix_start - 1, base_script_scope + " keyword.operator.accessor.cfml"):
+		if view.match_selector(prefix_start - 1, base_script_scope + " punctuation.accessor.cfml"):
 			completion_list = completions.get_dot_completions(view, prefix, locations[0])
 			return completion_list
 
 		# tag in script attribute completions
-		if view.match_selector(prefix_start, base_script_scope + " meta.tag, " + base_script_scope + " meta.class"):
+		if view.match_selector(prefix_start, base_script_scope + " meta.tag, " + base_script_scope + " meta.class.declaration"):
 			attribute_completions = completions.get_script_tag_attributes(view, prefix, locations[0])
 			return attribute_completions
 

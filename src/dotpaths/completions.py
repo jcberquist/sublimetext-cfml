@@ -58,7 +58,7 @@ def get_tag_attributes(view, prefix, position, info):
 	if not info["project_name"] or info["project_name"] not in projects:
 		return None
 
-	if view.match_selector(position - 1, "meta.class.inheritance.cfml - entity.other.inherited-class.cfml"):
+	if view.match_selector(position - 1, "meta.class.inheritance.cfml -entity.other.inherited-class.cfml"):
 		cfc_path = ""
 		folder_cfc_path = cfc_utils.get_folder_cfc_path(view, info["project_name"], cfc_path)
 
@@ -102,8 +102,8 @@ def get_script_completions(view, prefix, position, info):
 		if len(completions) > 0:
 			return CompletionList(completions, 2, True)
 
-	if view.match_selector(position - 1, "meta.instance.constructor"):
-		r = utils.get_scope_region_containing_point(view, position - 1, "meta.instance.constructor")
+	if view.match_selector(position - 1, "meta.instance.constructor.cfml"):
+		r = utils.get_scope_region_containing_point(view, position - 1, "meta.instance.constructor.cfml")
 		r = sublime.Region(r.begin(), position - len(prefix))
 		cfc_path = ".".join(view.substr(r)[4:].split(".")[:-1])
 		folder_cfc_path = cfc_utils.get_folder_cfc_path(view, info["project_name"], cfc_path)
@@ -126,7 +126,7 @@ def get_dot_completions(view, prefix, position, info):
 
 	if info["dot_context"][0].name == "createobject" and view.match_selector(pt - 2, "meta.support.function-call.createcomponent.cfml"):
 		component_name = cfc_utils.get_component_name(view.substr(info["dot_context"][0].args_region))
-	elif view.match_selector(pt - 2, "meta.instance.constructor"):
+	elif view.match_selector(pt - 2, "meta.instance.constructor.cfml"):
 		component_name = ".".join([s.name for s in reversed(info["dot_context"])])
 
 	if component_name:

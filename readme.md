@@ -14,7 +14,11 @@ This package was developed from the following packages:
 
 * https://github.com/SublimeText/ColdFusion
 * https://github.com/sublimehq/Packages (especially the HTML and JavaScript syntaxes)
-* https://github.com/Benvie/JavaScriptNext.tmLanguage (from which the current Sublime JavaScript syntax is derived)
+* https://github.com/Benvie/JavaScriptNext.tmLanguage
+
+The current CFScript syntax is based on Will Bond's ([@wbond](https://github.com/wbond)) JavaScript syntax rewrite:
+
+* https://github.com/sublimehq/Packages/blob/master/JavaScript/JavaScript.sublime-syntax
 
 Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](http://cfdocs.org), from which this package gets its function and tag data. Also, thanks to [@mjhagen](https://github.com/mjhagen) who helped me get this package off the ground.
 

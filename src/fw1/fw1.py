@@ -36,7 +36,7 @@ def make_setting_completions(prefix, source_list):
 	return [(key + "\t" + prefix, key) for key in sorted(source_list)]
 
 def get_setting(view, setting_key):
-	if setting_key in view.window().project_data():
+	if view.window().project_file_name() and setting_key in view.window().project_data():
 		return view.window().project_data()[setting_key]
 	package_settings = sublime.load_settings("cfml_package.sublime-settings")
 	return package_settings.get(setting_key)
@@ -82,9 +82,8 @@ def get_script_completions(view, prefix, position, info):
 	if not get_setting(view, "fw1_enabled"):
 		return None
 
-	if extends_fw1(view) and view.match_selector(position, "meta.group.braces.curly"):
-		scope_count = view.scope_name(position).count("meta.group.braces.curly")
-		if scope_count == 1:
+	if extends_fw1(view):
+		if view.match_selector(position, "meta.class.body.cfml -meta.function.body -meta.struct-literal"):
 			return CompletionList(fw1["methods"]["definitions"], 1, False)
 
 		key = get_struct_var_assignment(view, position)
@@ -110,15 +109,15 @@ def get_inline_documentation(view, position):
 	context = []
 	word_region = view.word(position)
 
-	if view_extends_fw1 and view.match_selector(position, "meta.property.object.cfml"):
+	if view_extends_fw1 and view.match_selector(position, "meta.property"):
 		context = utils.get_dot_context(view, word_region.begin() - 1)
 
-	if view_extends_fw1 and view.match_selector(position, "meta.group.braces.curly meta.group.braces.curly"):
+	if view_extends_fw1 and view.match_selector(position, "meta.class.body.cfml meta.struct-literal.cfml"):
 		context = utils.get_struct_context(view, position)
 
 	if len(context) > 0:
 		key = ".".join([symbol.name for symbol in reversed(context)])
-		if view.match_selector(position, "meta.property.object.cfml,string.unquoted.label.cfml,variable.other.cfml"):
+		if view.match_selector(position, "meta.property,meta.struct-literal.key,variable.other"):
 			key += "." + view.substr(word_region).lower()
 		if key in fw1["settings_docs"]:
 			return Documentation(get_documentation(key, fw1["settings_docs"][key]), None, 2)
@@ -127,7 +126,7 @@ def get_inline_documentation(view, position):
 			return Documentation(get_documentation(parent_key, fw1["settings_docs"][parent_key]), None, 2)
 
 	# methods
-	if view_extends_fw1 and view.match_selector(position, "meta.function.cfml"):
+	if view_extends_fw1 and view.match_selector(position, "meta.function.declaration.cfml"):
 		function_name, function_name_region, function_region = utils.get_function(view, position)
 		if function_name in fw1["methods_docs"]:
 			return Documentation(get_documentation(function_name, fw1["methods_docs"][function_name]), None, 2)

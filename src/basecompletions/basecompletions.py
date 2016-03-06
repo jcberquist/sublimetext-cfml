@@ -60,7 +60,7 @@ def get_dot_completions(view, prefix, position, info):
 
 def get_inline_documentation(view, position):
 
-	if view.match_selector(position, "variable.other.constant"):
+	if view.match_selector(position, "meta.property.constant"):
 		word = view.word(position)
 		dot_context = utils.get_dot_context(view, word.begin() - 1)
 		if len(dot_context) == 1 and dot_context[0].name == "cgi":

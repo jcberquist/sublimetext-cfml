@@ -96,7 +96,7 @@ def get_dot_context(view, dot_position):
 			context.append(Symbol(function_name, True, name_region, function_args_region, name_region))
 			break
 	else:
-		if view.match_selector(dot_position - 1, "variable, meta.property.object, meta.instance.constructor"):
+		if view.match_selector(dot_position - 1, "variable, meta.property, meta.instance.constructor"):
 			name_region = view.word(dot_position)
 			context.append(Symbol(view.substr(name_region).lower(), False, None, None, name_region))
 
@@ -108,22 +108,22 @@ def get_dot_context(view, dot_position):
 def get_struct_context(view, position):
 	context = []
 
-	if not view.match_selector(position, "meta.group.braces.curly"):
+	if not view.match_selector(position, "meta.struct-literal.cfml"):
 		return context
 
-	previous_char_point = get_char_point_before_scope(view, position, "meta.group.braces.curly")
+	previous_char_point = get_char_point_before_scope(view, position, "meta.struct-literal.cfml")
 	if not view.match_selector(previous_char_point, "keyword.operator.assignment.cfml,punctuation.separator.key-value.cfml"):
 		return context
 
 	previous_char_point = get_previous_character(view, previous_char_point)
 
-	if not view.match_selector(previous_char_point, "meta.property.object.cfml,variable,string.unquoted.label.cfml"):
+	if not view.match_selector(previous_char_point, "meta.property,variable,meta.struct-literal.key.cfml"):
 		return context
 
 	name_region = view.word(previous_char_point)
 	context.append(Symbol(view.substr(name_region).lower(), False, None, None, name_region))
 
-	if view.match_selector(previous_char_point, "meta.property.object.cfml"):
+	if view.match_selector(previous_char_point, "meta.property"):
 		context.extend(get_dot_context(view, name_region.begin() - 1))
 	else:
 		context.extend(get_struct_context(view, name_region.begin()))
@@ -226,7 +226,7 @@ def between_cfml_tag_pair(view, pos):
 	return True
 
 def get_function(view, pt):
-	function_scope = "meta.function.cfml"
+	function_scope = "meta.function.declaration.cfml"
 	function_name_scope = "entity.name.function.cfml,entity.name.function.constructor.cfml"
 	function_region = get_scope_region_containing_point(view, pt, function_scope)
 	if function_region:

@@ -82,7 +82,7 @@ def get_script_completions(view, prefix, position, info):
 	if not get_setting(view, "testbox_enabled"):
 		return None
 
-	if is_testbox_file(view) and view.match_selector(position, "meta.group.braces.curly"):
+	if is_testbox_file(view) and view.match_selector(position, "meta.class.body.cfml"):
 		return CompletionList(testbox["completions"]["basespec"], 1, False)
 
 	return None

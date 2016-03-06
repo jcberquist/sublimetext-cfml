@@ -34,11 +34,11 @@ def get_inline_documentation(view, position):
 			doc_name = "cf" + doc_name
 
 	# script component, interface, function
-	elif view.match_selector(position, "meta.class.cfml"):
+	elif view.match_selector(position, "meta.class.declaration.cfml"):
 		doc_name = "cfcomponent"
-	elif view.match_selector(position, "meta.interface.cfml"):
+	elif view.match_selector(position, "meta.interface.declaration.cfml"):
 		doc_name = "cfinterface"
-	elif view.match_selector(position, "meta.function.cfml"):
+	elif view.match_selector(position, "meta.function.declaration.cfml"):
 		doc_name = "cffunction"
 
 	if doc_name:

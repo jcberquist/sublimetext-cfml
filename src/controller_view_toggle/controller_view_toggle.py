@@ -75,8 +75,8 @@ def get_file_extension(type):
 	return None
 
 def get_controller_function(view, position):
-	funct_body_scope = "meta.group.braces.curly meta.group.braces.curly"
-	funct_declaration_scope = "meta.function"
+	funct_body_scope = "meta.class.body.cfml meta.function.body.cfml"
+	funct_declaration_scope = "meta.function.declaration.cfml"
 	function_body_region = utils.get_scope_region_containing_point(view, position, funct_body_scope)
 	function_position = None
 
@@ -86,9 +86,8 @@ def get_controller_function(view, position):
 			if funct_region.end() <= function_body_region.begin():
 				function_position = funct_region.begin()
 				break
-	elif view.match_selector(position, "meta.group.braces.curly meta.function"):
-		if view.scope_name(position).count("meta.group.braces.curly") == 1:
-			function_position = position
+	elif view.match_selector(position, "meta.class.body.cfml meta.function.declaration.cfml -meta.function.body.cfml"):
+		function_position = position
 
 	if function_position:
 		return view.substr(utils.get_function(view, function_position)[1])

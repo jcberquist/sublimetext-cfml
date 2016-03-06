@@ -42,9 +42,8 @@ def get_dot_completions(view, prefix, position, info):
 	return None
 
 def get_script_completions(view, prefix, position, info):
-	if info["file_name"] == "application.cfc" and view.match_selector(position, "meta.group.braces.curly"):
-		scope_count = view.scope_name(position).count("meta.group.braces.curly")
-		if scope_count == 1:
+	if info["file_name"] == "application.cfc":
+		if view.match_selector(position, "meta.class.body.cfml -meta.function"):
 			return CompletionList(appcfc["methods"], 1, False)
 
 		key = get_struct_var_assignment(view, position)
@@ -62,15 +61,15 @@ def get_inline_documentation(view, position):
 	context = []
 	word_region = view.word(position)
 
-	if view.match_selector(position, "meta.property.object.cfml"):
+	if view.match_selector(position, "meta.property"):
 		context = utils.get_dot_context(view, word_region.begin() - 1)
 
-	if view.match_selector(position, "meta.group.braces.curly meta.group.braces.curly"):
+	if view.match_selector(position, "meta.class.body.cfml meta.struct-literal.cfml"):
 		context = utils.get_struct_context(view, position)
 
 	if len(context) > 0:
 		key = ".".join([symbol.name for symbol in reversed(context)])
-		if view.match_selector(position, "meta.property.object.cfml,string.unquoted.label.cfml,variable.other.cfml"):
+		if view.match_selector(position, "meta.property, meta.struct-literal.key.cfml, variable.other.readwrite.cfml"):
 			key += "." + view.substr(word_region).lower()
 		if key in appcfc["settings_docs"]:
 			return Documentation(get_documentation(key, appcfc["settings_docs"][key]), None, 1)
