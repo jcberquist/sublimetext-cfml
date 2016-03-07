@@ -1180,31 +1180,44 @@
 					<string>\b([a-zA-Z0-9:-]+)\b</string>
 				</dict>
 				<dict>
-					<key>captures</key>
+					<key>begin</key>
+					<string>=</string>
+					<key>beginCaptures</key>
 					<dict>
-						<key>1</key>
+						<key>0</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.separator.key-value.cfml</string>
 						</dict>
-						<key>2</key>
+					</dict>
+					<key>end</key>
+					<string>(?&lt;=[^\s=])|(?=[&lt;/&gt;{;])</string>
+					<key>patterns</key>
+					<array>
 						<dict>
+							<key>include</key>
+							<string>#comments</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#string</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?=[^\s&lt;/&gt;{;\'"])</string>
+							<key>end</key>
+							<string>(?=[\s&lt;/&gt;{;])</string>
 							<key>name</key>
 							<string>string.unquoted.cfml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#hash-delimiters</string>
+								</dict>
+							</array>
 						</dict>
-					</dict>
-					<key>match</key>
-					<string>(=)\s*((?:[^\s&lt;&gt;/'"{;]|/(?!/&gt;))+)</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>=</string>
-					<key>name</key>
-					<string>punctuation.separator.key-value.cfml</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string</string>
+					</array>
 				</dict>
 			</array>
 		</dict>

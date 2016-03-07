@@ -347,13 +347,18 @@ repository:
     - match: \b([a-zA-Z0-9:-]+)\b
       captures:
         '1': {name: entity.other.attribute-name.cfml}
-    - match: (=)\s*((?:[^\s<>/'"{;]|/(?!/>))+)
-      captures:
-        '1': {name: punctuation.separator.key-value.cfml}
-        '2': {name: string.unquoted.cfml}
-    - name: punctuation.separator.key-value.cfml
-      match: '='
-    - include: '#string'
+    - begin: '='
+      beginCaptures:
+        '0': {name: punctuation.separator.key-value.cfml}
+      end: (?<=[^\s=])|(?=[</>{;])
+      patterns:
+      - include: '#comments'
+      - include: '#string'
+      - name: string.unquoted.cfml
+        begin: (?=[^\s</>{;\'"])
+        end: (?=[\s</>{;])
+        patterns:
+        - include: '#hash-delimiters'
 
   tags-with-script:
     name: meta.tag.cfml

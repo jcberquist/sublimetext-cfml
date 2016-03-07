@@ -8,3 +8,7 @@ CFML v0.6.0 Changelog:
   previous version of the CFScript syntax took ~150ms to parse FW/1's `one.cfc`
   (at 2883 lines) on my desktop and ~210ms on my laptop. The new version takes
   ~45ms on my desktop and ~70ms on my laptop.
+
+- Unquoted tag attribute values should now correctly highlight CFScript contained
+  between `#` characters
+

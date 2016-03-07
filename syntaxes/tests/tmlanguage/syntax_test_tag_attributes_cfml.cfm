@@ -35,3 +35,7 @@ type = "string" default = "hello">
 = "test" type = "string" default = "hello">
 <!--- <- embedding.cfml meta.tag.cfml punctuation.separator.key-value.cfml --->
    <!---  <- embedding.cfml meta.tag.cfml string.quoted.double.cfml --->
+
+<cfhttp url=#some_url_var#>
+<!---       ^ constant.character.hash.cfml.start --->
+<!---        ^ variable.other.readwrite.cfml --->

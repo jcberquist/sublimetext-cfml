@@ -324,7 +324,7 @@ contexts:
           scope: constant.character.hash.cfml.start
           pop: true
         - include: scope:source.cfml.script#comments
-        - include: scope:source.cfml.script#expression
+        - include: scope:source.cfml.script#expressions
   string:
     - match: "'"
       scope: punctuation.definition.string.begin.cfml
@@ -358,13 +358,19 @@ contexts:
     - match: =
       scope: punctuation.separator.key-value.cfml
       push:
-        - match: (?=[;/>{])
+        - match: (?=[\'"])
+          set:
+            - include: string
+            - match: ""
+              pop: true
+        - match: (?=[^\s</>{;])
+          set:
+            - meta_scope: string.unquoted.cfml
+            - match: (?=[\s</>{;])
+              pop: true
+            - include: hash-delimiters
+        - match: '(?=\S)'
           pop: true
-        - match: (?<=[^\s=])
-          pop: true
-        - include: string
-        - match: '(?:[^\s<>/''"{;]|/(?!/>))+'
-          scope: string.unquoted.cfml
   tags-with-script:
     - match: (?i)(<)(cfset|cfreturn)(?=\s|/?>)
       captures:
