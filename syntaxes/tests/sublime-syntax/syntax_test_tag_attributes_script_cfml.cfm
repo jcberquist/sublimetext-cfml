@@ -77,4 +77,7 @@ cfhttp( url = "www.google.com" );
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cf.cfml entity.name.tag.script.cfml  --->
 <!---   ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cf.cfml entity.other.attribute-name.cfml  --->
 
+cfcExists( someArg = 1 );
+<!--- <- embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml variable.function.cfml  --->
+<!---      ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml meta.function-call.arguments.cfml entity.other.function-parameter.cfml  --->
 </cfscript>

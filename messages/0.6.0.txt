@@ -12,3 +12,5 @@ CFML v0.6.0 Changelog:
 - Unquoted tag attribute values should now correctly highlight CFScript contained
   between `#` characters
 
+- The matching of ColdFusion style tags in script has been restricted to match only
+  actual tag names

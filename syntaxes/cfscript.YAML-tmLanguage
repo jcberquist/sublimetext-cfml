@@ -1170,7 +1170,19 @@ repository:
   tag-in-script-cf:
     patterns:
     - name: meta.tag.script.cf.cfml
-      begin: (?i)(cf[\w]+)\(
+      begin: |-
+        (?x)(?i)
+          (cf
+          (?:ajaximport|ajaxproxy|applet|application|argument|associate|authenticate|break|cache|chart|chartdata
+          |chartseries|col|collection|content|cookie|dbinfo|directory|div|document|documentitem
+          |documentsection|dump|error|execute|exit|feed|file|flush|form|forward|ftp|graph|graphdata
+          |header|htmlbody|htmlhead|http|httpparam|image|imap|import|include|index|input|insert|invoke|invokeargument
+          |layout|layoutarea|ldap|location|lock|log|login|loginuser|logout|loop|mail|mailparam|mailpart|map|mapitem|mediaplayer
+          |module|object|objectcache|output|pageencoding|pdf|pdfparam|pop|processingdirective|procparam|procresult
+          |query|queryparam|registry|rethrow|retry|savecontent|schedule|search|select|servlet|servletparam
+          |setting|silent|sleep|slider|stopwatch|storedproc|table|textinput|thread|throw|timer|trace|transaction
+          |update|video|videoplayer|videoplayerparam|wddx|window|xml|zip|zipparam)
+        )\(
       beginCaptures:
         '1': {name: entity.name.tag.script.cfml}
       end: \)
