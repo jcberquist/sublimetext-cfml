@@ -39,7 +39,7 @@ def negate_string(string_to_negate):
 	return "not" + string_to_negate[0].upper() + string_to_negate[1:]
 
 def get_setting(view, setting_key):
-	if setting_key in view.window().project_data():
+	if view.window().project_file_name() and setting_key in view.window().project_data():
 		return view.window().project_data()[setting_key]
 	package_settings = sublime.load_settings("cfml_package.sublime-settings")
 	return package_settings.get(setting_key)
