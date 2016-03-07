@@ -2268,7 +2268,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?&lt;=\))|(\})|(?:([A-Z][_$\dA-Z]*)|([_$a-zA-Z][$\w]*))\b(?!(\s*\(|\s*(=)\s*\bfunction\b))</string>
+					<string>(?&lt;=\))|(\})|(?:([A-Z][_$\dA-Z]*)|([_$a-zA-Z][$\w]*))(?=$|[^$\w])(?!(\s*\(|\s*(=)\s*\bfunction\b))</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>

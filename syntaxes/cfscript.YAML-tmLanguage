@@ -871,7 +871,7 @@ repository:
     - begin: \.
       beginCaptures:
         '0': {name: punctuation.accessor.cfml}
-      end: '(?<=\))|(\})|(?:([A-Z][_$\dA-Z]*)|([_$a-zA-Z][$\w]*))\b(?!(\s*\(|\s*(=)\s*\bfunction\b))'
+      end: '(?<=\))|(\})|(?:([A-Z][_$\dA-Z]*)|([_$a-zA-Z][$\w]*))(?=$|[^$\w])(?!(\s*\(|\s*(=)\s*\bfunction\b))'
       endCaptures:
         '1': {name: meta.function.body.cfml meta.brace.curly.cfml}
         '2': {name: meta.property.constant.cfml}
