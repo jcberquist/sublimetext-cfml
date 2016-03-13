@@ -154,6 +154,7 @@ repository:
     - include: '#tags-with-script'
     - include: '#cfscript'
     - include: '#cfproperty'
+    - include: '#custom-tags'
     - name: meta.tag.cfml
       begin: (?i)(<)(cf[a-z]+)
       beginCaptures:
@@ -277,6 +278,43 @@ repository:
       end: '--->'
       patterns:
       - include: '#comments'
+
+  custom-tags:
+    patterns:
+    - name: meta.tag.custom.cfml
+      begin: (?i)(<)(cf_[a-z]*)
+      beginCaptures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.custom.cfml}
+      end: (/?>)
+      endCaptures:
+        '0': {name: punctuation.definition.tag.end.cfml}
+      patterns:
+      - include: '#tag-generic-attribute'
+    - name: meta.tag.custom.cfml
+      match: (?i)(</)(cf_[a-z]*)(>)
+      captures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.custom.cfml}
+        '3': {name: punctuation.definition.tag.end.cfml}
+    - name: meta.tag.custom.cfml
+      begin: (?i)(<)([a-z]+)(\:)([a-z]*)
+      beginCaptures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.custom.cfml}
+        '3': {name: entity.name.tag.custom.cfml punctuation.separator.prefix.cfml}
+        '4': {name: entity.name.tag.custom.cfml}
+      end: (/?>)
+      endCaptures:
+        '0': {name: punctuation.definition.tag.end.cfml}
+      patterns:
+      - include: '#tag-generic-attribute'
+    - name: meta.tag.custom.cfml
+      match: (?i)(</)([a-z]+\:[a-z]*)(>)
+      captures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.custom.cfml}
+        '3': {name: punctuation.definition.tag.end.cfml}
 
   extends:
     name: meta.class.inheritance.cfml

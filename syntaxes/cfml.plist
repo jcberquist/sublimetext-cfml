@@ -518,6 +518,10 @@
 					<string>#cfproperty</string>
 				</dict>
 				<dict>
+					<key>include</key>
+					<string>#custom-tags</string>
+				</dict>
+				<dict>
 					<key>begin</key>
 					<string>(?i)(&lt;)(cf[a-z]+)</string>
 					<key>beginCaptures</key>
@@ -953,6 +957,142 @@
 							<string>#comments</string>
 						</dict>
 					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>custom-tags</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?i)(&lt;)(cf_[a-z]*)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.begin.cfml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.custom.cfml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(/?&gt;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.end.cfml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.tag.custom.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#tag-generic-attribute</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.begin.cfml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.custom.cfml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.end.cfml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(?i)(&lt;/)(cf_[a-z]*)(&gt;)</string>
+					<key>name</key>
+					<string>meta.tag.custom.cfml</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?i)(&lt;)([a-z]+)(\:)([a-z]*)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.begin.cfml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.custom.cfml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.custom.cfml punctuation.separator.prefix.cfml</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.custom.cfml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(/?&gt;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.end.cfml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.tag.custom.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#tag-generic-attribute</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.begin.cfml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.custom.cfml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.end.cfml</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(?i)(&lt;/)([a-z]+\:[a-z]*)(&gt;)</string>
+					<key>name</key>
+					<string>meta.tag.custom.cfml</string>
 				</dict>
 			</array>
 		</dict>

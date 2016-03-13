@@ -19,6 +19,26 @@
 <!---                           ^ embedding.cfml text.html.cfml meta.scope.cfquery.cfml source.sql comment.line.cfml --->
 </cfquery>
 
+<cf_custom attrname="#test#">
+<!--- <- meta.tag.custom.cfml --->
+ <!--- <- meta.tag.custom.cfml entity.name.tag.custom.cfml --->
+<!---      ^ meta.tag.custom.cfml entity.other.attribute-name.cfml --->
+<!---                 ^ meta.tag.custom.cfml variable.other.readwrite.cfml --->
+</cf_custom>
+<!--- <- meta.tag.custom.cfml --->
+  <!--- <- meta.tag.custom.cfml entity.name.tag.custom.cfml --->
+
+<prefix:tag attrname="#test#">
+<!--- <- meta.tag.custom.cfml --->
+ <!--- <- meta.tag.custom.cfml entity.name.tag.custom.cfml --->
+<!---  ^ meta.tag.custom.cfml entity.name.tag.custom.cfml punctuation.separator.prefix.cfml --->
+<!---   ^ meta.tag.custom.cfml entity.name.tag.custom.cfml --->
+<!---       ^ meta.tag.custom.cfml entity.other.attribute-name.cfml --->
+<!---                  ^ meta.tag.custom.cfml variable.other.readwrite.cfml --->
+</prefix:tag>
+<!--- <- meta.tag.custom.cfml --->
+  <!--- <- meta.tag.custom.cfml entity.name.tag.custom.cfml --->
+
 <cfscript>
 foo = 'hello world';
 <!--- <- embedding.cfml text.html.cfml source.cfml.script variable.other.readwrite.cfml --->

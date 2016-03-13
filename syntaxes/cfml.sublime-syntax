@@ -174,6 +174,7 @@ contexts:
     - include: tags-with-script
     - include: cfscript
     - include: cfproperty
+    - include: custom-tags
     - match: (?i)(<)(cf[a-z]+)
       captures:
         1: punctuation.definition.tag.begin.cfml
@@ -325,6 +326,41 @@ contexts:
           pop: true
         - include: scope:source.cfml.script#comments
         - include: scope:source.cfml.script#expressions
+  custom-tags:
+    - match: (?i)(<)(cf_[a-z]*)
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.custom.cfml
+      push:
+        - meta_scope: meta.tag.custom.cfml
+        - match: (/?>)
+          scope: punctuation.definition.tag.end.cfml
+          pop: true
+        - include: tag-generic-attribute
+    - match: (?i)(</)(cf_[a-z]*)(>)
+      captures:
+        0: meta.tag.custom.cfml
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.custom.cfml
+        3: punctuation.definition.tag.end.cfml
+    - match: (?i)(<)([a-z]+)(\:)([a-z]*)
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.custom.cfml
+        3: entity.name.tag.custom.cfml punctuation.separator.prefix.cfml
+        4: entity.name.tag.custom.cfml
+      push:
+        - meta_scope: meta.tag.custom.cfml
+        - match: (/?>)
+          scope: punctuation.definition.tag.end.cfml
+          pop: true
+        - include: tag-generic-attribute
+    - match: (?i)(</)([a-z]+\:[a-z]*)(>)
+      captures:
+        0: meta.tag.custom.cfml
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.custom.cfml
+        3: punctuation.definition.tag.end.cfml
   string:
     - match: "'"
       scope: punctuation.definition.string.begin.cfml
