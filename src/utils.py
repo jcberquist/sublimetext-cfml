@@ -192,8 +192,8 @@ def get_last_open_tag(view, pos, cfml_only):
 	return None
 
 def get_tag_name(view, pos):
-	tag_scope = "meta.tag.cfml - punctuation.definition.tag.begin, meta.tag.script.cfml, meta.tag.script.cf.cfml"
-	tag_name_scope = "entity.name.tag.cfml, entity.name.tag.script.cfml"
+	tag_scope = "meta.tag.cfml - punctuation.definition.tag.begin, meta.tag.custom.cfml - punctuation.definition.tag.begin, meta.tag.script.cfml, meta.tag.script.cf.cfml"
+	tag_name_scope = "entity.name.tag.cfml, entity.name.tag.custom.cfml, entity.name.tag.script.cfml"
 	tag_regions = view.find_by_selector(tag_scope)
 	tag_name_regions = view.find_by_selector(tag_name_scope)
 
@@ -204,14 +204,14 @@ def get_tag_name(view, pos):
 
 def get_tag_attribute_name(view, pos):
 	for scope in ["string.quoted","string.unquoted"]:
-		full_scope = "meta.tag.cfml " + scope + ", meta.tag.script.cfml " + scope + ", meta.tag.script.cf.cfml " + scope
+		full_scope = "meta.tag.cfml " + scope + ", meta.tag.custom.cfml " + scope  + ", meta.tag.script.cfml " + scope + ", meta.tag.script.cf.cfml " + scope
 		if view.match_selector(pos, full_scope):
 			previous_char = get_char_point_before_scope(view, pos, scope)
 			break
 	else:
 		previous_char = get_previous_character(view, pos)
 
-	full_scope = "meta.tag.cfml punctuation.separator.key-value, meta.tag.script.cfml punctuation.separator.key-value, meta.tag.script.cf.cfml punctuation.separator.key-value"
+	full_scope = "meta.tag.cfml punctuation.separator.key-value, meta.tag.custom.cfml punctuation.separator.key-value, meta.tag.script.cfml punctuation.separator.key-value, meta.tag.script.cf.cfml punctuation.separator.key-value"
 	if view.match_selector(previous_char, full_scope):
 		return get_previous_word(view, previous_char)
 	return None

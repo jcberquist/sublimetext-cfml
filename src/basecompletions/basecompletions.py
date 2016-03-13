@@ -35,11 +35,10 @@ def get_tag_attributes(view, prefix, position, info):
 		return None
 
 	# tag attribute completions
-	prefix_start = position - len(prefix)
-	ch = view.substr(prefix_start - 1)
-	if ch in [" ", "(", "\t", "\n"]:
+	if info["previous_char"] in [" ", "(", "\t", "\n"]:
 		completion_list = completions["cfml_tag_attributes"].get(info["tag_name"], None)
-		return CompletionList(completion_list, 0, False)
+		if completion_list:
+			return CompletionList(completion_list, 0, False)
 
 	return None
 
