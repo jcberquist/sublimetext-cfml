@@ -1,6 +1,6 @@
 import sublime
 from functools import partial
-from . import project_index
+from .component_project_index import get_extended_metadata_by_file_path
 
 STYLES = {
 	"side_color": "#4C9BB0",
@@ -33,7 +33,7 @@ def on_navigate(view, file_path, function_file_map, href):
 		open_file_at_symbol(view, file_path, href)
 
 def get_documentation(view, project_name, file_path, header):
-	extended_metadata = project_index.get_extended_metadata_by_file_path(project_name, file_path)
+	extended_metadata = get_extended_metadata_by_file_path(project_name, file_path)
 
 	model_doc = dict(STYLES)
 	model_doc["links"] = []
@@ -81,7 +81,7 @@ def get_documentation(view, project_name, file_path, header):
 	return model_doc, callback
 
 def get_method_documentation(view, project_name, file_path, function_name, header):
-	extended_metadata = project_index.get_extended_metadata_by_file_path(project_name, file_path)
+	extended_metadata = get_extended_metadata_by_file_path(project_name, file_path)
 	function_file_path = extended_metadata["function_file_map"][function_name]
 
 	funct = extended_metadata["functions"][function_name]
