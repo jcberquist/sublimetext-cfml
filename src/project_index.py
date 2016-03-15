@@ -93,7 +93,7 @@ class ProjectIndex():
 			self.sync_projects()
 		else:
 			# project file has been updated (saved), but no folder paths were changed
-			# so update project_data and rebuild dot_path_map and completions
+			# so update project_data
 			self.update_project(project_name, updated_project_data)
 
 	def project_file_updated(self, project_name, file_path):
