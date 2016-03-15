@@ -82,14 +82,21 @@ class CfmlAutoInsertClosingTagCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		pt = self.view.sel()[0].begin()
 		if utils.get_setting("cfml_auto_insert_closing_tag"):
-			cfml_non_closing_tags = utils.get_setting("cfml_non_closing_tags")
 			tag_name = utils.get_tag_name(self.view, pt)
-			if tag_name and tag_name not in cfml_non_closing_tags:
-				next_char = utils.get_next_character(self.view, pt)
-				tag_close_search_region = self.view.find("</" + tag_name + ">", pt)
-				if next_char != tag_close_search_region.begin():
-					self.view.run_command("insert_snippet", {"contents": ">$0</" + tag_name + ">"})
-					return
+			if tag_name:
+				is_custom_tag = self.view.match_selector(pt, "meta.tag.custom.cfml")
+				if is_custom_tag:
+					closing_custom_tags = utils.get_closing_custom_tags_by_project(self.view)
+					has_closing_tag = tag_name in closing_custom_tags
+				else:
+					cfml_non_closing_tags = utils.get_setting("cfml_non_closing_tags")
+					has_closing_tag = tag_name not in cfml_non_closing_tags
+				if has_closing_tag:
+					next_char = utils.get_next_character(self.view, pt)
+					tag_close_search_region = self.view.find("</" + tag_name + ">", pt)
+					if next_char != tag_close_search_region.begin():
+						self.view.run_command("insert_snippet", {"contents": ">$0</" + tag_name + ">"})
+						return
 		self.view.run_command("insert_snippet", {"contents": ">"})
 
 class CfmlBetweenTagPairCommand(sublime_plugin.TextCommand):

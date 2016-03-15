@@ -88,7 +88,7 @@
     "keys": [">"],
     "command": "cfml_auto_insert_closing_tag",
     "context": [
-      {"key": "selector", "operator": "equal", "operand": "meta.tag.cfml - comment - source.cfml.script", "match_all":true},
+      {"key": "selector", "operator": "equal", "operand": "meta.tag.cfml - comment - source.cfml.script, meta.tag.custom.cfml - comment - source.cfml.script", "match_all":true},
       {"key": "selection_empty", "operator": "equal", "operand": true, "match_all": true},
       {"key": "preceding_text", "operator": "regex_match", "operand": ".*[^/]$", "match_all":true}
     ]
@@ -98,7 +98,7 @@
     "command": "cfml_between_tag_pair",
     "context":
     [
-      {"key": "selector", "operator": "equal", "operand": "meta.tag.cfml - comment - source.cfml.script", "match_all":true},
+      {"key": "selector", "operator": "equal", "operand": "meta.tag.cfml - comment - source.cfml.script, meta.tag.custom.cfml - comment - source.cfml.script", "match_all":true},
       {"key": "selection_empty", "operator": "equal", "operand": true, "match_all": true},
       {"key": "preceding_text", "operator": "regex_match", "operand": ".*>$", "match_all":true},
       {"key": "following_text", "operator": "regex_match", "operand": "^</.*", "match_all":true}

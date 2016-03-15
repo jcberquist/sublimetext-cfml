@@ -144,8 +144,19 @@ def get_tag_end(view, pos, is_cfml):
 		return get_tag_end(view, tag_end.end(), is_cfml)
 	return None
 
+def get_closing_custom_tags(project_name):
+	# this function will be overwritten by custom_tags module
+	# did it this way to avoid circular dependency
+	return []
+
+def get_closing_custom_tags_by_project(view):
+	project_name = get_project_name(view)
+	if project_name:
+		return get_closing_custom_tags(project_name)
+	return []
+
 def get_last_open_tag(view, pos, cfml_only):
-	tag_selector = "entity.name.tag.cfml" if cfml_only else "entity.name.tag"
+	tag_selector = "entity.name.tag.cfml, entity.name.tag.custom.cfml" if cfml_only else "entity.name.tag"
 	closed_tags = []
 	cfml_non_closing_tags = get_setting("cfml_non_closing_tags")
 	html_non_closing_tags = get_setting("html_non_closing_tags")
@@ -159,7 +170,7 @@ def get_last_open_tag(view, pos, cfml_only):
 			continue
 
 		# this is an opening tag
-		is_cfml = view.match_selector(tag_name_region.begin(), "entity.name.tag.cfml")
+		is_cfml = view.match_selector(tag_name_region.begin(), "entity.name.tag.cfml, entity.name.tag.custom.cfml")
 		tag_end = get_tag_end(view, tag_name_region.end(), is_cfml)
 
 		# if no tag end then give up
@@ -185,6 +196,9 @@ def get_last_open_tag(view, pos, cfml_only):
 			continue
 		# check to exclude html tags that should not have a closing tag
 		if tag_name in html_non_closing_tags:
+			continue
+		# check for custom tags that should not be closed
+		if view.match_selector(tag_name_region.begin(), "meta.tag.custom.cfml") and tag_name not in get_closing_custom_tags_by_project(view):
 			continue
 
 		return tag_name
@@ -219,7 +233,7 @@ def get_tag_attribute_name(view, pos):
 def between_cfml_tag_pair(view, pos):
 	if not view.substr(pos - 1) == ">" or not view.substr(sublime.Region(pos, pos + 2)) == "</":
 		return False
-	if not view.match_selector(pos - 1, "meta.tag.cfml") or not view.match_selector(pos + 2, "meta.tag.cfml"):
+	if not view.match_selector(pos - 1, "meta.tag.cfml, meta.tag.custom.cfml") or not view.match_selector(pos + 2, "meta.tag.cfml, meta.tag.custom.cfml"):
 		return False
 	if get_tag_name(view, pos - 1) != get_tag_name(view, pos + 2):
 		return False

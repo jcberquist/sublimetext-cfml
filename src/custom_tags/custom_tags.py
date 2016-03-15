@@ -5,14 +5,14 @@ from .. import utils
 from . import custom_tag_index
 
 __all__ = ["custom_tags", "get_prefix_completions", "get_tag_completions",
-"get_tag_attribute_completions", "get_index_by_tag_name"]
+"get_tag_attribute_completions", "get_index_by_tag_name", "get_closing_custom_tags"]
 
 
 class CustomTags(ProjectIndex):
 
 
 	def __init__(self):
-		super().__init__("custom_tag_folders", {"index": {}, "tags": {}, "completions": {}})
+		super().__init__("custom_tag_folders", {"index": {}, "tags": {}, "completions": {}, "closing_tags": []})
 
 
 	def new_project(self, project_name, project_data):
@@ -35,9 +35,9 @@ class CustomTags(ProjectIndex):
 			index.update(custom_tag_index.index(root_path))
 
 		tags = generate_tag_map(custom_tag_folders, index)
-		completions = generate_completions(custom_tag_folders, index)
+		completions, closing_tags = generate_completions_and_closing_tags(custom_tag_folders, index)
 
-		self.projects[project_name] = {"project_data": project_data, "data": {"index": index, "tags": tags, "completions": completions}}
+		self.projects[project_name] = {"project_data": project_data, "data": {"index": index, "tags": tags, "completions": completions, "closing_tags": closing_tags}}
 
 		print("CFML: indexing custom tags in project '" + project_name + "' completed - " + str(len(index)) + " files indexed in " + "{0:.2f}".format(time.clock() - start_time) + " seconds")
 		self.notify_listeners(project_name)
@@ -62,9 +62,10 @@ class CustomTags(ProjectIndex):
 					custom_tag_folders = self.projects[project_name]["project_data"].get("custom_tag_folders", [])
 					index = self.projects[project_name]["data"]["index"]
 					tags = generate_tag_map(custom_tag_folders, index)
-					completions = generate_completions(custom_tag_folders, index)
+					completions, closing_tags = generate_completions_and_closing_tags(custom_tag_folders, index)
 					self.projects[project_name]["data"]["tags"] = tags
 					self.projects[project_name]["data"]["completions"] = completions
+					self.projects[project_name]["data"]["closing_tags"] = closing_tags
 			self.notify_listeners(project_name)
 
 
@@ -76,9 +77,10 @@ class CustomTags(ProjectIndex):
 					custom_tag_folders = self.projects[project_name]["project_data"].get("custom_tag_folders", [])
 					index = self.projects[project_name]["data"]["index"]
 					tags = generate_tag_map(custom_tag_folders, index)
-					completions = generate_completions(custom_tag_folders, index)
+					completions, closing_tags = generate_completions_and_closing_tags(custom_tag_folders, index)
 					self.projects[project_name]["data"]["tags"] = tags
 					self.projects[project_name]["data"]["completions"] = completions
+					self.projects[project_name]["data"]["closing_tags"] = closing_tags
 			self.notify_listeners(project_name)
 
 
@@ -95,10 +97,11 @@ def generate_tag_map(custom_tag_folders, index):
 				tag_map[tag_folder["prefix"] + ":" + index[file_path]["tag_name"]] = file_path
 	return tag_map
 
-def generate_completions(custom_tag_folders, index):
+def generate_completions_and_closing_tags(custom_tag_folders, index):
 	prefixes = []
 	tags = {}
 	attributes = {}
+	closing_tags = []
 
 	for tag_folder in custom_tag_folders:
 		root_path = utils.normalize_path(tag_folder["path"])
@@ -110,8 +113,10 @@ def generate_completions(custom_tag_folders, index):
 				key = tag_folder["prefix"] + ":" + index[file_path]["tag_name"]
 				tags[tag_folder["prefix"]].append(make_tag_completion(tag_folder["prefix"], index[file_path]["tag_name"]))
 				attributes[key] = [(a + "\t" + index[file_path]["tag_name"], a + "=\"$1\"") for a in index[file_path]["attributes"]]
+				if index[file_path]["has_end_tag"]:
+					closing_tags.append(key)
 
-	return {"prefixes": prefixes, "tags": tags, "attributes": attributes}
+	return {"prefixes": prefixes, "tags": tags, "attributes": attributes}, closing_tags
 
 def make_tag_completion(prefix, tag):
 	return (tag + "\tcustom tag (" + prefix + ")", tag)
@@ -143,3 +148,8 @@ def get_index_by_tag_name(project_name, tag_name):
 			file_path = custom_tags.projects[project_name]["data"]["tags"][tag_name]
 			return file_path, custom_tags.projects[project_name]["data"]["index"][file_path]
 	return None, None
+
+def get_closing_custom_tags(project_name):
+	if project_name in custom_tags.projects:
+		return custom_tags.projects[project_name]["data"]["closing_tags"]
+	return []

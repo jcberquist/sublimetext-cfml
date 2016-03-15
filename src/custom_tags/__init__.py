@@ -1,5 +1,5 @@
 import sublime
-from .. import completions, inline_documentation
+from .. import completions, inline_documentation, utils
 from .custom_tags import *
 from .documentation import get_inline_documentation
 
@@ -9,6 +9,7 @@ def plugin_loaded():
 	completions.add_completion_source('tag', get_tags)
 	completions.add_completion_source('tag_attributes', get_tag_attributes)
 	inline_documentation.add_documentation_source(get_inline_documentation)
+	utils.get_closing_custom_tags = get_closing_custom_tags
 
 def get_tags(view, prefix, position, info):
 	if (info["previous_char"] == "<"):
