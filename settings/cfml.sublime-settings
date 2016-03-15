@@ -4,6 +4,7 @@
 		{"selector": "source.cfml.script meta.support.function-call.createcomponent.cfml string.quoted", "characters": "."},
 		{"selector": "meta.class.inheritance.cfml", "characters": "."},
 		{"selector": "meta.tag.cfml - string - source.cfml.script", "characters": " "},
+		{"selector": "meta.tag.custom.cfml - string - source.cfml.script", "characters": ": "},
 		{"selector": "meta.tag.script.cfml - string, meta.tag.script.cf.cfml - string, meta.class.declaration.cfml - string", "characters": " "}
 	]
 }

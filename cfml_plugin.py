@@ -17,13 +17,16 @@ class CfmlEventListener(sublime_plugin.EventListener):
 		if command_name == "commit_completion":
 			pos = view.sel()[0].begin()
 
-			if view.match_selector(pos, "meta.tag.cfml - source.cfml.script, meta.tag.script.cfml, meta.tag.script.cf.cfml, meta.class.declaration.cfml - meta.class.inheritance.cfml"):
+			if view.match_selector(pos, "meta.tag.cfml -source.cfml.script, meta.tag.script.cfml, meta.tag.script.cf.cfml, meta.class.declaration.cfml -meta.class.inheritance.cfml"):
 				if view.substr(pos - 1) in [" ", "\"", "'", "="]:
 					view.run_command("auto_complete", {"api_completions_only": True})
 				elif view.substr(pos) == "\"":
 					# an attribute completion was most likely just inserted
 					# advance cursor past double quote character
 					view.run_command("move", {"by": "characters", "forward": True})
+
+			if view.substr(pos - 1) == ":" and view.match_selector(pos - 1, "meta.tag.custom.cfml -source.cfml.script"):
+				view.run_command("auto_complete", {"api_completions_only": True})
 
 			if view.substr(pos - 1) == "." and view.match_selector(pos - 1, "meta.support.function-call.createcomponent.cfml string.quoted, entity.other.inherited-class.cfml, meta.instance.constructor.cfml"):
 				view.run_command("auto_complete", {"api_completions_only": True})
