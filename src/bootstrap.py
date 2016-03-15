@@ -5,6 +5,7 @@ from . import cfdocs
 from . import cfcs
 from . import fw1
 from . import testbox
+from . import custom_tags
 from .build_cfml_tmlanguage import CfmlBuildTmlanguageCommand
 from .cfc_dotted_path import CfmlCfcDottedPathCommand
 from .controller_view_toggle import CfmlToggleControllerViewCommand
