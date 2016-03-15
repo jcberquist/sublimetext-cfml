@@ -1,6 +1,6 @@
 from .. import utils
 from ..inline_documentation import Documentation
-from ..goto_cfc import GotoCfc
+from ..goto_cfml_file import GotoCfmlFile
 from . import cfcs
 from .. import model_index
 
@@ -22,7 +22,7 @@ def get_inline_documentation(view, position):
 
 	return None
 
-def get_goto_cfc(view, position):
+def get_goto_cfml_file(view, position):
 	project_name = utils.get_project_name(view)
 
 	if not project_name:
@@ -32,9 +32,9 @@ def get_goto_cfc(view, position):
 
 	if cfc_info:
 		if function_name:
-			return GotoCfc(cfc_info["file_path"], metadata["functions"][function_name].name)
+			return GotoCfmlFile(cfc_info["file_path"], metadata["functions"][function_name].name)
 		else:
-			return GotoCfc(cfc_info["file_path"], None)
+			return GotoCfmlFile(cfc_info["file_path"], None)
 
 	return None
 

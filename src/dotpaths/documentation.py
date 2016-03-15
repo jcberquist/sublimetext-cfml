@@ -2,7 +2,7 @@ from functools import partial
 from .. import model_index
 from .. import utils
 from ..inline_documentation import Documentation
-from ..goto_cfc import GotoCfc
+from ..goto_cfml_file import GotoCfmlFile
 from . import cfc_utils
 
 STYLES = {
@@ -34,7 +34,7 @@ def get_inline_documentation(view, position):
 		return Documentation(doc, callback, 2)
 	return None
 
-def get_goto_cfc(view, position):
+def get_goto_cfml_file(view, position):
 	project_name = utils.get_project_name(view)
 
 	if not project_name:
@@ -46,9 +46,9 @@ def get_goto_cfc(view, position):
 		if function_name:
 			metadata = model_index.get_extended_metadata_by_file_path(project_name, file_path)
 			if function_name in metadata["functions"]:
-				return GotoCfc(metadata["function_file_map"][function_name], metadata["functions"][function_name].name)
+				return GotoCfmlFile(metadata["function_file_map"][function_name], metadata["functions"][function_name].name)
 		else:
-			return GotoCfc(file_path, None)
+			return GotoCfmlFile(file_path, None)
 
 	return None
 

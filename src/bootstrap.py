@@ -10,6 +10,6 @@ from .build_cfml_tmlanguage import CfmlBuildTmlanguageCommand
 from .cfc_dotted_path import CfmlCfcDottedPathCommand
 from .controller_view_toggle import CfmlToggleControllerViewCommand
 from .color_scheme_styles import CfmlColorSchemeStylesCommand
-from .goto_cfc import CfmlGotoCfcCommand
+from .goto_cfml_file import CfmlGotoFileCommand
 from .inline_documentation import CfmlInlineDocumentationCommand
 from .testbox import TestboxCommand
