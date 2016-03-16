@@ -26,7 +26,7 @@ def index_file(full_file_path):
 
 def parse_cfm_file_string(file_string):
   tag_index = {"has_end_tag": False}
-  tag_index["attributes"] = sorted([attr.lower() for attr in set(re.findall(attribute_regex, file_string))])
+  tag_index["attributes"] = list(sorted(set([attr.lower() for attr in re.findall(attribute_regex, file_string)])))
   if re.search(end_tag_regex, file_string):
     tag_index["has_end_tag"] = True
   elif re.search(alt_end_tag_regex, file_string):
