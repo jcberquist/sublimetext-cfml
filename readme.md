@@ -29,6 +29,7 @@ Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](http:/
 - [A Note about Settings](#a-note-about-settings)
 - [Default Key Bindings](#default-key-bindings)
 - [CFC Indexing and Dot Paths](#cfc-indexing-and-dot-paths)
+- [Custom Tags](#custom-tags)
 - [Custom Coloring for CFML Tags](#custom-coloring-for-cfml-tags)
 - [Controller/View Toggle](#controllerview-toggle)
 - [CommandBox](#commandbox)
@@ -122,6 +123,28 @@ Any other text in the string will be left in place - this allows for specifying 
 By default, implicit accessors are included in the completions.The `accessors` key, if present and set to false, will remove implicit property accessors from the completions offered (explicit accessors will always be included).
 
 These two settings work together, such that when a base CFC as well as another CFC that extends it are both indexed, and a mapping is specified such that the dot path in the `extends` can be resolved, the documentation and completions for the child CFC will include properties and methods from the base CFC. In addition, the dot paths of all indexed CFCs will be offered as completions in the `extends` attribute, the `createObject` function (where the type is `component`), as well as when using `new` to instantiate a CFC.
+
+### Custom Tags
+
+Support is offered on a per project basis for custom tags as used with a `<cfimport>` tag and a custom tag prefix. Here is an example project file (other settings have been removed):
+
+```
+{
+    "custom_tag_folders":
+    [
+        {
+            "path": "C:/myprojects/projectname/customtags/page",
+            "prefix": "page"
+        }
+    ]
+}
+```
+
+Once this is done, `page` will be offered as a custom tag prefix completion, and then after entering `<page:` a list of tags in the custom tag folder will be offered. After a tag has been entered, completions for every `attributes` scope variable found in that custom tag file will be offered.
+
+You can use the <kbd>F1</kbd> documentation command to get some minimal documentation about that custom tag, and <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> can be used to jump to the custom tag file.
+
+The indexer will search for `thistag.executionmode is/eq/== "end"/'end'` (case insensitive) or `<cfcase value="end"/'end'>` (case insensitive) in custom tag files in order to determine whether or not to auto close the custom tag.
 
 ### Custom Coloring for CFML Tags
 

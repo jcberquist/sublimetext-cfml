@@ -1,0 +1,26 @@
+CFML v0.7.0 Changelog:
+
+- adds basic support for custom tags as used with a cfimport tag and a custom tag prefix
+
+  The completions are offered on a per project basis. To set them up add a "custom_tag_folders"
+  setting to your `.sublime-project` file. It should be an array of JSON objects where each object
+  has two required keys: "path" and "prefix". "path" should be a full file path to a folder
+  containing custom tags, and "prefix" should be the prefix you intend to import them with.
+
+  For example:
+
+  "custom_tag_folders": [
+    {"path": "/path/to/tag/folder", "prefix": "page"}
+  ]
+
+  Once this is done, "page" will be offered as a custom tag prefix completion, and then after
+  entering `<page:` a list of tags in the custom tag folder will be offered. After a tag has been
+  entered, completions for every `attributes` scope variable found in that custom tag file will
+  be offered.
+
+  F1 used on an indexed custom tag will give some minimal documentation about that tag, and CTRL-ALT-Click
+  can be used to jump to the custom tag file.
+
+  The indexer searches for `thistag.executionmode is/eq/== "end"/'end'` (case insensitive) or
+  `<cfcase value="end"/'end'>` (case insensitive) in custom tag files in order to determine whether or not
+  to auto close the custom tag.
