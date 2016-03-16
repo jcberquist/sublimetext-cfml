@@ -1,6 +1,7 @@
 from functools import partial
 from .. import utils
 from ..inline_documentation import Documentation
+from ..goto_cfml_file import GotoCfmlFile
 from .custom_tags import get_index_by_tag_name
 
 STYLES = {
@@ -23,6 +24,21 @@ def get_inline_documentation(view, position):
 		if (file_path):
 			doc, callback = get_documentation(view, tag_name, file_path, tag_info)
 			return Documentation(doc, callback, 2)
+
+	return None
+
+def get_goto_cfml_file(view, position):
+	project_name = utils.get_project_name(view)
+
+	if not project_name:
+		return None
+
+	if view.match_selector(position, "meta.tag.custom.cfml"):
+		tag_name = utils.get_tag_name(view, position)
+
+		file_path, tag_info = get_index_by_tag_name(project_name, tag_name)
+		if (file_path):
+			return GotoCfmlFile(file_path, None)
 
 	return None
 
