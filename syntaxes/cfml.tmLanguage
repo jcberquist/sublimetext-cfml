@@ -4452,7 +4452,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?&lt;=[^\s=])|(?=[;\{])</string>
+					<string>(?=\s*\b([a-zA-Z0-9:-]+)\s*=)|(?=[;\{])</string>
 					<key>name</key>
 					<string>meta.tag.script.cfml</string>
 					<key>patterns</key>
@@ -4802,7 +4802,7 @@
 								</dict>
 							</dict>
 							<key>end</key>
-							<string>(?&lt;=[^\s=])|(?=\))</string>
+							<string>(?=\s*\b([a-zA-Z0-9:-]+)\s*=)|(?=\))</string>
 							<key>patterns</key>
 							<array>
 								<dict>

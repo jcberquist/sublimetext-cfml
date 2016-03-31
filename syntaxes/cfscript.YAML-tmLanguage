@@ -1077,7 +1077,7 @@ repository:
       begin: '='
       beginCaptures:
         '0': {name: punctuation.separator.key-value.cfml}
-      end: (?<=[^\s=])|(?=[;\{])
+      end: (?=\s*\b([a-zA-Z0-9:-]+)\s*=)|(?=[;\{])
       patterns:
       - include: '#expressions'
 
@@ -1193,7 +1193,7 @@ repository:
       - begin: '='
         beginCaptures:
           '0': {name: punctuation.separator.key-value.cfml}
-        end: (?<=[^\s=])|(?=\))
+        end: (?=\s*\b([a-zA-Z0-9:-]+)\s*=)|(?=\))
         patterns:
         - include: '#expressions'
 

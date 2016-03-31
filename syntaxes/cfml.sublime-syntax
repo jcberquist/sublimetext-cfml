@@ -1,4 +1,4 @@
-%YAML1.2
+%YAML 1.2
 ---
 # Started with https://github.com/SublimeText/ColdFusion
 name: CFML
@@ -192,16 +192,6 @@ contexts:
         2: entity.name.tag.cfml
         3: punctuation.definition.tag.end.cfml
   cfoutput:
-    - match: (?i)(?<=('|"))(<)(cfoutput)(?=.*<\/cfoutput>\1)
-      captures:
-        2: punctuation.definition.tag.begin.cfml
-        3: entity.name.tag.cfml
-      push:
-        - meta_scope: meta.tag.cfml
-        - match: ">"
-          scope: punctuation.definition.tag.end.cfml
-          set: cfoutput-string-contents
-        - include: tag-generic-attribute
     - match: (?i)(<)(cfoutput)
       captures:
         1: punctuation.definition.tag.begin.cfml

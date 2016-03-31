@@ -1,4 +1,4 @@
-%YAML1.2
+%YAML 1.2
 ---
 # started with https://github.com/SublimeText/ColdFusion
 # uses JavaScript package from sublimehq as a reference: https://github.com/sublimehq/Packages/tree/master/JavaScript
@@ -831,7 +831,7 @@ contexts:
       push:
         - match: (?=[;{])
           pop: true
-        - match: (?<=[^\s=])
+        - match: (?=\s*\b([a-zA-Z0-9:-]+)\s*=)
           pop: true
         - include: expressions
 
@@ -940,7 +940,7 @@ contexts:
           push:
             - match: (?=\))
               pop: true
-            - match: (?<=[^\s=])
+            - match: (?=\s*\b([a-zA-Z0-9:-]+)\s*=)
               pop: true
             - include: expressions
 

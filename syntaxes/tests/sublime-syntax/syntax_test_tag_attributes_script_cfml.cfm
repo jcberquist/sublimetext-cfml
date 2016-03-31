@@ -13,16 +13,6 @@ param name = "test" default = (now() * then);
 <!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.other.attribute-name.cfml --->
 <!---                          ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml support.function.cfml --->
 <!---                                  ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml variable.other.readwrite.cfml --->
-param name = "test" default = now() then;
-<!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->
-<!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.other.attribute-name.cfml --->
-<!---                         ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml support.function.cfml --->
-<!---                               ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.other.attribute-name.cfml --->
-param name = "test"
-default = now() then;
-<!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.other.attribute-name.cfml --->
-<!---     ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml support.function.cfml --->
-<!---           ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.other.attribute-name.cfml --->
 param testVar;
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->
 <!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml string.unquoted.cfml --->
