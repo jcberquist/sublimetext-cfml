@@ -37,6 +37,7 @@ contexts:
         - include: extends
         - include: tag-generic-attribute
   cfcomponent-contents:
+    - meta_content_scope: meta.class.body.tag.cfml
     - match: (?i)(</)(cfcomponent)(>)
       captures:
         0: meta.tag.cfml
@@ -107,7 +108,7 @@ contexts:
         - match: ">"
           scope: punctuation.definition.tag.end.cfml
           set:
-            - meta_content_scope: text.html.cfml
+            - meta_content_scope: meta.function.body.tag.cfml text.html.cfml
             - include: scope:text.html.basic
           with_prototype:
             - match: (?i)(</)(cffunction)(>)
@@ -174,6 +175,7 @@ contexts:
     - include: tags-with-script
     - include: cfscript
     - include: cfproperty
+    - include: cfargument
     - include: custom-tags
     - match: (?i)(<)(cf[a-z]+)
       captures:
@@ -250,6 +252,17 @@ contexts:
             9: meta.tag.property.name.cfml
             10: punctuation.definition.string.end.cfml
             11: string.unquoted.cfml meta.tag.property.name.cfml
+        - include: tag-generic-attribute
+  cfargument:
+    - match: (?i)(<)(cfargument)\b
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
+      push:
+        - meta_scope: meta.tag.cfml meta.tag.argument.cfml
+        - match: (/?>)
+          scope: punctuation.definition.tag.end.cfml
+          pop: true
         - include: tag-generic-attribute
   cfquery:
     - match: (?i)(<)(cfquery)(?=\s|>)

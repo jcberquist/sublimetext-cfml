@@ -20,6 +20,7 @@ extends=base.test
 <!---   ^ meta.class.inheritance.cfml string.unquoted.cfml entity.other.inherited-class.cfml --->
 <!---            ^ embedding.cfml source.cfml meta.tag.cfml meta.class.cfml --->
 >
+ <!--- <- meta.class.body.tag.cfml --->
 
   <cfproperty name="randomService">
   <!--- <- embedding.cfml source.cfml meta.tag.cfml meta.tag.property.cfml punctuation.definition.tag.begin.cfml --->
@@ -28,6 +29,7 @@ extends=base.test
   <!--- <- embedding.cfml source.cfml meta.tag.cfml meta.function.cfml punctuation.definition.tag.begin.cfml --->
    <!--- <- embedding.cfml source.cfml meta.tag.cfml meta.function.cfml entity.name.tag.cfml storage.type.function.cfml --->
 <!---                    ^ embedding.cfml source.cfml meta.tag.cfml meta.function.cfml punctuation.definition.tag.end.cfml --->
+<!---                     ^ meta.function.body.tag.cfml --->
     <cfreturn this>
   </cffunction>
 
@@ -35,6 +37,8 @@ extends=base.test
 <!---               ^ embedding.cfml source.cfml meta.tag.cfml meta.function.cfml entity.name.function.cfml --->
 <!---                                     ^ embedding.cfml source.cfml meta.tag.cfml meta.function.cfml string.quoted.double.cfml storage.type.return-type.primitive.cfml --->
 <!---                                                     ^ embedding.cfml source.cfml meta.tag.cfml meta.function.cfml string.quoted.double.cfml storage.modifier.cfml --->
+    <cfargument name="argName" type="any">
+    <!--- <- meta.tag.argument.cfml --->
     <cfsavecontent variable="testHtml">
       <div class="alert alert-<cfif danger>danger<cfelse>success</cfif>">Alert!</div>
 <!---  ^ embedding.cfml source.cfml meta.tag.block.any.html entity.name.tag.block.any.html --->

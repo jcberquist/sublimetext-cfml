@@ -72,6 +72,48 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>cfargument</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?i)(&lt;)(cfargument)\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.begin.cfml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.cfml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(/?&gt;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.end.cfml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.tag.cfml meta.tag.argument.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#tag-generic-attribute</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>cfcomponent</key>
 		<dict>
 			<key>begin</key>
@@ -120,15 +162,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>&gt;</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.tag.end.cfml</string>
-						</dict>
-					</dict>
+					<string>(?=&gt;)</string>
 					<key>name</key>
 					<string>meta.tag.cfml meta.class.cfml</string>
 					<key>patterns</key>
@@ -144,8 +178,27 @@
 					</array>
 				</dict>
 				<dict>
-					<key>include</key>
-					<string>#cfml-tags</string>
+					<key>begin</key>
+					<string>&gt;</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.cfml meta.class.cfml punctuation.definition.tag.end.cfml</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>meta.class.body.tag.cfml</string>
+					<key>end</key>
+					<string>(?i)(?=&lt;/cfcomponent&gt;)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#cfml-tags</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>
@@ -197,15 +250,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>&gt;</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.tag.end.cfml</string>
-						</dict>
-					</dict>
+					<string>(?=&gt;)</string>
 					<key>name</key>
 					<string>meta.tag.cfml meta.function.cfml</string>
 					<key>patterns</key>
@@ -346,11 +391,19 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?&lt;=&gt;)</string>
+					<string>&gt;</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.cfml meta.function.cfml punctuation.definition.tag.end.cfml</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>meta.function.body.tag.cfml text.html.cfml</string>
 					<key>end</key>
 					<string>(?i)(?=&lt;/cffunction&gt;)</string>
-					<key>name</key>
-					<string>text.html.cfml</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -516,6 +569,10 @@
 				<dict>
 					<key>include</key>
 					<string>#cfproperty</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#cfargument</string>
 				</dict>
 				<dict>
 					<key>include</key>

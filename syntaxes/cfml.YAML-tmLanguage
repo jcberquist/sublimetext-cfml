@@ -41,13 +41,17 @@ repository:
       beginCaptures:
         '1': {name: punctuation.definition.tag.begin.cfml}
         '2': {name: entity.name.tag.cfml storage.type.class.cfml}
-      end: '>'
-      endCaptures:
-        '0': {name: punctuation.definition.tag.end.cfml}
+      end: '(?=>)'
       patterns:
       - include: '#extends'
       - include: '#tag-generic-attribute'
-    - include: '#cfml-tags'
+    - contentName: meta.class.body.tag.cfml
+      begin: '>'
+      beginCaptures:
+        '0': {name: meta.tag.cfml meta.class.cfml punctuation.definition.tag.end.cfml}
+      end: (?i)(?=</cfcomponent>)
+      patterns:
+      - include: '#cfml-tags'
 
   cffunction:
     begin: (?i)(?=<cffunction)
@@ -63,9 +67,7 @@ repository:
       beginCaptures:
         '1': {name: punctuation.definition.tag.begin.cfml}
         '2': {name: entity.name.tag.cfml storage.type.function.cfml}
-      end: '>'
-      endCaptures:
-        '0': {name: punctuation.definition.tag.end.cfml}
+      end: '(?=>)'
       patterns:
       - match: (?i)\b(name)\s*(=)\s*((")([_$a-zA-Z][$\w]*)("))
         captures:
@@ -102,8 +104,10 @@ repository:
           '8': {name: storage.type.return-type.object.cfml}
           '9': {name: punctuation.definition.string.end.cfml}
       - include: '#tag-generic-attribute'
-    - name: text.html.cfml
-      begin: (?<=>)
+    - contentName: meta.function.body.tag.cfml text.html.cfml
+      begin: '>'
+      beginCaptures:
+        '0': {name: meta.tag.cfml meta.function.cfml punctuation.definition.tag.end.cfml}
       end: (?i)(?=</cffunction>)
       patterns:
       - include: '#cfml-tags'
@@ -154,6 +158,7 @@ repository:
     - include: '#tags-with-script'
     - include: '#cfscript'
     - include: '#cfproperty'
+    - include: '#cfargument'
     - include: '#custom-tags'
     - name: meta.tag.cfml
       begin: (?i)(<)(cf[a-z]+)
@@ -222,6 +227,19 @@ repository:
           '9': {name: meta.tag.property.name.cfml}
           '10': {name: punctuation.definition.string.end.cfml}
           '11': {name: string.unquoted.cfml meta.tag.property.name.cfml}
+      - include: '#tag-generic-attribute'
+
+  cfargument:
+    patterns:
+    - name: meta.tag.cfml meta.tag.argument.cfml
+      begin: (?i)(<)(cfargument)\b
+      beginCaptures:
+        '1': {name: punctuation.definition.tag.begin.cfml}
+        '2': {name: entity.name.tag.cfml}
+      end: (/?>)
+      endCaptures:
+        '0': {name: punctuation.definition.tag.end.cfml}
+      patterns:
       - include: '#tag-generic-attribute'
 
   cfquery:
