@@ -12,7 +12,7 @@ class CustomTags(ProjectIndex):
 
 
 	def __init__(self):
-		super().__init__("custom_tag_folders", {"index": {}, "tags": {}, "completions": {}, "closing_tags": []})
+		super().__init__("custom_tag_folders", {"index": {}, "tags": {}, "completions": {"prefixes": [], "tags": {}, "attributes": {}}, "closing_tags": []})
 
 
 	def new_project(self, project_name, project_data):
