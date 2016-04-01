@@ -39,6 +39,14 @@
 <!--- <- meta.tag.custom.cfml --->
   <!--- <- meta.tag.custom.cfml entity.name.tag.custom.cfml --->
 
+<cfif col eq 1>
+<!--- ^ meta.tag.cfml source.cfml.script variable.other.readwrite.cfml --->
+
+<cfset f.result = componentCall(
+    component="#f.componentName#",
+    <!--- <- meta.function-call.cfml meta.function-call.arguments.cfml entity.other.function-parameter.cfml --->
+)>
+
 <cfscript>
 foo = 'hello world';
 <!--- <- embedding.cfml text.html.cfml source.cfml.script variable.other.readwrite.cfml --->

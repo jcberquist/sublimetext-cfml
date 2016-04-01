@@ -1697,7 +1697,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=\n)</string>
+					<string>\n</string>
 					<key>name</key>
 					<string>comment.line.double-slash.cfml</string>
 				</dict>
@@ -2441,10 +2441,6 @@
 				<dict>
 					<key>include</key>
 					<string>#source-cfml-script-operators</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#source-cfml-script-component</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -3775,6 +3771,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#source-cfml-script-component</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#source-cfml-script-conditional</string>
 				</dict>
 				<dict>
@@ -4764,7 +4764,7 @@
   |query|queryparam|registry|rethrow|retry|savecontent|schedule|search|select|servlet|servletparam
   |setting|silent|sleep|slider|stopwatch|storedproc|table|textinput|thread|throw|timer|trace|transaction
   |update|video|videoplayer|videoplayerparam|wddx|window|xml|zip|zipparam)
-)(?!\s+in\b)(?=(\s+[a-zA-Z]|\s*[{]))</string>
+)(?=(\s+[a-zA-Z0-9:-]+\s*[=;{]|\s*[{]))</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>2</key>

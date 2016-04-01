@@ -27,6 +27,7 @@ repository:
 
   statements:
     patterns:
+    - include: '#component'
     - include: '#conditional'
     - name: meta.block.cfml
       begin: '\{'
@@ -183,7 +184,6 @@ repository:
     - include: '#string'
     - include: '#constructor'
     - include: '#operators'
-    - include: '#component'
     - include: '#keywords'
     - include: '#constants'
     - include: '#named-function'
@@ -217,7 +217,7 @@ repository:
       begin: //
       beginCaptures:
         '0': {name: punctuation.definition.comment.cfml}
-      end: (?=\n)
+      end: \n
 
   string:
     patterns:
@@ -1155,7 +1155,7 @@ repository:
           |query|queryparam|registry|rethrow|retry|savecontent|schedule|search|select|servlet|servletparam
           |setting|silent|sleep|slider|stopwatch|storedproc|table|textinput|thread|throw|timer|trace|transaction
           |update|video|videoplayer|videoplayerparam|wddx|window|xml|zip|zipparam)
-        )(?!\s+in\b)(?=(\s+[a-zA-Z]|\s*[{]))
+        )(?=(\s+[a-zA-Z0-9:-]+\s*[=;{]|\s*[{]))
       beginCaptures:
         '2': {name: meta.tag.script.cfml entity.name.tag.script.cfml}
       end: (\})|(?=;)

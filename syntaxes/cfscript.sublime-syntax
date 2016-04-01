@@ -39,6 +39,7 @@ contexts:
           pop: true
 
   statements:
+    - include: component
     - include: conditional
     - match: '\{'
       scope: meta.brace.curly.js
@@ -162,7 +163,6 @@ contexts:
     - include: string
     - include: constructor
     - include: operators
-    - include: component
     - include: keywords
     - include: constants
     - include: named-function
@@ -207,7 +207,7 @@ contexts:
       scope: punctuation.definition.comment.cfml
       push:
         - meta_scope: comment.line.double-slash.cfml
-        - match: (?=\n)
+        - match: \n
           pop: true
     - include: scope:embedding.cfml#comments
 
@@ -907,7 +907,7 @@ contexts:
               |query|queryparam|registry|rethrow|retry|savecontent|schedule|search|select|servlet|servletparam
               |setting|silent|sleep|slider|stopwatch|storedproc|table|textinput|thread|throw|timer|trace|transaction
               |update|video|videoplayer|videoplayerparam|wddx|window|xml|zip|zipparam)
-            )(?!\s+in\b)(?=(\s+[a-zA-Z]|\s*[{]))
+            )(?=(\s+[a-zA-Z0-9:-]+\s*[=;{]|\s*[{]))
       captures:
         2: entity.name.tag.script.cfml
       push: tag-generic-attribute-script
@@ -1056,7 +1056,6 @@ contexts:
       set:
         - meta_scope: meta.support.function-call.cfml
         - include: support-call-params
-
 
   support-method-call:
     - match: |-
