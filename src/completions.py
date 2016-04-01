@@ -26,11 +26,12 @@ def get_completions(source_type, *args):
 	return full_completion_list
 
 def get_base_info(view, prefix, position):
-	file_name = view.file_name().replace("\\", "/").split("/").pop().lower() if view.file_name() else None
+	file_path = view.file_name().replace("\\", "/") if view.file_name() else None
+	file_name = file_path.split("/").pop().lower() if file_path else None
 	project_name = utils.get_project_name(view)
 	prefix_start = position - len(prefix)
 	previous_char = view.substr(prefix_start - 1)
-	return {"file_name": file_name, "project_name": project_name, "prefix_start": prefix_start, "previous_char": previous_char}
+	return {"file_path": file_path, "file_name": file_name, "project_name": project_name, "prefix_start": prefix_start, "previous_char": previous_char}
 
 def get_tag_completions(view, prefix, position):
 	info = get_base_info(view, prefix, position)
