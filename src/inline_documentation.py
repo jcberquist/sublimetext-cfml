@@ -66,7 +66,7 @@ def generate_documentation(docs, current_index):
 def display_documentation(view, docs, current_index=0):
 	doc_html = generate_documentation(docs, current_index)
 	on_navigate = get_on_navigate(view, docs, current_index)
-	view.show_popup(doc_html, max_width=640, max_height=320, on_navigate=on_navigate)
+	view.show_popup(doc_html, max_width=1024, max_height=480, on_navigate=on_navigate)
 
 class CfmlInlineDocumentationCommand(sublime_plugin.TextCommand):
 
