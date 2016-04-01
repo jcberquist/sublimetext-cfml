@@ -9,14 +9,17 @@ def build(project_name, file_paths, get_extended_metadata_by_file_path):
   completions = {}
   for file_path in file_paths:
     extended_metadata = get_extended_metadata_by_file_path(project_name, file_path)
-    completions[file_path] = {}
-    completions[file_path]["constructor"] = None
-    if "init" in extended_metadata["functions"]:
-      constructor_meta = extended_metadata["functions"]["init"]
-      constructor_loc = extended_metadata["function_file_map"]["init"]
-      completions[file_path]["constructor"] = make_completion(constructor_meta, constructor_loc)
-    completions[file_path]["functions"] = make_completions(extended_metadata["functions"], extended_metadata["function_file_map"])
+    completions[file_path] = build_file_completions(extended_metadata)
   return completions
+
+def build_file_completions(extended_metadata):
+  file_completions = {"constructor": None}
+  if "init" in extended_metadata["functions"]:
+    constructor_meta = extended_metadata["functions"]["init"]
+    constructor_loc = extended_metadata["function_file_map"]["init"]
+    file_completions["constructor"] = make_completion(constructor_meta, constructor_loc)
+  file_completions["functions"] = make_completions(extended_metadata["functions"], extended_metadata["function_file_map"])
+  return file_completions
 
 def make_completions(funct_meta, funct_cfcs):
   return [make_completion(funct_meta[funct_key], funct_cfcs[funct_key]) for funct_key in sorted(funct_meta)]

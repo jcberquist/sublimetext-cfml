@@ -1,6 +1,8 @@
 import sublime
 from functools import partial
 from .component_project_index import get_extended_metadata_by_file_path
+from .. import utils, minihtml
+
 
 STYLES = {
 	"side_color": "#4C9BB0",
@@ -8,18 +10,8 @@ STYLES = {
 	"header_bg_color": "#E4EEF1",
 	"text_color": "#272B33"
 }
+SYNTAX_EXT = "sublime-syntax" if int(sublime.version()) >= 3092 else "tmLanguage"
 
-def open_file_at_symbol(view, file_path, symbol):
-	index_locations = view.window().lookup_symbol_in_index(symbol)
-
-	for full_path, project_path, rowcol in index_locations:
-		if full_path == file_path:
-			row, col = rowcol
-			view.window().open_file(full_path + ":" + str(row) + ":" + str(col), sublime.ENCODED_POSITION | sublime.FORCE_GROUP)
-			break
-	else:
-		# might be a setter, so for now just open the file
-		view.window().open_file(file_path)
 
 def on_navigate(view, file_path, function_file_map, href):
 	if href == "__go_to_component":
@@ -30,24 +22,31 @@ def on_navigate(view, file_path, function_file_map, href):
 		file_path = function_file_map[href.lower()]
 		if file_path[1] == ":":
 			file_path = "/" + file_path[0] + file_path[2:]
-		open_file_at_symbol(view, file_path, href)
+		view.window().run_command('cfml_navigate_to_method', {"file_path": file_path, "href": href})
+
 
 def get_documentation(view, project_name, file_path, header):
 	extended_metadata = get_extended_metadata_by_file_path(project_name, file_path)
+	model_doc = build_documentation(extended_metadata, file_path, header)
+	callback = partial(on_navigate, view, file_path, extended_metadata["function_file_map"])
+	return model_doc, callback
 
+def build_documentation(extended_metadata, file_path, header):
 	model_doc = dict(STYLES)
 	model_doc["links"] = []
+	model_doc["description"] = ""
 
 	model_doc["header"] = header
-	model_doc["description"] = "<strong>path</strong>: <a class=\"alt-link\" href=\"__go_to_component\">" + file_path + "</a>"
+	if file_path:
+		model_doc["description"] += "<strong>path</strong>: <a class=\"alt-link\" href=\"__go_to_component\">" + file_path + "</a><br>"
 
 	for key in ["entityname","extends"]:
 		if extended_metadata[key]:
-			model_doc["description"] += "<br><strong>" + key + "</strong>: " + extended_metadata[key]
+			model_doc["description"] += "<strong>" + key + "</strong>: " + extended_metadata[key] + "<br>"
 
 	for key in ["accessors","persistent"]:
 		if extended_metadata[key]:
-			model_doc["description"] += "<br><strong>" + key + "</strong>: true"
+			model_doc["description"] += "<strong>" + key + "</strong>: true"
 
 	model_doc["body"] = ""
 	if len(extended_metadata["properties"]) > 0:
@@ -77,16 +76,31 @@ def get_documentation(view, project_name, file_path, header):
 			model_doc["body"] += "</div><div class=\"method-box\">".join(functions["private"])
 			model_doc["body"] += "</div>"
 
-	callback = partial(on_navigate, view, file_path, extended_metadata["function_file_map"])
-	return model_doc, callback
+	return model_doc
+
 
 def get_method_documentation(view, project_name, file_path, function_name, header):
 	extended_metadata = get_extended_metadata_by_file_path(project_name, file_path)
+
+	function_file_path = extended_metadata["function_file_map"][function_name]
+	with open(function_file_path, "r") as f:
+		file_string = f.read()
+	cfml_minihtml_view = view.window().create_output_panel("cfml_minihtml")
+	cfml_minihtml_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/cfml." + SYNTAX_EXT)
+	cfml_minihtml_view.run_command("append", {"characters": file_string, "force": True, "scroll_to_end": True})
+
+	model_doc = build_method_documentation(extended_metadata, function_name, header, cfml_minihtml_view)
+	view.window().destroy_output_panel("cfml_minihtml")
+	callback = partial(on_navigate, view, file_path, extended_metadata["function_file_map"])
+	return model_doc, callback
+
+
+def build_method_documentation(extended_metadata, function_name, header, view = None):
 	function_file_path = extended_metadata["function_file_map"][function_name]
 
 	funct = extended_metadata["functions"][function_name]
 	model_doc = dict(STYLES)
-	model_doc["links"] = [{"href": funct.name, "text": "Go to Definition"}]
+	model_doc["links"] = []
 
 	model_doc["header"] = header
 	if funct.meta["access"] and len(funct.meta["access"]) > 0:
@@ -94,7 +108,7 @@ def get_method_documentation(view, project_name, file_path, function_name, heade
 	if funct.meta["returntype"] and len(funct.meta["returntype"]) > 0:
 		model_doc["header"] += ":" + funct.meta["returntype"]
 
-	model_doc["description"] = "<small>" + function_file_path + "</small>"
+	model_doc["description"] = "<strong>path</strong>: <a class=\"alt-link\" href=\"" + funct.name + "\">" + function_file_path + "</a>"
 
 	model_doc["body"] = ""
 	if len(funct.meta["arguments"]) > 0:
@@ -111,8 +125,16 @@ def get_method_documentation(view, project_name, file_path, function_name, heade
 			model_doc["body"] += "</li>"
 		model_doc["body"] += "</ul>"
 
-	callback = partial(on_navigate, view, file_path, extended_metadata["function_file_map"])
-	return model_doc, callback
+	if view:
+		function_region = get_function_region(view, function_name)
+		css, html = minihtml.from_view(view, function_region)
+		css = css.replace("<style>", "").replace("</style>", "")
+
+		model_doc["styles"] = css
+		model_doc["body"] += html
+
+	return model_doc
+
 
 def parse_functions(file_path, metadata):
 	result = {}
@@ -127,10 +149,12 @@ def parse_functions(file_path, metadata):
 		result["constructor"] = parse_function(functions[constructor], function_file_map[constructor], file_path)
 	return result
 
+
 def is_public_function(function):
 	if function.meta["access"] and function.meta["access"] == "private":
 		return False
 	return True
+
 
 def parse_function(function, funct_file_path, file_path):
 	result = "<a class=\"alt-link\" href=\"" + function.name + "\">"
@@ -158,6 +182,7 @@ def parse_function(function, funct_file_path, file_path):
 
 	return result
 
+
 def parse_properties(file_path, metadata):
 	properties = metadata["properties"]
 	property_file_map = metadata["property_file_map"]
@@ -173,3 +198,25 @@ def parse_property(prop, prop_file_path, file_path):
 	if accessors:
 		result += "<br><small><strong>accessors</strong>: <em>" + ", ".join(accessors) + "</em></small>"
 	return result
+
+
+def get_function_region(view, function_name):
+	functions = view.find_by_selector("entity.name.function.cfml -meta.function.body")
+	for funct_region in functions:
+		if view.substr(funct_region).lower() == function_name:
+			pt = funct_region.begin()
+			break
+	else:
+		return None
+
+	if view.match_selector(pt, "meta.function.cfml"):
+		# tag function
+		decl = utils.get_scope_region_containing_point(view, pt, "meta.function.cfml")
+		body = utils.get_scope_region_containing_point(view, decl.end() + 1, "meta.function.body.tag.cfml")
+		end = utils.get_scope_region_containing_point(view, body.end() + 1, "meta.tag.cfml")
+		return sublime.Region(decl.begin(), end.end())
+	else:
+		# script function
+		decl = utils.get_scope_region_containing_point(view, pt, "meta.function.declaration.cfml")
+		body = utils.get_scope_region_containing_point(view, decl.end() + 1, "meta.function.body.cfml")
+		return sublime.Region(decl.begin(), body.end())
