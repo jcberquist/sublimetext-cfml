@@ -1,0 +1,24 @@
+CFML v0.8.0 Changelog:
+
+- Support for completions and documentation in the active CFC file
+
+  When editing a CFC, completions for the methods of that component are
+  now offered; this includes offering completions after typing `this.`.
+  If the component extends another component and that parent component is
+  contained in a project index, then you will also be offered completions
+  from the parent component, as well as completions after typing `super.`.
+
+  The F1 documentation command and CTRL-ALT-Click can be used on component
+  method calls, as well as on the `this` and `super` keywords.
+
+- Source code preview when using the F1 documentation command on CFC methods has
+  been added. This is somewhat experimental, and feedback is welcome. Please note
+  that it will currently truncate longer functions in order to avoid crashing
+  Sublime Text.
+
+- Fixed several issues reported on GitHub
+
+- Updated regex patterns used in syntax to remove those not compatible with Sublime
+  Text's new regex engine
+
+- Bug fix for default custom tag project data
