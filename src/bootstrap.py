@@ -3,9 +3,10 @@ from . import basecompletions
 from . import dotpaths
 from . import cfdocs
 from . import cfcs
-from . import fw1
-from . import testbox
 from . import custom_tags
+from . import fw1
+from . import in_file_completions
+from . import testbox
 from .build_cfml_tmlanguage import CfmlBuildTmlanguageCommand
 from .cfc_dotted_path import CfmlCfcDottedPathCommand
 from .controller_view_toggle import CfmlToggleControllerViewCommand
@@ -13,3 +14,4 @@ from .color_scheme_styles import CfmlColorSchemeStylesCommand
 from .goto_cfml_file import CfmlGotoFileCommand
 from .inline_documentation import CfmlInlineDocumentationCommand
 from .testbox import TestboxCommand
+from .model_index import CfmlNavigateToMethodCommand
