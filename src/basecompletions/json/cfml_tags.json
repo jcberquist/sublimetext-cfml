@@ -59,12 +59,12 @@
   "cfcalendar": {
     "attributes": [["name"], ["daynames", "disabled", "enabled", "endrange", "firstdayofweek", "height", "mask", "monthnames", "onblur", "onchange", "onfocus", "selecteddate", "startrange", "style", "tooltip", "visible", "width"]],
     "attribute_values": {
-      "daynames": ["S,M,T,W,Th,F,S", "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday", "Sun,Mon,Tue,Wed,Thu,Fri,Sat"],
+      "daynames": ["S,  M,  T,  W,  Th,  F,  S", "Sunday,  Monday,  Tuesday,  Wednesday,  Thursday,  Friday,  Saturday", "Sun,  Mon,  Tue,  Wed,  Thu,  Fri,  Sat"],
       "disabled": ["true", "false"],
       "enabled": ["true", "false"],
       "firstdayofweek": ["0", "1", "2", "3", "4", "5", "6"],
       "mask": ["MM/DD/YYYY", "DD/MM/YYYY", "MM/YYYY", "MM/YY", "YYYY-MM-DD", "EEE DD. MMM YYYY"],
-      "monthnames": ["January,February,March,April,May,June,July,August,September,October,November,December", "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"],
+      "monthnames": ["January,  February,  March,  April,  May,  June,  July,  August,  September,  October,  November,  December", "Jan,  Feb,  Mar,  Apr,  May,  Jun,  Jul,  Aug,  Sep,  Oct,  Nov,  Dec"],
       "style": ["haloBlue", "haloGreen", "haloOrange", "haloSilver"],
       "visible": ["true", "false"]
     }
@@ -145,7 +145,7 @@
     }
   },
   "cfcomponent": {
-    "attributes": [[], ["accessors", "attribute", "batchsize", "bindingname", "cacheName", "cacheUse", "catalog", "discriminatorColumn", "discriminatorValue", "displayname", "dynamicinsert", "dynamicupdate", "embedded", "entityname", "extends", "hint", "implements", "initmethod", "joinColumn", "lazy", "namespace", "optimisticlock", "output", "persistent", "porttypename", "readonly", "rowid", "saveMapping", "schema", "selectbeforeupdate", "serializable", "serviceaddress", "serviceportname", "style", "table", "wsdlfile"]],
+    "attributes": [[], ["accessors", "attribute", "batchsize", "bindingname", "cacheName", "cacheUse", "catalog", "discriminatorColumn", "discriminatorValue", "displayname", "dynamicinsert", "dynamicupdate", "embedded", "entityname", "extends", "hint", "implements", "initmethod", "joinColumn", "lazy", "mappedSuperClass", "namespace", "optimisticlock", "output", "persistent", "porttypename", "readonly", "rowid", "saveMapping", "schema", "selectbeforeupdate", "serializable", "serviceaddress", "serviceportname", "style", "table", "wsdlfile"]],
     "attribute_values": {
       "accessors": ["true", "false"],
       "attribute": ["true", "false"],
@@ -154,6 +154,7 @@
       "dynamicupdate": ["true", "false"],
       "embedded": ["true", "false"],
       "lazy": ["true", "false"],
+      "mappedSuperClass": ["true", "false"],
       "optimisticlock": ["none", "dirty", "all", "version"],
       "output": ["true", "false"],
       "persistent": ["true", "false"],
@@ -392,13 +393,14 @@
     }
   },
   "cfftp": {
-    "attributes": [["action"], ["actionparam", "asciiextensionlist", "attributes", "buffersize", "connection", "directory", "existing", "failifexists", "fingerprint", "item", "key", "localfile", "name", "new", "passive", "passphrase", "password", "port", "proxyserver", "remotefile", "result", "retrycount", "secure", "server", "stoponerror", "timeout", "transfermode", "username"]],
+    "attributes": [["action"], ["actionparam", "asciiextensionlist", "attributes", "buffersize", "connection", "directory", "existing", "failifexists", "fingerprint", "item", "key", "localfile", "name", "new", "passive", "passphrase", "password", "port", "proxyserver", "remotefile", "result", "retrycount", "secure", "server", "stoponerror", "systemtype", "timeout", "transfermode", "username"]],
     "attribute_values": {
       "action": ["open", "close", "changedir", "createdir", "listdir", "removedir", "getfile", "putfile", "rename", "remove", "getcurrentdir", "getcurrenturl", "existsdir", "existsfile", "exists", "quote", "site", "allo", "acct"],
       "failifexists": ["true", "false"],
       "passive": ["true", "false"],
       "secure": ["true", "false"],
       "stoponerror": ["true", "false"],
+      "systemtype": ["WINDOWS", "UNIX"],
       "transfermode": ["auto", "ascii", "binary"]
     }
   },
@@ -468,7 +470,7 @@
       "select": ["true", "false"],
       "textcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
       "type": ["string_noCase", "Boolean", "numeric", "date", "combobox", "image"],
-      "valuesdelimiter": [", ", ";", "|", ":"]
+      "valuesdelimiter": [",  ", ";", "|", ":"]
     }
   },
   "cfgridrow": {
@@ -510,14 +512,16 @@
     }
   },
   "cfhttp": {
-    "attributes": [["url"], ["charset", "clientcert", "clientcertpassword", "columns", "compression", "delimiter", "file", "firstrowasheaders", "getasbinary", "method", "multipart", "name", "password", "path", "port", "proxypassword", "proxyport", "proxyserver", "proxyuser", "redirect", "resolveurl", "result", "textqualifier", "throwonerror", "timeout", "useragent", "username"]],
+    "attributes": [["url"], ["authType", "charset", "clientcert", "clientcertpassword", "columns", "compression", "delimiter", "domain", "file", "firstrowasheaders", "getasbinary", "method", "multipart", "multipartType", "name", "password", "path", "port", "proxypassword", "proxyport", "proxyserver", "proxyuser", "redirect", "resolveurl", "result", "textqualifier", "throwonerror", "timeout", "useragent", "username", "workstation"]],
     "attribute_values": {
+      "authType": ["BASIC", "NTLM"],
       "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"],
       "delimiter": [",", ";", "|", ":"],
       "firstrowasheaders": ["true", "false"],
       "getasbinary": ["auto", "false", "true"],
-      "method": ["get", "post", "put", "delete", "head", "trace", "options"],
+      "method": ["get", "post", "put", "delete", "head", "trace", "options", "patch"],
       "multipart": ["false", "true"],
+      "multipartType": ["form-data", "related"],
       "redirect": ["true", "false"],
       "resolveurl": ["true", "false"],
       "textqualifier": ["\"", "'"],
@@ -697,7 +701,7 @@
     "attribute_values": {}
   },
   "cfloop": {
-    "attributes": [[], ["array", "characters", "collection", "condition", "delimiters", "endrow", "file", "from", "index", "item", "list", "query", "startrow", "step", "to"]],
+    "attributes": [[], ["array", "characters", "collection", "condition", "delimiters", "endrow", "file", "from", "group", "groupcasesensitive", "index", "item", "list", "query", "startrow", "step", "to"]],
     "attribute_values": {
       "delimiters": [",", ";", "|", ":"]
     }
@@ -826,8 +830,9 @@
     }
   },
   "cfoutput": {
-    "attributes": [[], ["group", "groupcasesensitive", "maxrows", "query", "startrow"]],
+    "attributes": [[], ["encodefor", "group", "groupcasesensitive", "maxrows", "query", "startrow"]],
     "attribute_values": {
+      "encodefor": ["html", "htmlattribute", "javascript", "css", "xml", "xmlattribute", "url", "xpath", "ldap", "dn"],
       "groupcasesensitive": ["true", "false"]
     }
   },
@@ -1042,7 +1047,7 @@
       "encryption": ["128-bit", "40-bit", "none"],
       "format": ["PDF", "FlashPaper", "Excel", "RTF", "HTML", "XML"],
       "overwrite": ["true", "false"],
-      "permissions": ["AllowPrinting,AllowCopy,AllowScreenReaders", "AllowPrinting", "AllowModifyContents", "AllowCopy", "AllowModifyAnnotations", "AllowFillIn", "AllowScreenReaders", "AllowAssembly", "AllowDegradedPrinting", "AllowPrinting,AllowModifyContents,AllowCopy,AllowModifyAnnotations,AllowFillIn,AllowScreenReaders,AllowAssembly,AllowDegradedPrinting"],
+      "permissions": ["AllowPrinting,  AllowCopy,  AllowScreenReaders", "AllowPrinting", "AllowModifyContents", "AllowCopy", "AllowModifyAnnotations", "AllowFillIn", "AllowScreenReaders", "AllowAssembly", "AllowDegradedPrinting", "AllowPrinting,  AllowModifyContents,  AllowCopy,  AllowModifyAnnotations,  AllowFillIn,  AllowScreenReaders,  AllowAssembly,  AllowDegradedPrinting"],
       "type": ["standard", "netscape", "microsoft"]
     }
   },

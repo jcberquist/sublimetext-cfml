@@ -1,0 +1,5 @@
+CFML v0.8.1 Changelog:
+
+- Updated function and tag completions to use latest cfdocs.org data
+
+- Minor syntax file updates (tag and function lists, typo fixes, tweaked a regex)
