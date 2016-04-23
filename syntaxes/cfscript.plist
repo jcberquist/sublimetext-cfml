@@ -15,122 +15,161 @@
 	<dict>
 		<key>anonymous-function</key>
 		<dict>
-			<key>begin</key>
-			<string>(?=\s*\bfunction\b)</string>
-			<key>end</key>
-			<string>\}</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>meta.function.body.cfml meta.brace.curly.cfml</string>
-				</dict>
-			</dict>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\{</string>
-					<key>beginCaptures</key>
+					<string>(?=(\s*\bfunction\b|\s*\([^\(]*?\)\s*=&gt;\s*\{))</string>
+					<key>end</key>
+					<string>\}</string>
+					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.curly.cfml</string>
+							<string>meta.function.body.cfml meta.brace.curly.cfml</string>
 						</dict>
 					</dict>
-					<key>end</key>
-					<string>(?=\})</string>
-					<key>name</key>
-					<string>meta.function.body.cfml</string>
 					<key>patterns</key>
 					<array>
-						<dict>
-							<key>include</key>
-							<string>#statements</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>meta.function.anonymous.cfml meta.function.declaration.cfml</string>
-						</dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>storage.type.function.cfml</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>\b(function)\b\s*</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>[_$a-zA-Z][$\w]*</string>
-					<key>name</key>
-					<string>meta.function.anonymous.cfml meta.function.declaration.cfml entity.name.function.cfml</string>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>\(</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.parameters.begin.cfml</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(?=\))</string>
-					<key>name</key>
-					<string>meta.function.anonymous.cfml meta.function.declaration.cfml meta.function.parameters.cfml</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>match</key>
-							<string>(?i:required)</string>
-							<key>name</key>
-							<string>keyword.other.required.argument.cfml</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>\b(?i:(function|string|date|struct|array|void|binary|numeric|boolean|query|xml|uuid|any))\b</string>
-							<key>name</key>
-							<string>storage.type.cfml</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>[_$a-zA-Z][$\w]*</string>
-							<key>name</key>
-							<string>variable.parameter.function.cfml</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>,</string>
-							<key>name</key>
-							<string>punctuation.separator.parameter.function.cfml</string>
-						</dict>
 						<dict>
 							<key>begin</key>
-							<string>=</string>
+							<string>\{</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.cfml</string>
+									<string>meta.brace.curly.cfml</string>
 								</dict>
 							</dict>
 							<key>end</key>
-							<string>(?=[,)])</string>
+							<string>(?=\})</string>
 							<key>name</key>
-							<string>meta.parameter.optional.cfml</string>
+							<string>meta.function.body.cfml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#statements</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>meta.function.anonymous.cfml meta.function.declaration.cfml</string>
+								</dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>storage.type.function.cfml</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>\b(function)\b\s*</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>meta.function.anonymous.cfml meta.function.declaration.cfml</string>
+								</dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>storage.type.function.arrow.cfml</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>\s*(=&gt;)\s*</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>[_$a-zA-Z][$\w]*</string>
+							<key>name</key>
+							<string>meta.function.anonymous.cfml meta.function.declaration.cfml entity.name.function.cfml</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>\(</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.parameters.begin.cfml</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?=\))</string>
+							<key>name</key>
+							<string>meta.function.anonymous.cfml meta.function.declaration.cfml meta.function.parameters.cfml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#function-parameter</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>\)</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>meta.function.parameters.cfml punctuation.definition.parameters.end.cfml</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?=(\{|=&gt;))</string>
+							<key>name</key>
+							<string>meta.function.anonymous.cfml meta.function.declaration.cfml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#tag-generic-attribute</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=\s*\([^\(]*?\)\s*=&gt;)</string>
+					<key>end</key>
+					<string>(?=[);}\],\n])</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>\s*(=&gt;)\s*</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>meta.function.anonymous.cfml meta.function.declaration.cfml</string>
+								</dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>storage.type.function.arrow.cfml</string>
+								</dict>
+							</dict>
+							<key>contentName</key>
+							<string>meta.function.body.cfml</string>
+							<key>end</key>
+							<string>(?=[);}\],\n])</string>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -140,33 +179,150 @@
 							</array>
 						</dict>
 						<dict>
+							<key>begin</key>
+							<string>\(</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.parameters.begin.cfml</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>\)</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.parameters.end.cfml</string>
+								</dict>
+							</dict>
+							<key>name</key>
+							<string>meta.function.anonymous.cfml meta.function.declaration.cfml meta.function.parameters.cfml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#function-parameter</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>arrow-function-declaration</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?=\([^\(]*?\)\s*=&gt;\s*\{)</string>
+					<key>end</key>
+					<string>(=&gt;)\s*</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.function.arrow.cfml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.function.declaration.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
 							<key>include</key>
-							<string>#comments</string>
+							<string>#arrow-function-declaration-parameters</string>
 						</dict>
 					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\)</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>meta.function.parameters.cfml punctuation.definition.parameters.end.cfml</string>
-						</dict>
-					</dict>
+					<string>(?=\([^\(]*?\)\s*=&gt;)</string>
 					<key>end</key>
-					<string>(?=\{)</string>
-					<key>name</key>
-					<string>meta.function.anonymous.cfml meta.function.declaration.cfml</string>
+					<string>(?=[);}\],\n])</string>
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>include</key>
-							<string>#tag-generic-attribute</string>
+							<key>begin</key>
+							<string>(?=\()</string>
+							<key>end</key>
+							<string>(?=(=&gt;))</string>
+							<key>name</key>
+							<string>meta.function.declaration.cfml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#arrow-function-declaration-parameters</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(=&gt;)\s*</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>meta.function.declaration.cfml</string>
+								</dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>storage.type.function.arrow.cfml</string>
+								</dict>
+							</dict>
+							<key>contentName</key>
+							<string>meta.function.body.cfml</string>
+							<key>end</key>
+							<string>(?=[);}\],\n])</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#expressions</string>
+								</dict>
+							</array>
 						</dict>
 					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>arrow-function-declaration-parameters</key>
+		<dict>
+			<key>begin</key>
+			<string>\(</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.begin.cfml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.parameters.end.cfml</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.function.parameters.cfml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#function-parameter</string>
 				</dict>
 			</array>
 		</dict>
@@ -1301,55 +1457,8 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>match</key>
-							<string>(?i:required)</string>
-							<key>name</key>
-							<string>keyword.other.required.argument.cfml</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>\b(?i:(function|string|date|struct|array|void|binary|numeric|boolean|query|xml|uuid|any))\b</string>
-							<key>name</key>
-							<string>storage.type.cfml</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>[_$a-zA-Z][$\w]*</string>
-							<key>name</key>
-							<string>variable.parameter.function.cfml</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>,</string>
-							<key>name</key>
-							<string>punctuation.separator.parameter.function.cfml</string>
-						</dict>
-						<dict>
-							<key>begin</key>
-							<string>=</string>
-							<key>beginCaptures</key>
-							<dict>
-								<key>0</key>
-								<dict>
-									<key>name</key>
-									<string>keyword.operator.assignment.cfml</string>
-								</dict>
-							</dict>
-							<key>end</key>
-							<string>(?=[,)])</string>
-							<key>name</key>
-							<string>meta.parameter.optional.cfml</string>
-							<key>patterns</key>
-							<array>
-								<dict>
-									<key>include</key>
-									<string>#expressions</string>
-								</dict>
-							</array>
-						</dict>
-						<dict>
 							<key>include</key>
-							<string>#comments</string>
+							<string>#function-parameter</string>
 						</dict>
 					</array>
 				</dict>
@@ -1365,7 +1474,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=\{)</string>
+					<string>(?=(\{|=&gt;))</string>
 					<key>name</key>
 					<string>meta.function.declaration.cfml</string>
 					<key>patterns</key>
@@ -1375,6 +1484,63 @@
 							<string>#tag-generic-attribute</string>
 						</dict>
 					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>function-parameter</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(?i:required)</string>
+					<key>name</key>
+					<string>keyword.other.required.argument.cfml</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(?i:(function|string|date|struct|array|void|binary|numeric|boolean|query|xml|uuid|any))\b</string>
+					<key>name</key>
+					<string>storage.type.cfml</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[_$a-zA-Z][$\w]*</string>
+					<key>name</key>
+					<string>variable.parameter.function.cfml</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>,</string>
+					<key>name</key>
+					<string>punctuation.separator.parameter.function.cfml</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>=</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.assignment.cfml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=[,)])</string>
+					<key>name</key>
+					<string>meta.parameter.optional.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expressions</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
 				</dict>
 			</array>
 		</dict>
@@ -1722,7 +1888,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?=(([_$a-zA-Z][$\w]*)\s*(\.)\s*)+([_$a-zA-Z][$\w]*)\s*(=)\s*\bfunction\b)</string>
+					<string>(?=(([_$a-zA-Z][$\w]*)\s*(\.)\s*)+([_$a-zA-Z][$\w]*)\s*(=)\s*(\s*\bfunction\b|\s*\([^\(]*?\)\s*=&gt;\s*\{))</string>
 					<key>end</key>
 					<string>\}</string>
 					<key>endCaptures</key>
@@ -1757,6 +1923,10 @@
 									<string>#statements</string>
 								</dict>
 							</array>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#arrow-function-declaration</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -1820,7 +1990,74 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?=([_$a-zA-Z][$\w]*)\s*(=)\s*\s*\bfunction\b)</string>
+					<string>(?=(([_$a-zA-Z][$\w]*)\s*(\.)\s*)+([_$a-zA-Z][$\w]*)\s*(=)\s*\([^\(]*?\)\s*=&gt;)</string>
+					<key>end</key>
+					<string>(?=[);}\],\n])</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#arrow-function-declaration</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?=[_$a-zA-Z][$\w]*\s*\.)</string>
+							<key>end</key>
+							<string>\.</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.accessor.cfml</string>
+								</dict>
+							</dict>
+							<key>name</key>
+							<string>meta.function.declaration.cfml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#cfml-scopes</string>
+								</dict>
+								<dict>
+									<key>match</key>
+									<string>[_$a-zA-Z][$\w]*</string>
+									<key>name</key>
+									<string>support.class.cfml</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?=[_$a-zA-Z][$\w]*\s*(=)\s*)</string>
+							<key>end</key>
+							<string>\s*(=)\s*</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.assignment.cfml</string>
+								</dict>
+							</dict>
+							<key>name</key>
+							<string>meta.function.declaration.cfml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>match</key>
+									<string>[_$a-zA-Z][$\w]*</string>
+									<key>name</key>
+									<string>meta.property.cfml entity.name.function.cfml</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=([_$a-zA-Z][$\w]*)\s*(=)\s*(\s*\bfunction\b|\s*\([^\(]*?\)\s*=&gt;\s*\{))</string>
 					<key>end</key>
 					<string>\}</string>
 					<key>endCaptures</key>
@@ -1858,7 +2095,55 @@
 						</dict>
 						<dict>
 							<key>include</key>
+							<string>#arrow-function-declaration</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#function-declaration</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?=[_$a-zA-Z][$\w]*\s*(=)\s*)</string>
+							<key>end</key>
+							<string>\s*(=)\s*</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.assignment.cfml</string>
+								</dict>
+							</dict>
+							<key>name</key>
+							<string>meta.function.declaration.cfml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>match</key>
+									<string>[A-Z][_$\dA-Z]*</string>
+									<key>name</key>
+									<string>variable.other.constant.cfml entity.name.function.cfml</string>
+								</dict>
+								<dict>
+									<key>match</key>
+									<string>[_$a-zA-Z][$\w]*</string>
+									<key>name</key>
+									<string>variable.other.readwrite.cfml entity.name.function.cfml</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=([_$a-zA-Z][$\w]*)\s*(=)\s*\([^\(]*?\)\s*=&gt;)</string>
+					<key>end</key>
+					<string>(?=[);}\],\n])</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#arrow-function-declaration</string>
 						</dict>
 						<dict>
 							<key>begin</key>
@@ -2264,7 +2549,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?&lt;=\))|(\})|(?:([A-Z][_$\dA-Z]*)|([_$a-zA-Z][$\w]*))(?=$|[^$\w])(?!(\s*\(|\s*(=)\s*\bfunction\b))</string>
+					<string>(?&lt;=\))|(?=\n)|(\})|(;)|(?:([A-Z][_$\dA-Z]*)|([_$a-zA-Z][$\w]*))(?=\n|[^$\w])(?!(\s*\(|\s*=\s*(function\b|\([^\(]*?\)\s*=&gt;)))</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
@@ -2275,9 +2560,14 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>meta.property.constant.cfml</string>
+							<string>punctuation.terminator.statement.cfml</string>
 						</dict>
 						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>meta.property.constant.cfml</string>
+						</dict>
+						<key>4</key>
 						<dict>
 							<key>name</key>
 							<string>meta.property.cfml</string>
@@ -2287,7 +2577,7 @@
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>(?=([_$a-zA-Z][$\w]*)\s*(=)\s*\s*\bfunction\b)</string>
+							<string>(?=([_$a-zA-Z][$\w]*)\s*(=)\s*(function\b|\([^\(]*?\)\s*=&gt;\s*\{))</string>
 							<key>end</key>
 							<string>(?=\})</string>
 							<key>endCaptures</key>
@@ -2343,11 +2633,50 @@
 										</dict>
 									</dict>
 									<key>match</key>
-									<string>([_$a-zA-Z][$\w])*\s*(=)\s*</string>
+									<string>([_$a-zA-Z][$\w]*)\s*(=)\s*</string>
 								</dict>
 								<dict>
 									<key>include</key>
 									<string>#function-declaration</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#arrow-function-declaration</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?=([_$a-zA-Z][$\w]*)\s*(=)\s*\([^\(]*?\)\s*=&gt;)</string>
+							<key>end</key>
+							<string>(?=[);}\],\n])</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>captures</key>
+									<dict>
+										<key>0</key>
+										<dict>
+											<key>name</key>
+											<string>meta.function.declaration.cfml</string>
+										</dict>
+										<key>1</key>
+										<dict>
+											<key>name</key>
+											<string>meta.property.cfml entity.name.function.cfml</string>
+										</dict>
+										<key>2</key>
+										<dict>
+											<key>name</key>
+											<string>keyword.operator.assignment.cfml</string>
+										</dict>
+									</dict>
+									<key>match</key>
+									<string>([_$a-zA-Z][$\w]*)\s*(=)\s*</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#arrow-function-declaration</string>
 								</dict>
 							</array>
 						</dict>
@@ -2622,7 +2951,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*\bfunction\b)</string>
+					<string>(?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*(\bfunction\b|\([^\(]*?\)\s*=&gt;\s*\{))</string>
 					<key>end</key>
 					<string>\}</string>
 					<key>endCaptures</key>
@@ -2630,100 +2959,14 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.block.cfml meta.brace.curly.cfml</string>
+							<string>meta.function.body.cfml meta.brace.curly.cfml</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>begin</key>
-							<string>'</string>
-							<key>beginCaptures</key>
-							<dict>
-								<key>0</key>
-								<dict>
-									<key>name</key>
-									<string>punctuation.definition.string.begin.cfml</string>
-								</dict>
-							</dict>
-							<key>contentName</key>
-							<string>entity.name.function.cfml</string>
-							<key>end</key>
-							<string>(')(?!')</string>
-							<key>endCaptures</key>
-							<dict>
-								<key>1</key>
-								<dict>
-									<key>name</key>
-									<string>punctuation.definition.string.end.cfml</string>
-								</dict>
-							</dict>
-							<key>name</key>
-							<string>meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.single.cfml</string>
-							<key>patterns</key>
-							<array>
-								<dict>
-									<key>match</key>
-									<string>''</string>
-									<key>name</key>
-									<string>constant.character.escape.quote.cfml</string>
-								</dict>
-								<dict>
-									<key>include</key>
-									<string>#hash-delimiters</string>
-								</dict>
-							</array>
-						</dict>
-						<dict>
-							<key>begin</key>
-							<string>"</string>
-							<key>beginCaptures</key>
-							<dict>
-								<key>0</key>
-								<dict>
-									<key>name</key>
-									<string>punctuation.definition.string.begin.cfml</string>
-								</dict>
-							</dict>
-							<key>contentName</key>
-							<string>entity.name.function.cfml</string>
-							<key>end</key>
-							<string>(")(?!")</string>
-							<key>endCaptures</key>
-							<dict>
-								<key>1</key>
-								<dict>
-									<key>name</key>
-									<string>punctuation.definition.string.end.cfml</string>
-								</dict>
-							</dict>
-							<key>name</key>
-							<string>meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.double.cfml</string>
-							<key>patterns</key>
-							<array>
-								<dict>
-									<key>match</key>
-									<string>""</string>
-									<key>name</key>
-									<string>constant.character.escape.quote.cfml</string>
-								</dict>
-								<dict>
-									<key>include</key>
-									<string>#hash-delimiters</string>
-								</dict>
-							</array>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>[_$a-zA-Z][$\w]*</string>
-							<key>name</key>
-							<string>meta.function.declaration.cfml meta.struct-literal.key.cfml entity.name.function.cfml</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>(:|=)</string>
-							<key>name</key>
-							<string>meta.function.declaration.cfml punctuation.separator.key-value.cfml</string>
+							<key>include</key>
+							<string>#struct-literal-function-keys</string>
 						</dict>
 						<dict>
 							<key>begin</key>
@@ -2750,7 +2993,7 @@
 									<key>end</key>
 									<string>(?=\})</string>
 									<key>name</key>
-									<string>meta.block.cfml</string>
+									<string>meta.function.body.cfml</string>
 									<key>patterns</key>
 									<array>
 										<dict>
@@ -2760,6 +3003,59 @@
 									</array>
 								</dict>
 							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?=\s*\([^\(]*?\)\s*=&gt;\s*\{)</string>
+							<key>end</key>
+							<string>(?=\})</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#arrow-function-declaration</string>
+								</dict>
+								<dict>
+									<key>begin</key>
+									<string>\{</string>
+									<key>beginCaptures</key>
+									<dict>
+										<key>0</key>
+										<dict>
+											<key>name</key>
+											<string>meta.brace.curly.cfml</string>
+										</dict>
+									</dict>
+									<key>end</key>
+									<string>(?=\})</string>
+									<key>name</key>
+									<string>meta.function.body.cfml</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>#statements</string>
+										</dict>
+									</array>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*|\([^\(]*?\)\s*=&gt;)</string>
+					<key>end</key>
+					<string>(?=[);}\],\n])</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#struct-literal-function-keys</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#arrow-function-declaration</string>
 						</dict>
 					</array>
 				</dict>
@@ -2804,6 +3100,102 @@
 							<string>#expressions</string>
 						</dict>
 					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>struct-literal-function-keys</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.cfml</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>entity.name.function.cfml</string>
+					<key>end</key>
+					<string>(')(?!')</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.cfml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.single.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>''</string>
+							<key>name</key>
+							<string>constant.character.escape.quote.cfml</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#hash-delimiters</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.cfml</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>entity.name.function.cfml</string>
+					<key>end</key>
+					<string>(")(?!")</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.cfml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.double.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>""</string>
+							<key>name</key>
+							<string>constant.character.escape.quote.cfml</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#hash-delimiters</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[_$a-zA-Z][$\w]*</string>
+					<key>name</key>
+					<string>meta.function.declaration.cfml meta.struct-literal.key.cfml entity.name.function.cfml</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(:|=)</string>
+					<key>name</key>
+					<string>meta.function.declaration.cfml punctuation.separator.key-value.cfml</string>
 				</dict>
 			</array>
 		</dict>

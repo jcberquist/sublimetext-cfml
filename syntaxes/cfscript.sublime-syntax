@@ -14,6 +14,7 @@ variables:
   identifier: '[_$[:alpha:]][_$[:alnum:]]*'
   constant_identifier: '[[:upper:]][_$[:digit:][:upper:]]*\b'
   func_lookahead: '\s*\bfunction\b'
+  arrow_func_lookahead: '\s*\([^\(]*?\)\s*=>'
 
 contexts:
   prototype:
@@ -466,17 +467,21 @@ contexts:
         - include: function-declaration-parameters
         - match: '(?=\{)'
           set: function-block
-    - match: '(?=(({{identifier}})\s*(\.)\s*)+({{identifier}})\s*(=)\s*{{func_lookahead}})'
+    - match: '(?=(({{identifier}})\s*(\.)\s*)+({{identifier}})\s*(=)\s*({{func_lookahead}}|{{arrow_func_lookahead}}))'
       push:
         - meta_scope: meta.function.declaration.cfml
         - match: '(?={{func_lookahead}})'
           set: function-declaration
+        - match: '(?={{arrow_func_lookahead}})'
+          set: arrow-function-declaration
         - include: function-declaration-identifiers
-    - match: '(?=({{identifier}})\s*(=)\s*{{func_lookahead}})'
+    - match: '(?=({{identifier}})\s*(=)\s*({{func_lookahead}}|{{arrow_func_lookahead}}))'
       push:
         - meta_scope: meta.function.declaration.cfml
         - match: '(?={{func_lookahead}})'
           set: function-declaration
+        - match: '(?={{arrow_func_lookahead}})'
+          set: arrow-function-declaration
         - include: function-declaration-single-identifier
     - match: '(?={{func_lookahead}}\s+{{identifier}})'
       push: function-declaration
@@ -486,6 +491,10 @@ contexts:
       push:
         - meta_content_scope: meta.function.anonymous.cfml
         - include: function-declaration
+    - match: '(?={{arrow_func_lookahead}})'
+      push:
+        - meta_content_scope: meta.function.anonymous.cfml
+        - include: arrow-function-declaration
 
   function-declaration-identifiers:
     - match: '(?={{identifier}}\s*\.)'
@@ -521,6 +530,12 @@ contexts:
         - match: (?=.)
           pop: true
 
+  either-function-declaration:
+    - match: '(?={{func_lookahead}})'
+      push: function-declaration
+    - match: '(?={{arrow_func_lookahead}})'
+      push: arrow-function-declaration
+
   function-declaration:
     - match: \b(function)\b\s*
       scope: meta.function.declaration.cfml
@@ -538,14 +553,53 @@ contexts:
           pop: true
         - include: scope:embedding.cfml#tag-generic-attribute
 
+  arrow-function-declaration:
+    - match: '\s*(=>)\s*(?=\{)'
+      scope: meta.function.declaration.cfml
+      captures:
+        1: storage.type.function.arrow.cfml
+      set: function-block
+    - match: '(\s*(=>))\s*'
+      captures:
+        0: meta.function.declaration.cfml
+        2: storage.type.function.arrow.cfml
+      set: arrow-function-concise-body
+    - include: function-declaration-parameters
+
+  arrow-function-concise-body:
+    - meta_content_scope: meta.function.body.cfml
+    - match: '(?=[);}\],])'
+      pop: true
+    - match: '\n'
+      set: arrow-function-concise-continuation
+    # This custom comment match is required so that we move to the
+    # arrow-function-concise-continuation context to try and continue the
+    # body. Previously we didn't match the \n in the comments context, but that
+    # caused completions to appear at the end of a single-line comment.
+    - match: //
+      scope: punctuation.definition.comment.cfml
+      set:
+        - meta_scope: comment.line.double-slash.cfml
+        - match: \n
+          set: arrow-function-concise-continuation
+    - include: expressions
+
+  arrow-function-concise-continuation:
+    # Allow newlines in a concise body if the next line is a continuation
+    # of the previous via method chaining
+    - match: '(?=^\s*(\.|/[/*]))'
+      set: arrow-function-concise-body
+    - match: '(?=.|\n)'
+      pop: true
+
   function-block:
-    - meta_scope: meta.function.body.cfml
     - match: '\}'
-      scope: meta.brace.curly.cfml
+      scope: meta.function.body.cfml meta.brace.curly.cfml
       pop: true
     - match: '\{'
       scope: meta.brace.curly.cfml
       push:
+        - meta_scope: meta.function.body.cfml
         - match: '(?=\})'
           pop: true
         - include: statements
@@ -576,7 +630,7 @@ contexts:
 
   function-declaration-properties:
     - meta_content_scope: meta.function.declaration.cfml
-    - match: '(?=\{)'
+    - match: '(?=(\{|=>))'
       pop: true
     - include: scope:embedding.cfml#tag-generic-attribute
 
@@ -588,7 +642,7 @@ contexts:
         - match: '\}'
           scope: meta.brace.curly.cfml
           pop: true
-        - match: "(?=('.*'|\".*\"|{{identifier}})\\s*(:|=){{func_lookahead}})"
+        - match: "(?=('.*'|\".*\"|{{identifier}})\\s*(:|=)({{func_lookahead}}|{{arrow_func_lookahead}}))"
           push:
             - meta_content_scope: meta.function.declaration.cfml
             - match: "'"
@@ -613,17 +667,15 @@ contexts:
                     1: punctuation.definition.string.end.cfml
                   pop: true
                 - include: scope:embedding.cfml#hash-delimiters
-            - match: '({{identifier}})\s*'
-              captures:
-                1: meta.struct-literal.key.cfml entity.name.function.cfml
+            - match: '{{identifier}}'
+              scope: meta.struct-literal.key.cfml entity.name.function.cfml
             - match: '(?=(:|=))'
               set:
                 - match: '(:|=)\s*'
                   captures:
                     0: meta.function.declaration.cfml
                     1: punctuation.separator.key-value.cfml
-                - match: '(?={{func_lookahead}})'
-                  push: function-declaration
+                - include: either-function-declaration
                 - match: '(?=\S)'
                   pop: true
         - match: "(?=\"|')"
@@ -800,11 +852,13 @@ contexts:
       # accessor state once a match has been made. Otherwise identifiers
       # following method definitions or method calls will be scoped as
       # properties.
-        - match: '(?=({{identifier}})\s*(=)\s*{{func_lookahead}})'
+        - match: '(?=({{identifier}})\s*(=)\s*({{func_lookahead}}|{{arrow_func_lookahead}}))'
           set:
             - meta_scope: meta.function.declaration.cfml
             - match: '(?={{func_lookahead}})'
               set: function-declaration
+            - match: '(?={{arrow_func_lookahead}})'
+              set: arrow-function-declaration
             - include: function-declaration-final-identifier
         - match: '(?={{identifier}}\s*\()'
           set:

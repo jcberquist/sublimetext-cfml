@@ -501,7 +501,7 @@ repository:
         patterns:
         - include: '#statements'
 
-    - begin: '(?=(([_$a-zA-Z][$\w]*)\s*(\.)\s*)+([_$a-zA-Z][$\w]*)\s*(=)\s*\bfunction\b)'
+    - begin: '(?=(([_$a-zA-Z][$\w]*)\s*(\.)\s*)+([_$a-zA-Z][$\w]*)\s*(=)\s*(\s*\bfunction\b|\s*\([^\(]*?\)\s*=>\s*\{))'
       end: '\}'
       endCaptures:
         '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
@@ -513,6 +513,7 @@ repository:
         end: '(?=\})'
         patterns:
         - include: '#statements'
+      - include: '#arrow-function-declaration'
       - include: '#function-declaration'
       - name: meta.function.declaration.cfml
         begin: '(?=[_$a-zA-Z][$\w]*\s*\.)'
@@ -532,7 +533,30 @@ repository:
         - match: '[_$a-zA-Z][$\w]*'
           name: meta.property.cfml entity.name.function.cfml
 
-    - begin: '(?=([_$a-zA-Z][$\w]*)\s*(=)\s*\s*\bfunction\b)'
+    # duplicate for the sake of concise arrow functions
+    - begin: '(?=(([_$a-zA-Z][$\w]*)\s*(\.)\s*)+([_$a-zA-Z][$\w]*)\s*(=)\s*\([^\(]*?\)\s*=>)'
+      end: '(?=[);}\],\n])'
+      patterns:
+      - include: '#arrow-function-declaration'
+      - name: meta.function.declaration.cfml
+        begin: '(?=[_$a-zA-Z][$\w]*\s*\.)'
+        end: '\.'
+        endCaptures:
+          '0': {name: punctuation.accessor.cfml}
+        patterns:
+        - include: '#cfml-scopes'
+        - match: '[_$a-zA-Z][$\w]*'
+          name: support.class.cfml
+      - name: meta.function.declaration.cfml
+        begin: '(?=[_$a-zA-Z][$\w]*\s*(=)\s*)'
+        end: '\s*(=)\s*'
+        endCaptures:
+          '1': {name: keyword.operator.assignment.cfml}
+        patterns:
+        - match: '[_$a-zA-Z][$\w]*'
+          name: meta.property.cfml entity.name.function.cfml
+
+    - begin: '(?=([_$a-zA-Z][$\w]*)\s*(=)\s*(\s*\bfunction\b|\s*\([^\(]*?\)\s*=>\s*\{))'
       end: '\}'
       endCaptures:
         '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
@@ -544,7 +568,24 @@ repository:
         end: '(?=\})'
         patterns:
         - include: '#statements'
+      - include: '#arrow-function-declaration'
       - include: '#function-declaration'
+      - name: meta.function.declaration.cfml
+        begin: '(?=[_$a-zA-Z][$\w]*\s*(=)\s*)'
+        end: '\s*(=)\s*'
+        endCaptures:
+          '1': {name: keyword.operator.assignment.cfml}
+        patterns:
+        - match: '[A-Z][_$\dA-Z]*'
+          name: variable.other.constant.cfml entity.name.function.cfml
+        - match: '[_$a-zA-Z][$\w]*'
+          name: variable.other.readwrite.cfml entity.name.function.cfml
+
+    # duplicate for concise arrow functions
+    - begin: '(?=([_$a-zA-Z][$\w]*)\s*(=)\s*\([^\(]*?\)\s*=>)'
+      end: '(?=[);}\],\n])'
+      patterns:
+      - include: '#arrow-function-declaration'
       - name: meta.function.declaration.cfml
         begin: '(?=[_$a-zA-Z][$\w]*\s*(=)\s*)'
         end: '\s*(=)\s*'
@@ -571,53 +612,65 @@ repository:
       - include: '#function-declaration'
 
   anonymous-function:
-    begin: (?=\s*\bfunction\b)
-    end: '\}'
-    endCaptures:
-      '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
     patterns:
-    - name: meta.function.body.cfml
-      begin: '\{'
-      beginCaptures:
-        '0': {name: meta.brace.curly.cfml}
-      end: '(?=\})'
+    - begin: '(?=(\s*\bfunction\b|\s*\([^\(]*?\)\s*=>\s*\{))'
+      end: '\}'
+      endCaptures:
+        '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
       patterns:
-      - include: '#statements'
-    - match: \b(function)\b\s*
-      captures:
-        '0': {name: meta.function.anonymous.cfml meta.function.declaration.cfml}
-        '1': {name: storage.type.function.cfml}
-    - match: '[_$a-zA-Z][$\w]*'
-      name: meta.function.anonymous.cfml meta.function.declaration.cfml entity.name.function.cfml
-    - name: meta.function.anonymous.cfml meta.function.declaration.cfml meta.function.parameters.cfml
-      begin: \(
-      beginCaptures:
-        '0': {name: punctuation.definition.parameters.begin.cfml}
-      end: '(?=\))'
-      patterns:
-      - match: (?i:required)
-        name: keyword.other.required.argument.cfml
-      - match: \b(?i:(function|string|date|struct|array|void|binary|numeric|boolean|query|xml|uuid|any))\b
-        name: storage.type.cfml
-      - match: '[_$a-zA-Z][$\w]*'
-        name: variable.parameter.function.cfml
-      - match: ','
-        name: punctuation.separator.parameter.function.cfml
-      - name: meta.parameter.optional.cfml
-        begin: '='
+      - name: meta.function.body.cfml
+        begin: '\{'
         beginCaptures:
-          '0': {name: keyword.operator.assignment.cfml}
-        end: (?=[,)])
+          '0': {name: meta.brace.curly.cfml}
+        end: '(?=\})'
+        patterns:
+        - include: '#statements'
+      - match: \b(function)\b\s*
+        captures:
+          '0': {name: meta.function.anonymous.cfml meta.function.declaration.cfml}
+          '1': {name: storage.type.function.cfml}
+      - match: \s*(=>)\s*
+        captures:
+          '0': {name: meta.function.anonymous.cfml meta.function.declaration.cfml}
+          '1': {name: storage.type.function.arrow.cfml}
+      - match: '[_$a-zA-Z][$\w]*'
+        name: meta.function.anonymous.cfml meta.function.declaration.cfml entity.name.function.cfml
+      - name: meta.function.anonymous.cfml meta.function.declaration.cfml meta.function.parameters.cfml
+        begin: \(
+        beginCaptures:
+          '0': {name: punctuation.definition.parameters.begin.cfml}
+        end: '(?=\))'
+        patterns:
+        - include: '#function-parameter'
+      - name: meta.function.anonymous.cfml meta.function.declaration.cfml
+        begin: '\)'
+        beginCaptures:
+          '0': {name: meta.function.parameters.cfml punctuation.definition.parameters.end.cfml}
+        end: (?=(\{|=>))
+        patterns:
+        - include: '#tag-generic-attribute'
+
+    # concise arrow function
+    - begin: '(?=\s*\([^\(]*?\)\s*=>)'
+      end: '(?=[);}\],\n])'
+      patterns:
+      - begin: \s*(=>)\s*
+        beginCaptures:
+          '0': {name: meta.function.anonymous.cfml meta.function.declaration.cfml}
+          '1': {name: storage.type.function.arrow.cfml}
+        end: (?=[);}\],\n])
+        contentName: 'meta.function.body.cfml'
         patterns:
         - include: '#expressions'
-      - include: '#comments'
-    - name: meta.function.anonymous.cfml meta.function.declaration.cfml
-      begin: '\)'
-      beginCaptures:
-        '0': {name: meta.function.parameters.cfml punctuation.definition.parameters.end.cfml}
-      end: (?=\{)
-      patterns:
-      - include: '#tag-generic-attribute'
+      - name: meta.function.anonymous.cfml meta.function.declaration.cfml meta.function.parameters.cfml
+        begin: \(
+        beginCaptures:
+          '0': {name: punctuation.definition.parameters.begin.cfml}
+        end: \)
+        endCaptures:
+          '0': {name: punctuation.definition.parameters.end.cfml}
+        patterns:
+        - include: '#function-parameter'
 
   function-declaration:
     begin: (?=\s*\bfunction\b)
@@ -639,29 +692,71 @@ repository:
         '0': {name: punctuation.definition.parameters.begin.cfml}
       end: '(?=\))'
       patterns:
-      - match: (?i:required)
-        name: keyword.other.required.argument.cfml
-      - match: \b(?i:(function|string|date|struct|array|void|binary|numeric|boolean|query|xml|uuid|any))\b
-        name: storage.type.cfml
-      - match: '[_$a-zA-Z][$\w]*'
-        name: variable.parameter.function.cfml
-      - match: ','
-        name: punctuation.separator.parameter.function.cfml
-      - name: meta.parameter.optional.cfml
-        begin: '='
-        beginCaptures:
-          '0': {name: keyword.operator.assignment.cfml}
-        end: (?=[,)])
-        patterns:
-        - include: '#expressions'
-      - include: '#comments'
+      - include: '#function-parameter'
     - name: meta.function.declaration.cfml
       begin: '\)'
       beginCaptures:
         '0': {name: meta.function.parameters.cfml punctuation.definition.parameters.end.cfml}
-      end: (?=\{)
+      end: (?=(\{|=>))
       patterns:
       - include: '#tag-generic-attribute'
+
+  arrow-function-declaration:
+    patterns:
+    - name: meta.function.declaration.cfml
+      begin: '(?=\([^\(]*?\)\s*=>\s*\{)'
+      end: '(=>)\s*'
+      endCaptures:
+        '1': {name: storage.type.function.arrow.cfml}
+      patterns:
+      - include: '#arrow-function-declaration-parameters'
+    # concise arrow function
+    - begin: (?=\([^\(]*?\)\s*=>)
+      end: '(?=[);}\],\n])'
+      patterns:
+      - name: meta.function.declaration.cfml
+        begin: (?=\()
+        end: '(?=(=>))'
+        patterns:
+        - include: '#arrow-function-declaration-parameters'
+      - begin: '(=>)\s*'
+        beginCaptures:
+          '0': {name: meta.function.declaration.cfml}
+          '1': {name: storage.type.function.arrow.cfml}
+        end: (?=[);}\],\n])
+        contentName: 'meta.function.body.cfml'
+        patterns:
+        - include: '#expressions'
+
+  arrow-function-declaration-parameters:
+    name: meta.function.parameters.cfml
+    begin: \(
+    beginCaptures:
+      '0': {name: punctuation.definition.parameters.begin.cfml}
+    end: \)
+    endCaptures:
+      '0': {name: punctuation.definition.parameters.end.cfml}
+    patterns:
+    - include: '#function-parameter'
+
+  function-parameter:
+    patterns:
+    - match: (?i:required)
+      name: keyword.other.required.argument.cfml
+    - match: \b(?i:(function|string|date|struct|array|void|binary|numeric|boolean|query|xml|uuid|any))\b
+      name: storage.type.cfml
+    - match: '[_$a-zA-Z][$\w]*'
+      name: variable.parameter.function.cfml
+    - match: ','
+      name: punctuation.separator.parameter.function.cfml
+    - name: meta.parameter.optional.cfml
+      begin: '='
+      beginCaptures:
+        '0': {name: keyword.operator.assignment.cfml}
+      end: (?=[,)])
+      patterns:
+      - include: '#expressions'
+    - include: '#comments'
 
   struct-literal:
     name: meta.struct-literal.cfml
@@ -673,50 +768,39 @@ repository:
       '0': {name: meta.brace.curly.cfml}
     patterns:
     - include: '#comments'
-    - begin: (?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*\bfunction\b)
+    - begin: (?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*(\bfunction\b|\([^\(]*?\)\s*=>\s*\{))
       end: '\}'
       endCaptures:
-        '0': {name: meta.block.cfml meta.brace.curly.cfml}
+        '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
       patterns:
-      - name: meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.single.cfml
-        contentName: entity.name.function.cfml
-        begin: "'"
-        beginCaptures:
-          '0': {name: punctuation.definition.string.begin.cfml}
-        end: "(')(?!')"
-        endCaptures:
-          '1': {name: punctuation.definition.string.end.cfml}
-        patterns:
-        - name: constant.character.escape.quote.cfml
-          match: "''"
-        - include: '#hash-delimiters'
-      - name: meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.double.cfml
-        contentName: entity.name.function.cfml
-        begin: '"'
-        beginCaptures:
-          '0': {name: punctuation.definition.string.begin.cfml}
-        end: '(")(?!")'
-        endCaptures:
-          '1': {name: punctuation.definition.string.end.cfml}
-        patterns:
-        - name: constant.character.escape.quote.cfml
-          match: '""'
-        - include: '#hash-delimiters'
-      - match: '[_$a-zA-Z][$\w]*'
-        name: meta.function.declaration.cfml meta.struct-literal.key.cfml entity.name.function.cfml
-      - match: '(:|=)'
-        name: meta.function.declaration.cfml punctuation.separator.key-value.cfml
+      - include: '#struct-literal-function-keys'
       - begin: '(?=\s*\bfunction\b)'
         end: '(?=\})'
         patterns:
         - include: '#function-declaration'
-        - name: meta.block.cfml
+        - name: meta.function.body.cfml
           begin: '\{'
           beginCaptures:
             '0': {name: meta.brace.curly.cfml}
           end: '(?=\})'
           patterns:
           - include: '#statements'
+      - begin: '(?=\s*\([^\(]*?\)\s*=>\s*\{)'
+        end: '(?=\})'
+        patterns:
+        - include: '#arrow-function-declaration'
+        - name: meta.function.body.cfml
+          begin: '\{'
+          beginCaptures:
+            '0': {name: meta.brace.curly.cfml}
+          end: '(?=\})'
+          patterns:
+          - include: '#statements'
+    - begin: (?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*|\([^\(]*?\)\s*=>)
+      end: '(?=[);}\],\n])'
+      patterns:
+      - include: '#struct-literal-function-keys'
+      - include: '#arrow-function-declaration'
     - name: meta.struct-literal.key.cfml
       begin: "(?=\"|')"
       end: "(?<=\"|')"
@@ -730,6 +814,37 @@ repository:
       end: '(?=[\},])'
       patterns:
       - include: '#expressions'
+
+  struct-literal-function-keys:
+    patterns:
+    - name: meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.single.cfml
+      contentName: entity.name.function.cfml
+      begin: "'"
+      beginCaptures:
+        '0': {name: punctuation.definition.string.begin.cfml}
+      end: "(')(?!')"
+      endCaptures:
+        '1': {name: punctuation.definition.string.end.cfml}
+      patterns:
+      - name: constant.character.escape.quote.cfml
+        match: "''"
+      - include: '#hash-delimiters'
+    - name: meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.double.cfml
+      contentName: entity.name.function.cfml
+      begin: '"'
+      beginCaptures:
+        '0': {name: punctuation.definition.string.begin.cfml}
+      end: '(")(?!")'
+      endCaptures:
+        '1': {name: punctuation.definition.string.end.cfml}
+      patterns:
+      - name: constant.character.escape.quote.cfml
+        match: '""'
+      - include: '#hash-delimiters'
+    - match: '[_$a-zA-Z][$\w]*'
+      name: meta.function.declaration.cfml meta.struct-literal.key.cfml entity.name.function.cfml
+    - match: '(:|=)'
+      name: meta.function.declaration.cfml punctuation.separator.key-value.cfml
 
   brackets:
     patterns:
@@ -871,18 +986,19 @@ repository:
     - begin: \.
       beginCaptures:
         '0': {name: punctuation.accessor.cfml}
-      end: '(?<=\))|(\})|(?:([A-Z][_$\dA-Z]*)|([_$a-zA-Z][$\w]*))(?=$|[^$\w])(?!(\s*\(|\s*(=)\s*\bfunction\b))'
+      end: '(?<=\))|(?=\n)|(\})|(;)|(?:([A-Z][_$\dA-Z]*)|([_$a-zA-Z][$\w]*))(?=\n|[^$\w])(?!(\s*\(|\s*=\s*(function\b|\([^\(]*?\)\s*=>)))'
       endCaptures:
         '1': {name: meta.function.body.cfml meta.brace.curly.cfml}
-        '2': {name: meta.property.constant.cfml}
-        '3': {name: meta.property.cfml}
+        '2': {name: punctuation.terminator.statement.cfml}
+        '3': {name: meta.property.constant.cfml}
+        '4': {name: meta.property.cfml}
       # All of these matches use set (or effectively a set via the final
       # include/match/pop construct) instead of push so that we escape this
       # accessor state once a match has been made. Otherwise identifiers
       # following method definitions or method calls will be scoped as
       # properties.
       patterns:
-      - begin: '(?=([_$a-zA-Z][$\w]*)\s*(=)\s*\s*\bfunction\b)'
+      - begin: '(?=([_$a-zA-Z][$\w]*)\s*(=)\s*(function\b|\([^\(]*?\)\s*=>\s*\{))'
         end: '(?=\})'
         endCaptures:
           '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
@@ -894,12 +1010,22 @@ repository:
           end: '(?=\})'
           patterns:
           - include: '#statements'
-        - match: ([_$a-zA-Z][$\w])*\s*(=)\s*
+        - match: ([_$a-zA-Z][$\w]*)\s*(=)\s*
           captures:
             '0': {name: meta.function.declaration.cfml}
             '1': {name: meta.property.cfml entity.name.function.cfml}
             '2': {name: keyword.operator.assignment.cfml}
         - include: '#function-declaration'
+        - include: '#arrow-function-declaration'
+      - begin: '(?=([_$a-zA-Z][$\w]*)\s*(=)\s*\([^\(]*?\)\s*=>)'
+        end: '(?=[);}\],\n])'
+        patterns:
+        - match: ([_$a-zA-Z][$\w]*)\s*(=)\s*
+          captures:
+            '0': {name: meta.function.declaration.cfml}
+            '1': {name: meta.property.cfml entity.name.function.cfml}
+            '2': {name: keyword.operator.assignment.cfml}
+        - include: '#arrow-function-declaration'
       - include: '#method-call'
     - match: \;
       name: punctuation.terminator.statement.cfml

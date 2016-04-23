@@ -150,6 +150,7 @@ default="string";
     'key': function() {}
 //   ^ meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.single.cfml entity.name.function.cfml
 //       ^ meta.function.declaration.cfml punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
+
   }
 
   switch( foo ) {
@@ -173,6 +174,7 @@ default="string";
   obj.CONSTANT = true;
   // <- variable.other.struct.cfml
 //    ^ meta.property.constant.cfml
+
 }
 // <- embedding.cfml source.cfml.script meta.class.body.cfml meta.brace.curly.cfml
  // <- embedding.cfml source.cfml.script -meta
