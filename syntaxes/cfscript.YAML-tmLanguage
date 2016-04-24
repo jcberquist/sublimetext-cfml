@@ -32,10 +32,10 @@ repository:
     - name: meta.block.cfml
       begin: '\{'
       beginCaptures:
-        '0': {name: meta.brace.curly.cfml}
+        '0': {name: punctuation.definition.block.begin.cfml}
       end: '\}'
       endCaptures:
-        '0': {name: meta.brace.curly.cfml}
+        '0': {name: punctuation.definition.block.end.cfml}
       patterns:
       - include: '#statements'
     - include: '#expressions'
@@ -48,13 +48,13 @@ repository:
         '0': {name: keyword.control.switch.cfml}
       end: '\}'
       endCaptures:
-        '0': {name: meta.block.cfml meta.brace.curly.cfml}
+        '0': {name: meta.block.cfml punctuation.definition.block.end.cfml}
       patterns:
       - include: '#round-brackets'
       - name: meta.block.cfml
         begin: '\{'
         beginCaptures:
-          '0': {name: meta.brace.curly.cfml}
+          '0': {name: punctuation.definition.block.begin.cfml}
         end: '(?=\})'
         patterns:
         - begin: ':'
@@ -71,23 +71,23 @@ repository:
         '0': {name: keyword.control.loop.cfml}
       end: '\)'
       endCaptures:
-        '0': {name: meta.group.braces.round.cfml meta.brace.round.cfml}
+        '0': {name: meta.group.cfml punctuation.definition.group.end.cfml}
       patterns:
       - name: meta.block.cfml
         begin: '\{'
         beginCaptures:
-          '0': {name: meta.brace.curly.cfml}
+          '0': {name: punctuation.definition.block.begin.cfml}
         end: '\}'
         endCaptures:
-          '0': {name: meta.brace.curly.cfml}
+          '0': {name: punctuation.definition.block.end.cfml}
         patterns:
         - include: '#statements'
       - match: \bwhile\b
         name: keyword.control.loop.cfml
-      - name: meta.group.braces.round.cfml
+      - name: meta.group.cfml
         begin: '\('
         beginCaptures:
-          '0': {name: meta.brace.round.cfml}
+          '0': {name: punctuation.definition.group.begin.cfml}
         end: '(?=\))'
         patterns:
         - include: '#expressions'
@@ -98,7 +98,7 @@ repository:
         '0': {name: keyword.control.loop.cfml}
       end: (?:(\})|(?=[^\(\{\}\s]))
       endCaptures:
-        '1': {name: meta.block.cfml meta.brace.curly.cfml}
+        '1': {name: meta.block.cfml punctuation.definition.block.end.cfml}
       patterns:
         - include: '#parens-block-scope'
     - name: meta.while.cfml
@@ -107,7 +107,7 @@ repository:
         '0': {name: keyword.control.loop.cfml}
       end: (?:(\})|(?=[^\(\{\}\s]))
       endCaptures:
-        '1': {name: meta.block.cfml meta.brace.curly.cfml}
+        '1': {name: meta.block.cfml punctuation.definition.block.end.cfml}
       patterns:
         - include: '#parens-block-scope'
     - name: meta.conditional.cfml
@@ -116,7 +116,7 @@ repository:
         '0': {name: keyword.control.conditional.cfml}
       end: (?:(\})|(?=[^\(\{\}\s]))
       endCaptures:
-        '1': {name: meta.block.cfml meta.brace.curly.cfml}
+        '1': {name: meta.block.cfml punctuation.definition.block.end.cfml}
       patterns:
         - include: '#parens-block-scope'
     - name: meta.conditional.cfml
@@ -125,7 +125,7 @@ repository:
         '0': {name: keyword.control.conditional.cfml}
       end: (?:(\})|(?=[^\{\}\s]))
       endCaptures:
-        '1': {name: meta.block.cfml meta.brace.curly.cfml}
+        '1': {name: meta.block.cfml punctuation.definition.block.end.cfml}
       patterns:
         - include: '#block-scope'
     - name: meta.try.cfml
@@ -134,7 +134,7 @@ repository:
         '0': {name: keyword.control.trycatch.cfml}
       end: (?:(\})|(?=[^\{\}\s]))
       endCaptures:
-        '1': {name: meta.block.cfml meta.brace.curly.cfml}
+        '1': {name: meta.block.cfml punctuation.definition.block.end.cfml}
       patterns:
         - include: '#block-scope'
     - name: meta.finally.cfml
@@ -143,7 +143,7 @@ repository:
         '0': {name: keyword.control.trycatch.cfml}
       end: (?:(\})|(?=[^\{\}\s]))
       endCaptures:
-        '1': {name: meta.block.cfml meta.brace.curly.cfml}
+        '1': {name: meta.block.cfml punctuation.definition.block.end.cfml}
       patterns:
         - include: '#block-scope'
     - name: meta.catch.cfml
@@ -152,19 +152,19 @@ repository:
         '0': {name: keyword.control.trycatch.cfml}
       end: (?:(\})|(?=[^\(\{\}\s]))
       endCaptures:
-        '1': {name: meta.block.cfml meta.brace.curly.cfml}
+        '1': {name: meta.block.cfml punctuation.definition.block.end.cfml}
       patterns:
         - include: '#parens-block-scope'
 
   parens-block-scope:
     patterns:
-    - name: meta.group.braces.round.cfml
+    - name: meta.group.cfml
       begin: '\('
       beginCaptures:
-        '0': {name: meta.brace.round.cfml}
+        '0': {name: punctuation.definition.group.begin.cfml}
       end: '\)'
       endCaptures:
-        '0': {name: meta.brace.round.cfml}
+        '0': {name: punctuation.definition.group.end.cfml}
       patterns:
       - include: '#expressions'
     - include: '#block-scope'
@@ -173,7 +173,7 @@ repository:
     name: meta.block.cfml
     begin: '\{'
     beginCaptures:
-      '0': {name: meta.brace.curly.cfml}
+      '0': {name: punctuation.definition.block.begin.cfml}
     end: (?=\})
     patterns:
     - include: '#statements'
@@ -271,14 +271,14 @@ repository:
       '1': {name: keyword.operator.new.cfml}
     end: (\))|(?=[^_$\w.\(\)])
     endCaptures:
-      '1': {name: meta.function-call.method.arguments.cfml meta.brace.round.cfml}
+      '1': {name: meta.function-call.method.arguments.cfml punctuation.definition.group.end.cfml}
     patterns:
     - match: \b[_$a-zA-Z][$\w]*(?=\()
       name: entity.name.class.cfml
     - name: meta.function-call.method.arguments.cfml
       begin: \(
       beginCaptures:
-        '0': {name: meta.brace.round.cfml}
+        '0': {name: punctuation.definition.group.begin.cfml}
       end: '(?=\))'
       patterns:
       - match: ','
@@ -374,7 +374,7 @@ repository:
     - begin: (?i)^(?=\s*(component)\b)
       end: '\}'
       endCaptures:
-        '0': {name: meta.class.body.cfml meta.brace.curly.cfml}
+        '0': {name: meta.class.body.cfml punctuation.definition.block.end.cfml}
       patterns:
       - name: meta.class.declaration.cfml
         begin: \b(component)\b
@@ -387,14 +387,14 @@ repository:
       - name: meta.class.body.cfml
         begin: '\{'
         beginCaptures:
-          '0': {name: meta.brace.curly.cfml}
+          '0': {name: punctuation.definition.block.begin.cfml}
         end: (?=})
         patterns:
           - include: '#statements'
     - begin: (?i)^(?=\s*(interface)\b)
       end: '\}'
       endCaptures:
-        '0': {name: meta.interface.body.cfml meta.brace.curly.cfml}
+        '0': {name: meta.interface.body.cfml punctuation.definition.block.end.cfml}
       patterns:
       - name: meta.interface.declaration.cfml
         begin: \b(interface)\b
@@ -407,7 +407,7 @@ repository:
       - name: meta.interface.body.cfml
         begin: '\{'
         beginCaptures:
-          '0': {name: meta.brace.curly.cfml}
+          '0': {name: punctuation.definition.block.begin.cfml}
         end: (?=})
         patterns:
           - include: '#statements'
@@ -466,7 +466,7 @@ repository:
               |
               ([A-Za-z0-9_\.$]+)\s+
               |
-              ([A-Za-z0-9_\.$]+)(\[\])?\s+
+              ([A-Za-z0-9_\.$]+)(\[)(\])?\s+
             )?
           )
         )
@@ -484,19 +484,20 @@ repository:
         '3': {name: storage.type.return-type.primitive.cfml}
         '4': {name: storage.type.return-type.object.cfml}
         '5': {name: storage.type.return-type.object.array.cfml}
-        '6': {name: meta.group.braces.square.cfml meta.brace.square.cfml}
-        '7': {name: storage.type.function.cfml}
-        '8': {name: entity.name.function.constructor.cfml}
-        '9': {name: entity.name.function.cfml}
+        '6': {name: meta.brackets.cfml punctuation.definition.brackets.begin.cfml}
+        '7': {name: meta.brackets.cfml punctuation.definition.brackets.end.cfml}
+        '8': {name: storage.type.function.cfml}
+        '9': {name: entity.name.function.constructor.cfml}
+        '10': {name: entity.name.function.cfml}
       end: '\}'
       endCaptures:
-        '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
+        '0': {name: meta.function.body.cfml punctuation.definition.block.end.cfml}
       patterns:
       - include: '#function-declaration-parameters'
       - name: meta.function.body.cfml
         begin: '\{'
         beginCaptures:
-          '0': {name: meta.brace.curly.cfml}
+          '0': {name: punctuation.definition.block.begin.cfml}
         end: '(?=\})'
         patterns:
         - include: '#statements'
@@ -504,12 +505,12 @@ repository:
     - begin: '(?=(([_$a-zA-Z][$\w]*)\s*(\.)\s*)+([_$a-zA-Z][$\w]*)\s*(=)\s*(\s*\bfunction\b|\s*\([^\(]*?\)\s*=>\s*\{))'
       end: '\}'
       endCaptures:
-        '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
+        '0': {name: meta.function.body.cfml punctuation.definition.block.end.cfml}
       patterns:
       - name: meta.function.body.cfml
         begin: '\{'
         beginCaptures:
-          '0': {name: meta.brace.curly.cfml}
+          '0': {name: punctuation.definition.block.begin.cfml}
         end: '(?=\})'
         patterns:
         - include: '#statements'
@@ -559,12 +560,12 @@ repository:
     - begin: '(?=([_$a-zA-Z][$\w]*)\s*(=)\s*(\s*\bfunction\b|\s*\([^\(]*?\)\s*=>\s*\{))'
       end: '\}'
       endCaptures:
-        '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
+        '0': {name: meta.function.body.cfml punctuation.definition.block.end.cfml}
       patterns:
       - name: meta.function.body.cfml
         begin: '\{'
         beginCaptures:
-          '0': {name: meta.brace.curly.cfml}
+          '0': {name: punctuation.definition.block.begin.cfml}
         end: '(?=\})'
         patterns:
         - include: '#statements'
@@ -600,12 +601,12 @@ repository:
     - begin: '(?=\s*\bfunction\b\s+[_$a-zA-Z][$\w]*)'
       end: '\}'
       endCaptures:
-        '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
+        '0': {name: meta.function.body.cfml punctuation.definition.block.end.cfml}
       patterns:
       - name: meta.function.body.cfml
         begin: '\{'
         beginCaptures:
-          '0': {name: meta.brace.curly.cfml}
+          '0': {name: punctuation.definition.block.begin.cfml}
         end: '(?=\})'
         patterns:
         - include: '#statements'
@@ -616,12 +617,12 @@ repository:
     - begin: '(?=(\s*\bfunction\b|\s*\([^\(]*?\)\s*=>\s*\{))'
       end: '\}'
       endCaptures:
-        '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
+        '0': {name: meta.function.body.cfml punctuation.definition.block.end.cfml}
       patterns:
       - name: meta.function.body.cfml
         begin: '\{'
         beginCaptures:
-          '0': {name: meta.brace.curly.cfml}
+          '0': {name: punctuation.definition.block.begin.cfml}
         end: '(?=\})'
         patterns:
         - include: '#statements'
@@ -762,16 +763,16 @@ repository:
     name: meta.struct-literal.cfml
     begin: '\{'
     beginCaptures:
-      '0': {name: meta.brace.curly.cfml}
+      '0': {name: punctuation.definition.block.begin.cfml}
     end: '\}'
     endCaptures:
-      '0': {name: meta.brace.curly.cfml}
+      '0': {name: punctuation.definition.block.end.cfml}
     patterns:
     - include: '#comments'
     - begin: (?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*(\bfunction\b|\([^\(]*?\)\s*=>\s*\{))
       end: '\}'
       endCaptures:
-        '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
+        '0': {name: meta.function.body.cfml punctuation.definition.block.end.cfml}
       patterns:
       - include: '#struct-literal-function-keys'
       - begin: '(?=\s*\bfunction\b)'
@@ -781,7 +782,7 @@ repository:
         - name: meta.function.body.cfml
           begin: '\{'
           beginCaptures:
-            '0': {name: meta.brace.curly.cfml}
+            '0': {name: punctuation.definition.block.begin.cfml}
           end: '(?=\})'
           patterns:
           - include: '#statements'
@@ -792,7 +793,7 @@ repository:
         - name: meta.function.body.cfml
           begin: '\{'
           beginCaptures:
-            '0': {name: meta.brace.curly.cfml}
+            '0': {name: punctuation.definition.block.begin.cfml}
           end: '(?=\})'
           patterns:
           - include: '#statements'
@@ -853,13 +854,13 @@ repository:
 
   round-brackets:
     patterns:
-    - name: meta.group.braces.round.cfml
+    - name: meta.group.cfml
       begin: \(
       beginCaptures:
-        '0': {name: meta.brace.round.cfml}
+        '0': {name: punctuation.definition.group.begin.cfml}
       end: \)
       endCaptures:
-        '0': {name: meta.brace.round.cfml}
+        '0': {name: punctuation.definition.group.end.cfml}
       patterns:
       - include: '#expressions'
     - name: invalid.illegal.stray.brace.round.cfml
@@ -867,13 +868,13 @@ repository:
 
   square-brackets:
     patterns:
-    - name: meta.group.braces.square.cfml
+    - name: meta.brackets.cfml
       begin: \[
       beginCaptures:
-        '0': {name: meta.brace.square.cfml}
+        '0': {name: punctuation.definition.brackets.begin.cfml}
       end: \]
       endCaptures:
-        '0': {name: meta.brace.square.cfml}
+        '0': {name: punctuation.definition.brackets.end.cfml}
       patterns:
       - include: '#expressions'
 
@@ -916,12 +917,12 @@ repository:
         '1': {name: variable.function.cfml}
       end: '\)'
       endCaptures:
-        '0': {name: meta.brace.round.cfml}
+        '0': {name: punctuation.definition.group.end.cfml}
       patterns:
       - name: meta.function-call.method.arguments.cfml
         begin: '\('
         beginCaptures:
-          '0': {name: meta.brace.round.cfml}
+          '0': {name: punctuation.definition.group.begin.cfml}
         end: '(?=\))'
         patterns:
         - match: ','
@@ -939,10 +940,10 @@ repository:
     name: meta.function-call.cfml meta.function-call.arguments.cfml
     begin: '\('
     beginCaptures:
-      '0': {name: meta.brace.round.cfml}
+      '0': {name: punctuation.definition.group.begin.cfml}
     end: '\)'
     endCaptures:
-      '0': {name: meta.brace.round.cfml}
+      '0': {name: punctuation.definition.group.end.cfml}
     patterns:
     - match: ','
       name: punctuation.separator.argument.function.cfml
@@ -988,7 +989,7 @@ repository:
         '0': {name: punctuation.accessor.cfml}
       end: '(?<=\))|(?=\n)|(\})|(;)|(?:([A-Z][_$\dA-Z]*)|([_$a-zA-Z][$\w]*))(?=\n|[^$\w])(?!(\s*\(|\s*=\s*(function\b|\([^\(]*?\)\s*=>)))'
       endCaptures:
-        '1': {name: meta.function.body.cfml meta.brace.curly.cfml}
+        '1': {name: meta.function.body.cfml punctuation.definition.block.end.cfml}
         '2': {name: punctuation.terminator.statement.cfml}
         '3': {name: meta.property.constant.cfml}
         '4': {name: meta.property.cfml}
@@ -1000,13 +1001,11 @@ repository:
       patterns:
       - begin: '(?=([_$a-zA-Z][$\w]*)\s*(=)\s*(function\b|\([^\(]*?\)\s*=>\s*\{))'
         end: '(?=\})'
-        endCaptures:
-          '0': {name: meta.function.body.cfml meta.brace.curly.cfml}
         patterns:
         - name: meta.function.body.cfml
           begin: '\{'
           beginCaptures:
-            '0': {name: meta.brace.curly.cfml}
+            '0': {name: punctuation.definition.block.begin.cfml}
           end: '(?=\})'
           patterns:
           - include: '#statements'
@@ -1039,10 +1038,10 @@ repository:
       begin: (?i)\b(createobject)(\()(?=(?:\s*type\s*=)?\s*["']component["']\s*,)
       beginCaptures:
         '1': {name: support.function.cfml}
-        '2': {name: meta.support.function-call.arguments.cfml meta.brace.round.cfml}
+        '2': {name: meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml}
       end: \)
       endCaptures:
-        '0': {name: meta.support.function-call.arguments.cfml meta.brace.round.cfml}
+        '0': {name: meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml}
       patterns:
       - include: '#expressions'
     - name: meta.support.function-call.cfml meta.support.function-call.createjavaobject.cfml
@@ -1050,10 +1049,10 @@ repository:
       begin: (?i)\b(createobject)(\()(?=(?:\s*type\s*=)?\s*["']java["']\s*,)
       beginCaptures:
         '1': {name: support.function.cfml}
-        '2': {name: meta.support.function-call.arguments.cfml meta.brace.round.cfml}
+        '2': {name: meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml}
       end: \)
       endCaptures:
-        '0': {name: meta.support.function-call.arguments.cfml meta.brace.round.cfml}
+        '0': {name: meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml}
       patterns:
       - include: '#expressions'
     - name: meta.support.function-call.cfml
@@ -1156,10 +1155,10 @@ repository:
           )(\()
       beginCaptures:
         '1': {name: support.function.cfml}
-        '2': {name: meta.support.function-call.arguments.cfml meta.brace.round.cfml}
+        '2': {name: meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml}
       end: \)
       endCaptures:
-        '0': {name: meta.support.function-call.arguments.cfml meta.brace.round.cfml}
+        '0': {name: meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml}
       patterns:
       - match: ','
         name: punctuation.separator.argument.function.cfml
@@ -1196,10 +1195,10 @@ repository:
       )(\()
     beginCaptures:
       '1': {name: support.function.member.cfml}
-      '2': {name: meta.support.function-call.member.arguments.cfml meta.brace.round.cfml}
+      '2': {name: meta.support.function-call.member.arguments.cfml punctuation.definition.group.begin.cfml}
     end: \)
     endCaptures:
-      '0': {name: meta.support.function-call.member.arguments.cfml meta.brace.round.cfml}
+      '0': {name: meta.support.function-call.member.arguments.cfml punctuation.definition.group.end.cfml}
     patterns:
     - match: ','
       name: punctuation.separator.argument.function.cfml
@@ -1309,7 +1308,7 @@ repository:
         '2': {name: meta.tag.script.cfml entity.name.tag.script.cfml}
       end: (\})|(?=;)
       endCaptures:
-        '1': {name: meta.block.cfml meta.brace.curly.cfml}
+        '1': {name: meta.block.cfml punctuation.definition.block.end.cfml}
       patterns:
       - match: \s+
         name: meta.tag.script.cfml

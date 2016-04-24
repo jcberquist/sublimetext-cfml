@@ -52,7 +52,7 @@ transaction {
 }
 
 lock timeout="30"{
-<!---            ^ embedding.cfml text.html.cfml source.cfml.script meta.block.cfml meta.brace.curly.cfml - meta.tag.script.cfml --->
+<!---            ^ embedding.cfml text.html.cfml source.cfml.script meta.block.cfml punctuation.definition.block.begin.cfml - meta.tag.script.cfml --->
 }
 
 thread action="run" name="threadName" {

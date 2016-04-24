@@ -1337,7 +1337,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.function.body.cfml meta.brace.curly.cfml</string>
+							<string>meta.function.body.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -1350,7 +1350,7 @@
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>meta.brace.curly.cfml</string>
+									<string>punctuation.definition.block.begin.cfml</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -1645,7 +1645,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>meta.brace.curly.cfml</string>
+					<string>punctuation.definition.block.begin.cfml</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1877,7 +1877,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.class.body.cfml meta.brace.curly.cfml</string>
+							<string>meta.class.body.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -1917,7 +1917,7 @@
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>meta.brace.curly.cfml</string>
+									<string>punctuation.definition.block.begin.cfml</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -1944,7 +1944,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.interface.body.cfml meta.brace.curly.cfml</string>
+							<string>meta.interface.body.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -1984,7 +1984,7 @@
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>meta.brace.curly.cfml</string>
+									<string>punctuation.definition.block.begin.cfml</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -2104,7 +2104,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.block.cfml meta.brace.curly.cfml</string>
+							<string>meta.block.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -2123,7 +2123,7 @@
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>meta.brace.curly.cfml</string>
+									<string>punctuation.definition.block.begin.cfml</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -2177,7 +2177,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.group.braces.round.cfml meta.brace.round.cfml</string>
+							<string>meta.group.cfml punctuation.definition.group.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -2192,7 +2192,7 @@
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>meta.brace.curly.cfml</string>
+									<string>punctuation.definition.block.begin.cfml</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -2202,7 +2202,7 @@
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>meta.brace.curly.cfml</string>
+									<string>punctuation.definition.block.end.cfml</string>
 								</dict>
 							</dict>
 							<key>name</key>
@@ -2229,13 +2229,13 @@
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>meta.brace.round.cfml</string>
+									<string>punctuation.definition.group.begin.cfml</string>
 								</dict>
 							</dict>
 							<key>end</key>
 							<string>(?=\))</string>
 							<key>name</key>
-							<string>meta.group.braces.round.cfml</string>
+							<string>meta.group.cfml</string>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -2264,7 +2264,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.block.cfml meta.brace.curly.cfml</string>
+							<string>meta.block.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -2295,7 +2295,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.block.cfml meta.brace.curly.cfml</string>
+							<string>meta.block.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -2326,7 +2326,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.block.cfml meta.brace.curly.cfml</string>
+							<string>meta.block.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -2357,7 +2357,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.block.cfml meta.brace.curly.cfml</string>
+							<string>meta.block.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -2388,7 +2388,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.block.cfml meta.brace.curly.cfml</string>
+							<string>meta.block.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -2419,7 +2419,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.block.cfml meta.brace.curly.cfml</string>
+							<string>meta.block.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -2450,7 +2450,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.block.cfml meta.brace.curly.cfml</string>
+							<string>meta.block.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -2508,7 +2508,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>meta.function-call.method.arguments.cfml meta.brace.round.cfml</string>
+					<string>meta.function-call.method.arguments.cfml punctuation.definition.group.end.cfml</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -2529,7 +2529,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.round.cfml</string>
+							<string>punctuation.definition.group.begin.cfml</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -2657,7 +2657,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>meta.brace.round.cfml</string>
+					<string>punctuation.definition.group.begin.cfml</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -2667,7 +2667,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>meta.brace.round.cfml</string>
+					<string>punctuation.definition.group.end.cfml</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -3012,7 +3012,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.round.cfml</string>
+							<string>punctuation.definition.group.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -3027,7 +3027,7 @@
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>meta.brace.round.cfml</string>
+									<string>punctuation.definition.group.begin.cfml</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -3095,7 +3095,7 @@
       |
       ([A-Za-z0-9_\.$]+)\s+
       |
-      ([A-Za-z0-9_\.$]+)(\[\])?\s+
+      ([A-Za-z0-9_\.$]+)(\[)(\])?\s+
     )?
   )
 )
@@ -3117,6 +3117,11 @@
 						<dict>
 							<key>name</key>
 							<string>storage.modifier.cfml</string>
+						</dict>
+						<key>10</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.cfml</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -3141,22 +3146,22 @@
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>meta.group.braces.square.cfml meta.brace.square.cfml</string>
+							<string>meta.brackets.cfml punctuation.definition.brackets.begin.cfml</string>
 						</dict>
 						<key>7</key>
 						<dict>
 							<key>name</key>
-							<string>storage.type.function.cfml</string>
+							<string>meta.brackets.cfml punctuation.definition.brackets.end.cfml</string>
 						</dict>
 						<key>8</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.constructor.cfml</string>
+							<string>storage.type.function.cfml</string>
 						</dict>
 						<key>9</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.cfml</string>
+							<string>entity.name.function.constructor.cfml</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -3166,7 +3171,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.function.body.cfml meta.brace.curly.cfml</string>
+							<string>meta.function.body.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -3183,7 +3188,7 @@
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>meta.brace.curly.cfml</string>
+									<string>punctuation.definition.block.begin.cfml</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -3210,7 +3215,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.function.body.cfml meta.brace.curly.cfml</string>
+							<string>meta.function.body.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -3223,7 +3228,7 @@
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>meta.brace.curly.cfml</string>
+									<string>punctuation.definition.block.begin.cfml</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -3379,7 +3384,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.function.body.cfml meta.brace.curly.cfml</string>
+							<string>meta.function.body.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -3392,7 +3397,7 @@
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>meta.brace.curly.cfml</string>
+									<string>punctuation.definition.block.begin.cfml</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -3502,7 +3507,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.function.body.cfml meta.brace.curly.cfml</string>
+							<string>meta.function.body.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -3515,7 +3520,7 @@
 								<key>0</key>
 								<dict>
 									<key>name</key>
-									<string>meta.brace.curly.cfml</string>
+									<string>punctuation.definition.block.begin.cfml</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -3818,7 +3823,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.round.cfml</string>
+							<string>punctuation.definition.group.begin.cfml</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -3828,11 +3833,11 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.round.cfml</string>
+							<string>punctuation.definition.group.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.group.braces.round.cfml</string>
+					<string>meta.group.cfml</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -3869,7 +3874,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.function.body.cfml meta.brace.curly.cfml</string>
+							<string>meta.function.body.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -3894,14 +3899,6 @@
 							<string>(?=([_$a-zA-Z][$\w]*)\s*(=)\s*(function\b|\([^\(]*?\)\s*=&gt;\s*\{))</string>
 							<key>end</key>
 							<string>(?=\})</string>
-							<key>endCaptures</key>
-							<dict>
-								<key>0</key>
-								<dict>
-									<key>name</key>
-									<string>meta.function.body.cfml meta.brace.curly.cfml</string>
-								</dict>
-							</dict>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -3912,7 +3909,7 @@
 										<key>0</key>
 										<dict>
 											<key>name</key>
-											<string>meta.brace.curly.cfml</string>
+											<string>punctuation.definition.block.begin.cfml</string>
 										</dict>
 									</dict>
 									<key>end</key>
@@ -4026,7 +4023,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.round.cfml</string>
+							<string>punctuation.definition.group.begin.cfml</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -4036,11 +4033,11 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.round.cfml</string>
+							<string>punctuation.definition.group.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.group.braces.round.cfml</string>
+					<string>meta.group.cfml</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -4069,7 +4066,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.square.cfml</string>
+							<string>punctuation.definition.brackets.begin.cfml</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -4079,11 +4076,11 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.square.cfml</string>
+							<string>punctuation.definition.brackets.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.group.braces.square.cfml</string>
+					<string>meta.brackets.cfml</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -4114,7 +4111,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.curly.cfml</string>
+							<string>punctuation.definition.block.begin.cfml</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -4124,7 +4121,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.brace.curly.cfml</string>
+							<string>punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -4242,7 +4239,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>meta.brace.curly.cfml</string>
+					<string>punctuation.definition.block.begin.cfml</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -4252,7 +4249,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>meta.brace.curly.cfml</string>
+					<string>punctuation.definition.block.end.cfml</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -4273,7 +4270,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.function.body.cfml meta.brace.curly.cfml</string>
+							<string>meta.function.body.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -4301,7 +4298,7 @@
 										<key>0</key>
 										<dict>
 											<key>name</key>
-											<string>meta.brace.curly.cfml</string>
+											<string>punctuation.definition.block.begin.cfml</string>
 										</dict>
 									</dict>
 									<key>end</key>
@@ -4337,7 +4334,7 @@
 										<key>0</key>
 										<dict>
 											<key>name</key>
-											<string>meta.brace.curly.cfml</string>
+											<string>punctuation.definition.block.begin.cfml</string>
 										</dict>
 									</dict>
 									<key>end</key>
@@ -4530,7 +4527,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>meta.support.function-call.arguments.cfml meta.brace.round.cfml</string>
+							<string>meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -4542,7 +4539,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.support.function-call.arguments.cfml meta.brace.round.cfml</string>
+							<string>meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -4568,7 +4565,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>meta.support.function-call.arguments.cfml meta.brace.round.cfml</string>
+							<string>meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -4580,7 +4577,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.support.function-call.arguments.cfml meta.brace.round.cfml</string>
+							<string>meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -4700,7 +4697,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>meta.support.function-call.arguments.cfml meta.brace.round.cfml</string>
+							<string>meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
@@ -4712,7 +4709,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.support.function-call.arguments.cfml meta.brace.round.cfml</string>
+							<string>meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -4790,7 +4787,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>meta.support.function-call.member.arguments.cfml meta.brace.round.cfml</string>
+					<string>meta.support.function-call.member.arguments.cfml punctuation.definition.group.begin.cfml</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
@@ -4802,7 +4799,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>meta.support.function-call.member.arguments.cfml meta.brace.round.cfml</string>
+					<string>meta.support.function-call.member.arguments.cfml punctuation.definition.group.end.cfml</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -5195,7 +5192,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>meta.block.cfml meta.brace.curly.cfml</string>
+							<string>meta.block.cfml punctuation.definition.block.end.cfml</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
