@@ -22,6 +22,7 @@ contexts:
 
   main:
     - include: keywords-top-level
+    - include: component
     - include: statements
 
   keywords-top-level:
@@ -40,8 +41,8 @@ contexts:
           pop: true
 
   statements:
-    - include: component
     - include: conditional
+    - include: static
     - match: '\{'
       scope: punctuation.definition.block.begin.cfml
       push:
@@ -134,6 +135,13 @@ contexts:
       push:
         - meta_scope: meta.catch.cfml
         - include: parens-block-scope
+
+  static:
+    - match: \bstatic\b(?=\s*[\n\{])
+      scope: keyword.control.static.cfml
+      push:
+        - meta_scope: meta.block.static.cfml
+        - include: block-scope
 
   parens-block-scope:
     - match: '\('
@@ -248,6 +256,7 @@ contexts:
           scope: entity.name.class.cfml
           set: constructor-params
         - match: '\b{{identifier}}\b|\.'
+          scope: entity.name.class.cfml
         - match: ""
           pop: true
 
@@ -334,14 +343,15 @@ contexts:
         -      # subtraction     left-to-right   both
       scope: keyword.operator.arithmetic.cfml
       push: after-operator
-    - match: '\?|:'
+    - match: '\?|:(?!:)'
       scope: keyword.operator.ternary.cfml
       push: after-operator
 
   component:
-    - match: (?i)^\s*(component)\b
+    - match: (?i)^\s*(?:(abstract|final)\s+)?(component)\b
       captures:
-        1: storage.type.class.cfml
+        1: storage.modifier.cfml
+        2: storage.type.class.cfml
       push:
         - meta_scope: meta.class.declaration.cfml
         - match: '(?=\{)'
@@ -433,7 +443,8 @@ contexts:
         (?x)
         (?:
           (?:
-            (?i:\b(private|package|public|remote)\s+)?
+            (?i:\b(private|package|public|remote|static|final|abstract)\s+)?
+            (?i:\b(private|package|public|remote|static|final|abstract)\s+)?
             (?i:\b
               (void)\s+
               |
@@ -455,17 +466,20 @@ contexts:
       captures:
         0: meta.function.declaration.cfml
         1: storage.modifier.cfml
-        2: storage.type.return-type.void.cfml
-        3: storage.type.return-type.primitive.cfml
-        4: storage.type.return-type.object.cfml
-        5: storage.type.return-type.object.array.cfml
-        6: meta.brackets.cfml punctuation.definition.brackets.begin.cfml
-        7: meta.brackets.cfml punctuation.definition.brackets.end.cfml
-        8: storage.type.function.cfml
-        9: entity.name.function.constructor.cfml
-        10: entity.name.function.cfml
+        2: storage.modifier.cfml
+        3: storage.type.return-type.void.cfml
+        4: storage.type.return-type.primitive.cfml
+        5: storage.type.return-type.object.cfml
+        6: storage.type.return-type.object.array.cfml
+        7: meta.brackets.cfml punctuation.definition.brackets.begin.cfml
+        8: meta.brackets.cfml punctuation.definition.brackets.end.cfml
+        9: storage.type.function.cfml
+        10: entity.name.function.constructor.cfml
+        11: entity.name.function.cfml
       push:
         - include: function-declaration-parameters
+        - match: '(?=;)'
+          pop: true
         - match: '(?=\{)'
           set: function-block
     - match: '(?=(({{identifier}})\s*(\.)\s*)+({{identifier}})\s*(=)\s*({{func_lookahead}}|{{arrow_func_lookahead}}))'
@@ -631,7 +645,7 @@ contexts:
 
   function-declaration-properties:
     - meta_content_scope: meta.function.declaration.cfml
-    - match: '(?=(\{|=>))'
+    - match: '(?=(\{|=>|;))'
       pop: true
     - include: scope:embedding.cfml#tag-generic-attribute
 
@@ -758,6 +772,17 @@ contexts:
         - include: method-call
         - match: '(?=[^ ])'
           pop: true
+    - match: (?=\b[_.$[:alnum:]]+\s*::\s*{{identifier}}\s*\()
+      push:
+        - match: '\b{{identifier}}\.'
+          scope: entity.name.class.cfml
+        - match: '\b({{identifier}})(::)'
+          captures:
+            1: entity.name.class.cfml
+            2: punctuation.accessor.static.cfml
+        - include: static-method-call
+        - match: ""
+          pop: true
 
   method-call:
     - include: support-method-call
@@ -766,6 +791,14 @@ contexts:
         1: variable.function.cfml
       set:
         - meta_scope: meta.function-call.method.cfml
+        - include: method-call-params
+
+  static-method-call:
+    - match: '({{identifier}})\s*(?=\()'
+      captures:
+        1: variable.function.static.cfml
+      set:
+        - meta_scope: meta.function-call.method.static.cfml
         - include: method-call-params
 
   function-call-params:
@@ -823,12 +856,14 @@ contexts:
         (?x)
           \b(?i:(
           application|arguments|attributes|caller|cgi|client|cookie|flash|form|
-          local|request|server|session|thistag|url|variables|self|argumentcollection
+          local|request|server|session|thistag|url|variables|self|static|argumentcollection
         ))\b
       scope: variable.language.scope.cfml
 
   variable:
     - include: cfml-scopes
+    - match: '[_.$[:alnum:]]+(?=\s*::)'
+      scope: entity.name.class.cfml
     - match: '{{identifier}}(?=\s*[\[\.])'
       scope: variable.other.struct.cfml
     - match: '{{constant_identifier}}'
@@ -864,6 +899,23 @@ contexts:
         - match: '(?={{identifier}}\s*\()'
           set:
             - include: method-call
+            - match: '(?=(.|\n))'
+              pop: true
+        - include: struct-property
+    - match: '::'
+      scope: punctuation.accessor.static.cfml
+      push:
+        - match: '(?=({{identifier}})\s*(=)\s*({{func_lookahead}}|{{arrow_func_lookahead}}))'
+          set:
+            - meta_scope: meta.function.declaration.cfml
+            - match: '(?={{func_lookahead}})'
+              set: function-declaration
+            - match: '(?={{arrow_func_lookahead}})'
+              set: arrow-function-declaration
+            - include: function-declaration-final-identifier
+        - match: '(?={{identifier}}\s*\()'
+          set:
+            - include: static-method-call
             - match: '(?=(.|\n))'
               pop: true
         - include: struct-property

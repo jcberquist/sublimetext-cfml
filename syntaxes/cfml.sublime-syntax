@@ -9,7 +9,7 @@ file_extensions:
 scope: embedding.cfml
 contexts:
   main:
-    - match: (?i)(?=^\s*(/\*|//|import\b|(component|interface)(\s+|{)))
+    - match: (?i)(?=^\s*(/\*|//|import\b|(component|abstract\s*component|final\s*component|interface)(\s+|{)))
       push: scope:source.cfml.script
     - include: comments
     - match: (?i)(?=<cf(component|interface)\b)

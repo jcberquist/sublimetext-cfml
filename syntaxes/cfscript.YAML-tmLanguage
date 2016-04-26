@@ -9,6 +9,7 @@ repository:
   main:
     patterns:
     - include: '#keywords-top-level'
+    - include: '#component'
     - include: '#statements'
 
   keywords-top-level:
@@ -27,8 +28,8 @@ repository:
 
   statements:
     patterns:
-    - include: '#component'
     - include: '#conditional'
+    - include: '#static'
     - name: meta.block.cfml
       begin: '\{'
       beginCaptures:
@@ -156,6 +157,17 @@ repository:
       patterns:
         - include: '#parens-block-scope'
 
+  static:
+    name: meta.block.static.cfml
+    begin: \bstatic\b(?=\s*[\n\{])
+    beginCaptures:
+      '0': {name: keyword.control.static.cfml}
+    end: (?:(\})|(?=[^\{\}\s]))
+    endCaptures:
+      '1': {name: meta.block.static.cfml punctuation.definition.block.end.cfml}
+    patterns:
+      - include: '#block-scope'
+
   parens-block-scope:
     patterns:
     - name: meta.group.cfml
@@ -273,7 +285,7 @@ repository:
     endCaptures:
       '1': {name: meta.function-call.method.arguments.cfml punctuation.definition.group.end.cfml}
     patterns:
-    - match: \b[_$a-zA-Z][$\w]*(?=\()
+    - match: \b[_$a-zA-Z][$\w\.]*
       name: entity.name.class.cfml
     - name: meta.function-call.method.arguments.cfml
       begin: \(
@@ -362,7 +374,7 @@ repository:
       end: '(?<=\})|(?=[^\s\{])'
       patterns:
       - include: '#struct-literal'
-    - begin: '\?|:'
+    - begin: '\?|:(?!:)'
       beginCaptures:
         '0': {name: keyword.operator.ternary.cfml}
       end: '(?<=\})|(?=[^\s\{])'
@@ -371,15 +383,16 @@ repository:
 
   component:
     patterns:
-    - begin: (?i)^(?=\s*(component)\b)
+    - begin: (?i)^(?=\s*(?:(abstract|final)\s+)?(component)\b)
       end: '\}'
       endCaptures:
         '0': {name: meta.class.body.cfml punctuation.definition.block.end.cfml}
       patterns:
       - name: meta.class.declaration.cfml
-        begin: \b(component)\b
+        begin: \b(?:(abstract|final)\s+)?(component)\b
         beginCaptures:
-          '1': {name: storage.type.class.cfml}
+          '1': {name: storage.modifier.cfml}
+          '2': {name: storage.type.class.cfml}
         end: (?=\{)
         patterns:
         - include: '#comments'
@@ -458,7 +471,8 @@ repository:
         (?x)
         (?:
           (?:
-            (?i:\b(private|package|public|remote)\s+)?
+            (?i:\b(private|package|public|remote|static|final|abstract)\s+)?
+            (?i:\b(private|package|public|remote|static|final|abstract)\s+)?
             (?i:\b
               (void)\s+
               |
@@ -480,16 +494,17 @@ repository:
       beginCaptures:
         '0': {name: meta.function.declaration.cfml}
         '1': {name: storage.modifier.cfml}
-        '2': {name: storage.type.return-type.void.cfml}
-        '3': {name: storage.type.return-type.primitive.cfml}
-        '4': {name: storage.type.return-type.object.cfml}
-        '5': {name: storage.type.return-type.object.array.cfml}
-        '6': {name: meta.brackets.cfml punctuation.definition.brackets.begin.cfml}
-        '7': {name: meta.brackets.cfml punctuation.definition.brackets.end.cfml}
-        '8': {name: storage.type.function.cfml}
-        '9': {name: entity.name.function.constructor.cfml}
-        '10': {name: entity.name.function.cfml}
-      end: '\}'
+        '2': {name: storage.modifier.cfml}
+        '3': {name: storage.type.return-type.void.cfml}
+        '4': {name: storage.type.return-type.primitive.cfml}
+        '5': {name: storage.type.return-type.object.cfml}
+        '6': {name: storage.type.return-type.object.array.cfml}
+        '7': {name: meta.brackets.cfml punctuation.definition.brackets.begin.cfml}
+        '8': {name: meta.brackets.cfml punctuation.definition.brackets.end.cfml}
+        '9': {name: storage.type.function.cfml}
+        '10': {name: entity.name.function.constructor.cfml}
+        '11': {name: entity.name.function.cfml}
+      end: '\}|(?=;)'
       endCaptures:
         '0': {name: meta.function.body.cfml punctuation.definition.block.end.cfml}
       patterns:
@@ -698,7 +713,7 @@ repository:
       begin: '\)'
       beginCaptures:
         '0': {name: meta.function.parameters.cfml punctuation.definition.parameters.end.cfml}
-      end: (?=(\{|=>))
+      end: (?=(\{|;|=>))
       patterns:
       - include: '#tag-generic-attribute'
 
@@ -908,6 +923,18 @@ repository:
         name: keyword.other.accessor.cfml
       - include: '#method-call'
 
+    - begin: '(?=[_$a-zA-Z][$\w.]*\s*::\s*[_$a-zA-Z][$\w]*\s*\()'
+      end: '(?<=\))'
+      patterns:
+      - begin: '(?=[_$a-zA-Z][$\w.]*\s*::)'
+        end: '::'
+        endCaptures:
+          '0': {name: punctuation.accessor.static.cfml}
+        patterns:
+        - match: '[_$a-zA-Z][$\w.]*'
+          name: entity.name.class.cfml
+      - include: '#static-method-call'
+
   method-call:
     patterns:
     - include: '#support-method-call'
@@ -919,22 +946,37 @@ repository:
       endCaptures:
         '0': {name: punctuation.definition.group.end.cfml}
       patterns:
-      - name: meta.function-call.method.arguments.cfml
-        begin: '\('
-        beginCaptures:
-          '0': {name: punctuation.definition.group.begin.cfml}
-        end: '(?=\))'
-        patterns:
-        - match: ','
-          name: punctuation.separator.argument.function.cfml
-        - begin: '\b([_$a-zA-Z][$\w]*)\s*(=)(?!=)'
-          beginCaptures:
-            '1': {name: entity.other.method-parameter.cfml}
-            '2': {name: keyword.operator.assignment.cfml}
-          end: (?=[,\)])
-          patterns:
-          - include: '#expressions'
-        - include: '#expressions'
+      - include: '#method-call-params'
+
+  static-method-call:
+    patterns:
+    - name: meta.function-call.method.static.cfml
+      begin: '([_$a-zA-Z][$\w]*)\s*(?=\()'
+      beginCaptures:
+        '1': {name: variable.function.static.cfml}
+      end: '\)'
+      endCaptures:
+        '0': {name: punctuation.definition.group.end.cfml}
+      patterns:
+      - include: '#method-call-params'
+
+  method-call-params:
+    name: meta.function-call.method.arguments.cfml
+    begin: '\('
+    beginCaptures:
+      '0': {name: punctuation.definition.group.begin.cfml}
+    end: '(?=\))'
+    patterns:
+    - match: ','
+      name: punctuation.separator.argument.function.cfml
+    - begin: '\b([_$a-zA-Z][$\w]*)\s*(=)(?!=)'
+      beginCaptures:
+        '1': {name: entity.other.method-parameter.cfml}
+        '2': {name: keyword.operator.assignment.cfml}
+      end: (?=[,\)])
+      patterns:
+      - include: '#expressions'
+    - include: '#expressions'
 
   function-call-params:
     name: meta.function-call.cfml meta.function-call.arguments.cfml
@@ -968,13 +1010,15 @@ repository:
         (?x)
           \b(?i:(
           application|arguments|attributes|caller|cgi|client|cookie|flash|form|
-          local|request|server|session|thistag|url|variables|self|argumentcollection
+          local|request|server|session|thistag|url|variables|self|static|argumentcollection
         ))\b
       name: variable.language.scope.cfml
 
   variable:
     patterns:
     - include: '#cfml-scopes'
+    - match: '[_$a-zA-Z][$\w.]*(?=\s*::)'
+      name: entity.name.class.cfml
     - match: '[_$a-zA-Z][$\w]*(?=\s*[\[\.])'
       name: variable.other.struct.cfml
     - match: \b[A-Z][_$\dA-Z]*\b
@@ -1026,6 +1070,43 @@ repository:
             '2': {name: keyword.operator.assignment.cfml}
         - include: '#arrow-function-declaration'
       - include: '#method-call'
+    - begin: '::'
+      beginCaptures:
+        '0': {name: punctuation.accessor.static.cfml}
+      end: '(?<=\))|(?=\n)|(\})|(;)|(?:([A-Z][_$\dA-Z]*)|([_$a-zA-Z][$\w]*))(?=\n|[^$\w])(?!(\s*\(|\s*=\s*(function\b|\([^\(]*?\)\s*=>)))'
+      endCaptures:
+        '1': {name: meta.function.body.cfml punctuation.definition.block.end.cfml}
+        '2': {name: punctuation.terminator.statement.cfml}
+        '3': {name: meta.property.constant.cfml}
+        '4': {name: meta.property.cfml}
+      patterns:
+      - begin: '(?=([_$a-zA-Z][$\w]*)\s*(=)\s*(function\b|\([^\(]*?\)\s*=>\s*\{))'
+        end: '(?=\})'
+        patterns:
+        - name: meta.function.body.cfml
+          begin: '\{'
+          beginCaptures:
+            '0': {name: punctuation.definition.block.begin.cfml}
+          end: '(?=\})'
+          patterns:
+          - include: '#statements'
+        - match: ([_$a-zA-Z][$\w]*)\s*(=)\s*
+          captures:
+            '0': {name: meta.function.declaration.cfml}
+            '1': {name: meta.property.cfml entity.name.function.cfml}
+            '2': {name: keyword.operator.assignment.cfml}
+        - include: '#function-declaration'
+        - include: '#arrow-function-declaration'
+      - begin: '(?=([_$a-zA-Z][$\w]*)\s*(=)\s*\([^\(]*?\)\s*=>)'
+        end: '(?=[);}\],\n])'
+        patterns:
+        - match: ([_$a-zA-Z][$\w]*)\s*(=)\s*
+          captures:
+            '0': {name: meta.function.declaration.cfml}
+            '1': {name: meta.property.cfml entity.name.function.cfml}
+            '2': {name: keyword.operator.assignment.cfml}
+        - include: '#arrow-function-declaration'
+      - include: '#static-method-call'
     - match: \;
       name: punctuation.terminator.statement.cfml
     - match: ","

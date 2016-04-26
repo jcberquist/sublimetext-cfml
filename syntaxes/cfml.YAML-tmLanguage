@@ -5,7 +5,7 @@ fileTypes: [cfml, cfm, cfc]
 
 patterns:
 - contentName: source.cfml.script
-  begin: (?i)(?=^\s*(/\*|//|import\b|(component|interface)(\s+|{)))
+  begin: (?i)(?=^\s*(/\*|//|import\b|(component|abstract\s*component|final\s*component|interface)(\s+|{)))
   end: (?=not)possible
   patterns:
   - include: source.cfml.script

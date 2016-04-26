@@ -14,7 +14,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>(?i)(?=^\s*(/\*|//|import\b|(component|interface)(\s+|{)))</string>
+			<string>(?i)(?=^\s*(/\*|//|import\b|(component|abstract\s*component|final\s*component|interface)(\s+|{)))</string>
 			<key>contentName</key>
 			<string>source.cfml.script</string>
 			<key>end</key>
