@@ -1,0 +1,11 @@
+CFML v0.9.0 Changelog:
+
+- Lucee 5 syntax highlighting:
+    abstract/final modifiers
+    lambda functions
+    static constructor
+    static methods and properties
+
+- Syntax scope updates to stay in sync with official Sublime Text packages
+
+- Small bug fixes
