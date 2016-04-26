@@ -15,10 +15,7 @@ def from_view(view, region = None):
 		region.b = region.a + 5000
 		truncated = True
 
-	if view.substr(region.begin() - 1) != "\n":
-		region.a = view.find_by_class(region.begin(), False, sublime.CLASS_LINE_START)
-	if view.substr(region.end()) != "\n":
-		region.b = view.find_by_class(region.end(), True, sublime.CLASS_LINE_END)
+	region = view.line(region)
 
 	color_scheme = get_color_scheme()
 

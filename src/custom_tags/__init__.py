@@ -24,6 +24,9 @@ def get_tags(view, prefix, position, info):
 	return None
 
 def get_tag_attributes(view, prefix, position, info):
+	if not info["tag_name"]:
+		return None
+
 	if ":" in info["tag_name"] and info["project_name"] in custom_tags.projects:
 		completion_list = get_tag_attribute_completions(info["project_name"], info["tag_name"])
 		if completion_list:
