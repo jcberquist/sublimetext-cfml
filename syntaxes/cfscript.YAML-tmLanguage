@@ -39,6 +39,8 @@ repository:
         '0': {name: punctuation.definition.block.end.cfml}
       patterns:
       - include: '#statements'
+    - include: '#tag-in-script'
+    - include: '#tag-in-script-cf'
     - include: '#expressions'
 
   conditional:
@@ -200,11 +202,9 @@ repository:
     - include: '#constants'
     - include: '#named-function'
     - include: '#anonymous-function'
-    - include: '#tag-in-script'
     - include: '#struct-literal'
     - include: '#brackets'
     - include: '#number'
-    - include: '#tag-in-script-cf'
     - include: '#call'
     - include: '#variable'
     - include: '#punctuation'
@@ -784,7 +784,7 @@ repository:
       '0': {name: punctuation.definition.block.end.cfml}
     patterns:
     - include: '#comments'
-    - begin: (?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*(\bfunction\b|\([^\(]*?\)\s*=>\s*\{))
+    - begin: (?=(\'[^']*\'|\"[^"]*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*(\bfunction\b|\([^\(]*?\)\s*=>\s*\{))
       end: '\}'
       endCaptures:
         '0': {name: meta.function.body.cfml punctuation.definition.block.end.cfml}
@@ -812,7 +812,7 @@ repository:
           end: '(?=\})'
           patterns:
           - include: '#statements'
-    - begin: (?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*|\([^\(]*?\)\s*=>)
+    - begin: (?=(\'[^']*\'|\"[^"]*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*\([^\(]*?\)\s*=>)
       end: '(?=[);}\],\n])'
       patterns:
       - include: '#struct-literal-function-keys'

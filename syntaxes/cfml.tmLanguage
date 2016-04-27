@@ -2657,10 +2657,6 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#source-cfml-script-tag-in-script</string>
-				</dict>
-				<dict>
-					<key>include</key>
 					<string>#source-cfml-script-struct-literal</string>
 				</dict>
 				<dict>
@@ -2670,10 +2666,6 @@
 				<dict>
 					<key>include</key>
 					<string>#source-cfml-script-number</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#source-cfml-script-tag-in-script-cf</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -4333,6 +4325,14 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#source-cfml-script-tag-in-script</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#source-cfml-script-tag-in-script-cf</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#source-cfml-script-expressions</string>
 				</dict>
 			</array>
@@ -4528,7 +4528,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*(\bfunction\b|\([^\(]*?\)\s*=&gt;\s*\{))</string>
+					<string>(?=(\'[^']*\'|\"[^"]*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*(\bfunction\b|\([^\(]*?\)\s*=&gt;\s*\{))</string>
 					<key>end</key>
 					<string>\}</string>
 					<key>endCaptures</key>
@@ -4621,7 +4621,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*|\([^\(]*?\)\s*=&gt;)</string>
+					<string>(?=(\'[^']*\'|\"[^"]*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*\([^\(]*?\)\s*=&gt;)</string>
 					<key>end</key>
 					<string>(?=[);}\],\n])</string>
 					<key>patterns</key>

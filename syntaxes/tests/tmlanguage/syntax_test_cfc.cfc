@@ -133,7 +133,7 @@ default="string";
 //  ^ meta.struct-literal.key.cfml string.quoted.double.cfml
 //       ^ punctuation.separator.key-value.cfml -string
     key = value,
-//  ^ meta.struct-literal.key.cfml
+//  ^ meta.struct-literal.key.cfml -entity.name.function
 //      ^ punctuation.separator.key-value.cfml
     'key' = value,
 //  ^ meta.struct-literal.key.cfml string.quoted.single.cfml

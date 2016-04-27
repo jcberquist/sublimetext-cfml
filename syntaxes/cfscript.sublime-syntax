@@ -51,6 +51,8 @@ contexts:
           scope: punctuation.definition.block.end.cfml
           pop: true
         - include: statements
+    - include: tag-in-script
+    - include: tag-in-script-cf
     - include: expressions
 
   conditional:
@@ -176,11 +178,9 @@ contexts:
     - include: constants
     - include: named-function
     - include: anonymous-function
-    - include: tag-in-script
     - include: struct-literal
     - include: brackets
     - include: number
-    - include: tag-in-script-cf
     - include: call
     - include: variable
     - include: punctuation
@@ -657,7 +657,7 @@ contexts:
         - match: '\}'
           scope: punctuation.definition.block.end.cfml
           pop: true
-        - match: "(?=('.*'|\".*\"|{{identifier}})\\s*(:|=)({{func_lookahead}}|{{arrow_func_lookahead}}))"
+        - match: "(?=('[^']*'|\"[^\"]*\"|{{identifier}})\\s*(:|=)({{func_lookahead}}|{{arrow_func_lookahead}}))"
           push:
             - meta_content_scope: meta.function.declaration.cfml
             - match: "'"

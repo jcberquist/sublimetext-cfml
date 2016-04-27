@@ -1343,10 +1343,6 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#tag-in-script</string>
-				</dict>
-				<dict>
-					<key>include</key>
 					<string>#struct-literal</string>
 				</dict>
 				<dict>
@@ -1356,10 +1352,6 @@
 				<dict>
 					<key>include</key>
 					<string>#number</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#tag-in-script-cf</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -3019,6 +3011,14 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#tag-in-script</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#tag-in-script-cf</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#expressions</string>
 				</dict>
 			</array>
@@ -3214,7 +3214,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*(\bfunction\b|\([^\(]*?\)\s*=&gt;\s*\{))</string>
+					<string>(?=(\'[^']*\'|\"[^"]*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*(\bfunction\b|\([^\(]*?\)\s*=&gt;\s*\{))</string>
 					<key>end</key>
 					<string>\}</string>
 					<key>endCaptures</key>
@@ -3307,7 +3307,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?=(\'.*\'|\".*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*|\([^\(]*?\)\s*=&gt;)</string>
+					<string>(?=(\'[^']*\'|\"[^"]*\"|[_$a-zA-Z][$\w]*)\s*(:|=)\s*\([^\(]*?\)\s*=&gt;)</string>
 					<key>end</key>
 					<string>(?=[);}\],\n])</string>
 					<key>patterns</key>
