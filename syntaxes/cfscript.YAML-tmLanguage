@@ -451,8 +451,14 @@ repository:
       name: keyword.control.trycatch.cfml
     - match: (?<!\.)\b(break|continue)\b
       name: keyword.control.loop.cfml
-    - match: (?<!\.)\b(return|abort)\b
+    - match: (?<!\.)\b(abort)\b
       name: keyword.control.flow.cfml
+    - begin: (?<!\.)\b(return)\b
+      beginCaptures:
+        '0': {name: keyword.control.flow.cfml}
+      end: '(?<=\})|(?=[^\s\{])'
+      patterns:
+      - include: '#struct-literal'
     - match: \bvar\b
       name: storage.type.cfml
 
@@ -827,7 +833,9 @@ repository:
     - begin: '(:|=)\s*'
       beginCaptures:
         '1': {name: punctuation.separator.key-value.cfml}
-      end: '(?=[\},])'
+      end: '(,)|(?=\})'
+      endCaptures:
+        '1': {name: punctuation.separator.struct-literal.cfml}
       patterns:
       - include: '#expressions'
 

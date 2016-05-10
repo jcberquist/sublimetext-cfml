@@ -425,8 +425,11 @@ contexts:
       scope: keyword.control.trycatch.cfml
     - match: \b(break|continue)\b
       scope: keyword.control.loop.cfml
-    - match: \b(return|abort)\b
+    - match: \b(abort)\b
       scope: keyword.control.flow.cfml
+    - match: \b(return)\b
+      scope: keyword.control.flow.cfml
+      push: after-operator
     - match: \bvar\b
       scope: storage.type.cfml
 
@@ -705,7 +708,9 @@ contexts:
           captures:
             1: punctuation.separator.key-value.cfml
           push:
-            - match: '(?=\}|,)'
+            - match: '(,)|(?=\})'
+              captures:
+                1: punctuation.separator.struct-literal.cfml
               pop: true
             - include: expressions
 

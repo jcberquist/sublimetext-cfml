@@ -2952,9 +2952,30 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;!\.)\b(return|abort)\b</string>
+					<string>(?&lt;!\.)\b(abort)\b</string>
 					<key>name</key>
 					<string>keyword.control.flow.cfml</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?&lt;!\.)\b(return)\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.flow.cfml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?&lt;=\})|(?=[^\s\{])</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source-cfml-script-struct-literal</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -4669,7 +4690,15 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=[\},])</string>
+					<string>(,)|(?=\})</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.separator.struct-literal.cfml</string>
+						</dict>
+					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>

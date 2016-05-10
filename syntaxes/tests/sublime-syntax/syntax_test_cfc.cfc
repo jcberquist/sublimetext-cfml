@@ -115,6 +115,9 @@ default="string";
 //                ^ meta.support.function-call.member.cfml meta.support.function-call.member.arguments.cfml punctuation.definition.group.begin.cfml
 //                  ^ meta.support.function-call.member.cfml meta.support.function-call.member.arguments.cfml entity.other.method-parameter.cfml -meta.brace
 
+    return { key: value }
+//         ^ meta.struct-literal.cfml
+
   }
 
   public User[] function getUser(){}
@@ -126,6 +129,7 @@ default="string";
     key: value,
 //  ^ meta.struct-literal.key.cfml
 //     ^ punctuation.separator.key-value.cfml
+//            ^ punctuation.separator.struct-literal.cfml
     'key': value,
 //  ^ meta.struct-literal.key.cfml string.quoted.single.cfml
 //       ^ punctuation.separator.key-value.cfml -string
