@@ -115,7 +115,7 @@ default="string";
 //                ^ meta.support.function-call.member.cfml meta.support.function-call.member.arguments.cfml punctuation.definition.group.begin.cfml
 //                  ^ meta.support.function-call.member.cfml meta.support.function-call.member.arguments.cfml entity.other.method-parameter.cfml -meta.brace
 
-    return { key: value }
+    return { key: value };
 //         ^ meta.struct-literal.cfml
 
   }
@@ -179,6 +179,12 @@ default="string";
   // <- variable.other.struct.cfml
 //    ^ meta.property.constant.cfml
 
+  var test[key][0] = [ 1, 2, 3 ];
+//        ^^^^^^^^ meta.brackets.cfml
+//                   ^^^^^^^^^^^ meta.array-literal.cfml
+//                      ^ punctuation.separator.array-literal.cfml
+  obj.prop['key'] = true;
+//        ^^^^^^^ meta.brackets.cfml
 }
 // <- embedding.cfml source.cfml.script meta.class.body.cfml punctuation.definition.block.end.cfml
  // <- embedding.cfml source.cfml.script -meta

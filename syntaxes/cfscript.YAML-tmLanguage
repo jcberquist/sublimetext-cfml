@@ -892,6 +892,15 @@ repository:
   square-brackets:
     patterns:
     - name: meta.brackets.cfml
+      begin: (?<=[$\w\)\]])\s*(\[)
+      beginCaptures:
+        '1': {name: punctuation.definition.brackets.begin.cfml}
+      end: \]
+      endCaptures:
+        '0': {name: punctuation.definition.brackets.end.cfml}
+      patterns:
+      - include: '#expressions'
+    - name: meta.array-literal.cfml
       begin: \[
       beginCaptures:
         '0': {name: punctuation.definition.brackets.begin.cfml}
@@ -899,6 +908,8 @@ repository:
       endCaptures:
         '0': {name: punctuation.definition.brackets.end.cfml}
       patterns:
+      - name: punctuation.separator.array-literal.cfml
+        match: ','
       - include: '#expressions'
 
   number:

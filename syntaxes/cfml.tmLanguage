@@ -4270,6 +4270,37 @@
 			<array>
 				<dict>
 					<key>begin</key>
+					<string>(?&lt;=[$\w\)\]])\s*(\[)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.brackets.begin.cfml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\]</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.brackets.end.cfml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.brackets.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source-cfml-script-expressions</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
 					<string>\[</string>
 					<key>beginCaptures</key>
 					<dict>
@@ -4290,9 +4321,15 @@
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.brackets.cfml</string>
+					<string>meta.array-literal.cfml</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>match</key>
+							<string>,</string>
+							<key>name</key>
+							<string>punctuation.separator.array-literal.cfml</string>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>#source-cfml-script-expressions</string>

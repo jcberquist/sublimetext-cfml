@@ -179,7 +179,8 @@ contexts:
     - include: named-function
     - include: anonymous-function
     - include: struct-literal
-    - include: brackets
+    - include: round-brackets
+    - include: array-literal
     - include: number
     - include: call
     - include: variable
@@ -196,6 +197,19 @@ contexts:
           pop: true
     - match: '(?=\S)'
       pop: true
+
+  after-identifier:
+    - match: '\['
+      scope: punctuation.definition.brackets.begin.cfml
+      push:
+        - meta_scope: meta.brackets.cfml
+        - match: '\]'
+          scope: punctuation.definition.brackets.end.cfml
+          pop: true
+        - include: expressions
+    - match: '(?=[\S\n])'
+      pop: true
+
 
   comments:
     - match: /\*\*(?!/)
@@ -714,10 +728,6 @@ contexts:
               pop: true
             - include: expressions
 
-  brackets:
-    - include: round-brackets
-    - include: square-brackets
-
   round-brackets:
     - match: \(
       scope: punctuation.definition.group.begin.cfml
@@ -725,19 +735,21 @@ contexts:
         - meta_scope: meta.group.cfml
         - match: \)
           scope: punctuation.definition.group.end.cfml
-          pop: true
+          set: after-identifier
         - include: expressions
     - match: \)
       scope: invalid.illegal.stray.brace.round.cfml
 
-  square-brackets:
+  array-literal:
     - match: '\['
       scope: punctuation.definition.brackets.begin.cfml
       push:
-        - meta_scope: meta.brackets.cfml
+        - meta_scope: meta.array-literal.cfml
         - match: '\]'
           scope: punctuation.definition.brackets.end.cfml
-          pop: true
+          set: after-identifier
+        - match: ','
+          scope: punctuation.separator.array-literal.cfml
         - include: expressions
 
   number:
@@ -752,6 +764,7 @@ contexts:
           )
         )
       scope: constant.numeric.cfml
+      push: after-identifier
 
   call:
     - match: '(?=\b{{identifier}}\s*\()'
@@ -809,7 +822,7 @@ contexts:
   function-call-params:
     - match: '\)'
       scope: meta.function-call.arguments.cfml punctuation.definition.group.end.cfml
-      pop: true
+      set: after-identifier
     - match: '\('
       scope: punctuation.definition.group.begin.cfml
       push:
@@ -831,7 +844,7 @@ contexts:
   method-call-params:
     - match: '\)'
       scope: meta.function-call.method.arguments.cfml punctuation.definition.group.end.cfml
-      pop: true
+      set: after-identifier
     - match: '\('
       scope: punctuation.definition.group.begin.cfml
       push:
@@ -866,15 +879,19 @@ contexts:
       scope: variable.language.scope.cfml
 
   variable:
-    - include: cfml-scopes
-    - match: '[_.$[:alnum:]]+(?=\s*::)'
-      scope: entity.name.class.cfml
-    - match: '{{identifier}}(?=\s*[\[\.])'
-      scope: variable.other.struct.cfml
-    - match: '{{constant_identifier}}'
-      scope: variable.other.constant.cfml
-    - match: '{{identifier}}'
-      scope: variable.other.readwrite.cfml
+    - match: '(?={{identifier}})'
+      push:
+        - match: '(?!{{identifier}})'
+          set: after-identifier
+        - include: cfml-scopes
+        - match: '[_.$[:alnum:]]+(?=\s*::)'
+          scope: entity.name.class.cfml
+        - match: '{{identifier}}(?=\s*[\[\.])'
+          scope: variable.other.struct.cfml
+        - match: '{{constant_identifier}}'
+          scope: variable.other.constant.cfml
+        - match: '{{identifier}}'
+          scope: variable.other.readwrite.cfml
 
   struct-property:
     - match: '{{constant_identifier}}'
@@ -882,7 +899,7 @@ contexts:
     - match: '{{identifier}}'
       scope: meta.property.cfml
     - match: '(?=.|\n)'
-      pop: true
+      set: after-identifier
 
   punctuation:
     - match: \.
