@@ -69,5 +69,5 @@ cfhttp( url = "www.google.com" );
 
 cfcExists( someArg = 1 );
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml variable.function.cfml  --->
-<!---      ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml meta.function-call.arguments.cfml entity.other.function-parameter.cfml  --->
+<!---      ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml meta.function-call.parameters.cfml entity.other.function-parameter.cfml  --->
 </cfscript>

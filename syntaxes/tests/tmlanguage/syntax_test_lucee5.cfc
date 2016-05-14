@@ -22,12 +22,12 @@ abstract component {
 
     function test() {
       test.class::staticMethod();
-//    ^^^^^^^^^^ entity.name.class.cfml     
-//              ^^ punctuation.accessor.static.cfml    
-//                ^^^^^^^^^^^^ meta.function-call.method.static.cfml variable.function.static.cfml   
+//    ^^^^^^^^^^ entity.name.class.cfml
+//              ^^ punctuation.accessor.static.cfml
+//                ^^^^^^^^^^^^ meta.function-call.method.static.cfml variable.function.static.cfml
       test.class::staticVal;
-//    ^^^^^^^^^^ entity.name.class.cfml     
-//              ^^ punctuation.accessor.static.cfml    
-//                ^^^^^^^^^ meta.property.cfml 
+//    ^^^^^^^^^^ entity.name.class.cfml
+//              ^^ punctuation.accessor.static.cfml
+//                ^^^^^^^^^ meta.property.cfml
     }
 }

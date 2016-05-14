@@ -210,7 +210,6 @@ contexts:
     - match: '(?=[\S\n])'
       pop: true
 
-
   comments:
     - match: /\*\*(?!/)
       scope: punctuation.definition.comment.cfml
@@ -277,16 +276,16 @@ contexts:
   constructor-params:
     - meta_content_scope: meta.instance.constructor.cfml
     - match: '\)'
-      scope: meta.instance.constructor.cfml meta.function-call.method.arguments.cfml punctuation.definition.group.end.cfml
+      scope: meta.instance.constructor.cfml meta.function-call.parameters.method.cfml punctuation.definition.group.end.cfml
       pop: true
     - match: '\('
       scope: punctuation.definition.group.begin.cfml
       push:
-        - meta_scope: meta.function-call.method.arguments.cfml
+        - meta_scope: meta.function-call.parameters.method.cfml
         - match: '(?=\))'
           pop: true
         - match: ','
-          scope: punctuation.separator.argument.function.cfml
+          scope: punctuation.separator.function-call.method.cfml
         - match: '\b({{identifier}})\s*(=)(?!=)'
           captures:
             1: entity.other.method-parameter.cfml
@@ -651,7 +650,7 @@ contexts:
         - match: '{{identifier}}'
           scope: variable.parameter.function.cfml
         - match: ','
-          scope: punctuation.separator.parameter.function.cfml
+          scope: punctuation.separator.function.cfml
         - match: '='
           scope: keyword.operator.assignment.cfml
           push:
@@ -821,16 +820,16 @@ contexts:
 
   function-call-params:
     - match: '\)'
-      scope: meta.function-call.arguments.cfml punctuation.definition.group.end.cfml
+      scope: meta.function-call.parameters.cfml punctuation.definition.group.end.cfml
       set: after-identifier
     - match: '\('
       scope: punctuation.definition.group.begin.cfml
       push:
-        - meta_scope: meta.function-call.arguments.cfml
+        - meta_scope: meta.function-call.parameters.cfml
         - match: '(?=\))'
           pop: true
         - match: ','
-          scope: punctuation.separator.argument.function.cfml
+          scope: punctuation.separator.function-call.cfml
         - match: '\b({{identifier}})\s*(=)(?!=)'
           captures:
             1: entity.other.function-parameter.cfml
@@ -843,16 +842,16 @@ contexts:
 
   method-call-params:
     - match: '\)'
-      scope: meta.function-call.method.arguments.cfml punctuation.definition.group.end.cfml
+      scope: meta.function-call.parameters.method.cfml punctuation.definition.group.end.cfml
       set: after-identifier
     - match: '\('
       scope: punctuation.definition.group.begin.cfml
       push:
-        - meta_scope: meta.function-call.method.arguments.cfml
+        - meta_scope: meta.function-call.parameters.method.cfml
         - match: '(?=\))'
           pop: true
         - match: ','
-          scope: punctuation.separator.argument.function.cfml
+          scope: punctuation.separator.function-call.method.cfml
         - match: '\b({{identifier}})\s*(=)(?!=)'
           captures:
             1: entity.other.method-parameter.cfml
@@ -1223,16 +1222,16 @@ contexts:
       set:
         - meta_scope: meta.support.function-call.member.cfml
         - match: '\)'
-          scope: meta.support.function-call.member.arguments.cfml punctuation.definition.group.end.cfml
+          scope: meta.function-call.parameters.method.support.cfml punctuation.definition.group.end.cfml
           pop: true
         - match: '\('
           scope: punctuation.definition.group.begin.cfml
           push:
-            - meta_scope: meta.support.function-call.member.arguments.cfml
+            - meta_scope: meta.function-call.parameters.method.support.cfml
             - match: '(?=\))'
               pop: true
             - match: ','
-              scope: punctuation.separator.argument.function.cfml
+              scope: punctuation.separator.function-call.method.support.cfml
             - match: '\b({{identifier}})\s*(=)(?!=)'
               captures:
                 1: entity.other.method-parameter.cfml
@@ -1245,16 +1244,16 @@ contexts:
 
   support-call-params:
     - match: '\)'
-      scope: meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml
+      scope: meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml
       pop: true
     - match: '\('
       scope: punctuation.definition.group.begin.cfml
       push:
-        - meta_scope: meta.support.function-call.arguments.cfml
+        - meta_scope: meta.function-call.parameters.support.cfml
         - match: '(?=\))'
           pop: true
         - match: ','
-          scope: punctuation.separator.argument.function.cfml
+          scope: punctuation.separator.function-call.support.cfml
         - match: '\b({{identifier}})\s*(=)(?!=)'
           captures:
             1: entity.other.function-parameter.cfml

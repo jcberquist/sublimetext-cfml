@@ -1235,7 +1235,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>meta.function-call.method.arguments.cfml punctuation.definition.group.end.cfml</string>
+					<string>meta.function-call.parameters.method.cfml punctuation.definition.group.end.cfml</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -1262,14 +1262,14 @@
 					<key>end</key>
 					<string>(?=\))</string>
 					<key>name</key>
-					<string>meta.function-call.method.arguments.cfml</string>
+					<string>meta.function-call.parameters.method.cfml</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>match</key>
 							<string>,</string>
 							<key>name</key>
-							<string>punctuation.separator.argument.function.cfml</string>
+							<string>punctuation.separator.function-call.method.cfml</string>
 						</dict>
 						<dict>
 							<key>begin</key>
@@ -1390,14 +1390,14 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>meta.function-call.cfml meta.function-call.arguments.cfml</string>
+			<string>meta.function-call.cfml meta.function-call.parameters.cfml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>,</string>
 					<key>name</key>
-					<string>punctuation.separator.argument.function.cfml</string>
+					<string>punctuation.separator.function-call.cfml</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -1546,7 +1546,7 @@
 					<key>match</key>
 					<string>,</string>
 					<key>name</key>
-					<string>punctuation.separator.parameter.function.cfml</string>
+					<string>punctuation.separator.function.cfml</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -1786,14 +1786,14 @@
 			<key>end</key>
 			<string>(?=\))</string>
 			<key>name</key>
-			<string>meta.function-call.method.arguments.cfml</string>
+			<string>meta.function-call.parameters.method.cfml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>,</string>
 					<key>name</key>
-					<string>punctuation.separator.argument.function.cfml</string>
+					<string>punctuation.separator.function-call.method.cfml</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -3545,11 +3545,11 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml</string>
+							<string>meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
-					<string>meta.support.function-call.arguments.cfml</string>
+					<string>meta.function-call.parameters.support.cfml</string>
 					<key>end</key>
 					<string>\)</string>
 					<key>endCaptures</key>
@@ -3557,7 +3557,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml</string>
+							<string>meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -3583,11 +3583,11 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml</string>
+							<string>meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
-					<string>meta.support.function-call.arguments.cfml</string>
+					<string>meta.function-call.parameters.support.cfml</string>
 					<key>end</key>
 					<string>\)</string>
 					<key>endCaptures</key>
@@ -3595,7 +3595,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml</string>
+							<string>meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -3715,11 +3715,11 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml</string>
+							<string>meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml</string>
 						</dict>
 					</dict>
 					<key>contentName</key>
-					<string>meta.support.function-call.arguments.cfml</string>
+					<string>meta.function-call.parameters.support.cfml</string>
 					<key>end</key>
 					<string>\)</string>
 					<key>endCaptures</key>
@@ -3727,7 +3727,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml</string>
+							<string>meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -3738,7 +3738,7 @@
 							<key>match</key>
 							<string>,</string>
 							<key>name</key>
-							<string>punctuation.separator.argument.function.cfml</string>
+							<string>punctuation.separator.function-call.support.cfml</string>
 						</dict>
 						<dict>
 							<key>begin</key>
@@ -3805,11 +3805,11 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>meta.support.function-call.member.arguments.cfml punctuation.definition.group.begin.cfml</string>
+					<string>meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
-			<string>meta.support.function-call.member.arguments.cfml</string>
+			<string>meta.function-call.parameters.method.support.cfml</string>
 			<key>end</key>
 			<string>\)</string>
 			<key>endCaptures</key>
@@ -3817,7 +3817,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>meta.support.function-call.member.arguments.cfml punctuation.definition.group.end.cfml</string>
+					<string>meta.function-call.parameters.method.support.cfml punctuation.definition.group.end.cfml</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -3828,7 +3828,7 @@
 					<key>match</key>
 					<string>,</string>
 					<key>name</key>
-					<string>punctuation.separator.argument.function.cfml</string>
+					<string>punctuation.separator.function-call.method.support.cfml</string>
 				</dict>
 				<dict>
 					<key>begin</key>

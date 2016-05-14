@@ -283,18 +283,18 @@ repository:
       '1': {name: keyword.operator.new.cfml}
     end: (\))|(?=[^_$\w.\(\)])
     endCaptures:
-      '1': {name: meta.function-call.method.arguments.cfml punctuation.definition.group.end.cfml}
+      '1': {name: meta.function-call.parameters.method.cfml punctuation.definition.group.end.cfml}
     patterns:
     - match: \b[_$a-zA-Z][$\w\.]*
       name: entity.name.class.cfml
-    - name: meta.function-call.method.arguments.cfml
+    - name: meta.function-call.parameters.method.cfml
       begin: \(
       beginCaptures:
         '0': {name: punctuation.definition.group.begin.cfml}
       end: '(?=\))'
       patterns:
       - match: ','
-        name: punctuation.separator.argument.function.cfml
+        name: punctuation.separator.function-call.method.cfml
       - begin: '\b([_$a-zA-Z][$\w]*)\s*(=)(?!=)'
         beginCaptures:
           '1': {name: entity.other.method-parameter.cfml}
@@ -770,7 +770,7 @@ repository:
     - match: '[_$a-zA-Z][$\w]*'
       name: variable.parameter.function.cfml
     - match: ','
-      name: punctuation.separator.parameter.function.cfml
+      name: punctuation.separator.function.cfml
     - name: meta.parameter.optional.cfml
       begin: '='
       beginCaptures:
@@ -980,14 +980,14 @@ repository:
       - include: '#method-call-params'
 
   method-call-params:
-    name: meta.function-call.method.arguments.cfml
+    name: meta.function-call.parameters.method.cfml
     begin: '\('
     beginCaptures:
       '0': {name: punctuation.definition.group.begin.cfml}
     end: '(?=\))'
     patterns:
     - match: ','
-      name: punctuation.separator.argument.function.cfml
+      name: punctuation.separator.function-call.method.cfml
     - begin: '\b([_$a-zA-Z][$\w]*)\s*(=)(?!=)'
       beginCaptures:
         '1': {name: entity.other.method-parameter.cfml}
@@ -998,7 +998,7 @@ repository:
     - include: '#expressions'
 
   function-call-params:
-    name: meta.function-call.cfml meta.function-call.arguments.cfml
+    name: meta.function-call.cfml meta.function-call.parameters.cfml
     begin: '\('
     beginCaptures:
       '0': {name: punctuation.definition.group.begin.cfml}
@@ -1007,7 +1007,7 @@ repository:
       '0': {name: punctuation.definition.group.end.cfml}
     patterns:
     - match: ','
-      name: punctuation.separator.argument.function.cfml
+      name: punctuation.separator.function-call.cfml
     - begin: '\b([_$a-zA-Z][$\w]*)\s*(=)(?!=)'
       beginCaptures:
         '1': {name: entity.other.function-parameter.cfml}
@@ -1134,29 +1134,29 @@ repository:
   support-call:
     patterns:
     - name: meta.support.function-call.cfml meta.support.function-call.createcomponent.cfml
-      contentName: meta.support.function-call.arguments.cfml
+      contentName: meta.function-call.parameters.support.cfml
       begin: (?i)\b(createobject)(\()(?=(?:\s*type\s*=)?\s*["']component["']\s*,)
       beginCaptures:
         '1': {name: support.function.cfml}
-        '2': {name: meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml}
+        '2': {name: meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml}
       end: \)
       endCaptures:
-        '0': {name: meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml}
+        '0': {name: meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml}
       patterns:
       - include: '#expressions'
     - name: meta.support.function-call.cfml meta.support.function-call.createjavaobject.cfml
-      contentName: meta.support.function-call.arguments.cfml
+      contentName: meta.function-call.parameters.support.cfml
       begin: (?i)\b(createobject)(\()(?=(?:\s*type\s*=)?\s*["']java["']\s*,)
       beginCaptures:
         '1': {name: support.function.cfml}
-        '2': {name: meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml}
+        '2': {name: meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml}
       end: \)
       endCaptures:
-        '0': {name: meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml}
+        '0': {name: meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml}
       patterns:
       - include: '#expressions'
     - name: meta.support.function-call.cfml
-      contentName: meta.support.function-call.arguments.cfml
+      contentName: meta.function-call.parameters.support.cfml
       begin: |-
         (?x)\b
         (?i:
@@ -1255,13 +1255,13 @@ repository:
           )(\()
       beginCaptures:
         '1': {name: support.function.cfml}
-        '2': {name: meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml}
+        '2': {name: meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml}
       end: \)
       endCaptures:
-        '0': {name: meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml}
+        '0': {name: meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml}
       patterns:
       - match: ','
-        name: punctuation.separator.argument.function.cfml
+        name: punctuation.separator.function-call.support.cfml
       - begin: '\b([_$a-zA-Z][$\w\.]*)\s*(=)(?!=)'
         captures:
           '1': {name: entity.other.function-parameter.cfml}
@@ -1273,7 +1273,7 @@ repository:
 
   support-method-call:
     name: meta.support.function-call.member.cfml
-    contentName: meta.support.function-call.member.arguments.cfml
+    contentName: meta.function-call.parameters.method.support.cfml
     begin: |-
       (?x)
       (?i:
@@ -1295,13 +1295,13 @@ repository:
       )(\()
     beginCaptures:
       '1': {name: support.function.member.cfml}
-      '2': {name: meta.support.function-call.member.arguments.cfml punctuation.definition.group.begin.cfml}
+      '2': {name: meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml}
     end: \)
     endCaptures:
-      '0': {name: meta.support.function-call.member.arguments.cfml punctuation.definition.group.end.cfml}
+      '0': {name: meta.function-call.parameters.method.support.cfml punctuation.definition.group.end.cfml}
     patterns:
     - match: ','
-      name: punctuation.separator.argument.function.cfml
+      name: punctuation.separator.function-call.method.support.cfml
     - begin: '\b([_$a-zA-Z][$\w\.]*)\s*(=)(?!=)'
       captures:
         '1': {name: entity.other.method-parameter.cfml}

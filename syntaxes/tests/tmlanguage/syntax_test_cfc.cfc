@@ -53,13 +53,25 @@ default="string";
 //^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.declaration.cfml
     var result;
 
+    arrayAppend( arr, item, true );
+//             ^ meta.support.function-call.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml
+//                  ^ punctuation.separator.function-call.support.cfml
+    arr.append( item, true );
+//            ^ meta.support.function-call.member.cfml meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml
+//                  ^ punctuation.separator.function-call.method.support.cfml
+    doSomething( arr, item, true );
+//             ^ meta.function-call.cfml meta.function-call.parameters.cfml punctuation.definition.group.begin.cfml
+//                  ^ punctuation.separator.function-call.cfml
+    obj.do( arr, item, true );
+//        ^ meta.function-call.method.cfml meta.function-call.parameters.method.cfml punctuation.definition.group.begin.cfml
+//             ^ punctuation.separator.function-call.method.cfml
+
     toString( testVar, "utf-8" );
-//  ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.support.function-call.cfml support.function.cfml
-//          ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.support.function-call.cfml meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml
-//                             ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.support.function-call.cfml meta.support.function-call.arguments.cfml punctuation.definition.group.end.cfml
+//          ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.support.function-call.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml
+//                             ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.support.function-call.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml
     var new_list = testVar.listAppend( "hello" );
 //                         ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.support.function-call.member.cfml support.function.member.cfml
-//                                   ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.support.function-call.member.cfml meta.support.function-call.member.arguments.cfml punctuation.definition.group.begin.cfml
+//                                   ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.support.function-call.member.cfml meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml
     if ( true ) http url="www.google.com" result="result";
 //              ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.tag.script.cfml entity.name.tag.script.cfml
 //                   ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.tag.script.cfml entity.other.attribute-name.cfml
@@ -75,21 +87,21 @@ default="string";
 //            ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml - meta.tag.script.cfml
 
     test.foo( myvar == test );
-//            ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.method.cfml meta.function-call.method.arguments.cfml variable.other.readwrite.cfml
+//            ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.method.cfml meta.function-call.parameters.method.cfml variable.other.readwrite.cfml
 
     foo.method(test = true, random = "string");
 //      ^ meta.function-call.method.cfml
-//            ^ meta.function-call.method.cfml meta.function-call.method.arguments.cfml punctuation.definition.group.begin.cfml
-//             ^ meta.function-call.method.cfml meta.function-call.method.arguments.cfml entity.other.method-parameter.cfml
-//                  ^ meta.function-call.method.cfml meta.function-call.method.arguments.cfml keyword.operator.assignment.cfml
+//            ^ meta.function-call.method.cfml meta.function-call.parameters.method.cfml punctuation.definition.group.begin.cfml
+//             ^ meta.function-call.method.cfml meta.function-call.parameters.method.cfml entity.other.method-parameter.cfml
+//                  ^ meta.function-call.method.cfml meta.function-call.parameters.method.cfml keyword.operator.assignment.cfml
     var mycfc = createObject( 'component', 'path.to.cfc' );
 //              ^ meta.support.function-call.cfml meta.support.function-call.createcomponent.cfml support.function.cfml
     var mycfc = new path.to.cfc(test = true, random = "string");
 //              ^ meta.instance.constructor.cfml keyword.operator.new.cfml
 //                          ^ meta.instance.constructor.cfml entity.name.class.cfml
-//                             ^ meta.instance.constructor.cfml meta.function-call.method.arguments.cfml punctuation.definition.group.begin.cfml
-//                              ^ meta.instance.constructor.cfml meta.function-call.method.arguments.cfml entity.other.method-parameter.cfml
-//                                   ^  meta.instance.constructor.cfml meta.function-call.method.arguments.cfml keyword.operator.assignment.cfml
+//                             ^ meta.instance.constructor.cfml meta.function-call.parameters.method.cfml punctuation.definition.group.begin.cfml
+//                              ^ meta.instance.constructor.cfml meta.function-call.parameters.method.cfml entity.other.method-parameter.cfml
+//                                   ^  meta.instance.constructor.cfml meta.function-call.parameters.method.cfml keyword.operator.assignment.cfml
     new path.to.cfc().callmethod();
 //                   ^ punctuation.accessor.cfml
 //                    ^ meta.function-call.method.cfml
@@ -106,14 +118,14 @@ default="string";
 
     throw( message = "test error message" );
 //  ^ meta.support.function-call.cfml support.function.cfml
-//       ^ meta.support.function-call.cfml meta.support.function-call.arguments.cfml punctuation.definition.group.begin.cfml -support.function.cfml
-//         ^ meta.support.function-call.arguments.cfml entity.other.function-parameter.cfml -meta.brace
+//       ^ meta.support.function-call.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml -support.function.cfml
+//         ^ meta.function-call.parameters.support.cfml entity.other.function-parameter.cfml -meta.brace
 
     myarray.append( value = 'test' );
 //  ^ variable.other.object.cfml
 //          ^ meta.support.function-call.member.cfml support.function.member.cfml
-//                ^ meta.support.function-call.member.cfml meta.support.function-call.member.arguments.cfml punctuation.definition.group.begin.cfml
-//                  ^ meta.support.function-call.member.cfml meta.support.function-call.member.arguments.cfml entity.other.method-parameter.cfml -meta.brace
+//                ^ meta.support.function-call.member.cfml meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml
+//                  ^ meta.support.function-call.member.cfml meta.function-call.parameters.method.support.cfml entity.other.method-parameter.cfml -meta.brace
 
     return { key: value };
 //         ^ meta.struct-literal.cfml
