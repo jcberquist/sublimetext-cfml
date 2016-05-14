@@ -3,8 +3,13 @@ from collections import deque, namedtuple
 from os import listdir
 from os.path import dirname, realpath, splitext
 
+CFML_PLUGIN_NAME = None
+
 path_parts = dirname(realpath(__file__)).replace("\\", "/").split("/")
-CFML_PLUGIN_NAME = path_parts[-1].split(".")[0] if "Installed Packages" in path_parts else path_parts[-2]
+for i, path_part in enumerate(reversed(path_parts)):
+    if "Packages" in path_part:
+        CFML_PLUGIN_NAME = path_parts[len(path_parts) - i].split(".")[0]
+        break
 
 Symbol = namedtuple('Symbol', 'name is_function function_region args_region, name_region')
 
