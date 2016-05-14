@@ -1,0 +1,9 @@
+CFML v0.9.1 Changelog:
+
+- Fixed a bug that caused the plugin to incorrectly determine the name of the
+  folder that it was installed in. This came about due to recent changes in
+  how plugins are loaded by ST (in build 3112, I think). Thanks to @mjhagen
+  for reporting the issue to me.
+
+- various syntax highlighting updates, see the recent commits on GitHub for
+  more details
