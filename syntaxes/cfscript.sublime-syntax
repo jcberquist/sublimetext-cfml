@@ -1089,13 +1089,13 @@ contexts:
       captures:
         1: support.function.cfml
       set:
-        - meta_scope: meta.support.function-call.cfml meta.support.function-call.createcomponent.cfml
+        - meta_scope: meta.function-call.support.cfml meta.function-call.support.createcomponent.cfml
         - include: support-call-params
     - match: (?i)\b(createobject)(?=\((?:\s*type\s*=)?\s*[\"']java[\"']\s*,)
       captures:
         1: support.function.cfml
       set:
-        - meta_scope: meta.support.function-call.cfml meta.support.function-call.createjavaobject.cfml
+        - meta_scope: meta.function-call.support.cfml meta.function-call.support.createjavaobject.cfml
         - include: support-call-params
     - match: |-
         (?x)\b
@@ -1196,7 +1196,7 @@ contexts:
       captures:
         1: support.function.cfml
       set:
-        - meta_scope: meta.support.function-call.cfml
+        - meta_scope: meta.function-call.support.cfml
         - include: support-call-params
 
   support-method-call:
@@ -1220,7 +1220,7 @@ contexts:
             )\b(?=\()
       scope: support.function.member.cfml
       set:
-        - meta_scope: meta.support.function-call.member.cfml
+        - meta_scope: meta.function-call.method.support.cfml
         - match: '\)'
           scope: meta.function-call.parameters.method.support.cfml punctuation.definition.group.end.cfml
           pop: true

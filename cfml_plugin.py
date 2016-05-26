@@ -28,7 +28,7 @@ class CfmlEventListener(sublime_plugin.EventListener):
 			if view.substr(pos - 1) == ":" and view.match_selector(pos - 1, "meta.tag.custom.cfml -source.cfml.script"):
 				view.run_command("auto_complete", {"api_completions_only": True})
 
-			if view.substr(pos - 1) == "." and view.match_selector(pos - 1, "meta.support.function-call.createcomponent.cfml string.quoted, entity.other.inherited-class.cfml, meta.instance.constructor.cfml"):
+			if view.substr(pos - 1) == "." and view.match_selector(pos - 1, "meta.function-call.support.createcomponent.cfml string.quoted, entity.other.inherited-class.cfml, meta.instance.constructor.cfml"):
 				view.run_command("auto_complete", {"api_completions_only": True})
 
 	def on_post_window_command(self, window, command_name, args):

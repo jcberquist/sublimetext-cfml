@@ -86,7 +86,7 @@ def get_script_completions(view, prefix, position, info):
 	if not info["project_name"] or info["project_name"] not in projects:
 		return None
 
-	if view.match_selector(position, "meta.support.function-call.createcomponent.cfml string.quoted"):
+	if view.match_selector(position, "meta.function-call.support.createcomponent.cfml string.quoted"):
 		r = utils.get_scope_region_containing_point(view, position, "string.quoted")
 		r = sublime.Region(r.begin(), position + 1)
 		cfc_path = view.substr(r)
@@ -124,7 +124,7 @@ def get_dot_completions(view, prefix, position, info):
 	pt = position - len(prefix)
 	component_name = None
 
-	if info["dot_context"][0].name == "createobject" and view.match_selector(pt - 2, "meta.support.function-call.createcomponent.cfml"):
+	if info["dot_context"][0].name == "createobject" and view.match_selector(pt - 2, "meta.function-call.support.createcomponent.cfml"):
 		component_name = cfc_utils.get_component_name(view.substr(info["dot_context"][0].args_region))
 	elif view.match_selector(pt - 2, "meta.instance.constructor.cfml"):
 		component_name = ".".join([s.name for s in reversed(info["dot_context"])])

@@ -1133,7 +1133,7 @@ repository:
 
   support-call:
     patterns:
-    - name: meta.support.function-call.cfml meta.support.function-call.createcomponent.cfml
+    - name: meta.function-call.support.cfml meta.function-call.support.createcomponent.cfml
       contentName: meta.function-call.parameters.support.cfml
       begin: (?i)\b(createobject)(\()(?=(?:\s*type\s*=)?\s*["']component["']\s*,)
       beginCaptures:
@@ -1144,7 +1144,7 @@ repository:
         '0': {name: meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml}
       patterns:
       - include: '#expressions'
-    - name: meta.support.function-call.cfml meta.support.function-call.createjavaobject.cfml
+    - name: meta.function-call.support.cfml meta.function-call.support.createjavaobject.cfml
       contentName: meta.function-call.parameters.support.cfml
       begin: (?i)\b(createobject)(\()(?=(?:\s*type\s*=)?\s*["']java["']\s*,)
       beginCaptures:
@@ -1155,7 +1155,7 @@ repository:
         '0': {name: meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml}
       patterns:
       - include: '#expressions'
-    - name: meta.support.function-call.cfml
+    - name: meta.function-call.support.cfml
       contentName: meta.function-call.parameters.support.cfml
       begin: |-
         (?x)\b
@@ -1272,7 +1272,7 @@ repository:
       - include: '#expressions'
 
   support-method-call:
-    name: meta.support.function-call.member.cfml
+    name: meta.function-call.method.support.cfml
     contentName: meta.function-call.parameters.method.support.cfml
     begin: |-
       (?x)

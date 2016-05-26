@@ -4875,7 +4875,7 @@
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.support.function-call.cfml meta.support.function-call.createcomponent.cfml</string>
+					<string>meta.function-call.support.cfml meta.function-call.support.createcomponent.cfml</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -4913,7 +4913,7 @@
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.support.function-call.cfml meta.support.function-call.createjavaobject.cfml</string>
+					<string>meta.function-call.support.cfml meta.function-call.support.createjavaobject.cfml</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -5045,7 +5045,7 @@
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.support.function-call.cfml</string>
+					<string>meta.function-call.support.cfml</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -5135,7 +5135,7 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>meta.support.function-call.member.cfml</string>
+			<string>meta.function-call.method.support.cfml</string>
 			<key>patterns</key>
 			<array>
 				<dict>

@@ -54,10 +54,10 @@ default="string";
     var result;
 
     arrayAppend( arr, item, true );
-//             ^ meta.support.function-call.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml
+//             ^ meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml
 //                  ^ punctuation.separator.function-call.support.cfml
     arr.append( item, true );
-//            ^ meta.support.function-call.member.cfml meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml
+//            ^ meta.function-call.method.support.cfml meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml
 //                  ^ punctuation.separator.function-call.method.support.cfml
     doSomething( arr, item, true );
 //             ^ meta.function-call.cfml meta.function-call.parameters.cfml punctuation.definition.group.begin.cfml
@@ -67,11 +67,11 @@ default="string";
 //             ^ punctuation.separator.function-call.method.cfml
 
     toString( testVar, "utf-8" );
-//          ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.support.function-call.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml
-//                             ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.support.function-call.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml
+//          ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml
+//                             ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml
     var new_list = testVar.listAppend( "hello" );
-//                         ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.support.function-call.member.cfml support.function.member.cfml
-//                                   ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.support.function-call.member.cfml meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml
+//                         ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.method.support.cfml support.function.member.cfml
+//                                   ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.method.support.cfml meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml
     if ( true ) http url="www.google.com" result="result";
 //              ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.tag.script.cfml entity.name.tag.script.cfml
 //                   ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.tag.script.cfml entity.other.attribute-name.cfml
@@ -95,7 +95,7 @@ default="string";
 //             ^ meta.function-call.method.cfml meta.function-call.parameters.method.cfml entity.other.method-parameter.cfml
 //                  ^ meta.function-call.method.cfml meta.function-call.parameters.method.cfml keyword.operator.assignment.cfml
     var mycfc = createObject( 'component', 'path.to.cfc' );
-//              ^ meta.support.function-call.cfml meta.support.function-call.createcomponent.cfml support.function.cfml
+//              ^ meta.function-call.support.cfml meta.function-call.support.createcomponent.cfml support.function.cfml
     var mycfc = new path.to.cfc(test = true, random = "string");
 //              ^ meta.instance.constructor.cfml keyword.operator.new.cfml
 //                          ^ meta.instance.constructor.cfml entity.name.class.cfml
@@ -106,7 +106,7 @@ default="string";
 //                   ^ punctuation.accessor.cfml
 //                    ^ meta.function-call.method.cfml
     var mystring = createobject( "java", "java.lang.String" );
-//                 ^ meta.support.function-call.cfml meta.support.function-call.createjavaobject.cfml support.function.cfml
+//                 ^ meta.function-call.support.cfml meta.function-call.support.createjavaobject.cfml support.function.cfml
     return result = foo;
 //         ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml variable.other.readwrite.cfml
 //                  ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml variable.other.readwrite.cfml
@@ -117,15 +117,15 @@ default="string";
 //                                ^ keyword.operator.ternary.cfml
 
     throw( message = "test error message" );
-//  ^ meta.support.function-call.cfml support.function.cfml
-//       ^ meta.support.function-call.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml -support.function.cfml
+//  ^ meta.function-call.support.cfml support.function.cfml
+//       ^ meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml -support.function.cfml
 //         ^ meta.function-call.parameters.support.cfml entity.other.function-parameter.cfml -meta.brace
 
     myarray.append( value = 'test' );
 //  ^ variable.other.object.cfml
-//          ^ meta.support.function-call.member.cfml support.function.member.cfml
-//                ^ meta.support.function-call.member.cfml meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml
-//                  ^ meta.support.function-call.member.cfml meta.function-call.parameters.method.support.cfml entity.other.method-parameter.cfml -meta.brace
+//          ^ meta.function-call.method.support.cfml support.function.member.cfml
+//                ^ meta.function-call.method.support.cfml meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml
+//                  ^ meta.function-call.method.support.cfml meta.function-call.parameters.method.support.cfml entity.other.method-parameter.cfml -meta.brace
 
     return { key: value };
 //         ^ meta.struct-literal.cfml

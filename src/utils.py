@@ -93,17 +93,14 @@ def get_dot_context(view, dot_position):
 	if view.substr(dot_position - 1) in [" ", "\t", "\n"]:
 		dot_position = view.find_by_class(dot_position, False, sublime.CLASS_WORD_END | sublime.CLASS_PUNCTUATION_END)
 
-	for scope_name in ["meta.support.function-call", "meta.function-call"]:
-		base_scope_count = view.scope_name(dot_position).count(scope_name)
-		scope_to_find = " ".join([scope_name] * (base_scope_count + 1))
-		if view.match_selector(dot_position - 1, scope_to_find):
-			function_name, name_region, function_args_region = get_function_call(view, dot_position - 1, scope_name == "meta.support.function-call")
-			context.append(Symbol(function_name, True, name_region, function_args_region, name_region))
-			break
-	else:
-		if view.match_selector(dot_position - 1, "variable, meta.property, meta.instance.constructor"):
-			name_region = view.word(dot_position)
-			context.append(Symbol(view.substr(name_region).lower(), False, None, None, name_region))
+	base_scope_count = view.scope_name(dot_position).count("meta.function-call")
+	scope_to_find = " ".join(["meta.function-call"] * (base_scope_count + 1))
+	if view.match_selector(dot_position - 1, scope_to_find):
+		function_name, name_region, function_args_region = get_function_call(view, dot_position - 1)
+		context.append(Symbol(function_name, True, name_region, function_args_region, name_region))
+	elif view.match_selector(dot_position - 1, "variable, meta.property, meta.instance.constructor"):
+		name_region = view.word(dot_position)
+		context.append(Symbol(view.substr(name_region).lower(), False, None, None, name_region))
 
 	if len(context) > 0:
 		context.extend(get_dot_context(view, name_region.begin() - 1))
@@ -255,8 +252,8 @@ def get_function(view, pt):
 				return view.substr(function_name_region).lower(), function_name_region, function_region
 	return None
 
-def get_function_call(view, pt, support_function = False):
-	function_call_scope = "meta.support.function-call" if support_function else "meta.function-call"
+def get_function_call(view, pt):
+	function_call_scope = "meta.function-call"
 	function_region = get_scope_region_containing_point(view, pt, function_call_scope)
 	if function_region:
 		function_name_region = view.word(function_region.begin())

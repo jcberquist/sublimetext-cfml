@@ -76,8 +76,8 @@ def find_cfc(view, position, project_name):
 		file_path, dot_path = get_cfc_file_info(view, project_name, cfc_path)
 		return cfc_path, file_path, dot_path, None
 
-	if view.match_selector(position, "meta.support.function-call.createcomponent.cfml"):
-		r = utils.get_scope_region_containing_point(view, position, "meta.support.function-call.createcomponent.cfml")
+	if view.match_selector(position, "meta.function-call.support.createcomponent.cfml"):
+		r = utils.get_scope_region_containing_point(view, position, "meta.function-call.support.createcomponent.cfml")
 		cfc_path = cfc_utils.get_component_name(view.substr(r))
 		file_path, dot_path = get_cfc_file_info(view, project_name, cfc_path)
 		return cfc_path, file_path, dot_path, None
@@ -107,8 +107,8 @@ def find_cfc(view, position, project_name):
 				file_path, dot_path = get_cfc_file_info(view, project_name, cfc_path)
 				return cfc_path, file_path, dot_path, function_name
 
-			if view.match_selector(dot_context[-1].name_region.begin(), "meta.support.function-call.createcomponent.cfml"):
-				r = utils.get_scope_region_containing_point(view, dot_context[-1].name_region.begin(), "meta.support.function-call.createcomponent.cfml")
+			if view.match_selector(dot_context[-1].name_region.begin(), "meta.function-call.support.createcomponent.cfml"):
+				r = utils.get_scope_region_containing_point(view, dot_context[-1].name_region.begin(), "meta.function-call.support.createcomponent.cfml")
 				cfc_path = cfc_utils.get_component_name(view.substr(r))
 				file_path, dot_path = get_cfc_file_info(view, project_name, cfc_path)
 				return cfc_path, file_path, dot_path, function_name

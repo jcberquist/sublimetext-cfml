@@ -4,7 +4,7 @@
 <cfset testArray = []>
  <!--- <- embedding.cfml entity.name.tag --->
 <cfset arrayAppend(testArray, 1)>
-<!---  ^ embedding.cfml meta.tag source.cfml.script meta.support.function-call.cfml support.function.cfml --->
+<!---  ^ embedding.cfml meta.tag source.cfml.script meta.function-call.support.cfml support.function.cfml --->
 <!---             ^ embedding.cfml meta.tag source.cfml.script meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml --->
 </div>
 <cfoutput>
@@ -54,12 +54,12 @@ foo = 'hello world';
 <!---              ^ embedding.cfml text.html.cfml source.cfml.script punctuation.terminator.statement.cfml --->
 
 arrayAppend(foo, 10);
-<!--- <- embedding.cfml text.html.cfml source.cfml.script meta.support.function-call.cfml support.function.cfml --->
-<!---      ^ embedding.cfml text.html.cfml source.cfml.script meta.support.function-call.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml --->
-<!---              ^ embedding.cfml text.html.cfml source.cfml.script meta.support.function-call.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml --->
+<!--- <- embedding.cfml text.html.cfml source.cfml.script meta.function-call.support.cfml support.function.cfml --->
+<!---      ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml --->
+<!---              ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml --->
 myArray.append(10);
-<!---   ^ embedding.cfml text.html.cfml source.cfml.script meta.support.function-call.member.cfml support.function.member.cfml --->
-<!---         ^ embedding.cfml text.html.cfml source.cfml.script meta.support.function-call.member.cfml meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml --->
+<!---   ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.method.support.cfml support.function.member.cfml --->
+<!---         ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.method.support.cfml meta.function-call.parameters.method.support.cfml punctuation.definition.group.begin.cfml --->
 myFunc();
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml variable.function.cfml --->
 <!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml meta.function-call.parameters.cfml punctuation.definition.group.begin.cfml --->
