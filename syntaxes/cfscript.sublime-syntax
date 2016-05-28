@@ -211,13 +211,20 @@ contexts:
       pop: true
 
   comments:
-    - match: /\*\*(?!/)
+    - match: (/\*\*)\s*$
       scope: punctuation.definition.comment.cfml
       push:
         - meta_scope: comment.block.documentation.cfml
         - match: \*/
           scope: punctuation.definition.comment.cfml
           pop: true
+        - match: ^\s*\*?\s*((\@)\S*)\s
+          captures:
+            1: keyword.other.documentation.cfml
+            2: punctuation.definition.keyword.cfml
+          push: cfmldoc
+        - match: ^\s*(\*(?!/))?\s*(?=\w)
+          push: cfmldoc
     - match: /\*
       scope: punctuation.definition.comment.cfml
       push:
@@ -232,6 +239,14 @@ contexts:
         - match: \n
           pop: true
     - include: scope:embedding.cfml#comments
+
+  cfmldoc:
+    - meta_content_scope: text.html
+    - match: (\n|(?=\*/))
+      pop: true
+    - include: scope:text.html.basic
+    - match: "((https?|s?ftp|ftps|file|smb|afp|nfs|(x-)?man|gopher|txmt)://|mailto:)[-:@a-zA-Z0-9_.~%+/?=&#]+(?<![.?:])"
+      scope: markup.underline.link
 
   string:
     - match: "'"

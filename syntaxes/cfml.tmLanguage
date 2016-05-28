@@ -1831,7 +1831,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>/\*\*(?!/)</string>
+					<string>(/\*\*)\s*$</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -1852,6 +1852,64 @@
 					</dict>
 					<key>name</key>
 					<string>comment.block.documentation.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>^\s*\*?\s*((\@)\S*)\s</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.other.documentation.cfml</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.keyword.cfml</string>
+								</dict>
+							</dict>
+							<key>contentName</key>
+							<string>text.html</string>
+							<key>end</key>
+							<string>(\n|(?=\*/))</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>text.html.basic</string>
+								</dict>
+								<dict>
+									<key>match</key>
+									<string>((https?|s?ftp|ftps|file|smb|afp|nfs|(x-)?man|gopher|txmt)://|mailto:)[-:@a-zA-Z0-9_.~%+/?=&amp;#]+(?&lt;![.?:])</string>
+									<key>name</key>
+									<string>markup.underline.link</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>^\s*(\*(?!/))?\s*(?=\w)</string>
+							<key>contentName</key>
+							<string>text.html</string>
+							<key>end</key>
+							<string>(\n|(?=\*/))</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>text.html.basic</string>
+								</dict>
+								<dict>
+									<key>match</key>
+									<string>((https?|s?ftp|ftps|file|smb|afp|nfs|(x-)?man|gopher|txmt)://|mailto:)[-:@a-zA-Z0-9_.~%+/?=&amp;#]+(?&lt;![.?:])</string>
+									<key>name</key>
+									<string>markup.underline.link</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>

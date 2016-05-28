@@ -212,12 +212,30 @@ repository:
   comments:
     patterns:
     - name: comment.block.documentation.cfml
-      begin: /\*\*(?!/)
+      begin: (/\*\*)\s*$
       beginCaptures:
         '0': {name: punctuation.definition.comment.cfml}
       end: \*/
       endCaptures:
         '0': {name: punctuation.definition.comment.cfml}
+      patterns:
+      - contentName: text.html
+        begin: ^\s*\*?\s*((\@)\S*)\s
+        beginCaptures:
+          '1': {name: keyword.other.documentation.cfml}
+          '2': {name: punctuation.definition.keyword.cfml}
+        end: (\n|(?=\*/))
+        patterns:
+        - include: 'text.html.basic'
+        - match: '((https?|s?ftp|ftps|file|smb|afp|nfs|(x-)?man|gopher|txmt)://|mailto:)[-:@a-zA-Z0-9_.~%+/?=&#]+(?<![.?:])'
+          name: markup.underline.link
+      - contentName: text.html
+        begin: ^\s*(\*(?!/))?\s*(?=\w)
+        end: (\n|(?=\*/))
+        patterns:
+        - include: 'text.html.basic'
+        - match: '((https?|s?ftp|ftps|file|smb|afp|nfs|(x-)?man|gopher|txmt)://|mailto:)[-:@a-zA-Z0-9_.~%+/?=&#]+(?<![.?:])'
+          name: markup.underline.link
     - name: comment.block.cfml
       begin: /\*
       beginCaptures:
