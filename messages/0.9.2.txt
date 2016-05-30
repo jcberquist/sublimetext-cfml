@@ -1,0 +1,5 @@
+CFML v0.9.2 Changelog:
+
+- Added basic syntax highlighting for JavaDoc style comments
+
+- Standardized syntax highlighting meta scope order for function calls
