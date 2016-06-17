@@ -245,8 +245,6 @@ contexts:
     - match: (\n|(?=\*/))
       pop: true
     - include: scope:text.html.basic
-    - match: "((https?|s?ftp|ftps|file|smb|afp|nfs|(x-)?man|gopher|txmt)://|mailto:)[-:@a-zA-Z0-9_.~%+/?=&#]+(?<![.?:])"
-      scope: markup.underline.link
 
   string:
     - match: "'"
@@ -1112,6 +1110,12 @@ contexts:
       set:
         - meta_scope: meta.function-call.support.cfml meta.function-call.support.createjavaobject.cfml
         - include: support-call-params
+    - match: (?i)\b(queryexecute)(?=\()
+      captures:
+        1: support.function.cfml
+      set:
+        - meta_scope: meta.function-call.support.cfml
+        - include: queryexecute-params
     - match: |-
         (?x)\b
           (?i:
@@ -1278,3 +1282,77 @@ contexts:
               pop: true
             - include: expressions
         - include: expressions
+
+  queryexecute-params:
+    - match: '\)'
+      scope: meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml
+      pop: true
+    - match: '\('
+      scope: punctuation.definition.group.begin.cfml
+      push:
+        - meta_scope: meta.function-call.parameters.support.cfml
+        - match: '(?=[,\)])'
+          set: queryexecute-final-params
+        - include: queryexecute-parameter
+        - include: sql-string
+        - include: expressions
+
+  queryexecute-final-params:
+    - meta_scope: meta.function-call.parameters.support.cfml
+    - match: '(?=\))'
+      pop: true
+    - match: ','
+      scope: punctuation.separator.function-call.support.cfml
+    - include: queryexecute-parameter
+    - include: expressions
+
+  queryexecute-parameter:
+    - match: '\b(sql)\s*(=)(?!=)'
+      captures:
+        1: entity.other.function-parameter.cfml
+        2: keyword.operator.assignment.cfml
+      push:
+        - match: '(?=[,\)])'
+          pop: true
+        - include: sql-string
+        - include: expressions
+    - match: '\b({{identifier}})\s*(=)(?!=)'
+      captures:
+        1: entity.other.function-parameter.cfml
+        2: keyword.operator.assignment.cfml
+      push:
+        - match: '(?=[,\)])'
+          pop: true
+        - include: expressions
+
+  sql-string:
+    - match: '"'
+      scope: string.quoted.double.cfml punctuation.definition.string.begin.cfml
+      push:
+        - meta_scope: meta.queryexecute.sql.cfml
+        - match: '"'
+          scope: string.quoted.double.cfml punctuation.definition.string.end.cfml
+          pop: true
+        - match: (?=.|\n)
+          push: scope:source.sql
+          with_prototype:
+            - match: '""'
+              scope: constant.character.escape.quote.cfml
+            - match: (?=")
+              pop: true
+            - include: scope:embedding.cfml#hash-delimiters
+    - match: "'"
+      scope: string.quoted.single.cfml punctuation.definition.string.begin.cfml
+      push:
+        - meta_scope: meta.queryexecute.sql.cfml
+        - match: "'"
+          scope: string.quoted.single.cfml punctuation.definition.string.end.cfml
+          pop: true
+        - match: (?=.|\n)
+          push: scope:source.sql
+          with_prototype:
+            - match: "''"
+              scope: constant.character.escape.quote.cfml
+            - match: (?=')
+              pop: true
+            - include: scope:embedding.cfml#hash-delimiters

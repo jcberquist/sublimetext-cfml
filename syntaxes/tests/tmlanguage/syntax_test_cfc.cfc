@@ -197,6 +197,12 @@ default="string";
 //                      ^ punctuation.separator.array-literal.cfml
   obj.prop['key'] = true;
 //        ^^^^^^^ meta.brackets.cfml
+
+  thisQuery = queryExecute("SELECT * from myTable WHERE myColumn = 1", "SELECT * from myTable WHERE myColumn = 1");
+//                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml
+//                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.double.cfml -source.sql
+  thisQuery = queryExecute(params = {}, sql = "SELECT * FROM myTable");
+//                                             ^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml
 }
 // <- embedding.cfml source.cfml.script meta.class.body.cfml punctuation.definition.block.end.cfml
  // <- embedding.cfml source.cfml.script -meta

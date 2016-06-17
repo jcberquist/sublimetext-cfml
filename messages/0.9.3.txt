@@ -1,0 +1,4 @@
+CFML v0.9.3 Changelog:
+
+- Adds SQL string highlighting in `queryExecute()`
+  https://github.com/jcberquist/sublimetext-cfml/issues/24

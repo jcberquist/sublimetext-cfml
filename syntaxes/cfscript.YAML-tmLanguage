@@ -227,15 +227,11 @@ repository:
         end: (\n|(?=\*/))
         patterns:
         - include: 'text.html.basic'
-        - match: '((https?|s?ftp|ftps|file|smb|afp|nfs|(x-)?man|gopher|txmt)://|mailto:)[-:@a-zA-Z0-9_.~%+/?=&#]+(?<![.?:])'
-          name: markup.underline.link
       - contentName: text.html
         begin: ^\s*(\*(?!/))?\s*(?=\w)
         end: (\n|(?=\*/))
         patterns:
         - include: 'text.html.basic'
-        - match: '((https?|s?ftp|ftps|file|smb|afp|nfs|(x-)?man|gopher|txmt)://|mailto:)[-:@a-zA-Z0-9_.~%+/?=&#]+(?<![.?:])'
-          name: markup.underline.link
     - name: comment.block.cfml
       begin: /\*
       beginCaptures:
@@ -1161,6 +1157,9 @@ repository:
       endCaptures:
         '0': {name: meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml}
       patterns:
+      - match: ','
+        name: punctuation.separator.function-call.support.cfml
+      - include: '#support-call-parameter'
       - include: '#expressions'
     - name: meta.function-call.support.cfml meta.function-call.support.createjavaobject.cfml
       contentName: meta.function-call.parameters.support.cfml
@@ -1172,7 +1171,34 @@ repository:
       endCaptures:
         '0': {name: meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml}
       patterns:
+      - match: ','
+        name: punctuation.separator.function-call.support.cfml
+      - include: '#support-call-parameter'
       - include: '#expressions'
+
+    - name: meta.function-call.support.cfml
+      contentName: meta.function-call.parameters.support.cfml
+      begin: (?i)\b(queryexecute)(\()
+      beginCaptures:
+        '1': {name: support.function.cfml}
+        '2': {name: meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml}
+      end: \)
+      endCaptures:
+        '0': {name: meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml}
+      patterns:
+      - begin: (?i)(?<=queryexecute\()
+        end: (?=[,)])
+        patterns:
+        - include: '#sql-string'
+        - include: '#queryexecute-parameter'
+        - include: '#support-call-parameter'
+        - include: '#expressions'
+      - match: ','
+        name: punctuation.separator.function-call.support.cfml
+      - include: '#queryexecute-parameter'
+      - include: '#support-call-parameter'
+      - include: '#expressions'
+
     - name: meta.function-call.support.cfml
       contentName: meta.function-call.parameters.support.cfml
       begin: |-
@@ -1280,14 +1306,58 @@ repository:
       patterns:
       - match: ','
         name: punctuation.separator.function-call.support.cfml
-      - begin: '\b([_$a-zA-Z][$\w\.]*)\s*(=)(?!=)'
-        captures:
-          '1': {name: entity.other.function-parameter.cfml}
-          '2': {name: keyword.operator.assignment.cfml}
-        end: '(?=[,\)])'
-        patterns:
-        - include: '#expressions'
+      - include: '#support-call-parameter'
       - include: '#expressions'
+
+  support-call-parameter:
+    patterns:
+    - begin: '\b([_$a-zA-Z][$\w\.]*)\s*(=)(?!=)'
+      captures:
+        '1': {name: entity.other.function-parameter.cfml}
+        '2': {name: keyword.operator.assignment.cfml}
+      end: '(?=[,\)])'
+      patterns:
+      - include: '#expressions'
+
+  queryexecute-parameter:
+    patterns:
+    - begin: '\b(sql)\s*(=)(?!=)'
+      captures:
+        '1': {name: entity.other.function-parameter.cfml}
+        '2': {name: keyword.operator.assignment.cfml}
+      end: '(?=[,\)])'
+      patterns:
+      - include: '#sql-string'
+      - include: '#expressions'
+
+  sql-string:
+    patterns:
+    - name: meta.queryexecute.sql.cfml
+      contentName: source.sql
+      begin: '"'
+      beginCaptures:
+        '0': {name: string.quoted.double.cfml punctuation.definition.string.begin.cfml}
+      end: '(")(?!")'
+      endCaptures:
+        '1': {name: string.quoted.double.cfml punctuation.definition.string.end.cfml}
+      patterns:
+      - name: constant.character.escape.quote.cfml
+        match: '""'
+      - include: '#hash-delimiters'
+      - include: source.sql
+    - name: meta.queryexecute.sql.cfml
+      contentName: source.sql
+      begin: "'"
+      beginCaptures:
+        '0': {name: string.quoted.single.cfml punctuation.definition.string.begin.cfml}
+      end: "(')(?!')"
+      endCaptures:
+        '1': {name: string.quoted.single.cfml punctuation.definition.string.end.cfml}
+      patterns:
+      - name: constant.character.escape.quote.cfml
+        match: "''"
+      - include: '#hash-delimiters'
+      - include: source.sql
 
   support-method-call:
     name: meta.function-call.method.support.cfml

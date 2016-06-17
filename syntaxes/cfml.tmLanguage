@@ -1880,12 +1880,6 @@
 									<key>include</key>
 									<string>text.html.basic</string>
 								</dict>
-								<dict>
-									<key>match</key>
-									<string>((https?|s?ftp|ftps|file|smb|afp|nfs|(x-)?man|gopher|txmt)://|mailto:)[-:@a-zA-Z0-9_.~%+/?=&amp;#]+(?&lt;![.?:])</string>
-									<key>name</key>
-									<string>markup.underline.link</string>
-								</dict>
 							</array>
 						</dict>
 						<dict>
@@ -1900,12 +1894,6 @@
 								<dict>
 									<key>include</key>
 									<string>text.html.basic</string>
-								</dict>
-								<dict>
-									<key>match</key>
-									<string>((https?|s?ftp|ftps|file|smb|afp|nfs|(x-)?man|gopher|txmt)://|mailto:)[-:@a-zA-Z0-9_.~%+/?=&amp;#]+(?&lt;![.?:])</string>
-									<key>name</key>
-									<string>markup.underline.link</string>
 								</dict>
 							</array>
 						</dict>
@@ -4279,6 +4267,42 @@
 				</dict>
 			</array>
 		</dict>
+		<key>source-cfml-script-queryexecute-parameter</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\b(sql)\s*(=)(?!=)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.other.function-parameter.cfml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.assignment.cfml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=[,\)])</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#source-cfml-script-sql-string</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source-cfml-script-expressions</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>source-cfml-script-round-brackets</key>
 		<dict>
 			<key>patterns</key>
@@ -4319,6 +4343,98 @@
 					<string>\)</string>
 					<key>name</key>
 					<string>invalid.illegal.stray.brace.round.cfml</string>
+				</dict>
+			</array>
+		</dict>
+		<key>source-cfml-script-sql-string</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.double.cfml punctuation.definition.string.begin.cfml</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>source.sql</string>
+					<key>end</key>
+					<string>(")(?!")</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.double.cfml punctuation.definition.string.end.cfml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.queryexecute.sql.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>""</string>
+							<key>name</key>
+							<string>constant.character.escape.quote.cfml</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source-cfml-script-hash-delimiters</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source-sql</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.single.cfml punctuation.definition.string.begin.cfml</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>source.sql</string>
+					<key>end</key>
+					<string>(')(?!')</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.single.cfml punctuation.definition.string.end.cfml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.queryexecute.sql.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>''</string>
+							<key>name</key>
+							<string>constant.character.escape.quote.cfml</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source-cfml-script-hash-delimiters</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source-sql</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>
@@ -4937,6 +5053,16 @@
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>match</key>
+							<string>,</string>
+							<key>name</key>
+							<string>punctuation.separator.function-call.support.cfml</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source-cfml-script-support-call-parameter</string>
+						</dict>
+						<dict>
 							<key>include</key>
 							<string>#source-cfml-script-expressions</string>
 						</dict>
@@ -4974,6 +5100,93 @@
 					<string>meta.function-call.support.cfml meta.function-call.support.createjavaobject.cfml</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>match</key>
+							<string>,</string>
+							<key>name</key>
+							<string>punctuation.separator.function-call.support.cfml</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source-cfml-script-support-call-parameter</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source-cfml-script-expressions</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?i)\b(queryexecute)(\()</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.cfml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>meta.function-call.parameters.support.cfml punctuation.definition.group.begin.cfml</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>meta.function-call.parameters.support.cfml</string>
+					<key>end</key>
+					<string>\)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.function-call.support.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>(?i)(?&lt;=queryexecute\()</string>
+							<key>end</key>
+							<string>(?=[,)])</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#source-cfml-script-sql-string</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#source-cfml-script-queryexecute-parameter</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#source-cfml-script-support-call-parameter</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#source-cfml-script-expressions</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>,</string>
+							<key>name</key>
+							<string>punctuation.separator.function-call.support.cfml</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source-cfml-script-queryexecute-parameter</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source-cfml-script-support-call-parameter</string>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>#source-cfml-script-expressions</string>
@@ -5113,31 +5326,41 @@
 							<string>punctuation.separator.function-call.support.cfml</string>
 						</dict>
 						<dict>
-							<key>begin</key>
-							<string>\b([_$a-zA-Z][$\w\.]*)\s*(=)(?!=)</string>
-							<key>captures</key>
-							<dict>
-								<key>1</key>
-								<dict>
-									<key>name</key>
-									<string>entity.other.function-parameter.cfml</string>
-								</dict>
-								<key>2</key>
-								<dict>
-									<key>name</key>
-									<string>keyword.operator.assignment.cfml</string>
-								</dict>
-							</dict>
-							<key>end</key>
-							<string>(?=[,\)])</string>
-							<key>patterns</key>
-							<array>
-								<dict>
-									<key>include</key>
-									<string>#source-cfml-script-expressions</string>
-								</dict>
-							</array>
+							<key>include</key>
+							<string>#source-cfml-script-support-call-parameter</string>
 						</dict>
+						<dict>
+							<key>include</key>
+							<string>#source-cfml-script-expressions</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>source-cfml-script-support-call-parameter</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\b([_$a-zA-Z][$\w\.]*)\s*(=)(?!=)</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.other.function-parameter.cfml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.assignment.cfml</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=[,\)])</string>
+					<key>patterns</key>
+					<array>
 						<dict>
 							<key>include</key>
 							<string>#source-cfml-script-expressions</string>
