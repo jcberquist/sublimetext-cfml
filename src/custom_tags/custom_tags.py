@@ -1,5 +1,6 @@
 import sublime, time
 from functools import partial
+from os.path import dirname
 from ..project_index import ProjectIndex
 from .. import utils
 from . import custom_tag_index
@@ -15,12 +16,13 @@ class CustomTags(ProjectIndex):
 		super().__init__("custom_tag_folders", {"index": {}, "tags": {}, "completions": {"prefixes": [], "tags": {}, "attributes": {}}, "closing_tags": []})
 
 
-	def new_project(self, project_name, project_data):
-		sublime.set_timeout_async(partial(self.index_project, project_name, project_data))
+	def new_project(self, project_name):
+		sublime.set_timeout_async(partial(self.index_project, project_name))
 
 
-	def index_project(self, project_name, project_data):
-		custom_tag_folders = project_data.get("custom_tag_folders", [])
+	def index_project(self, project_name):
+		custom_tag_folders = self.projects[project_name]["project_data"].get("custom_tag_folders", [])
+		project_file_dir = dirname(project_name)
 		if len(custom_tag_folders) == 0:
 			return
 
@@ -31,13 +33,13 @@ class CustomTags(ProjectIndex):
 		print("CFML: indexing custom tags in project '" + project_name + "'")
 
 		for tag_folder in sorted(custom_tag_folders, key = lambda d: d["path"]):
-			root_path = utils.normalize_path(tag_folder["path"])
+			root_path = utils.normalize_path(tag_folder["path"], project_file_dir)
 			index.update(custom_tag_index.index(root_path))
 
-		tags = generate_tag_map(custom_tag_folders, index)
-		completions, closing_tags = generate_completions_and_closing_tags(custom_tag_folders, index)
+		tags = generate_tag_map(custom_tag_folders, index, project_file_dir)
+		completions, closing_tags = generate_completions_and_closing_tags(custom_tag_folders, index, project_file_dir)
 
-		self.projects[project_name] = {"project_data": project_data, "data": {"index": index, "tags": tags, "completions": completions, "closing_tags": closing_tags}}
+		self.projects[project_name]["data"] = {"index": index, "tags": tags, "completions": completions, "closing_tags": closing_tags}
 
 		print("CFML: indexing custom tags in project '" + project_name + "' completed - " + str(len(index)) + " files indexed in " + "{0:.2f}".format(time.clock() - start_time) + " seconds")
 		self.notify_listeners(project_name)
@@ -61,8 +63,9 @@ class CustomTags(ProjectIndex):
 					self.projects[project_name]["data"]["index"].update({file_path: file_index})
 					custom_tag_folders = self.projects[project_name]["project_data"].get("custom_tag_folders", [])
 					index = self.projects[project_name]["data"]["index"]
-					tags = generate_tag_map(custom_tag_folders, index)
-					completions, closing_tags = generate_completions_and_closing_tags(custom_tag_folders, index)
+					project_file_dir = dirname(project_name)
+					tags = generate_tag_map(custom_tag_folders, index, project_file_dir)
+					completions, closing_tags = generate_completions_and_closing_tags(custom_tag_folders, index, project_file_dir)
 					self.projects[project_name]["data"]["tags"] = tags
 					self.projects[project_name]["data"]["completions"] = completions
 					self.projects[project_name]["data"]["closing_tags"] = closing_tags
@@ -76,8 +79,9 @@ class CustomTags(ProjectIndex):
 					del self.projects[project_name]["data"]["index"][file_path]
 					custom_tag_folders = self.projects[project_name]["project_data"].get("custom_tag_folders", [])
 					index = self.projects[project_name]["data"]["index"]
-					tags = generate_tag_map(custom_tag_folders, index)
-					completions, closing_tags = generate_completions_and_closing_tags(custom_tag_folders, index)
+					project_file_dir = dirname(project_name)
+					tags = generate_tag_map(custom_tag_folders, index, project_file_dir)
+					completions, closing_tags = generate_completions_and_closing_tags(custom_tag_folders, index, project_file_dir)
 					self.projects[project_name]["data"]["tags"] = tags
 					self.projects[project_name]["data"]["completions"] = completions
 					self.projects[project_name]["data"]["closing_tags"] = closing_tags
@@ -88,23 +92,23 @@ class CustomTags(ProjectIndex):
 		self.notify_listeners(project_name)
 
 
-def generate_tag_map(custom_tag_folders, index):
+def generate_tag_map(custom_tag_folders, index, project_file_dir):
 	tag_map = {}
 	for tag_folder in custom_tag_folders:
-		root_path = utils.normalize_path(tag_folder["path"])
+		root_path = utils.normalize_path(tag_folder["path"], project_file_dir)
 		for file_path in index:
 			if file_path.startswith(root_path):
 				tag_map[tag_folder["prefix"] + ":" + index[file_path]["tag_name"]] = file_path
 	return tag_map
 
-def generate_completions_and_closing_tags(custom_tag_folders, index):
+def generate_completions_and_closing_tags(custom_tag_folders, index, project_file_dir):
 	prefixes = []
 	tags = {}
 	attributes = {}
 	closing_tags = []
 
 	for tag_folder in custom_tag_folders:
-		root_path = utils.normalize_path(tag_folder["path"])
+		root_path = utils.normalize_path(tag_folder["path"], project_file_dir)
 		prefixes.append((tag_folder["prefix"] + '\tcustom tag prefix (cfml)', tag_folder["prefix"] + ":"))
 		for file_path in index:
 			if file_path.startswith(root_path):

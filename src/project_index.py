@@ -1,4 +1,5 @@
 import sublime, threading
+from os.path import dirname
 from . import events, utils
 
 class ProjectIndex():
@@ -27,7 +28,7 @@ class ProjectIndex():
 
 		with self.lock:
 			current_project_names = set(self.projects.keys())
-			updated_project_names = {project_name for project_name, project_data in project_list}
+			updated_project_names = {project_tuple[0] for project_tuple in project_list}
 			#print(current_project_names,updated_project_names)
 			new_project_names = list(updated_project_names.difference(current_project_names))
 			stale_project_names = list(current_project_names.difference(updated_project_names))
@@ -42,7 +43,7 @@ class ProjectIndex():
 		# now that projects dict is up to date release lock before initing directory load
 		for project_name, project_data in project_list:
 			if project_name in new_project_names:
-				self.new_project(project_name, project_data)
+				self.new_project(project_name)
 
 
 	def on_post_save_async(self, view):
@@ -50,7 +51,7 @@ class ProjectIndex():
 		# check to see if the updated file was a .sublime-project
 		if file_name.lower().endswith(".sublime-project"):
 			# trying this without try/catch so that errors show in the console
-			project_name = utils.extract_project_name(file_name)
+			project_name = utils.normalize_path(file_name)
 			project_data = sublime.decode_value(view.substr(sublime.Region(0, view.size())))
 			self.project_updated(project_name, project_data)
 		else:
@@ -69,7 +70,7 @@ class ProjectIndex():
 
 			for file_name in args["files"]:
 				if file_name.lower().endswith(".sublime-project"):
-					project_name = utils.extract_project_name(file_name)
+					project_name = utils.normalize_path(file_name)
 					if project_name in self.projects:
 						with self.lock:
 							if project_name in self.projects:
@@ -84,8 +85,9 @@ class ProjectIndex():
 
 		# if this project has already been indexed, reindexing should only be
 		# necessary if the model folder paths have changed
-		new_paths = [utils.normalize_path(folder["path"]) for folder in updated_project_data.get(self.folder_key, [])]
-		current_paths = [utils.normalize_path(folder["path"]) for folder in self.projects[project_name]["project_data"].get(self.folder_key, [])]
+		project_file_dir = dirname(project_name)
+		new_paths = [utils.normalize_path(folder["path"], project_file_dir) for folder in updated_project_data.get(self.folder_key, [])]
+		current_paths = [utils.normalize_path(folder["path"], project_file_dir) for folder in self.projects[project_name]["project_data"].get(self.folder_key, [])]
 		if set(new_paths) != set(current_paths):
 			with self.lock:
 				if project_name in self.projects:
@@ -103,7 +105,7 @@ class ProjectIndex():
 		# check for tracked file path
 		tracked_folders = project_data.get(self.folder_key, [])
 		for tracked_folder in tracked_folders:
-			root_path = utils.normalize_path(tracked_folder["path"])
+			root_path = utils.normalize_path(tracked_folder["path"], dirname(project_name))
 			if file_path.startswith(root_path):
 				break
 		else:
@@ -116,7 +118,7 @@ class ProjectIndex():
 	## methods for child classes to implement
 
 
-	def new_project(self, project_name, project_data):
+	def new_project(self, project_name):
 		pass
 
 

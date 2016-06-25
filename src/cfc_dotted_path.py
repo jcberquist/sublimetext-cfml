@@ -33,7 +33,7 @@ class CfmlCfcDottedPathCommand(sublime_plugin.WindowCommand):
 		project_data = self.window.project_data()
 		if "mappings" in project_data:
 			for mapping in project_data["mappings"]:
-				normalized_mapping = utils.normalize_mapping(mapping)
+				normalized_mapping = utils.normalize_mapping(mapping, self.window.project_file_name())
 				if normalized_path.startswith(normalized_mapping["path"]):
 					mapped_path = normalized_mapping["mapping"] + normalized_path.replace(normalized_mapping["path"], "")
 					path_parts = mapped_path.split("/")[1:]
@@ -42,7 +42,7 @@ class CfmlCfcDottedPathCommand(sublime_plugin.WindowCommand):
 		# fall back to folders if no mappings matched
 		if len(dotted_paths) == 0:
 			for folder in self.window.project_data()["folders"]:
-				relative_path = normalized_path.replace(utils.normalize_path(folder["path"]), "")
+				relative_path = normalized_path.replace(utils.normalize_path(folder["path"], self.window.project_file_name()), "")
 				if relative_path != normalized_path:
 					path_parts = relative_path.split("/")[1:]
 					dotted_paths.append(".".join(path_parts)[:-4])

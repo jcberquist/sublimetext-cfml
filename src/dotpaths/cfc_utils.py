@@ -1,4 +1,5 @@
 import re
+from os.path import dirname
 from .. import model_index
 from .. import utils
 
@@ -40,7 +41,7 @@ def get_folder_mapping(view, project_name):
 	normalized_file_name = utils.normalize_path(view.file_name())
 	mappings = model_index.get_project_data(project_name).get("mappings", [])
 	for mapping in mappings:
-		normalized_mapping = utils.normalize_mapping(mapping)
+		normalized_mapping = utils.normalize_mapping(mapping, dirname(project_name))
 		if not normalized_file_name.startswith(normalized_mapping["path"]):
 			continue
 		mapped_path = normalized_mapping["mapping"] + normalized_file_name.replace(normalized_mapping["path"], "")

@@ -134,7 +134,7 @@ def get_cfc_file_info(view, project_name, cfc_path):
 		mappings = view.window().project_data().get("mappings", [])
 		mapped_cfc_path = "/" + cfc_path.lower().replace(".", "/") + ".cfc"
 		for mapping in mappings:
-			normalized_mapping = utils.normalize_mapping(mapping)
+			normalized_mapping = utils.normalize_mapping(mapping, view.window().project_file_name())
 			if mapped_cfc_path.lower().startswith(normalized_mapping["mapping"]):
 				relative_path = mapped_cfc_path.replace(normalized_mapping["mapping"], "")[1:]
 				relative_path, path_exists = utils.get_verified_path(normalized_mapping["path"], relative_path)

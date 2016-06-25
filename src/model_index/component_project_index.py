@@ -1,12 +1,13 @@
 import sublime, time
 from functools import partial
+from os.path import dirname
 from ..project_index import ProjectIndex
 from .. import utils
 from . import cfc_index, completions
 
 __all__ = ["get_completions_by_dot_path", "get_completions_by_file_path",
-"get_dot_paths", "get_extended_metadata_by_file_path", "get_file_path_by_dot_path", 
-"get_file_paths", "get_metadata_by_dot_path", "get_metadata_by_file_path", 
+"get_dot_paths", "get_extended_metadata_by_file_path", "get_file_path_by_dot_path",
+"get_file_paths", "get_metadata_by_dot_path", "get_metadata_by_file_path",
 "get_project_data", "component_index", "resolve_path"]
 
 class ComponentProjectIndex(ProjectIndex):
@@ -16,13 +17,14 @@ class ComponentProjectIndex(ProjectIndex):
 		super().__init__("cfc_folders", {"index": {}, "dot_paths": {}, "completions": {}})
 
 
-	def new_project(self, project_name, project_data):
-		sublime.set_timeout_async(partial(self.index_project, project_name, project_data))
+	def new_project(self, project_name):
+		sublime.set_timeout_async(partial(self.index_project, project_name))
 
 
-	def index_project(self, project_name, project_data):
-		cfc_folders = project_data.get("cfc_folders", [])
-		mappings = project_data.get("mappings", [])
+	def index_project(self, project_name):
+		cfc_folders = self.projects[project_name]["project_data"].get("cfc_folders", [])
+		mappings = self.projects[project_name]["project_data"].get("mappings", [])
+		project_file_dir = dirname(project_name)
 		if len(cfc_folders) == 0:
 			return
 
@@ -33,12 +35,12 @@ class ComponentProjectIndex(ProjectIndex):
 		print("CFML: indexing components in project '" + project_name + "'" )
 
 		for cfc_folder in sorted(cfc_folders, key = lambda d: d["path"]):
-			root_path = utils.normalize_path(cfc_folder["path"])
+			root_path = utils.normalize_path(cfc_folder["path"], project_file_dir)
 			path_index = cfc_index.index(root_path)
 			index.update(path_index)
 
-		dot_path_map = build_dot_paths(index, mappings)
-		self.projects[project_name] = {"project_data": project_data, "data": {"index": index, "dot_paths": dot_path_map, "completions": {}}}
+		dot_path_map = build_dot_paths(index, mappings, project_file_dir)
+		self.projects[project_name]["data"] = {"index": index, "dot_paths": dot_path_map, "completions": {}}
 		self.projects[project_name]["data"]["completions"] = completions.build(project_name, index.keys(), get_extended_metadata_by_file_path)
 
 		print("CFML: indexing components in project '" + project_name + "' completed - " + str(len(index)) + " files indexed in " + "{0:.2f}".format(time.clock() - start_time) + " seconds")
@@ -51,7 +53,7 @@ class ComponentProjectIndex(ProjectIndex):
 				print("CFML: updating project '" + project_name + "'" )
 				self.projects[project_name]["project_data"] = updated_project_data
 				mappings = updated_project_data.get("mappings", [])
-				dot_path_map = build_dot_paths(self.projects[project_name]["data"]["index"], mappings)
+				dot_path_map = build_dot_paths(self.projects[project_name]["data"]["index"], mappings, dirname(project_name))
 				self.projects[project_name]["data"]["dot_paths"] = dot_path_map
 				self.projects[project_name]["data"]["completions"] = completions.build(project_name, get_file_paths(project_name), get_extended_metadata_by_file_path)
 		self.notify_listeners(project_name)
@@ -64,7 +66,9 @@ class ComponentProjectIndex(ProjectIndex):
 			with self.lock:
 				if project_name in self.projects:
 					self.projects[project_name]["data"]["index"].update({file_path: file_index})
-					dot_path_map = build_dot_paths(self.projects[project_name]["data"]["index"], get_project_data(project_name).get("mappings", []))
+					index = self.projects[project_name]["data"]["index"];
+					mappings = get_project_data(project_name).get("mappings", [])
+					dot_path_map = build_dot_paths(index, mappings, dirname(project_name))
 					self.projects[project_name]["data"]["dot_paths"] = dot_path_map
 					self.projects[project_name]["data"]["completions"] = completions.build(project_name, get_file_paths(project_name), get_extended_metadata_by_file_path)
 			self.notify_listeners(project_name)
@@ -77,7 +81,7 @@ class ComponentProjectIndex(ProjectIndex):
 					del self.projects[project_name]["data"]["index"][file_path]
 					project_index = self.projects[project_name]["data"]["index"]
 					project_data = self.projects[project_name]["data"]["project_data"]
-					dot_path_map = build_dot_paths(project_index, project_data.get("mappings", []))
+					dot_path_map = build_dot_paths(project_index, project_data.get("mappings", []), dirname(project_name))
 					self.projects[project_name]["data"]["dot_paths"] = dot_path_map
 					self.projects[project_name]["data"]["completions"] = completions.build(project_name, get_file_paths(project_name), get_extended_metadata_by_file_path)
 			self.notify_listeners(project_name)
@@ -89,11 +93,11 @@ class ComponentProjectIndex(ProjectIndex):
 
 ##############
 
-def build_dot_paths(path_index, mappings):
+def build_dot_paths(path_index, mappings, project_file_dir):
 	dot_paths = {}
 	for file_path in path_index:
 		for mapping in mappings:
-			normalized_mapping = utils.normalize_mapping(mapping)
+			normalized_mapping = utils.normalize_mapping(mapping, project_file_dir)
 			if file_path.startswith(normalized_mapping["path"]):
 				mapped_path = normalized_mapping["mapping"] + file_path.replace(normalized_mapping["path"], "")
 				path_parts = mapped_path.split("/")[1:]
@@ -119,7 +123,7 @@ def get_folder_mapping(project_name, file_path):
 	mappings = get_project_data(project_name).get("mappings", [])
 	normalized_file_name = utils.normalize_path(file_path)
 	for mapping in mappings:
-		normalized_mapping = utils.normalize_mapping(mapping)
+		normalized_mapping = utils.normalize_mapping(mapping, dirname(project_name))
 		if not normalized_file_name.startswith(normalized_mapping["path"]):
 			continue
 		mapped_path = normalized_mapping["mapping"] + normalized_file_name.replace(normalized_mapping["path"], "")

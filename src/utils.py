@@ -1,11 +1,9 @@
-import sublime
+import sublime, os
 from collections import deque, namedtuple
-from os import listdir
-from os.path import dirname, realpath, splitext
 
 CFML_PLUGIN_NAME = None
 
-path_parts = dirname(realpath(__file__)).replace("\\", "/").split("/")
+path_parts = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/").split("/")
 for i, path_part in enumerate(reversed(path_parts)):
     if "Packages" in path_part:
         CFML_PLUGIN_NAME = path_parts[len(path_parts) - i].split(".")[0]
@@ -17,34 +15,39 @@ def get_plugin_name():
 	return CFML_PLUGIN_NAME
 
 def get_project_list():
-	return [(extract_project_name(window.project_file_name()), window.project_data()) for window in sublime.windows() if window.project_file_name()]
+	project_list = []
+	for window in sublime.windows():
+		if window.project_file_name():
+			project_tuple = (normalize_path(window.project_file_name()), window.project_data())
+			project_list.append(project_tuple)
+	return project_list
 
 def get_project_name(view):
 	project_file_name = view.window().project_file_name()
 	if project_file_name:
-		return extract_project_name(project_file_name)
+		return normalize_path(project_file_name)
 	return None
 
 def get_project_name_from_window(window):
 	project_file_name = window.project_file_name()
 	if project_file_name:
-		return extract_project_name(project_file_name)
+		return normalize_path(project_file_name)
 	return None
 
-def extract_project_name(project_file_name):
-	project_file = project_file_name.replace("\\","/").split("/").pop()
-	project_name, ext = splitext(project_file)
-	return project_name
-
-def normalize_path(path):
+def normalize_path(path, root_path=None):
+	if not os.path.isabs(path) and root_path is not None:
+		path = os.path.normpath(os.path.join(root_path, path))
 	normalized_path = path.replace("\\","/")
 	if normalized_path[-1] == "/":
 		normalized_path = normalized_path[:-1]
 	return normalized_path
 
-def normalize_mapping(mapping):
+def normalize_mapping(mapping, root_path=None):
 	normalized_mapping = {}
-	normalized_mapping["path"] = normalize_path(mapping["path"])
+	# convenience check for project file path
+	if root_path.endswith('sublime-project'):
+		root_path = os.path.dirname(root_path)
+	normalized_mapping["path"] = normalize_path(mapping["path"], root_path)
 	normalized_mapping_path = mapping["mapping"].replace("\\", "/")
 	if normalized_mapping_path[0] != "/":
 		normalized_mapping_path = "/" + normalized_mapping_path
@@ -273,7 +276,7 @@ def get_verified_path(root_path, rel_path):
 	verified_path_elements = [ ]
 
 	for elem in rel_path_elements:
-		dir_map = {f.lower(): f for f in listdir(normalized_root_path + "/" + "/".join(verified_path_elements))}
+		dir_map = {f.lower(): f for f in os.listdir(normalized_root_path + "/" + "/".join(verified_path_elements))}
 		if elem.lower() not in dir_map:
 			return rel_path, False
 		verified_path_elements.append(dir_map[elem.lower()])
