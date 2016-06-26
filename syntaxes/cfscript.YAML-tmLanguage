@@ -777,21 +777,34 @@ repository:
 
   function-parameter:
     patterns:
-    - match: (?i:required)
-      name: keyword.other.required.argument.cfml
-    - match: \b(?i:(function|string|date|struct|array|void|binary|numeric|boolean|query|xml|uuid|any))\b
-      name: storage.type.cfml
-    - match: '[_$a-zA-Z][$\w]*'
-      name: variable.parameter.function.cfml
     - match: ','
       name: punctuation.separator.function.cfml
-    - name: meta.parameter.optional.cfml
-      begin: '='
+    - match: (?i:required)
+      name: keyword.other.required.argument.cfml
+    - begin: (?:([_$a-zA-Z][$\w]*)\s+)?([_$a-zA-Z][$\w]*)
       beginCaptures:
-        '0': {name: keyword.operator.assignment.cfml}
+        '1': {name: storage.type.cfml}
+        '2': {name: variable.parameter.function.cfml}
       end: (?=[,)])
       patterns:
-      - include: '#expressions'
+      - begin: (?=[_$a-zA-Z][$\w]*)
+        end: (?=[,)])
+        patterns:
+        - include: '#tag-generic-attribute'
+      - name: meta.parameter.optional.cfml
+        begin: '(=)\s*([_$a-zA-Z][$\w]*)?'
+        beginCaptures:
+          '1': {name: keyword.operator.assignment.cfml}
+          '2': {name: variable.other.readwrite.cfml}
+        end: (?=([_$a-zA-Z][$\w]*|[,)]))
+        patterns:
+        - begin: '(?=\s*([+\-*/&%])\s*[_$a-zA-Z][$\w]*)'
+          end: '[_$a-zA-Z][$\w]*'
+          endCaptures:
+            '0': {name: variable.other.readwrite.cfml}
+          patterns:
+          - include: '#operators'
+        - include: '#expressions'
     - include: '#comments'
 
   struct-literal:

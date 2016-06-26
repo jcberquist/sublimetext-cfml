@@ -656,21 +656,37 @@ contexts:
         - match: \)
           scope: punctuation.definition.parameters.end.cfml
           set: function-declaration-properties
-        - match: (?i:required)
-          scope: keyword.other.required.argument.cfml
-        - match: \b(?i:(function|string|date|struct|array|void|binary|numeric|boolean|query|xml|uuid|any))\b
-          scope: storage.type.cfml
-        - match: '{{identifier}}'
-          scope: variable.parameter.function.cfml
         - match: ','
           scope: punctuation.separator.function.cfml
-        - match: '='
-          scope: keyword.operator.assignment.cfml
+        - match: (?i:required)
+          scope: keyword.other.required.argument.cfml
+        - match: (?:({{identifier}})\s+)?({{identifier}})
+          captures:
+            1: storage.type.cfml
+            2: variable.parameter.function.cfml
           push:
-            - meta_scope: meta.parameter.optional.cfml
-            - match: "(?=[,)])"
+            - match: (?=[,)])
               pop: true
-            - include: expressions
+            - match: (?={{identifier}})
+              set:
+                - match: '(?=[,)])'
+                  pop: true
+                - include: scope:embedding.cfml#tag-generic-attribute
+            - match: '(=)\s*({{identifier}})?'
+              captures:
+                1: keyword.operator.assignment.cfml
+                2: variable.other.readwrite.cfml
+              push:
+                - meta_scope: meta.parameter.optional.cfml
+                - match: '(?=({{identifier}}|[,)]))'
+                  pop: true
+                - match: '(?=\s*([+\-*/&%])\s*{{identifier}})'
+                  push:
+                    - match: '{{identifier}}'
+                      scope: variable.other.readwrite.cfml
+                      pop: true
+                    - include: operators
+                - include: expressions
 
   function-declaration-properties:
     - meta_content_scope: meta.function.declaration.cfml

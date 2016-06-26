@@ -2886,48 +2886,97 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>(?i:required)</string>
-					<key>name</key>
-					<string>keyword.other.required.argument.cfml</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\b(?i:(function|string|date|struct|array|void|binary|numeric|boolean|query|xml|uuid|any))\b</string>
-					<key>name</key>
-					<string>storage.type.cfml</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>[_$a-zA-Z][$\w]*</string>
-					<key>name</key>
-					<string>variable.parameter.function.cfml</string>
-				</dict>
-				<dict>
-					<key>match</key>
 					<string>,</string>
 					<key>name</key>
 					<string>punctuation.separator.function.cfml</string>
 				</dict>
 				<dict>
+					<key>match</key>
+					<string>(?i:required)</string>
+					<key>name</key>
+					<string>keyword.other.required.argument.cfml</string>
+				</dict>
+				<dict>
 					<key>begin</key>
-					<string>=</string>
+					<string>(?:([_$a-zA-Z][$\w]*)\s+)?([_$a-zA-Z][$\w]*)</string>
 					<key>beginCaptures</key>
 					<dict>
-						<key>0</key>
+						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.operator.assignment.cfml</string>
+							<string>storage.type.cfml</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.function.cfml</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>(?=[,)])</string>
-					<key>name</key>
-					<string>meta.parameter.optional.cfml</string>
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>include</key>
-							<string>#source-cfml-script-expressions</string>
+							<key>begin</key>
+							<string>(?=[_$a-zA-Z][$\w]*)</string>
+							<key>end</key>
+							<string>(?=[,)])</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#source-cfml-script-tag-generic-attribute</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(=)\s*([_$a-zA-Z][$\w]*)?</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.assignment.cfml</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>variable.other.readwrite.cfml</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?=([_$a-zA-Z][$\w]*|[,)]))</string>
+							<key>name</key>
+							<string>meta.parameter.optional.cfml</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>begin</key>
+									<string>(?=\s*([+\-*/&amp;%])\s*[_$a-zA-Z][$\w]*)</string>
+									<key>end</key>
+									<string>[_$a-zA-Z][$\w]*</string>
+									<key>endCaptures</key>
+									<dict>
+										<key>0</key>
+										<dict>
+											<key>name</key>
+											<string>variable.other.readwrite.cfml</string>
+										</dict>
+									</dict>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>#source-cfml-script-operators</string>
+										</dict>
+									</array>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#source-cfml-script-expressions</string>
+								</dict>
+							</array>
 						</dict>
 					</array>
 				</dict>
