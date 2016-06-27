@@ -102,6 +102,7 @@ There are two settings that are set on a per project basis in a project file, `c
     ]
 }
 ```
+*__Note__: the paths specified above can either be absolute paths, or relative paths. If they are relative paths, they will be calculated relative to the location of the `.sublime-project` file.*
 
 The specified mappings are used to resolve file paths to dot paths when right clicking on a CFC file in the sidebar and selecting `Copy CFC Dotted Path`. If more than one mapping matches, you will be given a choice, and if none match, it will fall back to using the base folder of the project as a dot path root. The mappings are also used to resolve dot paths specified in the `extends` attribute in a component, the `createObject` function, and when using the `new` operator to instantiate a component (e.g. `new dot.path.to.component()`). If the <kbd>F1</kbd> command is used when the cursor is in any of these, you will get a popup with the file path for the component (plus more information about the component if it is one that has been indexed). You can click on the file path to jump to the component file. You can also <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> (<kbd>CMD</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> on a Mac) on any of these to jump straight to the component file without going through the popup. In addition, these same commands will work in any quoted string that is used as a function call argument if it contains a dot path that can be resolved.
 
@@ -124,6 +125,10 @@ By default, implicit accessors are included in the completions.The `accessors` k
 
 These two settings work together, such that when a base CFC as well as another CFC that extends it are both indexed, and a mapping is specified such that the dot path in the `extends` can be resolved, the documentation and completions for the child CFC will include properties and methods from the base CFC. In addition, the dot paths of all indexed CFCs will be offered as completions in the `extends` attribute, the `createObject` function (where the type is `component`), as well as when using `new` to instantiate a CFC.
 
+**Inject Property Command**
+
+<kbd>SHIFT</kbd>+<kbd>ALT</kbd>+<kbd>D</kbd> is bound to command that will insert a property into a component. If it is run while the cursor is on one of the above mentioned component variable names or method calls, it will insert a property with its name set to the component variable name. Otherwise, it will present a list of all component variable names indexed in the given project, allowing one to be selected from the list and inserted. The default property templates used by the insert command can be found in the default package settings under the `di_property` key. These can be overriden in the user package settings, or on a per project basis by adding the same settings to a project settings file. By default, after a new property has been inserted all properties in the component will be sorted by name; this can be turned off by setting the `sort_properties` key in the `di_property` object to false.
+
 ### Custom Tags
 
 Support is offered on a per project basis for custom tags as used with a `<cfimport>` tag and a custom tag prefix. Here is an example project file (other settings have been removed):
@@ -139,6 +144,8 @@ Support is offered on a per project basis for custom tags as used with a `<cfimp
     ]
 }
 ```
+
+*__Note__: the path specified above can either be an absolute path, or a relative path. If it is a relative path, it will be calculated relative to the location of `.sublime-project` file.*
 
 Once this is done, `page` will be offered as a custom tag prefix completion, and then after entering `<page:` a list of tags in the custom tag folder will be offered. After a tag has been entered, completions for every `attributes` scope variable found in that custom tag file will be offered.
 

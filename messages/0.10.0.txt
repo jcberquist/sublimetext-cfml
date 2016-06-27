@@ -1,0 +1,20 @@
+CFML v0.10.0 Changelog:
+
+- Added `cflocation` to the default list of tags that do not need a closing tag
+  https://github.com/jcberquist/sublimetext-cfml/issues/25
+
+- Relative paths are now supported in `.sublime-project` files for paths specified
+  for mappings, cfc folders, and custom tags. When a relative path is used, it is
+  understood to be relative to the location of the `.sublime-project` file.
+  (Just as Sublime Text itself resolves relative folder paths in project files.)
+  https://github.com/jcberquist/sublimetext-cfml/issues/26
+
+- Added syntax highlighting support for function parameter hints and metadata
+  specified inline with the parameter (e.g. `required string varName hint="hint"`)
+
+- Added a new command (bound by default to SHIFT+ALT+d), that when run will insert a
+  property into a component based on a project's indexed component variable names.
+  If the cursor's current position can be resolved to a component name, that name will
+  be set in the property, otherwise, a list of the project's indexed component names will
+  be offered from which a component name can be chosen. See `Inject Property Command` in
+  https://github.com/jcberquist/sublimetext-cfml#cfc-indexing-and-dot-paths
