@@ -38,6 +38,11 @@ def get_cfc_name(cfc_name, path_keys):
 		cfc_name = cfc_name.replace("{" + path_key + "}", path_keys[path_key])
 	return cfc_name
 
+def get_cfc_list(project_name):
+	if project_name in projects:
+		return [projects[project_name][key]["name"] for key in sorted(projects[project_name])]
+	return []
+
 def has_cfc(project_name, cfc_name):
 	if project_name in projects:
 		return cfc_name.lower() in projects[project_name]

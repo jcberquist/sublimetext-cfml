@@ -60,6 +60,12 @@
 	"fw1_enabled": false,
 	"fw1_controller_folders": ["controllers"],
 	"fw1_view_folders": ["views"],
-	"fw1_layout_folders": ["layouts"]
+	"fw1_layout_folders": ["layouts"],
 
+	// dependency inject property command
+	"di_property": {
+		"script_template": "property {name};",
+		"tag_template": "<cfproperty name=\"{name}\">",
+		"sort_properties": true
+	}
 }

@@ -110,5 +110,12 @@
     "context": [
       {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
     ]
+  },
+  {
+    "keys": ["shift+alt+d"],
+    "command": "cfml_di_property",
+    "context": [
+      {"key": "selector", "operator": "equal", "operand": "source.cfml meta.class", "match_all":true}
+    ]
   }
 ]

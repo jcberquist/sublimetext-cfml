@@ -8,6 +8,7 @@ from . import fw1
 from . import in_file_completions
 from . import testbox
 from .build_cfml_tmlanguage import CfmlBuildTmlanguageCommand
+from .cfcs import CfmlDiPropertyCommand
 from .cfc_dotted_path import CfmlCfcDottedPathCommand
 from .controller_view_toggle import CfmlToggleControllerViewCommand
 from .color_scheme_styles import CfmlColorSchemeStylesCommand
