@@ -328,7 +328,7 @@ repository:
       name: keyword.operator.arithmetic.cfml
     - match: \bnew\b
       name: keyword.operator.new.cfml
-    - begin: \b(in|void)\b
+    - begin: \bin\b
       beginCaptures:
         '0': {name: keyword.operator.cfml}
       end: '(?<=\})|(?=[^\s\{])'

@@ -318,7 +318,7 @@ contexts:
       scope: keyword.operator.arithmetic.cfml
     - match: \bnew\b
       scope: keyword.operator.new.cfml
-    - match: \b(in|void)\b
+    - match: \bin\b
       scope: keyword.operator.cfml
       push: after-operator
     - match: '&&|\|\|'

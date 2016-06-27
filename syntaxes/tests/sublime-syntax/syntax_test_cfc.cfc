@@ -137,12 +137,14 @@ default="string";
 //       ^ meta.function.declaration.cfml storage.type.return-type.object.array.cfml
 //           ^ meta.function.declaration.cfml meta.brackets.cfml punctuation.definition.brackets.begin.cfml
 
-
   function go( required string param = someVar & hint hint="go", param_2 ) {}
 //                                               ^ meta.parameter.optional.cfml variable.other.readwrite.cfml
 //                                                    ^ entity.other.attribute-name.cfml
 //                                                        ^ punctuation.separator.key-value.cfml
 //                                                         ^ string.quoted.double.cfml punctuation.definition.string.begin.cfml
+
+  void function testme() {}
+//^ meta.function.declaration.cfml storage.type.return-type.void.cfml
 
   var test = {
     key: value,

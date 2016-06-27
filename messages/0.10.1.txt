@@ -1,0 +1,4 @@
+CFML v0.10.1 Changelog:
+
+- Match `void` correctly in a function declaration that has no storage modifier
+  https://github.com/jcberquist/sublimetext-cfml/issues/27
