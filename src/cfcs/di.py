@@ -33,7 +33,7 @@ class CfmlDiPropertyCommand(sublime_plugin.TextCommand):
 			self.view.window().show_quick_panel(cfc_list, callback, flags=sublime.MONOSPACE_FONT)
 
 	def insert_property(self, edit, property_name):
-		di_property = utils.get_setting("di_property")
+		di_property = self.get_setting("di_property")
 		is_script = len(self.view.find_by_selector("source.cfml.script meta.class.body.cfml")) > 0
 		property_string = di_property.get("script_template", "") if is_script else di_property.get("tag_template", "")
 
@@ -73,3 +73,8 @@ class CfmlDiPropertyCommand(sublime_plugin.TextCommand):
 			for i, r in enumerate(reversed(properties)):
 				self.view.replace(edit, r, sorted_properties[i])
 
+	def get_setting(self, setting_key):
+		if self.view.window().project_file_name() and setting_key in self.view.window().project_data():
+			return self.view.window().project_data()[setting_key]
+		package_settings = sublime.load_settings("cfml_package.sublime-settings")
+		return package_settings.get(setting_key)
