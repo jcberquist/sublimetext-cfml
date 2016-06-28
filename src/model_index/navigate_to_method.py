@@ -1,4 +1,5 @@
 import sublime, sublime_plugin
+from .. import utils
 
 class CfmlNavigateToMethodCommand(sublime_plugin.WindowCommand):
 
@@ -8,7 +9,7 @@ class CfmlNavigateToMethodCommand(sublime_plugin.WindowCommand):
 			index_locations = self.window.lookup_symbol_in_index(href)
 
 			for full_path, project_path, rowcol in index_locations:
-				if full_path == file_path:
+				if utils.format_lookup_file_path(full_path) == file_path:
 					row, col = rowcol
 					self.window.open_file(full_path + ":" + str(row) + ":" + str(col), sublime.ENCODED_POSITION | sublime.FORCE_GROUP)
 					break

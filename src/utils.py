@@ -56,6 +56,12 @@ def normalize_mapping(mapping, root_path=None):
 	normalized_mapping["mapping"] = normalized_mapping_path
 	return normalized_mapping
 
+def format_lookup_file_path(file_path):
+	file_path = normalize_path(file_path)
+	if file_path[1] == ":":
+		file_path = "/" + file_path[0] + file_path[2:]
+	return file_path
+
 def get_previous_character(view, position):
 	if view.substr(position - 1) in [" ", "\t", "\n"]:
 		position = view.find_by_class(position, False, sublime.CLASS_WORD_END | sublime.CLASS_PUNCTUATION_END)

@@ -1,5 +1,6 @@
 import sublime, sublime_plugin
 from collections import namedtuple
+from . import utils
 
 GotoCfmlFile = namedtuple('GotoCfmlFile', 'file_path symbol')
 
@@ -24,7 +25,7 @@ def open_file_at_symbol(view, file_path, symbol):
 		file_path = "/" + file_path[0] + file_path[2:]
 
 	for full_path, project_path, rowcol in index_locations:
-		if full_path == file_path:
+		if utils.format_lookup_file_path(full_path) == file_path:
 			row, col = rowcol
 			view.window().open_file(full_path + ":" + str(row) + ":" + str(col), sublime.ENCODED_POSITION | sublime.FORCE_GROUP)
 			break

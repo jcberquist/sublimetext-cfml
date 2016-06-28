@@ -30,7 +30,7 @@ def toggle_controller_view(view, position):
 			index_locations = view.window().lookup_symbol_in_index(symbol)
 
 			for full_path, project_path, rowcol in index_locations:
-				if full_path == file_path:
+				if utils.format_lookup_file_path(full_path) == file_path:
 					row, col = rowcol
 					break
 
