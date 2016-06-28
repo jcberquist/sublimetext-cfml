@@ -83,7 +83,7 @@ def get_method_documentation(view, project_name, file_path, function_name, heade
 	extended_metadata = get_extended_metadata_by_file_path(project_name, file_path)
 
 	function_file_path = extended_metadata["function_file_map"][function_name]
-	with open(function_file_path, "r") as f:
+	with open(function_file_path, "r", encoding="utf-8") as f:
 		file_string = f.read()
 	cfml_minihtml_view = view.window().create_output_panel("cfml_minihtml")
 	cfml_minihtml_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/cfml." + SYNTAX_EXT)

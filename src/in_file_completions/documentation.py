@@ -112,7 +112,7 @@ def get_function_documentation(view, extended_meta, function_name, header):
 	function_file_path = extended_meta["function_file_map"][function_name]
 	view_file_path = utils.normalize_path(view.file_name()) if view.file_name() else ""
 	if len(function_file_path) > 0 and function_file_path != view_file_path:
-		with open(function_file_path, "r") as f:
+		with open(function_file_path, "r", encoding="utf-8") as f:
 			file_string = f.read()
 		cfml_minihtml_view = view.window().create_output_panel("cfml_minihtml")
 		cfml_minihtml_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/cfml." + SYNTAX_EXT)

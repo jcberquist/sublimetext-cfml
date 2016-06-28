@@ -1,0 +1,5 @@
+CFML v0.10.2 Changelog:
+
+- When indexing files, the plugin now specifies utf-8 encoding for file reads
+  rather than relying on the system default. See the discussion as to why at
+  https://github.com/jcberquist/sublimetext-cfml/issues/26

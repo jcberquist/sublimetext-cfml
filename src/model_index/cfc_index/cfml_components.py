@@ -66,7 +66,7 @@ def index(root_path):
       if filename.endswith(".cfc"):
         full_file_path = path.replace("\\","/") + "/" + filename
         try:
-          with open(full_file_path, 'r') as f:
+          with open(full_file_path, "r", encoding="utf-8") as f:
             file_string = f.read()
         except:
           print("CFML: unable to read file - " + full_file_path)
@@ -78,7 +78,7 @@ def index(root_path):
 
 def index_file(full_file_path):
   try:
-    with open(full_file_path, 'r') as f:
+    with open(full_file_path, "r", encoding="utf-8") as f:
       file_string = f.read()
   except:
     print("CFML: unable to read file - " + full_file_path)

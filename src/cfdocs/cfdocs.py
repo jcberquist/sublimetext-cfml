@@ -75,7 +75,7 @@ def fetch_cfdoc(function_or_tag):
 def load_cfdoc(function_or_tag):
 	file_path = utils.get_setting("cfdocs_path") + function_or_tag  + ".json"
 	try:
-		with open(file_path, 'r') as f:
+		with open(file_path, "r", encoding="utf-8") as f:
 			json_string = f.read()
 	except:
 		data = {"error_message": "Unable to read " + function_or_tag + ".json"}

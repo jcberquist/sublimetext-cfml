@@ -14,7 +14,7 @@ def index(custom_tag_path):
 
 def index_file(full_file_path):
   try:
-    with open(full_file_path, 'r') as f:
+    with open(full_file_path, "r", encoding="utf-8") as f:
       file_string = f.read()
   except:
     print("CFML: unable to read file - " + full_file_path)
