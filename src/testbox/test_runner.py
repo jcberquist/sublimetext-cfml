@@ -108,14 +108,6 @@ class TestboxCommand(sublime_plugin.WindowCommand):
 	def get_dotted_directory(self, root, directory):
 		return directory.replace(root, "").replace("/",".")[:-1]
 
-	def normalize_directory(self, directory):
-		if len(directory) == 0:
-			return ""
-		normalized_directory = directory.replace("\\", "/")
-		if normalized_directory[-1] != "/":
-			normalized_directory += "/"
-		return normalized_directory
-
 # result rendering
 
 def render_result(result_data, test_bundle):
