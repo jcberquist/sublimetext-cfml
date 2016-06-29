@@ -24,7 +24,9 @@ class TestboxCommand(sublime_plugin.WindowCommand):
 			sublime.message_dialog("No TestBox runner URL has been defined for this project.")
 			return
 
-		testbox_tests_root = self.normalize_directory(self.get_setting("testbox_tests_root"))
+		project_file_dir = utils.normalize_path(os.path.dirname(self.window.project_file_name())) if self.window.project_file_name() else None
+
+		testbox_tests_root = utils.normalize_path(self.get_setting("testbox_tests_root"), project_file_dir) + '/'
 
 		directory, filename, ext = self.get_path_parts(self.window.active_view().file_name())
 		full_url = self.get_setting("testbox_runner_url")
@@ -49,7 +51,7 @@ class TestboxCommand(sublime_plugin.WindowCommand):
 		if not hasattr(self, "output_view"):
 			self.output_view = self.window.create_output_panel("testbox")
 
-		testbox_results = {k: self.normalize_directory(v) for k, v in self.get_setting("testbox_results").items()}
+		testbox_results = self.get_testbox_results(project_file_dir)
 
 		self.output_view.settings().set("result_file_regex", testbox_results["server_root"] + "([^\\s].*):([0-9]+)$")
 		self.output_view.settings().set("result_base_dir", testbox_results["sublime_root"])
@@ -89,6 +91,12 @@ class TestboxCommand(sublime_plugin.WindowCommand):
 			return self.window.project_data()[setting_key]
 		package_settings = sublime.load_settings("cfml_package.sublime-settings")
 		return package_settings.get(setting_key, "")
+
+	def get_testbox_results(self, project_file_dir):
+		testbox_results = self.get_setting("testbox_results")
+		testbox_results["server_root"] = utils.normalize_path(testbox_results["server_root"]) + "/"
+		testbox_results["sublime_root"] = utils.normalize_path(testbox_results["sublime_root"], project_file_dir) + "/"
+		return testbox_results
 
 	def get_path_parts(self, file_name):
 		normalized_file_name = file_name.replace("\\","/")
