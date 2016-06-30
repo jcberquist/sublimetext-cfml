@@ -18,7 +18,7 @@ def load():
 
 class TestboxCommand(sublime_plugin.WindowCommand):
 
-	def run(self, cmd = None, test_type=""):
+	def run(self, test_type="", **kwargs):
 
 		if not len(self.get_setting("testbox_runner_url")):
 			sublime.message_dialog("No TestBox runner URL has been defined for this project.")
