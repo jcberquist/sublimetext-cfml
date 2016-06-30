@@ -9,7 +9,7 @@ for i, path_part in enumerate(reversed(path_parts)):
         CFML_PLUGIN_NAME = path_parts[len(path_parts) - i].split(".")[0]
         break
 
-Symbol = namedtuple('Symbol', 'name is_function function_region args_region, name_region')
+Symbol = namedtuple('Symbol', 'name is_function function_region args_region name_region')
 
 def get_plugin_name():
 	return CFML_PLUGIN_NAME
@@ -261,8 +261,10 @@ def get_function(view, pt):
 				return view.substr(function_name_region).lower(), function_name_region, function_region
 	return None
 
-def get_function_call(view, pt):
+def get_function_call(view, pt, support=False):
 	function_call_scope = "meta.function-call"
+	if support:
+		function_call_scope += ".support"
 	function_region = get_scope_region_containing_point(view, pt, function_call_scope)
 	if function_region:
 		function_name_region = view.word(function_region.begin())
