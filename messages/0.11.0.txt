@@ -1,0 +1,12 @@
+CFML v0.11.0 Changelog:
+
+- Allow cfc folder variable names in .sublime-project files to contain periods
+  https://github.com/jcberquist/sublimetext-cfml/issues/28
+
+- `testbox_tests_root` .sublime-project setting now supports relative paths just
+  as the various `path` settings in a sublime project file do (relative to the
+  location of the sublime project file).
+
+- Updates to work with changes introduced in the latest ST dev builds
+
+- Various bug fixes, see the recent commits on GitHub for more details
