@@ -1,8 +1,7 @@
-from .. import utils
+from .. import model_index, utils
 from ..inline_documentation import Documentation
 from ..goto_cfml_file import GotoCfmlFile
 from . import cfcs
-from .. import model_index
 
 def get_inline_documentation(view, position):
 	project_name = utils.get_project_name(view)
@@ -44,12 +43,8 @@ def find_cfc(view, position, project_name):
 		function_name, function_name_region, function_args_region = utils.get_function_call(view, position)
 		if view.substr(function_name_region.begin() - 1) == ".":
 			dot_context = utils.get_dot_context(view, function_name_region.begin() - 1)
-			symbol_name = None
 			# check for known cfc name
-			for symbol in dot_context:
-				if not symbol.is_function and cfcs.has_cfc(project_name, symbol.name):
-					symbol_name = symbol.name
-					break
+			symbol_name, symbol_region = cfcs.search_dot_context_for_cfc(project_name, dot_context)
 			# also check for getter being used to access cfc
 			if not symbol_name:
 				symbol = dot_context[-1]
@@ -64,7 +59,16 @@ def find_cfc(view, position, project_name):
 
 	# check for cfc
 	cfc_name = None
-	if view.match_selector(position, "variable.other.object.cfml, meta.tag.property.name.cfml"):
+	check_position = position
+	if view.match_selector(position, "punctuation.accessor.cfml"):
+		check_position = position + 1
+	if view.match_selector(check_position, "variable.other, meta.property.cfml"):
+		# we need to find the whole dot context now in order to search for variable names that contain dots
+		dot_context = get_dot_context(view, check_position)
+		cfc_name, cfc_name_region = cfcs.search_dot_context_for_cfc(project_name, dot_context)
+		if cfc_name and not cfc_name_region.contains(position):
+			cfc_name = None
+	elif view.match_selector(position, "meta.tag.property.name.cfml"):
 		cfc_name = view.substr(view.word(position)).lower()
 	elif view.match_selector(position, "meta.function-call.cfml variable.function.cfml"):
 		var_name = view.substr(view.word(position)).lower()
@@ -77,3 +81,13 @@ def find_cfc(view, position, project_name):
 		return cfc_info, metadata, None
 
 	return None, None, None
+
+def get_dot_context(view, position):
+	current_element = view.word(position)
+	next_pt = utils.get_next_character(view, current_element.end())
+	if (view.match_selector(next_pt, "punctuation.accessor.cfml")
+		and view.match_selector(next_pt + 1, "variable.other, meta.property.cfml")):
+			return get_dot_context(view, next_pt + 1)
+	dot_context = [utils.Symbol(view.substr(current_element), False, None, None, current_element)]
+	dot_context.extend(utils.get_dot_context(view, current_element.begin() - 1))
+	return dot_context

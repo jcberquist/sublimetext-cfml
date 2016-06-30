@@ -1,3 +1,4 @@
+import sublime
 import os
 from .. import model_index
 from .. import utils
@@ -47,6 +48,26 @@ def has_cfc(project_name, cfc_name):
 	if project_name in projects:
 		return cfc_name.lower() in projects[project_name]
 	return False
+
+def search_dot_context_for_cfc(project_name, dot_context):
+	stack = []
+	regions = []
+	for symbol in dot_context:
+		if not symbol.is_function:
+			stack.append(symbol.name)
+			regions.append(symbol.name_region)
+		else:
+			if len(stack) > 0:
+				break
+
+	if len(stack) > 0:
+		stack.reverse()
+		regions.reverse()
+		for i in range(len(stack)):
+			cfc_name = ".".join(stack[i:])
+			if has_cfc(project_name, cfc_name):
+				return cfc_name, sublime.Region(regions[i].begin(), regions[-1].end())
+	return None, None
 
 def get_cfc_info(project_name, cfc_name):
 	return projects[project_name][cfc_name.lower()]
