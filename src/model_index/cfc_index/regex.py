@@ -93,6 +93,7 @@ cfml_property = re.compile(cfml_property, re.X | re.I | re.M)
 
 property_type_name = r"""
 \A[\s\n]*
+(?!\b\w+\s*=)
 (?:(\w+)\s+)?
 \b(\w+)\b
 """
