@@ -26,78 +26,181 @@
 #   are nested they will not be matched correctly
 
 import re
+from . import regex
 
-script_function_regex = re.compile('(?:(private|package|public|remote)\s+)?([A-Za-z0-9_\.$]+)?\s*function\s+([_$a-zA-Z][$\w]*)\s*(?:\(\s*([^)]*)\))', re.I)
-script_arguments_regex = re.compile(r'(?:^|,)\s*(required)?\s*(\b\w+\b)?\s*(\b\w+\b)(?:\s*=\s*(\{[^\}]*\}|\[[^\]]*\]|[^,\)]+))?', re.I)
-
-function_block_regex = re.compile('<cffunction.*?</cffunction>', re.I | re.DOTALL)
-function_regex = {}
-function_regex["name"] = re.compile(r'<cffunction[^>]+name\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1)[^>]*>', re.I | re.DOTALL)
-function_regex["access"] = re.compile(r'<cffunction[^>]+access\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1)[^>]*>', re.I | re.DOTALL)
-function_regex["returntype"] = re.compile(r'<cffunction[^>]+returntype\s*=\s*(\'|")([_$a-zA-Z][$\w]*)(\1)[^>]*>', re.I | re.DOTALL)
-
-argument_block_regex = re.compile('<cfargument[^>]*>', re.I)
-argument_regex = {}
-argument_regex["name"] = re.compile(r'name\s*=\s*(\'|")(\w*)(\1)', re.I)
-argument_regex["required"] = re.compile(r'required\s*=\s*(\'|")(\w*)(\1)', re.I)
-argument_regex["default"] = re.compile(r'default\s*(=\s*(\'|")#?([^\2]*?)#?(\2))', re.I)
-argument_regex["type"] = re.compile(r'type\s*=\s*(\'|")([^\1]*?)(\1)', re.I)
 
 def index(file_string):
-	functions = {function_tuple[0]: function_tuple[1] for function_tuple in find_script_functions(file_string)}
-	functions.update({function_tuple[0]: function_tuple[1] for function_tuple in find_tag_functions(file_string)})
-	return functions
+    functions = {}
+    for name, meta in find_script_functions(file_string):
+        functions[name] = meta
+    for name, meta in find_tag_functions(file_string):
+        functions[name] = meta
+    return functions
+
 
 def find_script_functions(file_string):
-	return [find_script_function(access, returntype, function_name, arguments) for access, returntype, function_name, arguments in re.findall(script_function_regex, file_string)]
+    functions = []
+    for t in re.findall(regex.script_function, file_string):
+        functions.append(parse_script_function(regex.ScriptFunction._make(t)))
+    return functions
 
-def find_script_function(access, returntype, function_name, arguments):
-	function = {}
-	function["access"] = access if len(access) else "public"
-	function["returntype"] = returntype if len(returntype) else None
-	function["arguments"] = find_script_function_arguments(arguments)
-	return (function_name, function)
 
-def find_script_function_arguments(arguments_string):
-	return [find_script_function_argument(arg_required, arg_type, arg_name, arg_default) for arg_required, arg_type, arg_name, arg_default in re.findall(script_arguments_regex, arguments_string)]
+def parse_script_function(script_function):
+    def parse_storage_slot(slot):
+        if slot.lower() in ["public", "private", "remote", "package"]:
+            return "access"
+        elif slot.lower() in ["static", "final", "abstract"]:
+            return "modifier"
 
-def find_script_function_argument(arg_required, arg_type, arg_name, arg_default):
-	argument = {}
-	argument["name"] = arg_name
-	argument["required"] = True if len(arg_required) else False
-	argument["type"] = arg_type if len(arg_type) else None
-	argument["default"] = arg_default.strip() if len(arg_default) else None
-	return argument
+    function = {}
+
+    if len(script_function.storage_slot_1) > 0:
+        key = parse_storage_slot(script_function.storage_slot_1)
+        function[key] = script_function.storage_slot_1
+    if len(script_function.storage_slot_2) > 0:
+        key = parse_storage_slot(script_function.storage_slot_2)
+        function[key] = script_function.storage_slot_2
+    if "access" not in function:
+        function["access"] = "public"
+
+    function["returntype"] = script_function.returntype if len(script_function.returntype) else None
+
+    docblock = parse_docblock(script_function.docblock)
+    function["arguments"] = parse_script_function_arguments(script_function.arguments, docblock)
+
+    arg_names = [arg["name"].lower() for arg in function["arguments"]]
+    for key in docblock:
+        if key in arg_names:
+            continue
+        d = docblock[key]
+        full_key = d.key.lower() + '.' + d.subkey.lower() if len(d.subkey) > 0 else d.key.lower()
+        function[full_key] = d.value
+
+    function.update(parse_function_attributes(script_function.arguments))
+
+    return (script_function.name, function)
+
+
+def parse_script_function_arguments(arguments_string, docblock):
+    args = []
+    for t in re.findall(regex.script_argument, arguments_string):
+        script_argument = regex.ScriptArgument._make(t)
+        argument = {}
+        argument["required"] = True if len(script_argument.required) > 0 else False
+        argument["type"] = script_argument.type if len(script_argument.type) > 0 else None
+        argument["default"] = script_argument.default.strip() if len(script_argument.default) else None
+
+        for d in docblock.get(script_argument.name.lower(), []):
+            key = d.subkey.lower() if len(d.subkey) else "hint"
+            argument[key] = d.value.strip()
+
+        argument.update(parse_attributes(script_argument.attributes))
+
+        argument["name"] = script_argument.name
+        args.append(argument)
+    return args
+
+
+def parse_function_attributes(attributes_string):
+    # remove strings
+    strings = {}
+    for i, s in enumerate(re.findall(regex.strings, attributes_string)):
+        key = r"__string_" + str(i) + "__"
+        strings[key] = s
+        attributes_string = attributes_string.replace(s, key)
+
+    # perform search
+    attributes_string = re.search(regex.function_attributes, attributes_string).group(1)
+
+    # add strings back
+    for key in strings:
+        attributes_string = attributes_string.replace(key, strings[key])
+    return parse_attributes(attributes_string)
+
+
+def parse_attributes(attributes_string):
+    attributes = [regex.Attribute._make(t) for t in re.findall(regex.attribute, attributes_string)]
+    attr_dict = {}
+    for attr in attributes:
+        if len(attr.value) > 0:
+            attr_dict[attr.key.lower()] = attr.value
+        elif len(attr.unquoted_value) > 0:
+            attr_dict[attr.key.lower()] = attr.unquoted_value
+        else:
+            attr_dict[attr.key.lower()] = ""
+    return attr_dict
+
+
+def parse_docblock(docblock_string):
+    docblock = {}
+    hint = []
+    for t in re.findall(regex.docblock, docblock_string):
+        line = regex.Docblock._make(t)
+        if len(line.key) == 0:
+            hint.append(line.value.strip())
+        else:
+            if line.key.lower() not in docblock:
+                docblock[line.key.lower()] = []
+            docblock[line.key.lower()].append(line)
+    if len(hint) > 0 and "hint" not in docblock:
+        docblock["hint"] = regex.Docblock("hint", "", "<br>".join(hint))
+    return docblock
+
 
 def find_tag_functions(file_string):
-	return filter(lambda x: x, [find_tag_function(function_string) for function_string in re.findall(function_block_regex,file_string)])
+    functions = []
+    for function_string in re.findall(regex.function_block, file_string):
+        function = {}
+        function_tag_string = re.search(regex.function_start_tag, function_string).group(1)
+        function.update(parse_attributes(function_tag_string))
 
-def find_tag_function(function_string):
-	function_matches = {}
-	for key in function_regex:
-		function_matches[key] = re.search(function_regex[key], function_string)
-	if not function_matches["name"]:
-		print("CFML: could not find function name while indexing...\n" + function_string)
-		return None
-	function = {}
-	function["access"] = function_matches["access"].group(2) if function_matches["access"] else "public"
-	function["returntype"] = function_matches["returntype"].group(2) if function_matches["returntype"] else None
-	function["arguments"] = find_tag_function_arguments(function_string)
-	return (function_matches["name"].group(2), function)
+        if "name" not in function:
+            print("CFML: could not find function name while indexing...\n" + function_string)
+            continue
 
-def find_tag_function_arguments(function_string):
-	return [find_tag_argument(argument_string) for argument_string in re.findall(argument_block_regex, function_string)]
+        if "access" not in function:
+            function["access"] = "public"
 
-def find_tag_argument(argument_string):
-	argument_matches = {}
-	for key in argument_regex:
-		argument_matches[key] = re.search(argument_regex[key], argument_string)
-	if not argument_matches["name"]:
-		print("CFML: could not find function name while indexing...\n" + argument_string)
-		return None
-	argument = {}
-	argument["name"] = argument_matches["name"].group(2)
-	argument["required"] = True if argument_matches["required"] else False
-	argument["type"] = argument_matches["type"].group(2) if argument_matches["type"] else None
-	argument["default"] = argument_matches["default"].group(2) if argument_matches["default"] else None
-	return argument
+        if "returntype" not in function:
+            function["returntype"] = None
+
+        function["arguments"] = parse_tag_function_arguments(function_string)
+
+        function_name = function["name"]
+        del function["name"]
+
+        functions.append((function_name, function))
+
+    return functions
+
+
+def parse_tag_function_arguments(function_string):
+    arguments = []
+    for argument_string in re.findall(regex.argument_tag, function_string):
+        argument = {}
+        argument.update(parse_attributes(argument_string))
+
+        if "name" not in argument:
+            print("CFML: could not find argument name while indexing...\n" + argument_string)
+            continue
+
+        if "required" in argument and argument["required"].lower() in ["true", "yes"]:
+            argument["required"] = True
+        else:
+            argument["required"] = False
+
+        if "type" not in argument:
+            argument["type"] = None
+
+        if "default" in argument:
+            if (
+                argument["default"].startswith("#")
+                and argument["default"].endswith("#")
+            ):
+                argument["default"] = argument["default"][1:-1]
+        else:
+            argument["default"] = None
+
+        arguments.append(argument)
+
+    return arguments

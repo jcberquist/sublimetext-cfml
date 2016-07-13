@@ -13,75 +13,41 @@
 # }
 
 import re
+from . import cfml_functions
+from . import regex
 
-script_property_regex = re.compile("^\s*(property[^;>]+);", re.I | re.M)
-tag_property_regex = re.compile("^\s*<cf(property[^>]+)>", re.I | re.M)
-
-type_name_regex = re.compile("^property.+?(?:(\w+)\s+)?\\b(\w+)\\b(?:$|\s*\w+\s*=)", re.I | re.M | re.S)
-
-attr_regex = {}
-for key in ["name","type","getter","setter"]:
-  attr_regex[key] = re.compile(key + "\s*=\s*[\"']?([\w\.]+)", re.I)
 
 def index(file_string):
-	properties = {name: attributes for name, attributes in find_script_properties(file_string) if name}
-	properties.update({name: attributes for name, attributes in find_tag_properties(file_string) if name})
-	return properties
+    properties = {}
+    for property_string in re.findall(regex.cfml_property, file_string):
 
-def find_script_properties(file_string):
-	return [find_script_property(property_string) for property_string in re.findall(script_property_regex, file_string)]
+        # search for 'property type name;' syntax
+        type_name_search = re.search(regex.property_type_name, property_string)
+        if type_name_search:
+            property_string = property_string.replace(type_name_search.group(0), "")
 
-def find_tag_properties(file_string):
-	return [find_tag_property(property_string) for property_string in re.findall(tag_property_regex, file_string)]
+        attributes = find_property_attributes(property_string)
 
-def find_script_property(property_string):
-	attribute_name = None
-	attributes = {}
+        if type_name_search:
+            attributes["name"] = type_name_search.group(2)
+        if type_name_search and type_name_search.group(1):
+            attributes["type"] = type_name_search.group(1)
 
-	# search first for 'property type name;' syntax
-	type_name_search = re.search(type_name_regex, property_string)
-	if type_name_search:
-		attribute_name = type_name_search.group(2)
-
-	if not attribute_name:
-		attr_search = re.search(attr_regex["name"], property_string)
-		if not attr_search:
-			return None, None
-		attribute_name = attr_search.group(1)
-
-	attributes.update(find_property_attributes(property_string))
-
-	if type_name_search and type_name_search.group(1):
-		attributes["type"] = type_name_search.group(1)
-
-	return attribute_name, attributes
-
-def find_tag_property(property_string):
-	attribute_name = None
-
-	attr_search = re.search(attr_regex["name"], property_string)
-	if not attr_search:
-		return None, None
-	attribute_name = attr_search.group(1)
-
-	attributes = find_property_attributes(property_string)
-	return attribute_name, attributes
+        if "name" in attributes:
+            property_name = attributes["name"]
+            del attributes["name"]
+            properties[property_name] = attributes
+    return properties
 
 
 def find_property_attributes(property_string):
-	attributes = {"type": "any", "getter": None, "setter": None}
+    attributes = {"type": "any", "getter": None, "setter": None}
+    attributes.update(cfml_functions.parse_attributes(property_string))
 
-	attr_search = re.search(attr_regex["type"], property_string)
-	if attr_search:
-		attributes["type"] = attr_search.group(1)
+    for key in ["getter", "setter"]:
+        if attributes[key] in ["true", "yes"]:
+            attributes[key] = True
+        elif attributes[key] in ["false", "no"]:
+            attributes[key] = False
 
-	for key in ["getter","setter"]:
-		attr_search = re.search(attr_regex[key], property_string)
-		if attr_search:
-			prop_value = attr_search.group(1).lower()
-			if prop_value in ["true", "yes"]:
-				attributes[key] = True
-			elif prop_value in ["false", "no"]:
-				attributes[key] = False
-
-	return attributes
+    return attributes
