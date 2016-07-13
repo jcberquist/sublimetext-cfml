@@ -2931,7 +2931,7 @@
 						</dict>
 						<dict>
 							<key>begin</key>
-							<string>(=)\s*([_$a-zA-Z][$\w]*)?</string>
+							<string>(=)\s*(?i:(\btrue\b)|(\bfalse\b)|(\bnull\b)|([_$a-zA-Z][$\w]*))?</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>1</key>
@@ -2940,6 +2940,21 @@
 									<string>keyword.operator.assignment.cfml</string>
 								</dict>
 								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>constant.language.boolean.true.cfml</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>constant.language.boolean.false.cfml</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>constant.language.null.cfml</string>
+								</dict>
+								<key>5</key>
 								<dict>
 									<key>name</key>
 									<string>variable.other.readwrite.cfml</string>

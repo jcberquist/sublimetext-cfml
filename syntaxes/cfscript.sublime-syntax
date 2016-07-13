@@ -672,10 +672,13 @@ contexts:
                 - match: '(?=[,)])'
                   pop: true
                 - include: scope:embedding.cfml#tag-generic-attribute
-            - match: '(=)\s*({{identifier}})?'
+            - match: '(=)\s*(?i:(\btrue\b)|(\bfalse\b)|(\bnull\b)|({{identifier}}))?'
               captures:
                 1: keyword.operator.assignment.cfml
-                2: variable.other.readwrite.cfml
+                2: constant.language.boolean.true.cfml
+                3: constant.language.boolean.false.cfml
+                4: constant.language.null.cfml
+                5: variable.other.readwrite.cfml
               push:
                 - meta_scope: meta.parameter.optional.cfml
                 - match: '(?=({{identifier}}|[,)]))'

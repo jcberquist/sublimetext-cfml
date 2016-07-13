@@ -143,6 +143,9 @@ default="string";
 //                                                        ^ punctuation.separator.key-value.cfml
 //                                                         ^ string.quoted.double.cfml punctuation.definition.string.begin.cfml
 
+  function go( required string param = true ) {}
+//                                     ^ meta.parameter.optional.cfml constant.language.boolean.true.cfml
+
   void function testme() {}
 //^ meta.function.declaration.cfml storage.type.return-type.void.cfml
 

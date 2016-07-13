@@ -792,10 +792,13 @@ repository:
         patterns:
         - include: '#tag-generic-attribute'
       - name: meta.parameter.optional.cfml
-        begin: '(=)\s*([_$a-zA-Z][$\w]*)?'
+        begin: '(=)\s*(?i:(\btrue\b)|(\bfalse\b)|(\bnull\b)|([_$a-zA-Z][$\w]*))?'
         beginCaptures:
           '1': {name: keyword.operator.assignment.cfml}
-          '2': {name: variable.other.readwrite.cfml}
+          '2': {name: constant.language.boolean.true.cfml}
+          '3': {name: constant.language.boolean.false.cfml}
+          '4': {name: constant.language.null.cfml}
+          '5': {name: variable.other.readwrite.cfml}
         end: (?=([_$a-zA-Z][$\w]*|[,)]))
         patterns:
         - begin: '(?=\s*([+\-*/&%])\s*[_$a-zA-Z][$\w]*)'
