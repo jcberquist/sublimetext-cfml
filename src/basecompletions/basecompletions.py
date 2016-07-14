@@ -44,6 +44,10 @@ def get_tag_attributes(view, prefix, position, info):
 
 def get_script_completions(view, prefix, position, info):
 	completion_list = []
+
+	if view.match_selector(position, "meta.function-call.parameters.cfml,meta.function-call.parameters.method.cfml"):
+		completion_list.append(("argumentCollection\tparameter struct", "argumentCollection = ${1:parameters}"))
+
 	completion_list.extend(completions["cfml_functions"])
 	completion_list.extend(completions["cfml_cf_tags_in_script"])
 	completion_list.extend(completions["cfml_tags_in_script"])
