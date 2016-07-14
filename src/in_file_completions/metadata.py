@@ -6,7 +6,7 @@ def get_view_metadata(view):
 	file_string = get_minimal_file_string(view)
 	base_meta = parse_cfc_file_string(file_string)
 
-	extended_meta = {k: base_meta[k] for k in ["extends","initmethod","entityname","accessors","persistent"]}
+	extended_meta = dict(base_meta)
 	extended_meta.update({"functions": {}, "function_file_map": {}, "properties": {}, "property_file_map": {}})
 
 	file_path = utils.normalize_path(view.file_name()) if view.file_name() else ""
@@ -34,7 +34,6 @@ def get_minimal_file_string(view):
 		current_funct = ""
 		for r in view.find_by_selector("meta.function.cfml, meta.function.body.tag.cfml meta.tag.argument.cfml"):
 			text = view.substr(r)
-			print(r)
 			if text.lower().startswith("<cff") and len(current_funct) > 0:
 				min_string += current_funct + "</cffunction>\n"
 				current_funct = ""
@@ -42,13 +41,18 @@ def get_minimal_file_string(view):
 		min_string += current_funct + "</cffunction>\n"
 	else:
 		script_selectors = [
-			"meta.class.declaration.cfml",
-			"meta.tag.property.cfml",
-			"meta.function.declaration.cfml -meta.function.body.cfml"
+			("comment.block.documentation.cfml -meta.class", "\n"),
+			("meta.class.declaration.cfml", " {\n"),
+			("meta.tag.property.cfml", ";\n")
 		]
 
-		for s in script_selectors:
-			for r in view.find_by_selector(s):
-				min_string += view.substr(r) + ";\n"
+		for selector, separator in script_selectors:
+			for r in view.find_by_selector(selector):
+				min_string += view.substr(r) + separator
+
+		funct_regions = "meta.class.body.cfml comment.block.documentation.cfml, meta.function.declaration.cfml -meta.function.body.cfml"
+		for r in view.find_by_selector(funct_regions):
+			string = view.substr(r)
+			min_string += string + ("\n" if string.endswith("*/") else "\{ \}\n")
 
 	return min_string
