@@ -184,7 +184,7 @@ def get_extended_metadata(project_name, file_path, stack):
 	if not base_meta:
 		return None
 
-	extended_meta = {k: base_meta[k] for k in ["extends","initmethod","entityname","accessors","persistent"]}
+	extended_meta = dict(base_meta)
 	extended_meta.update({"functions": {}, "function_file_map": {}, "properties": {}, "property_file_map": {}})
 
 	if base_meta["extends"]:
