@@ -40,8 +40,11 @@ def build_documentation(extended_metadata, file_path, header):
 	if file_path:
 		model_doc["description"] += "<strong>path</strong>: <a class=\"alt-link\" href=\"__go_to_component\">" + file_path + "</a><br>"
 
+	if "hint" in extended_metadata and extended_metadata["hint"]:
+		model_doc["description"] += "<div class=\"doc-box\">" + extended_metadata["hint"] + "</div>"
+
 	for key in ["entityname","extends"]:
-		if extended_metadata[key]:
+		if key in extended_metadata and extended_metadata[key]:
 			model_doc["description"] += "<strong>" + key + "</strong>: " + extended_metadata[key] + "<br>"
 
 	for key in ["accessors","persistent"]:
@@ -110,6 +113,9 @@ def build_method_documentation(extended_metadata, function_name, header, view = 
 
 	model_doc["description"] = "<strong>path</strong>: <a class=\"alt-link\" href=\"" + funct.name + "\">" + function_file_path + "</a>"
 
+	if "hint" in funct.meta and funct.meta["hint"]:
+		model_doc["description"] += "<div class=\"doc-box\">" + funct.meta["hint"] + "</div>"
+
 	model_doc["body"] = ""
 	if len(funct.meta["arguments"]) > 0:
 		model_doc["body"] += "<ul>"
@@ -122,6 +128,8 @@ def build_method_documentation(extended_metadata, function_name, header, view = 
 			model_doc["body"] += "<strong>" + arg["name"] + "</strong>"
 			if arg["default"]:
 				model_doc["body"] += " = " + arg["default"]
+			if "hint" in arg and arg["hint"]:
+				model_doc["body"] += "<div class=\"doc-box\">" + arg["hint"] + "</div>"
 			model_doc["body"] += "</li>"
 		model_doc["body"] += "</ul>"
 
@@ -164,6 +172,8 @@ def parse_function(function, funct_file_path, file_path):
 	result += "</a>"
 	if funct_file_path != file_path:
 		result += " <small><em>(from " + funct_file_path.split("/")[-1] + ")</em></small>"
+	if "hint" in function.meta:
+		result += "<div class=\"doc-box\">" + function.meta["hint"] + "</div>"
 
 	arg_strings = []
 	for arg in function.meta["arguments"]:
@@ -175,6 +185,8 @@ def parse_function(function, funct_file_path, file_path):
 		arg_string += "<strong>" + arg["name"] + "</strong>"
 		if arg["default"]:
 			arg_string += " = " + arg["default"]
+		if "hint" in arg and arg["hint"]:
+			arg_string += "<div class=\"doc-box\">" + arg["hint"] + "</div>"
 		arg_strings.append(arg_string)
 
 	if len(arg_strings) > 0:
@@ -197,6 +209,8 @@ def parse_property(prop, prop_file_path, file_path):
 	accessors = [key for key in ["setter","getter"] if prop.meta[key]]
 	if accessors:
 		result += "<br><small><strong>accessors</strong>: <em>" + ", ".join(accessors) + "</em></small>"
+	if "inject" in prop.meta and prop.meta["inject"]:
+		result += "<div class=\"doc-box\">inject: " + prop.meta["inject"] + "</div>"
 	return result
 
 
