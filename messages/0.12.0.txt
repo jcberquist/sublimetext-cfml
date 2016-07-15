@@ -1,0 +1,10 @@
+CFML v0.12.0 Changelog:
+
+- Added `argumentCollection` completion when entering function call parameters
+  https://github.com/jcberquist/sublimetext-cfml/issues/29
+
+- Component indexing has been updated to try and capture docblocks as well as
+  inline hints. Hints, if present, will be displayed in the inline documentation
+  for indexed components and methods.
+
+- Syntax highlighting bug fix
