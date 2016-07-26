@@ -1,0 +1,4 @@
+CFML v0.12.1 Changelog:
+
+- Fixed inconsistent docblock parsing function return type
+  https://github.com/jcberquist/sublimetext-cfml/issues/30

@@ -97,9 +97,9 @@ def parse_cfc_file_string(file_string):
         if component.docblock:
             docblock = cfml_functions.parse_docblock(component.docblock)
             for key in docblock:
-                d = docblock[key]
-                full_key = d.key.lower() + '.' + d.subkey.lower() if len(d.subkey) > 0 else d.key.lower()
-                cfc_index[full_key] = d.value
+                for d in docblock[key]:
+                    full_key = d.key.lower() + '.' + d.subkey.lower() if len(d.subkey) > 0 else d.key.lower()
+                    cfc_index[full_key] = d.value.strip()
 
         cfc_index.update(cfml_functions.parse_attributes(component.attributes))
 

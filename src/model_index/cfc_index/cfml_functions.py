@@ -72,9 +72,10 @@ def parse_script_function(script_function):
     for key in docblock:
         if key in arg_names:
             continue
-        d = docblock[key]
-        full_key = d.key.lower() + '.' + d.subkey.lower() if len(d.subkey) > 0 else d.key.lower()
-        function[full_key] = d.value
+
+        for d in docblock[key]:
+            full_key = d.key.lower() + '.' + d.subkey.lower() if len(d.subkey) > 0 else d.key.lower()
+            function[full_key] = d.value.strip()
 
     function.update(parse_function_attributes(script_function.arguments))
 
@@ -143,7 +144,8 @@ def parse_docblock(docblock_string):
                 docblock[line.key.lower()] = []
             docblock[line.key.lower()].append(line)
     if len(hint) > 0 and "hint" not in docblock:
-        docblock["hint"] = regex.Docblock("hint", "", "<br>".join(hint))
+        docblock["hint"] = [regex.Docblock("hint", "", "<br>".join(hint))]
+
     return docblock
 
 
