@@ -48,6 +48,8 @@ class RegExWorker(Thread):
     def run(self):
         while True:
             full_file_path, file_string = self.index_queue.get()
+            if full_file_path is None:
+                break
             try:
                 self.cfcs[full_file_path] = parse_cfc_file_string(file_string)
             except Exception as e:
@@ -60,10 +62,11 @@ def index(root_path):
     cfcs = {}
 
     index_queue = Queue()
+    workers = []
     for x in range(4):
         regex_worker = RegExWorker(index_queue, cfcs)
-        regex_worker.daemon = True
         regex_worker.start()
+        workers.append(regex_worker)
 
     for path, directories, filenames in os.walk(root_path):
         for filename in filenames:
@@ -78,6 +81,11 @@ def index(root_path):
                     index_queue.put((full_file_path, file_string))
 
     index_queue.join()
+    for x in range(4):
+        index_queue.put((None, None))
+    for t in workers:
+        t.join()
+
     return cfcs
 
 
@@ -122,7 +130,7 @@ def parse_cfc_file_string(file_string):
     functions = cfml_functions.index(file_string)
 
     cfc_index["properties"] = prop_metadata_dict(properties)
-    cfc_index["functions"] = get_accessors_metadata_dict(cfc_index["accessors"], properties)
+    cfc_index["functions"] = get_accessors_metadata_dict(cfc_index["accessors"] or cfc_index["persistent"], properties)
     cfc_index["functions"].update(funct_metadata_dict(functions))
 
     return cfc_index

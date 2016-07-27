@@ -46,7 +46,7 @@ ScriptArgument = namedtuple(
 attribute = r"""
 \b(\w+)\b(?:\s*=\s*(?:(['"])(.*?)(\2)|([a-z0-9:.]+)))?
 """
-attribute = re.compile(attribute, re.I | re.X)
+attribute = re.compile(attribute, re.I | re.X | re.S)
 Attribute = namedtuple('Attribute', 'key quote_start value quote_end unquoted_value')
 
 

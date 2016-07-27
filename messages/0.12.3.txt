@@ -1,0 +1,9 @@
+CFML v0.12.3 Changelog:
+
+- Updated attribute regex to correctly handle attributes
+  having value strings that extend over multiple lines.
+  https://github.com/jcberquist/sublimetext-cfml/issues/32
+
+- Indexed components that have `persistent` set to true now
+  have accessors generated for their properties.
+  https://github.com/jcberquist/sublimetext-cfml/issues/33
