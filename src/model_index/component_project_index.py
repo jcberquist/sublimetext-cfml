@@ -8,7 +8,7 @@ from . import cfc_index, completions
 __all__ = ["get_completions_by_dot_path", "get_completions_by_file_path",
 "get_dot_paths", "get_extended_metadata_by_file_path", "get_file_path_by_dot_path",
 "get_file_paths", "get_metadata_by_dot_path", "get_metadata_by_file_path",
-"get_project_data", "component_index", "resolve_path"]
+"get_project_data", "component_index", "resolve_path","resync_project"]
 
 class ComponentProjectIndex(ProjectIndex):
 
@@ -136,6 +136,9 @@ def get_folder_mapping(project_name, file_path):
 ##############
 
 component_index = ComponentProjectIndex()
+
+def resync_project(project_name):
+	component_index.resync_project(project_name)
 
 def get_project_data(project_name):
 	return component_index.projects.get(project_name, dict).get("project_data", dict)

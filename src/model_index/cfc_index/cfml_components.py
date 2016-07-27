@@ -29,6 +29,7 @@
 
 import os
 import re
+import traceback
 from collections import namedtuple
 from queue import Queue
 from threading import Thread
@@ -47,7 +48,11 @@ class RegExWorker(Thread):
     def run(self):
         while True:
             full_file_path, file_string = self.index_queue.get()
-            self.cfcs[full_file_path] = parse_cfc_file_string(file_string)
+            try:
+                self.cfcs[full_file_path] = parse_cfc_file_string(file_string)
+            except Exception as e:
+                print("CFML: unable to index file - " + full_file_path)
+                traceback.print_exc()
             self.index_queue.task_done()
 
 

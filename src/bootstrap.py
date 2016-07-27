@@ -13,6 +13,7 @@ from .cfc_dotted_path import CfmlCfcDottedPathCommand
 from .controller_view_toggle import CfmlToggleControllerViewCommand
 from .color_scheme_styles import CfmlColorSchemeStylesCommand
 from .goto_cfml_file import CfmlGotoFileCommand
+from .index_project_command import CfmlIndexProjectCommand
 from .inline_documentation import CfmlInlineDocumentationCommand
 from .testbox import TestboxCommand
 from .model_index import CfmlNavigateToMethodCommand

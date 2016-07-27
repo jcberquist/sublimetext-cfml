@@ -114,6 +114,13 @@ class ProjectIndex():
 		# if we got here this is a tracked project file
 		self.update_project_file(project_name, file_path)
 
+	def resync_project(self, project_name):
+		if project_name in self.projects:
+			with self.lock:
+				if project_name in self.projects:
+					del self.projects[project_name]
+		self.sync_projects()
+
 
 	## methods for child classes to implement
 

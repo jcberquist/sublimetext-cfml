@@ -6,7 +6,7 @@ from .. import utils
 from . import custom_tag_index
 
 __all__ = ["custom_tags", "get_prefix_completions", "get_tag_completions",
-"get_tag_attribute_completions", "get_index_by_tag_name", "get_closing_custom_tags"]
+"get_tag_attribute_completions", "get_index_by_tag_name", "get_closing_custom_tags", "resync_project"]
 
 
 class CustomTags(ProjectIndex):
@@ -128,6 +128,9 @@ def make_tag_completion(prefix, tag):
 #############
 
 custom_tags = CustomTags()
+
+def resync_project(project_name):
+	custom_tags.resync_project(project_name)
 
 def get_prefix_completions(project_name):
 	if project_name in custom_tags.projects:

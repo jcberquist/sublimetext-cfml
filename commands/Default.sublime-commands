@@ -49,6 +49,11 @@
 		"caption": "CFML: Build tmLanguage Syntax File",
 		"command": "cfml_build_tmlanguage"
 	},
+	// Re-index active project
+	{
+		"caption": "CFML: Index Active Project",
+		"command": "cfml_index_project"
+	},
 	// Toggle CFML tag color scheme styles
 	{
 		"caption": "CFML: Toggle Color Scheme Styles",

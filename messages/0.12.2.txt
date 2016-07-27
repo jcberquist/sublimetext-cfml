@@ -1,0 +1,9 @@
+CFML v0.12.2 Changelog:
+
+- Better error handling when indexing components
+  The file path of a component that causes an indexing error
+  is printed to the console along with the error traceback.
+
+- Added a command to the command palette that can be used to
+  trigger a re-indexing of the project in the active window:
+  `CFML: Index Active Project`
