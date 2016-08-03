@@ -172,6 +172,7 @@ default="string";
     key: function() {},
 //  ^ meta.function.declaration.cfml meta.struct-literal.key.cfml entity.name.function.cfml
 //     ^ meta.function.declaration.cfml punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
+//                    ^ punctuation.separator.struct-literal.cfml
     "key": function() {},
 //   ^ meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.double.cfml entity.name.function.cfml
 //       ^ meta.function.declaration.cfml punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml

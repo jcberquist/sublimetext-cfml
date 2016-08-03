@@ -739,6 +739,9 @@ contexts:
                     0: meta.function.declaration.cfml
                     1: punctuation.separator.key-value.cfml
                 - include: either-function-declaration
+                - match: ','
+                  scope: punctuation.separator.struct-literal.cfml
+                  pop: true
                 - match: '(?=\S)'
                   pop: true
         - match: "(?=\"|')"

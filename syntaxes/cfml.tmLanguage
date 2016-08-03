@@ -4982,6 +4982,12 @@
 						</dict>
 					</array>
 				</dict>
+				<dict>
+					<key>match</key>
+					<string>,</string>
+					<key>name</key>
+					<string>punctuation.separator.struct-literal.cfml</string>
+				</dict>
 			</array>
 		</dict>
 		<key>source-cfml-script-struct-literal-function-keys</key>

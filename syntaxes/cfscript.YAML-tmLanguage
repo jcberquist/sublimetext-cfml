@@ -868,6 +868,8 @@ repository:
         '1': {name: punctuation.separator.struct-literal.cfml}
       patterns:
       - include: '#expressions'
+    - match: ','
+      name: punctuation.separator.struct-literal.cfml
 
   struct-literal-function-keys:
     patterns:
