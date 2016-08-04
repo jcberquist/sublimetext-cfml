@@ -213,9 +213,11 @@ default="string";
 
   thisQuery = queryExecute("SELECT * from myTable WHERE myColumn = 1", "SELECT * from myTable WHERE myColumn = 1");
 //                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml
-//                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.double.cfml -source.sql
+//                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml
   thisQuery = queryExecute(params = {}, sql = "SELECT * FROM myTable");
 //                                             ^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml
+  var test = 'FROM myTable'
+//            ^^^^ source.sql keyword.other.DML.sql
 }
 // <- embedding.cfml source.cfml.script meta.class.body.cfml punctuation.definition.block.end.cfml
  // <- embedding.cfml source.cfml.script -meta

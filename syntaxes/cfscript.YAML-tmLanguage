@@ -251,30 +251,89 @@ repository:
     - include: '#string-quoted-double'
 
   string-quoted-double:
-    name: string.quoted.double.cfml
     begin: '"'
     beginCaptures:
-      '0': {name: punctuation.definition.string.begin.cfml}
+      '0': {name: string.quoted.double.cfml punctuation.definition.string.begin.cfml}
     end: '(")(?!")'
     endCaptures:
-      '1': {name: punctuation.definition.string.end.cfml}
+      '1': {name: string.quoted.double.cfml punctuation.definition.string.end.cfml}
     patterns:
-    - name: constant.character.escape.quote.cfml
+    - name: string.quoted.double.cfml constant.character.escape.quote.cfml
       match: '""'
-    - include: '#hash-delimiters'
+    - name: source.sql
+      begin: (?=\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|ORDER BY|GROUP)\b)
+      end: (?="[^"])
+      patterns:
+      - name: constant.character.escape.quote.cfml
+        match: '""'
+      - include: '#hash-delimiters'
+      - include: source.sql
+    - name: string.quoted.double.cfml
+      begin: (?=\S)
+      end: (?="[^"])
+      patterns:
+      - name: constant.character.escape.quote.cfml
+        match: '""'
+      - include: '#hash-delimiters'
+    - name: string.quoted.double.cfml
+      match: '[\s\n]'
 
   string-quoted-single:
-    name: string.quoted.single.cfml
     begin: "'"
     beginCaptures:
-      '0': {name: punctuation.definition.string.begin.cfml}
+      '0': {name: string.quoted.single.cfml punctuation.definition.string.begin.cfml}
     end: "(')(?!')"
     endCaptures:
-      '1': {name: punctuation.definition.string.end.cfml}
+      '1': {name: string.quoted.single.cfml punctuation.definition.string.end.cfml}
     patterns:
-    - name: constant.character.escape.quote.cfml
+    - name: string.quoted.single.cfml constant.character.escape.quote.cfml
       match: "''"
-    - include: '#hash-delimiters'
+    - name: source.sql
+      begin: (?=\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|ORDER BY|GROUP)\b)
+      end: (?='[^'])
+      patterns:
+      - name: constant.character.escape.quote.cfml
+        match: "''"
+      - include: '#hash-delimiters'
+      - include: source.sql
+    - name: string.quoted.single.cfml
+      begin: (?=\S)
+      end: (?='[^'])
+      patterns:
+      - name: constant.character.escape.quote.cfml
+        match: "''"
+      - include: '#hash-delimiters'
+    - name: string.quoted.single.cfml
+      match: '[\s\n]'
+
+  sql-string:
+    patterns:
+    - name: meta.queryexecute.sql.cfml
+      contentName: source.sql
+      begin: '"'
+      beginCaptures:
+        '0': {name: string.quoted.double.cfml punctuation.definition.string.begin.cfml}
+      end: '(")(?!")'
+      endCaptures:
+        '1': {name: string.quoted.double.cfml punctuation.definition.string.end.cfml}
+      patterns:
+      - name: constant.character.escape.quote.cfml
+        match: '""'
+      - include: '#hash-delimiters'
+      - include: source.sql
+    - name: meta.queryexecute.sql.cfml
+      contentName: source.sql
+      begin: "'"
+      beginCaptures:
+        '0': {name: string.quoted.single.cfml punctuation.definition.string.begin.cfml}
+      end: "(')(?!')"
+      endCaptures:
+        '1': {name: string.quoted.single.cfml punctuation.definition.string.end.cfml}
+      patterns:
+      - name: constant.character.escape.quote.cfml
+        match: "''"
+      - include: '#hash-delimiters'
+      - include: source.sql
 
   hash-delimiters:
     patterns:
@@ -1347,35 +1406,6 @@ repository:
       patterns:
       - include: '#sql-string'
       - include: '#expressions'
-
-  sql-string:
-    patterns:
-    - name: meta.queryexecute.sql.cfml
-      contentName: source.sql
-      begin: '"'
-      beginCaptures:
-        '0': {name: string.quoted.double.cfml punctuation.definition.string.begin.cfml}
-      end: '(")(?!")'
-      endCaptures:
-        '1': {name: string.quoted.double.cfml punctuation.definition.string.end.cfml}
-      patterns:
-      - name: constant.character.escape.quote.cfml
-        match: '""'
-      - include: '#hash-delimiters'
-      - include: source.sql
-    - name: meta.queryexecute.sql.cfml
-      contentName: source.sql
-      begin: "'"
-      beginCaptures:
-        '0': {name: string.quoted.single.cfml punctuation.definition.string.begin.cfml}
-      end: "(')(?!')"
-      endCaptures:
-        '1': {name: string.quoted.single.cfml punctuation.definition.string.end.cfml}
-      patterns:
-      - name: constant.character.escape.quote.cfml
-        match: "''"
-      - include: '#hash-delimiters'
-      - include: source.sql
 
   support-method-call:
     name: meta.function-call.method.support.cfml

@@ -3411,7 +3411,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.begin.cfml</string>
+					<string>string.quoted.double.cfml punctuation.definition.string.begin.cfml</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -3421,22 +3421,68 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.end.cfml</string>
+					<string>string.quoted.double.cfml punctuation.definition.string.end.cfml</string>
 				</dict>
 			</dict>
-			<key>name</key>
-			<string>string.quoted.double.cfml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>""</string>
 					<key>name</key>
-					<string>constant.character.escape.quote.cfml</string>
+					<string>string.quoted.double.cfml constant.character.escape.quote.cfml</string>
 				</dict>
 				<dict>
-					<key>include</key>
-					<string>#hash-delimiters</string>
+					<key>begin</key>
+					<string>(?=\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|ORDER BY|GROUP)\b)</string>
+					<key>end</key>
+					<string>(?="[^"])</string>
+					<key>name</key>
+					<string>source.sql</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>""</string>
+							<key>name</key>
+							<string>constant.character.escape.quote.cfml</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#hash-delimiters</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>source.sql</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=\S)</string>
+					<key>end</key>
+					<string>(?="[^"])</string>
+					<key>name</key>
+					<string>string.quoted.double.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>""</string>
+							<key>name</key>
+							<string>constant.character.escape.quote.cfml</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#hash-delimiters</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[\s\n]</string>
+					<key>name</key>
+					<string>string.quoted.double.cfml</string>
 				</dict>
 			</array>
 		</dict>
@@ -3449,7 +3495,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.begin.cfml</string>
+					<string>string.quoted.single.cfml punctuation.definition.string.begin.cfml</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -3459,22 +3505,68 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.end.cfml</string>
+					<string>string.quoted.single.cfml punctuation.definition.string.end.cfml</string>
 				</dict>
 			</dict>
-			<key>name</key>
-			<string>string.quoted.single.cfml</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>''</string>
 					<key>name</key>
-					<string>constant.character.escape.quote.cfml</string>
+					<string>string.quoted.single.cfml constant.character.escape.quote.cfml</string>
 				</dict>
 				<dict>
-					<key>include</key>
-					<string>#hash-delimiters</string>
+					<key>begin</key>
+					<string>(?=\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|ORDER BY|GROUP)\b)</string>
+					<key>end</key>
+					<string>(?='[^'])</string>
+					<key>name</key>
+					<string>source.sql</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>''</string>
+							<key>name</key>
+							<string>constant.character.escape.quote.cfml</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#hash-delimiters</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>source.sql</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=\S)</string>
+					<key>end</key>
+					<string>(?='[^'])</string>
+					<key>name</key>
+					<string>string.quoted.single.cfml</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>''</string>
+							<key>name</key>
+							<string>constant.character.escape.quote.cfml</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#hash-delimiters</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[\s\n]</string>
+					<key>name</key>
+					<string>string.quoted.single.cfml</string>
 				</dict>
 			</array>
 		</dict>

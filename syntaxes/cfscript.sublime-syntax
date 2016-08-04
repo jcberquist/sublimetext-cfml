@@ -15,6 +15,7 @@ variables:
   constant_identifier: '[[:upper:]][_$[:digit:][:upper:]]*\b'
   func_lookahead: '\s*\bfunction\b'
   arrow_func_lookahead: '\s*\([^\(]*?\)\s*=>'
+  sql_lookahead: '\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|ORDER BY|GROUP)\b'
 
 contexts:
   prototype:
@@ -252,25 +253,99 @@ contexts:
       push:
         - meta_include_prototype: false
         - meta_scope: string.quoted.single.cfml
-        - match: ('')
-          scope: constant.character.escape.quote.cfml
-        - match: (')
-          captures:
-            1: punctuation.definition.string.end.cfml
-          pop: true
-        - include: scope:embedding.cfml#hash-delimiters
+        - match: (?={{sql_lookahead}})
+          set: string-sql-single
+        - match: (?=\S)
+          set: string-single
     - match: '"'
       scope: punctuation.definition.string.begin.cfml
       push:
         - meta_include_prototype: false
         - meta_scope: string.quoted.double.cfml
-        - match: ("")
+        - match: (?={{sql_lookahead}})
+          set: string-sql-double
+        - match: (?=\S)
+          set: string-double
+
+  string-single:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.single.cfml
+    - match: ('')
+      scope: constant.character.escape.quote.cfml
+    - match: (')
+      scope: punctuation.definition.string.end.cfml
+      pop: true
+    - include: scope:embedding.cfml#hash-delimiters
+
+  string-sql-single:
+    - meta_include_prototype: false
+    - match: (')
+      scope: string.quoted.single.cfml punctuation.definition.string.end.cfml
+      pop: true
+    - match: (?={{sql_lookahead}})
+      push: scope:source.sql
+      with_prototype:
+        - match: ('')
           scope: constant.character.escape.quote.cfml
-        - match: (")
-          captures:
-            1: punctuation.definition.string.end.cfml
+        - match: (?=')
           pop: true
         - include: scope:embedding.cfml#hash-delimiters
+
+  string-double:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.cfml
+    - match: ("")
+      scope: constant.character.escape.quote.cfml
+    - match: (")
+      captures:
+        1: punctuation.definition.string.end.cfml
+      pop: true
+    - include: scope:embedding.cfml#hash-delimiters
+
+  string-sql-double:
+    - meta_include_prototype: false
+    - match: (")
+      captures:
+        1: string.quoted.double.cfml punctuation.definition.string.end.cfml
+      pop: true
+    - match: (?={{sql_lookahead}})
+      push: scope:source.sql
+      with_prototype:
+        - match: '""'
+          scope: constant.character.escape.quote.cfml
+        - match: (?=")
+          pop: true
+        - include: scope:embedding.cfml#hash-delimiters
+
+  sql-string:
+    - match: '"'
+      scope: string.quoted.double.cfml punctuation.definition.string.begin.cfml
+      push:
+        - match: '"'
+          scope: string.quoted.double.cfml punctuation.definition.string.end.cfml
+          pop: true
+        - match: (?=.|\n)
+          push: scope:source.sql
+          with_prototype:
+            - match: '""'
+              scope: constant.character.escape.quote.cfml
+            - match: (?=")
+              pop: true
+            - include: scope:embedding.cfml#hash-delimiters
+    - match: "'"
+      scope: string.quoted.single.cfml punctuation.definition.string.begin.cfml
+      push:
+        - match: "'"
+          scope: string.quoted.single.cfml punctuation.definition.string.end.cfml
+          pop: true
+        - match: (?=.|\n)
+          push: scope:source.sql
+          with_prototype:
+            - match: "''"
+              scope: constant.character.escape.quote.cfml
+            - match: (?=')
+              pop: true
+            - include: scope:embedding.cfml#hash-delimiters
 
   constructor:
     - match: '\b(new)\s+'
@@ -1346,35 +1421,3 @@ contexts:
         - match: '(?=[,\)])'
           pop: true
         - include: expressions
-
-  sql-string:
-    - match: '"'
-      scope: string.quoted.double.cfml punctuation.definition.string.begin.cfml
-      push:
-        - meta_scope: meta.queryexecute.sql.cfml
-        - match: '"'
-          scope: string.quoted.double.cfml punctuation.definition.string.end.cfml
-          pop: true
-        - match: (?=.|\n)
-          push: scope:source.sql
-          with_prototype:
-            - match: '""'
-              scope: constant.character.escape.quote.cfml
-            - match: (?=")
-              pop: true
-            - include: scope:embedding.cfml#hash-delimiters
-    - match: "'"
-      scope: string.quoted.single.cfml punctuation.definition.string.begin.cfml
-      push:
-        - meta_scope: meta.queryexecute.sql.cfml
-        - match: "'"
-          scope: string.quoted.single.cfml punctuation.definition.string.end.cfml
-          pop: true
-        - match: (?=.|\n)
-          push: scope:source.sql
-          with_prototype:
-            - match: "''"
-              scope: constant.character.escape.quote.cfml
-            - match: (?=')
-              pop: true
-            - include: scope:embedding.cfml#hash-delimiters
