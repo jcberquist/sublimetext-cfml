@@ -217,7 +217,7 @@ default="string";
   thisQuery = queryExecute(params = {}, sql = "SELECT * FROM myTable");
 //                                             ^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml
   var test = 'FROM myTable'
-//            ^^^^ source.sql keyword.other.DML.sql
+//            ^^^^ meta.string.quoted.single.cfml source.sql keyword.other.DML.sql
 }
 // <- embedding.cfml source.cfml.script meta.class.body.cfml punctuation.definition.block.end.cfml
  // <- embedding.cfml source.cfml.script -meta

@@ -15,7 +15,7 @@ variables:
   constant_identifier: '[[:upper:]][_$[:digit:][:upper:]]*\b'
   func_lookahead: '\s*\bfunction\b'
   arrow_func_lookahead: '\s*\([^\(]*?\)\s*=>'
-  sql_lookahead: '\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|ORDER BY|GROUP)\b'
+  sql_lookahead: '\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|AND|ORDER BY|GROUP BY|INNER JOIN|OUTER JOIN|LEFT JOIN)\b'
 
 contexts:
   prototype:
@@ -279,6 +279,7 @@ contexts:
 
   string-sql-single:
     - meta_include_prototype: false
+    - meta_scope: meta.string.quoted.single.cfml
     - match: (')
       scope: string.quoted.single.cfml punctuation.definition.string.end.cfml
       pop: true
@@ -304,6 +305,7 @@ contexts:
 
   string-sql-double:
     - meta_include_prototype: false
+    - meta_scope: meta.string.quoted.double.cfml
     - match: (")
       captures:
         1: string.quoted.double.cfml punctuation.definition.string.end.cfml
@@ -321,6 +323,7 @@ contexts:
     - match: '"'
       scope: string.quoted.double.cfml punctuation.definition.string.begin.cfml
       push:
+        - meta_content_scope: meta.string.quoted.double.cfml
         - match: '"'
           scope: string.quoted.double.cfml punctuation.definition.string.end.cfml
           pop: true
@@ -335,6 +338,7 @@ contexts:
     - match: "'"
       scope: string.quoted.single.cfml punctuation.definition.string.begin.cfml
       push:
+        - meta_content_scope: meta.string.single.double.cfml
         - match: "'"
           scope: string.quoted.single.cfml punctuation.definition.string.end.cfml
           pop: true

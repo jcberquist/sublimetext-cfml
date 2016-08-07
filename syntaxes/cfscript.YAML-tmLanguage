@@ -260,8 +260,8 @@ repository:
     patterns:
     - name: string.quoted.double.cfml constant.character.escape.quote.cfml
       match: '""'
-    - name: source.sql
-      begin: (?=\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|ORDER BY|GROUP)\b)
+    - name: meta.string.quoted.double.cfml source.sql
+      begin: (?=\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|AND|ORDER BY|GROUP BY|INNER JOIN|OUTER JOIN|LEFT JOIN)\b)
       end: (?="[^"])
       patterns:
       - name: constant.character.escape.quote.cfml
@@ -288,8 +288,8 @@ repository:
     patterns:
     - name: string.quoted.single.cfml constant.character.escape.quote.cfml
       match: "''"
-    - name: source.sql
-      begin: (?=\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|ORDER BY|GROUP)\b)
+    - name: meta.string.quoted.single.cfml source.sql
+      begin: (?=\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|AND|ORDER BY|GROUP BY|INNER JOIN|OUTER JOIN|LEFT JOIN)\b)
       end: (?='[^'])
       patterns:
       - name: constant.character.escape.quote.cfml

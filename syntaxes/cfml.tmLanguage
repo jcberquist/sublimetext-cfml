@@ -4748,11 +4748,11 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?=\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|ORDER BY|GROUP)\b)</string>
+					<string>(?=\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|AND|ORDER BY|GROUP BY|INNER JOIN|OUTER JOIN|LEFT JOIN)\b)</string>
 					<key>end</key>
 					<string>(?="[^"])</string>
 					<key>name</key>
-					<string>source.sql</string>
+					<string>meta.string.quoted.double.cfml source.sql</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -4832,11 +4832,11 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?=\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|ORDER BY|GROUP)\b)</string>
+					<string>(?=\s*(?:SELECT|INSERT|UPDATE|DELETE|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|AND|ORDER BY|GROUP BY|INNER JOIN|OUTER JOIN|LEFT JOIN)\b)</string>
 					<key>end</key>
 					<string>(?='[^'])</string>
 					<key>name</key>
-					<string>source.sql</string>
+					<string>meta.string.quoted.single.cfml source.sql</string>
 					<key>patterns</key>
 					<array>
 						<dict>
