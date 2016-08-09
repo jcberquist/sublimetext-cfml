@@ -43,9 +43,10 @@ class CfmlFormatMenuCommand(sublime_plugin.TextCommand):
             return
         if self.commands[index]["name"] in ["full_component", "cfscript"]:
             self.view.run_command("cfml_format", {"commands": [], "current_method": False})
-        if self.commands[index]["name"] == "current_function":
+        elif self.commands[index]["name"] == "current_function":
             self.view.run_command("cfml_format", {"commands": [], "current_method": True})
-        self.view.run_command("cfml_format", {"commands": [self.commands[index]["name"]], "current_method": False})
+        else:
+            self.view.run_command("cfml_format", {"commands": [self.commands[index]["name"]], "current_method": False})
 
 
 class CfmlFormatCommand(sublime_plugin.TextCommand):
