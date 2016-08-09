@@ -17,3 +17,4 @@ from .index_project_command import CfmlIndexProjectCommand
 from .inline_documentation import CfmlInlineDocumentationCommand
 from .testbox import TestboxCommand
 from .model_index import CfmlNavigateToMethodCommand
+from .formatting.cfml_format import CfmlFormatCommand, CfmlFormatMenuCommand

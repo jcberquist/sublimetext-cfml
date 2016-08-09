@@ -30,6 +30,7 @@ Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](http:/
 - [Default Key Bindings](#default-key-bindings)
 - [CFC Indexing and Dot Paths](#cfc-indexing-and-dot-paths)
 - [Custom Tags](#custom-tags)
+- [Code Formatting](#code-formatting)
 - [Custom Coloring for CFML Tags](#custom-coloring-for-cfml-tags)
 - [Controller/View Toggle](#controllerview-toggle)
 - [CommandBox](#commandbox)
@@ -152,6 +153,15 @@ Once this is done, `page` will be offered as a custom tag prefix completion, and
 You can use the <kbd>F1</kbd> documentation command to get some minimal documentation about that custom tag, and <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> can be used to jump to the custom tag file.
 
 The indexer will search for `thistag.executionmode is/eq/== "end"/'end'` (case insensitive) or `<cfcase value="end"/'end'>` (case insensitive) in custom tag files in order to determine whether or not to auto close the custom tag.
+
+### Code Formatting
+
+This package includes several CFScript code formatting commands. You can view the default settings for these commands via the menu: `Package Settings -> CFML -> Format Settings - Default`, or from the command palette via `CFML: Format Settings - Default`. Please view these settings to see the various formatting options available. These settings can be overridden in your user format settings file, which can be found in the same locations.
+
+There are two key bindings included that work with these commands: <kbd>SHIFT</kbd>+<kbd>ALT</kbd>+<kbd>F</kbd> and <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>SHIFT</kbd>+<kbd>F</kbd> (<kbd>CMD</kbd>+<kbd>ALT</kbd>+<kbd>SHIFT</kbd>+<kbd>F</kbd> on a Mac) The first executes a default set of commands (specified in the settings file (`cfml_format.sublime-settings`), while the second calls up a menu from which formatting commands can be selected. The <kbd>SHIFT</kbd>+<kbd>ALT</kbd>+<kbd>F</kbd> command formats only the current method when in a component - though if any text is selected it formats that text, and in `.cfm` files it formats all CFScript in the file. To format an entire component the `Format Full Component` menu command can be used. All of the individual command options in the menu format the whole file unless text is selected.
+
+*PLEASE NOTE:*
+The reason formatting is limited by default to the current method in components is that the formatting is CPU intensive and is currently run on the main thread, meaning Sublime Text will "freeze" while formatting is ongoing. On small blocks of code, this should be very quick, but on a large file it can take some time.
 
 ### Custom Coloring for CFML Tags
 

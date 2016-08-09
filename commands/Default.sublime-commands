@@ -44,6 +44,21 @@
 				"contents": "[\n\t$0\n]\n"
 			}
 	},
+	{
+		"caption": "CFML: Format Settings - Default",
+		"command": "cfml_open_package_file", "args":
+			{
+				"file": "${packages}/{cfml_package_name}/settings/cfml_format.sublime-settings"
+			}
+	},
+	{
+		"caption": "CFML: Format Settings - User",
+		"command": "open_file", "args":
+			{
+				"file": "${packages}/User/cfml_format.sublime-settings",
+				"contents": "{\n\t$0\n}\n"
+			}
+	},
 	// Build tmLanguage file
 	{
 		"caption": "CFML: Build tmLanguage Syntax File",

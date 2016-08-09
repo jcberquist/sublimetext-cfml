@@ -62,6 +62,22 @@
 									"contents": "[\n\t$0\n]\n"
 								},
 								"caption": "Mouse Bindings – User"
+							},
+							{ "caption": "-" },
+							{
+								"command": "cfml_open_package_file", "args":
+								{
+									"file": "${packages}/{cfml_package_name}/settings/cfml_format.sublime-settings"
+								},
+								"caption": "Format Settings – Default"
+							},
+							{
+								"command": "open_file", "args":
+								{
+									"file": "${packages}/User/cfml_format.sublime-settings",
+									"contents": "{\n\t$0\n}\n"
+								},
+								"caption": "Format Settings – User"
 							}
 						]
 					}

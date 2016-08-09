@@ -13,6 +13,7 @@ DOC_STYLES = {
 }
 
 completions = {}
+function_names = []
 cgi = {}
 
 def get_tags(view, prefix, position, info):
@@ -76,7 +77,7 @@ def get_inline_documentation(view, position):
 	return None
 
 def load_completions():
-	global completions, cgi
+	global completions, function_names, cgi
 	completions_data = {filename: load_json_data(filename) for filename in COMPLETION_FILES}
 
 	# tags
@@ -102,6 +103,7 @@ def load_completions():
 
 	# functions
 	completions["cfml_functions"] = [(funct + '\tfn (cfml)', funct + completions_data["cfml_functions"][funct]) for funct in sorted(completions_data["cfml_functions"].keys())]
+	function_names = [funct for funct in sorted(completions_data["cfml_functions"].keys())]
 
 	# member functions
 	mem_func_comp = []

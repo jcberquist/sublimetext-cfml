@@ -1,0 +1,40 @@
+CFML v0.13.0 Changelog:
+
+- CFScript strings starting with uppercase SQL keywords are now highlighted as SQL.
+  https://github.com/jcberquist/sublimetext-cfml/issues/35
+
+- Added (beta) CFScript code formatting commands
+
+  The settings for these commands are found in a new settings file:
+  `cfml_format.sublime-settings`. You can find the default settings via the menu
+  under `Package Settings -> CFML -> Format Settings - Default` or from the
+  command palette under `CFML: Format Settings - Default`. Please open that
+  file to see the various formatting options available. These settings can be
+  overridden in your user format settings file, which you can open from the
+  same locations.
+
+  There are two new key bindings that work with these formatting commansds:
+  `SHIFT+ALT+F` and `CTRL+ALT+SHIFT+F` (`CMD+ALT+SHIFT+F` on OSX). The first
+  executes a default set of commands (specified in the settings file), while
+  the second calls up a menu from which a formatting command can be selected.
+  The `SHIFT+ALT+F` command formats the current method when in a component -
+  though if any text is selected it formats only that text, and in `.cfm`
+  files it formats all CFScript in the file. To format an entire component the
+  `Format Full Component` menu command can be used. All of the individual
+  commands listed in the menu operate on the whole file unless text is selected.
+
+  PLEASE NOTE:
+  The reason formatting is limited by default to the current method in components
+  is that the formatting is CPU intensive and is currently run on the main thread,
+  meaning Sublime Text will "freeze" while formatting is ongoing. I tested this on
+  FW/1's `one.cfc` - to format the full file with the default set of commands takes
+  ~900ms on my machine. @mjhagen tested this for me on a slower processor - it took
+  ~700ms to format around 800 lines of code. On smaller blocks of code, though,
+  performance should be fine.
+
+  I have looked into doing this in an asynchronous fashion, but it seems that text
+  buffer updates have to be run on the main thread, so I have yet to find a
+  satisfactory async approach.
+
+  This is definitely a beta feature, so please do report if you use these formatting
+  commands and they do something unexpected or eat your code :)

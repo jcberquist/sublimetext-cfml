@@ -1,0 +1,168 @@
+{
+	// These settings can be also be set in your user `cfml_format.sublime-settings` file.
+	// Sublime Text merges your user settings with this default file, so you must override any
+	// setting you want to change.
+	// IMPORTANT: it merges at the top key level, and not recursively, so when specifying a
+	// settings object in your user settings file, you must include all of its properties
+	//
+	// These settings can also be specified in a `.sublime-project` file under a `cfml_format` key.
+	// e.g. { "cfml_format": {"default_commands": [...] }, etc... }
+	// Project settings are NOT merged with settings from your `.sublime-settings` files.
+	// Once a project settings file has a `cfml_format` key, the settings specified here
+	// and in your user `cfml_format.sublime-settings` file will have no effect for files
+	// in that project.
+
+	// default commands to run when calling cfml_format
+	"default_commands": ["whitespace", "keywords", "blocks", "delimited_scopes", "method_chains"],
+
+	// if true, prints the time each command took to the console
+	"log_command_times": false,
+
+	// `singleline_max_col` only applies to delimited scopes (struct, array, function declaration, function call)
+	// and method chains
+	"singleline_max_col": 120,
+
+	// brackets are used in access by key or index: `obj["key"]`, `arr[index]`
+	// array padding/spacing is set below in the `array` settings object
+	// this setting is used by the `whitespace` command
+	"brackets": {
+		"padding": "compact", // "spaced|compact"
+		"padding_strip_newlines": true
+	},
+
+	// parentheses spacing only affects parentheses used to group expressions
+	// it does not apply to parentheses used with keywords or function definitions and calls
+	// this setting is used by the `whitespace` command
+	"parentheses": {
+		"padding": "compact", // "spaced|compact"
+		"padding_strip_newlines": false
+	},
+
+	// applies to operators that operate on two operands such as =,+,-,/,*,%,&,&&,||,==,!=, etc.
+	// formatting the spacing around `=` can be disabled using the `format_assignment_operator` setting
+	// this setting is used by the `whitespace` command
+	"binary_operators": {
+		"padding": "spaced", // "spaced|compact"
+		"padding_strip_newlines": false,
+		"format_assignment_operator": true
+	},
+
+	// semicolon spacing in a for loop group - `for (var i=1;i<=10;i++)` or `for (var i=1; i<=10; i++)`
+	// this setting is used by the `whitespace` command
+	"for_loop_semicolons": {
+		"padding": "spaced" // "spaced|compact"
+	},
+
+	// keyword formatting applies to keywords such as `if`, `else`, `else if`, `for`, `do`, `while`, `try`, `catch`
+	// if you null a setting, or set it to something other than a valid option, that formatting will not be applied
+	// you can apply settings to a specific keyword by cloning the settings object below and appending the keyword
+	// to the key: e.g. "keywords-for": {...} or "keywords-elseif": {...}
+	// these settings are used by the `keywords` command
+	//
+	// `block_to_keyword_spacing` normalizes the space before the keyword to the previous block it continues - e.g. `}else`, `} else`, or `}\nelse`
+	// `to_keyword_spacing` normalizes the space before the keyword to the previous line of code
+	// `spacing_to_group` normalizes the space from the keyword to the following group - e.g. `for (` or `for(`
+	// `spacing_to_block` normalizes the space from the keyword to the following block - e.g. `try {`, `try{`, or `try\n{`
+	// `empty_group_spacing` normalizes the space inside an empty group - e.g. `for ()` or `for ( )`
+	// `padding_inside_group` normalizes the padding inside a non empty group - e.g. `if (true)` or `if ( true )`
+	// `padding_strip_newlines` affects the above setting - should newlines be stripped from beginning and end of group
+	// `group_to_block_spacing` normalizes the space from a keyword group to its block - e.g. `if (true) {`, `if (true){`, or `if (true)\n{`
+	"keywords": {
+		"block_to_keyword_spacing": "spaced", // "newline|spaced|compact" - only applies to `else`, `else if`, `while`, `catch`
+		"to_keyword_spacing": null, // "newline|emptyline" - applies to anything other than a comment
+		"spacing_to_group": "spaced", // "spaced|compact"
+		"spacing_to_block": "spaced", // "newline|spaced|compact"
+		"empty_group_spacing": "compact", // "spaced|compact"
+		"padding_inside_group": "compact", // "spaced|compact"
+		"padding_strip_newlines": false, // never ignored, truthy value - set `padding_inside_group` to null to avoid formatting
+		"group_to_block_spacing": "spaced" // "newline|spaced|compact"
+	},
+
+	// block formatting - used by the `blocks` command
+	// if you null a setting, or set it to something other than a valid option, that formatting will not be applied
+	// you can apply settings to a specific block type by cloning the settings object below and appending a block type
+	// to the key: e.g. "blocks-function": {...}, "blocks-anonymous": {...}, "blocks-for": {...}
+	"blocks": {
+		"empty_spacing": "newline", // "spaced|compact|newline|emptyline"
+		"start_spacing": "newline", // "newline|emptyline"
+		"end_spacing": "newline", // "newline|emptyline"
+		"after_block_spacing": null // "newline|emptyline"
+	},
+
+	// delimited scopes - used by the `delimited_scopes` command _and_ the `whitespace` command
+	// `key_value_colon` and `key_value_equals` are currently only used with the `whitespace` command
+	// `empty_spacing`,`padding_inside`,`after_comma_spacing` are also used when running the `whitespace` command
+	// the `multiline.element_count` setting, and the `singleline_max_col` setting (specified above) are used to determine
+	// when to render these inline or over multiple lines
+	// if the `delimited_scopes` command is run, due to how it computes whether to render inline or multiline, the
+	// whitespace settings cannot be ignored, and anything other than `spaced` will be treated as `compact`
+	"struct": {
+		"empty_spacing": "compact", // "spaced|compact"
+		"padding_inside": "compact", // "spaced|compact"
+		"key_value_colon": "spaced", // "spaced|compact"
+		"key_value_equals": "spaced", // "spaced|compact"
+		"after_comma_spacing": "spaced", // "spaced|compact"
+		"multiline": {
+			"element_count": 4, // always split onto multiple lines, if there are at least this many elements
+			"leading_comma": false
+		}
+	},
+	"array": {
+		"empty_spacing": "compact", // "spaced|compact"
+		"padding_inside": "compact", // "spaced|compact"
+		"after_comma_spacing": "spaced", // "spaced|compact"
+		"multiline": {
+			"element_count": 4, // always split onto multiple lines, if there are at least this many elements
+			"leading_comma": false
+		}
+	},
+	"function_declaration": {
+		"empty_spacing": "compact", // "spaced|compact"
+		"padding_inside": "compact", // "spaced|compact"
+		"after_comma_spacing": "spaced", // "spaced|compact"
+		"spacing_to_group": "compact", // "spaced|compact" - e.g. `function name()` vs `function name ()`
+		"group_to_block_spacing": "spaced", // "newline|spaced|compact"
+		"multiline": {
+			"element_count": 4, // always split onto multiple lines, if there are at least this many elements
+			"leading_comma": false
+		}
+	},
+	"function_call": {
+		"empty_spacing": "compact", // "spaced|compact"
+		"padding_inside": "compact", // "spaced|compact"
+		"after_comma_spacing": "spaced", // "spaced|compact"
+		"multiline": {
+			"element_count": 4, // always split onto multiple lines, if there are at least this many elements
+			"leading_comma": false,
+			"break_after_first_element": false // break after first element and align other elements to it
+		}
+	},
+
+	// method chains - used with the `method_chains` command
+	// will render the method chain on multiple lines if the method chain length is greater than
+	// `singleline_max_col` above or if there are more methods in the chain than the `break_after` setting,
+	// or if any newlines are contained in any method's parameters
+	// if the method chain will break onto multiple lines `inline` specifies how many methods to put on the first line
+	"method_chains": {
+		"break_after": 2,
+		"inline": 1
+	},
+
+	// format properties
+	// currently only sorts by name - don't run this if you have comments documenting your properties
+	// as they currently won't get included in the sort
+	"format_properties": {
+		"sort_by_name": true
+	},
+
+	// converts all strings to the quote type specified, either `double` or `single`
+	// anything else and that setting will be ignored
+	"normalize_strings": {
+		"script": "single",
+		"script-tag-attributes": "double"
+	},
+
+	// converts all builtin function casing to match the casing specified in cfdocs.org data
+	// e.g. converts `ARRAYAPPEND()` -> `arrayAppend()`
+	"normalize_builtin_functions": "cfdocs"
+}
