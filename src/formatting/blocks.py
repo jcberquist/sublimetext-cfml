@@ -1,6 +1,6 @@
 import sublime
 from collections import namedtuple
-from CFML.src import utils
+from .. import utils
 from .delimited_scopes import DELIMITED_SCOPE_LIST
 
 Block = namedtuple("Block", "block_type, indent_pt, start_to_char, char_to_end, end_to_char")

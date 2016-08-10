@@ -1,5 +1,5 @@
 import sublime, sublime_plugin, plistlib, time
-from CFML.src import utils
+from . import utils
 
 
 def from_source_text(source_text, syntax, region = None):
