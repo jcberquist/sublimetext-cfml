@@ -410,7 +410,7 @@
       "access": ["private", "package", "public", "remote"],
       "output": ["true", "false"],
       "returnformat": ["JSON", "plain", "WDDX"],
-      "returntype": ["Any", "Array", "Binary", "boolean", "date", "guid", "Numeric", "Query", "String", "Struct", "UUID", "variablename", "void", "xml", "(component name)"],
+      "returntype": ["any", "array", "binary", "boolean", "date", "guid", "numeric", "query", "string", "struct", "UUID", "variablename", "void", "xml", "(component name)"],
       "securejson": ["true", "false"],
       "verifyclient": ["true", "false"]
     }
