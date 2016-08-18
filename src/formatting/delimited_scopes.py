@@ -199,7 +199,7 @@ def render_ds_element(cfml_format, el, indent_column, ds_start_column):
                 last_start_column = cfml_format.text_columns(txt_lines[-1]) + 1
                 last_indent_column = cfml_format.text_indent_columns(txt_lines[-1])
             else:
-                last_start_column = ds_start_column + cfml_format.text_columns(el_str)
+                last_start_column = ds_start_column + cfml_format.text_columns(el_str) + 1
                 last_indent_column = indent_column
 
             el_str += render_delimited_scope(cfml_format, part, last_indent_column, last_start_column)
@@ -221,17 +221,24 @@ def render_delimited_scope(cfml_format, ds, indent_column, ds_start_column):
     el_indent_col = indent_column + cfml_format.tab_size
     indent = cfml_format.indent_to_column(indent_column)
     el_indent = cfml_format.indent_to_column(el_indent_col)
+    start_col_offset = 0
+
     if multiline.get("leading_comma"):
         separator = "\n" + el_indent + ","
+        start_col_offset += 1
         if after_comma_spacing and after_comma_spacing == "spaced":
             separator += " "
+            start_col_offset += 1
     else:
         separator = ",\n" + el_indent
     formatted_str = "\n" + el_indent
     if multiline.get("leading_comma"):
         formatted_str += "  " if after_comma_spacing and after_comma_spacing == "spaced" else " "
 
-    formatted_str += separator.join([render_ds_element(cfml_format, e, el_indent_col, el_indent_col) for e in ds.elements])
+    formatted_str += render_ds_element(cfml_format, ds.elements[0], el_indent_col, el_indent_col + start_col_offset)
+    if len(ds.elements) > 1:
+        formatted_str += separator
+        formatted_str += separator.join([render_ds_element(cfml_format, e, el_indent_col, el_indent_col + start_col_offset) for e in ds.elements[1:]])
 
     formatted_str += "\n" + indent
 

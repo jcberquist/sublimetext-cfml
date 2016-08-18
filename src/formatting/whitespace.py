@@ -30,7 +30,7 @@ def format_operators(cfml_format):
 
     space_str = " " if padding == "spaced" else ""
 
-    operators = cfml_format.find_by_selector("source.cfml.script keyword.operator")
+    operators = cfml_format.find_by_selector("source.cfml.script keyword.operator -source.sql")
 
     for r in operators:
         operator = cfml_format.view.substr(r)
@@ -137,10 +137,10 @@ def format_struct_key_values(cfml_format):
 
         space_str = " " if separator_setting == "spaced" else ""
 
-        if separator == "=":
-            prev_pt = utils.get_previous_character(cfml_format.view, r.begin())
-            if not cfml_format.view.match_selector(prev_pt, WHITESPACE_CONTAINER_START):
-                substitutions.append((sublime.Region(prev_pt + 1, r.begin()), space_str))
+        prev_pt = utils.get_previous_character(cfml_format.view, r.begin())
+        if not cfml_format.view.match_selector(prev_pt, WHITESPACE_CONTAINER_START):
+            prev_space_str = space_str if separator == "=" else ""
+            substitutions.append((sublime.Region(prev_pt + 1, r.begin()), prev_space_str))
 
         next_pt = utils.get_next_character(cfml_format.view, r.end())
         if not cfml_format.view.match_selector(next_pt, WHITESPACE_CONTAINER_END):
