@@ -3,6 +3,12 @@
     "attributes": [[], ["attributecollection", "showerror"]],
     "attribute_values": {}
   },
+  "cfadmin": {
+    "attributes": [["action", "password", "type"], []],
+    "attribute_values": {
+      "type": ["web", "server"]
+    }
+  },
   "cfajaximport": {
     "attributes": [[], ["attributecollection", "csssrc", "scriptsrc", "tags"]],
     "attribute_values": {}
@@ -405,12 +411,13 @@
     }
   },
   "cffunction": {
-    "attributes": [["name"], ["access", "description", "displayname", "hint", "output", "returnformat", "returntype", "roles", "securejson", "verifyclient"]],
+    "attributes": [["name"], ["access", "consumes", "description", "displayname", "hint", "httpMethod", "output", "produces", "restPath", "returnformat", "returntype", "roles", "securejson", "verifyclient"]],
     "attribute_values": {
       "access": ["private", "package", "public", "remote"],
+      "httpMethod": ["get", "post", "put", "delete", "head", "options"],
       "output": ["true", "false"],
       "returnformat": ["JSON", "plain", "WDDX"],
-      "returntype": ["Any", "Array", "Binary", "boolean", "date", "guid", "Numeric", "Query", "String", "Struct", "UUID", "variablename", "void", "xml", "(component name)"],
+      "returntype": ["any", "array", "binary", "boolean", "date", "guid", "numeric", "query", "string", "struct", "UUID", "variablename", "void", "xml", "(component name)"],
       "securejson": ["true", "false"],
       "verifyclient": ["true", "false"]
     }
@@ -722,7 +729,7 @@
     }
   },
   "cfmailparam": {
-    "attributes": [[], ["content", "contentID", "disposition", "file", "name", "remove", "type", "value"]],
+    "attributes": [[], ["content", "contentID", "disposition", "file", "filename", "name", "remove", "type", "value"]],
     "attribute_values": {
       "disposition": ["attachment", "inline"],
       "name": ["Message-Context", "Apparently-To", "Approved-By", "Fax", "Telefax", "For-Approval", "For-Comment", "For-Handling", "Mail-System-Version", "Mailer", "Originating-Client", "X-Mailer ", "X-Newsreader", "X-MimeOLE", "User-Agent", "Originator-Info", "Phone", "X-Envelope-From", "Envelope-To", "X-Envelope-To", "X-Face", "X-RCPT-TO", "X-Sender", "X-X-Sender", "Posted-To", "X-Admin", "Errors-To", "Return-Receipt-To", "Read-Receipt-To", "X-Confirm-reading-to", "Return-Receipt-Requested", "Register-Mail-Reply-Requested-By", "Abuse-Reports-To", "X-Complaints-To", "X-Report-Abuse-To", "Content-Alias", "Delivered-To", "X-Loop", "Translated-By", "Translation-Of", "X-UIDL", "X-URI", "X-URL", "X-IMAP", "X-OriginalArrivalTime", "Precedence", "X-MSMail-Priority", "X-Priority", "Content-Length", "Content-Conversion", "Content-Class", "Content-SGML-Entity", "X-MIME-Autoconverted", "List-Digest", "Mailing-List", "X-Mailing-List", "List-Software", "List-URL", "X-Listserver", "X-List-Host", "Fcc", "Speech-Act", "Status", "X-No-Archive"],
@@ -1026,7 +1033,7 @@
   "cfqueryparam": {
     "attributes": [[], ["cfsqltype", "list", "maxlength", "null", "scale", "separator", "value"]],
     "attribute_values": {
-      "cfsqltype": ["cf_sql_bigint", "cf_sql_bit", "cf_sql_char", "cf_sql_blob", "cf_sql_clob", "cf_sql_date", "cf_sql_decimal", "cf_sql_double", "cf_sql_float", "cf_sql_idstamp", "cf_sql_integer", "cf_sql_longvarchar", "cf_sql_money", "cf_sql_money4", "cf_sql_numeric", "cf_sql_real", "cf_sql_refcursor", "cf_sql_smallint", "cf_sql_time", "cf_sql_timestamp", "cf_sql_tinyint", "cf_sql_varchar"],
+      "cfsqltype": ["cf_sql_bigint", "cf_sql_bit", "cf_sql_char", "cf_sql_blob", "cf_sql_clob", "cf_sql_date", "cf_sql_decimal", "cf_sql_double", "cf_sql_float", "cf_sql_idstamp", "cf_sql_integer", "cf_sql_longvarchar", "cf_sql_money", "cf_sql_money4", "cf_sql_numeric", "cf_sql_real", "cf_sql_refcursor", "cf_sql_smallint", "cf_sql_time", "cf_sql_timestamp", "cf_sql_tinyint", "cf_sql_varchar", "integer", "varchar", "timestamp", "date"],
       "list": ["true", "false"],
       "null": ["true", "false"],
       "separator": [",", ";", "|", ":"]
@@ -1059,6 +1066,10 @@
     "attributes": [[], []],
     "attribute_values": {}
   },
+  "cfretry": {
+    "attributes": [[], []],
+    "attribute_values": {}
+  },
   "cfreturn": {
     "attributes": [[], []],
     "attribute_values": {}
@@ -1068,7 +1079,7 @@
     "attribute_values": {}
   },
   "cfschedule": {
-    "attributes": [["action", "task"], ["URL", "endDate", "endTime", "file", "interval", "operation", "password", "path", "port", "proxypassword", "proxyport", "proxyserver", "proxyuser", "publish", "requesttimeout", "resolveurl", "startdate", "starttime", "username"]],
+    "attributes": [["action", "task"], ["URL", "endDate", "endTime", "file", "group", "interval", "mode", "operation", "password", "path", "port", "proxypassword", "proxyport", "proxyserver", "proxyuser", "publish", "requesttimeout", "resolveurl", "startdate", "starttime", "username"]],
     "attribute_values": {
       "action": ["delete", "update", "run", "pause", "resume"],
       "interval": ["once", "daily", "weekly", "monthly"],
@@ -1101,6 +1112,14 @@
       "visible": ["true", "false"]
     }
   },
+  "cfservlet": {
+    "attributes": [[], []],
+    "attribute_values": {}
+  },
+  "cfservletparam": {
+    "attributes": [[], []],
+    "attribute_values": {}
+  },
   "cfset": {
     "attributes": [[], []],
     "attribute_values": {}
@@ -1120,6 +1139,10 @@
   },
   "cfsilent": {
     "attributes": [[], []],
+    "attribute_values": {}
+  },
+  "cfsleep": {
+    "attributes": [["time"], []],
     "attribute_values": {}
   },
   "cfslider": {
@@ -1285,6 +1308,10 @@
   },
   "cfwebsocket": {
     "attributes": [["name", "onMessage"], ["onClose", "onError", "onOpen", "secure", "subscribeTo", "usecfAuth"]],
+    "attribute_values": {}
+  },
+  "cfwhile": {
+    "attributes": [[], ["condition", "label"]],
     "attribute_values": {}
   },
   "cfwindow": {
