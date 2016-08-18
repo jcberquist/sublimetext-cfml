@@ -1,0 +1,11 @@
+CFML v0.14.0 Changelog:
+
+- after typing `arguments.` in a function body you will now be offered
+  available function arguments as completions
+  https://github.com/jcberquist/sublimetext-cfml/issues/37
+
+- CFScript formatting bug fixes
+  https://github.com/jcberquist/sublimetext-cfml/issues/40
+
+- Tag completions were updated to match latest cfdocs.org tag data
+  https://github.com/jcberquist/sublimetext-cfml/pull/41

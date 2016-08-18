@@ -23,6 +23,16 @@ def get_dot_completions(view, prefix, position, info):
 				completions = [make_completion(completion, info["file_path"]) for completion in completions["functions"]]
 				return CompletionList(completions, 1, True)
 
+			if len(info["dot_context"]) == 1 and symbol.name == "arguments":
+				current_function_body = utils.get_current_function_body(view, position, component_method=False)
+				if current_function_body:
+					function = utils.get_function(view, current_function_body.begin() - 1)
+					meta = metadata.get_string_metadata(view.substr(function[2]) + "{}")
+					if "functions" in meta and function[0] in meta["functions"]:
+						args = meta["functions"][function[0]].meta["arguments"]
+						completions = [(arg["name"] + "\targuments", arg["name"]) for arg in args]
+						return CompletionList(completions, 1, True)
+
 			if symbol.name == "super" and info["project_name"]:
 				extends = get_extends(view)
 				if extends:

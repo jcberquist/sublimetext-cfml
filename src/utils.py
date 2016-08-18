@@ -272,6 +272,12 @@ def get_function_call(view, pt, support=False):
 		return view.substr(function_name_region).lower(), function_name_region, function_args_region
 	return None
 
+def get_current_function_body(view, pt, component_method=True):
+	selector = "meta.function.body.cfml"
+	if component_method:
+		selector = "source.cfml.script meta.class.body.cfml " + selector
+	return get_scope_region_containing_point(view, pt, selector)
+
 def get_verified_path(root_path, rel_path):
 	"""
 	Given a valid root path and an unverified relative path out from that root

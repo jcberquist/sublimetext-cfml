@@ -24,6 +24,9 @@ def get_view_metadata(view):
 	extended_meta["property_file_map"].update({prop_key: file_path for prop_key in base_meta["properties"]})
 	return extended_meta
 
+def get_string_metadata(file_string):
+	return parse_cfc_file_string(file_string)
+
 def get_minimal_file_string(view):
 	min_string = ""
 
