@@ -46,11 +46,11 @@
       {"key": "selector", "operator": "not_equal", "operand": "source.cfml.script"}
     ]
   },
-  // ctrl+shift+o  writeOutput()
+  // ctrl+shift+o  writeOutput();
   {
     "keys": ["super+shift+o"],
     "command": "insert_snippet",
-    "args": {"contents": "writeOutput(${1:$SELECTION})"},
+    "args": {"contents": "writeOutput(${1:$SELECTION});"},
     "context": [
       {"key": "selector", "operand": "source.cfml.script" }
     ]
