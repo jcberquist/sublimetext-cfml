@@ -12,6 +12,7 @@ scope: source.cfml.script
 hidden: true
 variables:
   identifier: '[_$[:alpha:]][_$[:alnum:]]*'
+  dot_path_identifier: '[_$[:alpha:]][_$[:alnum:].]*'
   constant_identifier: '[[:upper:]][_$[:digit:][:upper:]]*\b'
   func_lookahead: '\s*\bfunction\b'
   arrow_func_lookahead: '\s*\([^\(]*?\)\s*=>'
@@ -739,7 +740,7 @@ contexts:
           scope: punctuation.separator.function.cfml
         - match: (?i:required)
           scope: keyword.other.required.argument.cfml
-        - match: (?:({{identifier}})\s+)?({{identifier}})
+        - match: (?:({{identifier}})\s+)?({{dot_path_identifier}})
           captures:
             1: storage.type.cfml
             2: variable.parameter.function.cfml

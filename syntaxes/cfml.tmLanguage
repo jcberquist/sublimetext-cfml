@@ -2898,7 +2898,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?:([_$a-zA-Z][$\w]*)\s+)?([_$a-zA-Z][$\w]*)</string>
+					<string>(?:([_$a-zA-Z][$\w]*)\s+)?([_$a-zA-Z][$\w.]*)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>

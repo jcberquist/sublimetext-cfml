@@ -146,6 +146,9 @@ default="string";
   function go( required string param = true ) {}
 //                                     ^ meta.parameter.optional.cfml constant.language.boolean.true.cfml
 
+public void function setup( required root.model.cava.connection connection ) {}
+//                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.function.cfml
+
   void function testme() {}
 //^ meta.function.declaration.cfml storage.type.return-type.void.cfml
 

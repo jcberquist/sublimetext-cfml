@@ -840,7 +840,7 @@ repository:
       name: punctuation.separator.function.cfml
     - match: (?i:required)
       name: keyword.other.required.argument.cfml
-    - begin: (?:([_$a-zA-Z][$\w]*)\s+)?([_$a-zA-Z][$\w]*)
+    - begin: (?:([_$a-zA-Z][$\w]*)\s+)?([_$a-zA-Z][$\w.]*)
       beginCaptures:
         '1': {name: storage.type.cfml}
         '2': {name: variable.parameter.function.cfml}
