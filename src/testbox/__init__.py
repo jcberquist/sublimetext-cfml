@@ -2,6 +2,13 @@ from .testbox import get_dot_completions, get_script_completions, get_inline_doc
 from .test_runner import TestboxCommand
 from .. import completions, inline_documentation
 
-completions.add_completion_source('script', get_script_completions)
-completions.add_completion_source('dot', get_dot_completions)
+
+def get_completions(cfml_completions):
+    if cfml_completions.type == 'script':
+        return get_script_completions(cfml_completions)
+    elif cfml_completions.type == 'dot':
+        return get_dot_completions(cfml_completions)
+    return None
+
+completions.add_completion_source(get_completions)
 inline_documentation.add_documentation_source(get_inline_documentation)

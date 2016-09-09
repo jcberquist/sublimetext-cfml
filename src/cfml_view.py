@@ -1,0 +1,153 @@
+from collections import namedtuple
+from . import utils
+from .cfc_indexer import parse_cfc_file_string
+from .model_index import get_extended_metadata_by_file_path, resolve_path
+
+CompletionList = namedtuple("CompletionList", "completions priority exclude_lower_priority")
+Documentation = namedtuple('Documentation', 'doc_html_variables on_navigate priority')
+GotoCfmlFile = namedtuple('GotoCfmlFile', 'file_path symbol')
+
+
+def get_view_metadata(view):
+    file_string = get_minimal_file_string(view)
+    base_meta = parse_cfc_file_string(file_string)
+
+    extended_meta = dict(base_meta)
+    extended_meta.update({"functions": {}, "function_file_map": {}, "properties": {}, "property_file_map": {}})
+
+    file_path = utils.normalize_path(view.file_name()) if view.file_name() else ""
+    project_name = utils.get_project_name(view)
+    if project_name and base_meta["extends"]:
+        extends_file_path = resolve_path(project_name, file_path, base_meta["extends"])
+        root_meta = get_extended_metadata_by_file_path(project_name, extends_file_path)
+        if root_meta:
+            for key in ["functions", "function_file_map", "properties", "property_file_map"]:
+                extended_meta[key].update(root_meta[key])
+
+    extended_meta["functions"].update(base_meta["functions"])
+    extended_meta["function_file_map"].update({funct_key: file_path for funct_key in base_meta["functions"]})
+    extended_meta["properties"].update(base_meta["properties"])
+    extended_meta["property_file_map"].update({prop_key: file_path for prop_key in base_meta["properties"]})
+    return extended_meta
+
+
+def get_minimal_file_string(view):
+    min_string = ""
+
+    tag_component_regions = view.find_by_selector("meta.class.cfml")
+
+    if len(tag_component_regions) > 0:
+        min_string += view.substr(tag_component_regions[0]) + "\n"
+        current_funct = ""
+        for r in view.find_by_selector("meta.function.cfml, meta.function.body.tag.cfml meta.tag.argument.cfml"):
+            text = view.substr(r)
+            if text.lower().startswith("<cff") and len(current_funct) > 0:
+                min_string += current_funct + "</cffunction>\n"
+                current_funct = ""
+            current_funct += text + "\n"
+        min_string += current_funct + "</cffunction>\n"
+    else:
+        script_selectors = [
+            ("comment.block.documentation.cfml -meta.class", "\n"),
+            ("meta.class.declaration.cfml", " {\n"),
+            ("meta.tag.property.cfml", ";\n")
+        ]
+
+        for selector, separator in script_selectors:
+            for r in view.find_by_selector(selector):
+                min_string += view.substr(r) + separator
+
+        funct_regions = "meta.class.body.cfml comment.block.documentation.cfml, meta.function.declaration.cfml -meta.function.body.cfml"
+        for r in view.find_by_selector(funct_regions):
+            string = view.substr(r)
+            min_string += string + ("\n" if string.endswith("*/") else "\{ \}\n")
+
+    return min_string
+
+
+class CfmlView():
+
+    def __init__(self, view, position, prefix=''):
+        self.view = view
+        self.prefix = prefix
+        self.position = position
+        self.CompletionList = CompletionList
+        self.Documentation = Documentation
+        self.GotoCfmlFile = GotoCfmlFile
+
+        self.prefix_start = self.position - len(self.prefix)
+        self.set_type()
+
+        # continue processing only if we know the type
+        if self.type:
+            self.set_base_info()
+            self.view_metadata = get_view_metadata(view)
+
+    def set_base_info(self):
+        self.file_path = utils.normalize_path(self.view.file_name())
+        self.file_name = self.file_path.split("/").pop().lower() if self.file_path else None
+        self.project_name = utils.get_project_name(self.view)
+        self.previous_char = self.view.substr(self.prefix_start - 1)
+
+    def set_type(self):
+        base_script_scope = "embedding.cfml source.cfml.script"
+        self.type = None
+
+        # tag completions
+        if self.view.match_selector(self.prefix_start, "embedding.cfml - source.cfml.script"):
+            self.type = 'tag'
+
+            is_inside_tag = self.view.match_selector(self.prefix_start, "meta.tag - punctuation.definition.tag.begin")
+            is_tag_name = self.view.match_selector(self.prefix_start - 1, "punctuation.definition.tag.begin, entity.name.tag")
+
+            if is_inside_tag and not is_tag_name:
+                self.type = 'tag_attributes'
+                self.set_tag_info()
+
+        # dot completions (member and model function completions)
+        elif self.view.match_selector(self.prefix_start - 1, base_script_scope + " punctuation.accessor.cfml"):
+            self.type = 'dot'
+            self.set_dot_context()
+
+        # tag in script attribute completions
+        elif self.view.match_selector(self.prefix_start, base_script_scope + " meta.tag, " + base_script_scope + " meta.class.declaration"):
+            self.type = 'tag_attributes'
+            self.set_tag_info(True)
+
+        # script completions
+        elif self.view.match_selector(self.prefix_start, "embedding.cfml source.cfml.script"):
+            self.type = 'script'
+
+    def set_dot_context(self):
+        self.dot_context = self.get_dot_context(self.prefix_start - 1)
+
+    def set_tag_info(self, tag_in_script=False):
+        self.tag_in_script = tag_in_script
+        if self.view.match_selector(self.prefix_start, "source.cfml.script meta.class.declaration"):
+            self.tag_name = "component"
+        else:
+            self.tag_name = utils.get_tag_name(self.view, self.prefix_start)
+        self.tag_attribute_name = utils.get_tag_attribute_name(self.view, self.prefix_start)
+
+    def get_dot_context(self, pt):
+        return utils.get_dot_context(self.view, pt)
+
+    def get_struct_context(self, pt):
+        return utils.get_struct_context(self.view, pt)
+
+    def get_struct_var_assignment(self, pt):
+        struct_context = self.get_struct_context(pt)
+        variable_name = ".".join([symbol.name for symbol in reversed(struct_context)])
+        return variable_name
+
+    def get_function(self, pt):
+        return utils.get_function(self.view, pt)
+
+    def get_function_call(self, pt, support=False):
+        return utils.get_function_call(self.view, pt, support)
+
+    def get_string_metadata(self, file_string):
+        return parse_cfc_file_string(file_string)
+
+    def find_variable_assignment(self, position, variable_name):
+        return utils.find_variable_assignment(self.view, position, variable_name)
