@@ -2,6 +2,7 @@ import sublime
 import sublime_plugin
 from . import cfcs, documentation
 from .. import utils
+from ..cfml_view import CfmlView
 
 
 class CfmlDiPropertyCommand(sublime_plugin.TextCommand):
@@ -17,17 +18,18 @@ class CfmlDiPropertyCommand(sublime_plugin.TextCommand):
             self.insert_property(edit, property_name)
             return
 
-        project_name = utils.get_project_name(self.view)
-        if not project_name:
+        cfml_view = CfmlView(self.view, pt)
+
+        if not cfml_view.project_name:
             return
 
         # cfc_info, metadata, function_name = find_cfc(view, position, project_name)
-        cfc_info, metadata, function_name = documentation.find_cfc(self.view, pt, project_name)
+        cfc_info, metadata, function_name = documentation.find_cfc(cfml_view)
 
         if cfc_info:
             self.insert_property(edit, cfc_info["name"])
         else:
-            cfc_list = cfcs.get_cfc_list(project_name)
+            cfc_list = cfcs.get_cfc_list(cfml_view.project_name)
 
             def callback(i):
                 if i > -1:
