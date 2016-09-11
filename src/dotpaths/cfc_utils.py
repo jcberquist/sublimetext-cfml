@@ -74,25 +74,25 @@ def get_folder_mapping(cfml_view):
 
 def find_cfc(cfml_view, position):
     """
-    returns cfc_path, file_path, dot_path, function_name
+    returns cfc_path, file_path, dot_path, function_name, region
     """
     if cfml_view.view.match_selector(position, "entity.other.inherited-class.cfml"):
         r = utils.get_scope_region_containing_point(cfml_view.view, position, "entity.other.inherited-class.cfml")
         cfc_path = cfml_view.view.substr(r)
         file_path, dot_path = get_cfc_file_info(cfml_view, cfc_path)
-        return cfc_path, file_path, dot_path, None
+        return cfc_path, file_path, dot_path, None, r
 
     if cfml_view.view.match_selector(position, component_selector):
         r = utils.get_scope_region_containing_point(cfml_view.view, position, component_selector)
         cfc_path = get_component_name(cfml_view.view.substr(r))
         file_path, dot_path = get_cfc_file_info(cfml_view, cfc_path)
-        return cfc_path, file_path, dot_path, None
+        return cfc_path, file_path, dot_path, None, r
 
     if cfml_view.view.match_selector(position, constructor_selector):
         r = utils.get_scope_region_containing_point(cfml_view.view, position, constructor_selector)
         cfc_path = cfml_view.view.substr(r)[4:].split("(")[0]
         file_path, dot_path = get_cfc_file_info(cfml_view, cfc_path)
-        return cfc_path, file_path, dot_path, None
+        return cfc_path, file_path, dot_path, None, r
 
     if cfml_view.view.match_selector(position, "string.quoted.single.cfml, string.quoted.double.cfml"):
         cfc_path = cfml_view.view.substr(cfml_view.view.extract_scope(position))
@@ -101,7 +101,7 @@ def find_cfc(cfml_view, position):
         if is_cfc_dot_path(cfc_path):
             file_path, dot_path = get_cfc_file_info(cfml_view, cfc_path)
             if file_path:
-                return cfc_path, file_path, dot_path, None
+                return cfc_path, file_path, dot_path, None, cfml_view.view.extract_scope(position)
 
     if cfml_view.view.match_selector(position, "meta.function-call.method"):
         function_name, function_name_region, function_args_region = cfml_view.get_function_call(position)
@@ -112,17 +112,17 @@ def find_cfc(cfml_view, position):
                 r = utils.get_scope_region_containing_point(cfml_view.view, dot_context[-1].name_region.begin(), "meta.instance.constructor.cfml")
                 cfc_path = cfml_view.view.substr(r)[4:].split("(")[0]
                 file_path, dot_path = get_cfc_file_info(cfml_view, cfc_path)
-                return cfc_path, file_path, dot_path, function_name
+                return cfc_path, file_path, dot_path, function_name, r
 
             if cfml_view.view.match_selector(dot_context[-1].name_region.begin(), "meta.function-call.support.createcomponent.cfml"):
                 r = utils.get_scope_region_containing_point(cfml_view.view, dot_context[-1].name_region.begin(), "meta.function-call.support.createcomponent.cfml")
                 cfc_path = get_component_name(cfml_view.view.substr(r))
                 file_path, dot_path = get_cfc_file_info(cfml_view, cfc_path)
-                return cfc_path, file_path, dot_path, function_name
+                return cfc_path, file_path, dot_path, function_name, r
 
             if is_possible_cfc_instance(dot_context):
-                cfc_path, file_path, dot_path, temp = find_cfc_by_var_assignment(cfml_view, position, dot_context[0].name)
-                return cfc_path, file_path, dot_path, function_name
+                cfc_path, file_path, dot_path, temp, r = find_cfc_by_var_assignment(cfml_view, position, dot_context[0].name)
+                return cfc_path, file_path, dot_path, function_name, r
 
     if cfml_view.view.match_selector(position, "variable.other, meta.property.cfml"):
         r = cfml_view.view.word(position)
@@ -131,17 +131,57 @@ def find_cfc(cfml_view, position):
            or (len(dot_context) == 1 and dot_context[0].name == "variables")):
             return find_cfc_by_var_assignment(cfml_view, position, cfml_view.view.substr(r).lower())
 
-    return None, None, None, None
+    return None, None, None, None, None
 
 
 def find_cfc_by_var_assignment(cfml_view, position, var_name):
+    empty_tuple = None, None, None, None, None
+
+    if not utils.get_setting("instantiated_component_completions"):
+        return empty_tuple
+
     var_assignment_pt = cfml_view.find_variable_assignment(position, var_name)
-    if var_assignment_pt:
-        s = component_selector + "," + constructor_selector
-        if cfml_view.view.match_selector(var_assignment_pt, s):
-            # try to determine component
-            return find_cfc(cfml_view, var_assignment_pt)
-    return None, None, None, None
+    if not var_assignment_pt:
+        return empty_tuple
+
+    s = component_selector + "," + constructor_selector
+    if not cfml_view.view.match_selector(var_assignment_pt, s):
+        return empty_tuple
+
+    # try to determine component
+    cfc_path, file_path, dot_path, function_name, region = find_cfc(cfml_view, var_assignment_pt)
+
+    if cfc_path is None:
+        return empty_tuple
+
+    next_pt = utils.get_next_character(cfml_view.view, region.end())
+    if cfml_view.view.substr(next_pt) != ".":
+        return cfc_path, file_path, dot_path, function_name, region
+
+    # if next char is a `.`, try to determine if what follows is init method
+    if not cfml_view.view.match_selector(next_pt + 1, "meta.function-call.method"):
+        return empty_tuple
+
+    function_name, function_name_region, function_args_region = cfml_view.get_function_call(next_pt + 1)
+
+    if not function_name:
+        return empty_tuple
+
+    metadata = model_index.get_extended_metadata_by_file_path(cfml_view.project_name, file_path)
+
+    if metadata["initmethod"] is None:
+        if function_name != 'init':
+            return empty_tuple
+    else:
+        if metadata["initmethod"] != function_name:
+            return empty_tuple
+
+    next_pt = utils.get_next_character(cfml_view.view, function_args_region.end())
+
+    if cfml_view.view.substr(next_pt) == ".":
+        return empty_tuple
+
+    return cfc_path, file_path, dot_path, function_name, region
 
 
 def get_cfc_file_info(cfml_view, cfc_path):

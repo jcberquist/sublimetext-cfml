@@ -139,7 +139,8 @@ def get_dot_completions(cfml_view):
     elif cfc_utils.is_possible_cfc_instance(cfml_view.dot_context):
         # look for variable assignment, it might be an instantiated component
         component_tuple = cfc_utils.find_cfc_by_var_assignment(cfml_view, cfml_view.prefix_start, cfml_view.dot_context[0].name)
-        component_name = component_tuple[0]
+        if component_tuple[0] is not None:
+            component_name = component_tuple[0]
 
     if component_name:
         completions = get_completions_by_component_name(cfml_view.view, cfml_view.project_name, component_name)

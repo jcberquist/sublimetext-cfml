@@ -15,7 +15,7 @@ def get_inline_documentation(cfml_view):
     if not cfml_view.project_name:
         return None
 
-    cfc_path, file_path, dot_path, function_name = cfc_utils.find_cfc(cfml_view, cfml_view.position)
+    cfc_path, file_path, dot_path, function_name, region = cfc_utils.find_cfc(cfml_view, cfml_view.position)
 
     if file_path:
         if dot_path:
@@ -39,7 +39,7 @@ def get_goto_cfml_file(cfml_view):
     if not cfml_view.project_name:
         return None
 
-    cfc_path, file_path, dot_path, function_name = cfc_utils.find_cfc(cfml_view, cfml_view.position)
+    cfc_path, file_path, dot_path, function_name, region = cfc_utils.find_cfc(cfml_view, cfml_view.position)
 
     if file_path:
         if function_name:

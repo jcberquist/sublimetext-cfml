@@ -22,6 +22,10 @@
 	// should end with trailing "/" - e.g. 'C:/github/cfdocs/data/en/'
 	"cfdocs_path": null,
 
+	// provide method completions for variables referring to instantiated components
+	// e.g. myvar = new path.to.cfc();
+	"instantiated_component_completions": true,
+
 	// color scheme styles to inject for Lucee/CFML tags
 	// valid keys are "foreground" and "fontStyle"
 	// "foreground": "#RRGGBB", "#RGB" or ""
