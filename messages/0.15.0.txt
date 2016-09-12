@@ -1,0 +1,30 @@
+CFML v0.15.0 Changelog:
+
+- `writeOutput` key binding now outputs a semicolon after the parentheses
+  matching the `writeDump` key binding
+  https://github.com/jcberquist/sublimetext-cfml/pull/44
+
+- Fixed syntax highlighting and cfc completions for function parameter types
+  containing component dot paths
+  https://github.com/jcberquist/sublimetext-cfml/issues/45
+
+- Component completions no longer include private methods in contexts where
+  those methods are not callable
+  https://github.com/jcberquist/sublimetext-cfml/issues/43
+
+- Added basic method completion support for variables referencing instantiated
+  components.
+
+  For example, given `myVar = new path.to.component()`, after typing `mycfc.`,
+  completions will be offered for `path/to/component.cfc`.
+
+  This support is somewhat limited, and it may collide with the completions
+  offered by the already extant cfc completions using `cfc_folders`. If you wish
+  to disable it you can set the package setting `instantiated_component_completions`
+  to `false` in your user package settings.
+
+  In order for these completions to work, the component in question must be
+  indexed in a project `cfc_folders` array and there must be a mapping specified in
+  the project `mappings` array such that the path to the component can be deciphered.
+  (If pressing F1 on `new path.to.component()` brings up the component documentation,
+  then things are setup properly.)
