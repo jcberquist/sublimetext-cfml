@@ -164,5 +164,10 @@ def get_completions_by_component_name(view, project_name, component_name):
         comp = model_index.get_completions_by_dot_path(project_name, folder_cfc_path)
 
     if comp:
-        return [(completion.key + "\t" + completion.file_path.split("/").pop(), completion.content) for completion in comp["functions"]]
+        filtered_completions = []
+        for completion in comp["functions"]:
+            if not completion.private:
+                filtered_completions.append((completion.key + "\t" + completion.file_path.split("/").pop(), completion.content))
+        return filtered_completions
+
     return None
