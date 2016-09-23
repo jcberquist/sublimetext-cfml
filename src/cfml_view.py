@@ -1,3 +1,5 @@
+import re
+import sublime
 from collections import namedtuple
 from . import utils
 from .cfc_indexer import parse_cfc_file_string
@@ -5,6 +7,7 @@ from .model_index import get_extended_metadata_by_file_path, resolve_path
 
 CompletionList = namedtuple("CompletionList", "completions priority exclude_lower_priority")
 Documentation = namedtuple('Documentation', 'doc_html_variables on_navigate priority')
+CompletionDoc = namedtuple('CompletionDoc', 'doc_html_variables on_navigate')
 GotoCfmlFile = namedtuple('GotoCfmlFile', 'file_path symbol')
 
 
@@ -65,14 +68,63 @@ def get_minimal_file_string(view):
     return min_string
 
 
+class CfmlFunctionCall():
+
+    param_regex = re.compile(r"^(?:([\w]+)\s*=\s*)?(.*)$", re.M | re.S)
+
+    def __init__(self, cfml_view, position):
+        self.support = False
+        self.method = False
+        self.dot_context = None
+        self.named_params = False
+        self.current_index = None
+        self.params = []
+
+        self.function_name, self.function_region, self.params_region = cfml_view.get_function_call(position)
+
+        if "support" in cfml_view.view.scope_name(self.function_region.begin()).strip().split(" ")[-1]:
+            self.support = True
+
+        prev_pt = self.function_region.begin() - 1
+        if cfml_view.view.match_selector(prev_pt, "embedding.cfml source.cfml.script punctuation.accessor.cfml"):
+            self.method = True
+            self.dot_context = cfml_view.dot_context = cfml_view.get_dot_context(prev_pt)
+
+        start_scope_list = cfml_view.view.scope_name(self.params_region.begin()).strip().split(" ")[:-1]
+        separator_scope = " ".join(start_scope_list) + " " + start_scope_list[-2].replace("meta.", "punctuation.separator.") + " "
+
+        start = self.params_region.begin() + 1
+        for pt in range(self.params_region.begin() + 1, self.params_region.end()):
+            if pt == position:
+                self.current_index = len(self.params)
+            if cfml_view.view.scope_name(pt) == separator_scope:
+                current_element = cfml_view.view.substr(sublime.Region(start, pt)).strip()
+                param = re.match(CfmlFunctionCall.param_regex, current_element)
+                self.params.append(param.groups())
+                start = pt + 1
+
+        final_element = cfml_view.view.substr(sublime.Region(start, pt)).strip()
+        if len(final_element) > 0 or start != self.params_region.begin() + 1:
+            param = re.match(CfmlFunctionCall.param_regex, final_element)
+            self.params.append(param.groups())
+
+        if len(self.params) > 0:
+            self.named_params = self.params[0][0] is not None
+
+    def __repr__(self):
+        return repr((self.support, self.method, self.function_name, self.function_region, self.params_region, self.dot_context, self.named_params, self.current_index, self.params))
+
+
 class CfmlView():
 
-    def __init__(self, view, position, prefix=''):
+    def __init__(self, view, position, prefix=""):
         self.view = view
         self.prefix = prefix
         self.position = position
+        self.function_call_params = None
         self.CompletionList = CompletionList
         self.Documentation = Documentation
+        self.CompletionDoc = CompletionDoc
         self.GotoCfmlFile = GotoCfmlFile
 
         self.prefix_start = self.position - len(self.prefix)
@@ -108,6 +160,7 @@ class CfmlView():
         elif self.view.match_selector(self.prefix_start - 1, base_script_scope + " punctuation.accessor.cfml"):
             self.type = 'dot'
             self.set_dot_context()
+            self.function_call_params = self.get_function_call_params(self.position)
 
         # tag in script attribute completions
         elif self.view.match_selector(self.prefix_start, base_script_scope + " meta.tag, " + base_script_scope + " meta.class.declaration"):
@@ -117,6 +170,7 @@ class CfmlView():
         # script completions
         elif self.view.match_selector(self.prefix_start, "embedding.cfml source.cfml.script"):
             self.type = 'script'
+            self.function_call_params = self.get_function_call_params(self.position)
 
     def set_dot_context(self):
         self.dot_context = self.get_dot_context(self.prefix_start - 1)
@@ -145,6 +199,11 @@ class CfmlView():
 
     def get_function_call(self, pt, support=False):
         return utils.get_function_call(self.view, pt, support)
+
+    def get_function_call_params(self, pt):
+        if self.view.match_selector(pt, "source.cfml.script meta.function-call.parameters"):
+            return CfmlFunctionCall(self, pt)
+        return None
 
     def get_string_metadata(self, file_string):
         return parse_cfc_file_string(file_string)

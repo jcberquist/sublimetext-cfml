@@ -277,7 +277,11 @@ def between_cfml_tag_pair(view, pos):
 
 
 def get_function(view, pt):
-    function_scope = "meta.function.declaration.cfml"
+    if view.match_selector(pt, "meta.function.cfml"):
+        function_scope = "meta.function.cfml"
+    else:
+        function_scope = "meta.function.declaration.cfml"
+
     function_name_scope = "entity.name.function.cfml,entity.name.function.constructor.cfml"
     function_region = get_scope_region_containing_point(view, pt, function_scope)
     if function_region:

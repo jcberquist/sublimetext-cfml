@@ -1,6 +1,6 @@
 from .. import completions, inline_documentation, goto_cfml_file
 from . import in_file_completions
-from .documentation import get_inline_documentation, get_goto_cfml_file
+from .documentation import get_inline_documentation, get_goto_cfml_file, get_completion_docs
 
 
 def get_completions(cfml_completions):
@@ -11,5 +11,6 @@ def get_completions(cfml_completions):
     return None
 
 completions.add_completion_source(get_completions)
+completions.add_completion_doc_source(get_completion_docs)
 inline_documentation.add_documentation_source(get_inline_documentation)
 goto_cfml_file.add_goto_source(get_goto_cfml_file)

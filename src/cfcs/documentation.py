@@ -34,6 +34,28 @@ def get_goto_cfml_file(cfml_view):
     return None
 
 
+def get_completions_doc(cfml_view):
+    if not cfml_view.project_name or not cfml_view.function_call_params or not cfml_view.function_call_params.method:
+        return None
+
+    symbol_name, symbol_region = cfcs.search_dot_context_for_cfc(cfml_view.project_name, cfml_view.function_call_params.dot_context)
+    # also check for getter being used to access cfc
+    if not symbol_name:
+        symbol = cfml_view.function_call_params.dot_context[-1]
+        if symbol.is_function and symbol.name.startswith("get") and cfcs.has_cfc(cfml_view.project_name, symbol.name[3:]):
+            symbol_name = symbol.name[3:]
+
+    if symbol_name:
+        cfc_info = cfcs.get_cfc_info(cfml_view.project_name, symbol_name)
+        metadata = cfcs.get_cfc_metadata(cfml_view.project_name, symbol_name)
+        if cfml_view.function_call_params.function_name in metadata["functions"]:
+            header = cfc_info["name"] + "." + metadata["functions"][cfml_view.function_call_params.function_name].name + "()"
+            doc, callback = model_index.get_function_call_params_doc(cfml_view.project_name, cfc_info["file_path"], cfml_view.function_call_params, header)
+            return cfml_view.CompletionDoc(doc, callback)
+
+    return None
+
+
 def find_cfc(cfml_view):
     if cfml_view.view.match_selector(cfml_view.position, "meta.function-call.method"):
         function_name, function_name_region, function_args_region = cfml_view.get_function_call(cfml_view.position)

@@ -145,6 +145,53 @@ def build_method_documentation(extended_metadata, function_name, header, view=No
     return model_doc
 
 
+def get_function_call_params_doc(project_name, file_path, function_call_params, header):
+    extended_metadata = get_extended_metadata_by_file_path(project_name, file_path)
+    # function_file_path = extended_metadata["function_file_map"][function_name]
+    model_doc = build_function_call_params_doc(extended_metadata, function_call_params, header)
+    return model_doc, None
+
+
+def build_function_call_params_doc(extended_metadata, function_call_params, header):
+    model_doc = dict(STYLES)
+    funct = extended_metadata["functions"][function_call_params.function_name]
+
+    model_doc["header"] = header
+    if funct.meta["access"] and len(funct.meta["access"]) > 0:
+        model_doc["header"] = "<em>" + funct.meta["access"] + "</em> " + model_doc["header"]
+    if funct.meta["returntype"] and len(funct.meta["returntype"]) > 0:
+        model_doc["header"] += ":" + funct.meta["returntype"]
+
+    model_doc["description"] = ""
+    model_doc["body"] = ""
+    description_args = []
+
+    if len(funct.meta["arguments"]) > 0:
+        for index, arg in enumerate(funct.meta["arguments"]):
+
+            if function_call_params.named_params:
+                active_name = function_call_params.params[function_call_params.current_index][0] or ""
+                is_active = active_name.lower() == arg["name"].lower()
+            else:
+                is_active = index == function_call_params.current_index
+
+            if is_active:
+                model_doc["body"] += "type: <em>" + (arg["type"] + "</em><br>" if arg["type"] else "any</em><br>")
+                model_doc["body"] += "required: " + ("true<br>" if arg["required"] else "false<br>")
+                if arg["default"]:
+                    model_doc["body"] += "default: " + arg["default"] + "<br>"
+                if "hint" in arg and arg["hint"]:
+                    model_doc["body"] += "<p>" + arg["hint"] + "</p>"
+
+                description_args.append("<span class=\"active\">" + arg["name"] + "</span>")
+            else:
+                description_args.append(arg["name"])
+
+        model_doc["description"] = "(" + ", ".join(description_args) + ")"
+
+    return model_doc
+
+
 def parse_functions(file_path, metadata):
     result = {}
     constructor = metadata["initmethod"].lower() if metadata["initmethod"] else "init"

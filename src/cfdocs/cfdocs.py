@@ -4,6 +4,8 @@ import urllib.request
 import urllib.error
 from .. import utils
 
+CFDOCS_CACHE = {}
+
 CFDOCS_PARAM_TEMPLATE = '<strong>${name}</strong><p>${description}</p><p>${values}</p>'
 CFDOCS_BASE_URL = "https://raw.githubusercontent.com/foundeo/cfdocs/master/data/en/"
 
@@ -50,6 +52,16 @@ def get_inline_documentation(cfml_view):
     return None
 
 
+def get_completion_docs(cfml_view):
+    if cfml_view.function_call_params is None:
+        return None
+
+    if cfml_view.function_call_params.support and not cfml_view.function_call_params.method:
+        return get_completion_doc(cfml_view)
+
+    return None
+
+
 def get_cfdoc(function_or_tag, doc_priority, cfml_view):
     if utils.get_setting("cfdocs_path"):
         data, success = load_cfdoc(function_or_tag)
@@ -60,39 +72,59 @@ def get_cfdoc(function_or_tag, doc_priority, cfml_view):
     return cfml_view.Documentation(build_cfdoc_error(function_or_tag, data), None, doc_priority)
 
 
+def get_completion_doc(cfml_view):
+    if utils.get_setting("cfdocs_path"):
+        data, success = load_cfdoc(cfml_view.function_call_params.function_name)
+    else:
+        data, success = fetch_cfdoc(cfml_view.function_call_params.function_name)
+    if success:
+        return cfml_view.CompletionDoc(build_completion_doc(cfml_view.function_call_params, data), None)
+    return cfml_view.Documentation(build_cfdoc_error(cfml_view.function_call_params, data), None)
+
+
 def fetch_cfdoc(function_or_tag):
-    full_url = CFDOCS_BASE_URL + function_or_tag + ".json"
+    global CFDOCS_CACHE
+    file_path = function_or_tag + ".json"
 
-    try:
-        json_string = urllib.request.urlopen(full_url).read().decode("utf-8")
-    except urllib.error.HTTPError as e:
-        data = {"error_message": "Unable to fetch " + function_or_tag + ".json<br>" + str(e)}
-        return data, False
+    if file_path not in CFDOCS_CACHE:
+        full_url = CFDOCS_BASE_URL + file_path
+        try:
+            json_string = urllib.request.urlopen(full_url).read().decode("utf-8")
+        except urllib.error.HTTPError as e:
+            data = {"error_message": "Unable to fetch " + function_or_tag + ".json<br>" + str(e)}
+            return data, False
 
-    try:
-        data = json.loads(json_string)
-    except ValueError as e:
-        data = {"error_message": "Unable to decode " + function_or_tag + ".json<br>ValueError: " + str(e)}
-        return data, False
+        try:
+            data = json.loads(json_string)
+        except ValueError as e:
+            data = {"error_message": "Unable to decode " + function_or_tag + ".json<br>ValueError: " + str(e)}
+            return data, False
 
-    return data, True
+        CFDOCS_CACHE[file_path] = data
+
+    return CFDOCS_CACHE[file_path], True
 
 
 def load_cfdoc(function_or_tag):
-    file_path = utils.get_setting("cfdocs_path") + function_or_tag + ".json"
-    try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            json_string = f.read()
-    except:
-        data = {"error_message": "Unable to read " + function_or_tag + ".json"}
-        return data, False
-    try:
-        data = json.loads(json_string)
-    except ValueError as e:
-        data = {"error_message": "Unable to decode " + function_or_tag + ".json<br>ValueError: " + str(e)}
-        return data, False
+    global CFDOCS_CACHE
+    file_path = function_or_tag + ".json"
+    if file_path not in CFDOCS_CACHE:
+        full_file_path = utils.get_setting("cfdocs_path") + file_path
+        try:
+            with open(full_file_path, "r", encoding="utf-8") as f:
+                json_string = f.read()
+        except:
+            data = {"error_message": "Unable to read " + function_or_tag + ".json"}
+            return data, False
+        try:
+            data = json.loads(json_string)
+        except ValueError as e:
+            data = {"error_message": "Unable to decode " + function_or_tag + ".json<br>ValueError: " + str(e)}
+            return data, False
 
-    return data, True
+        CFDOCS_CACHE[file_path] = data
+
+    return CFDOCS_CACHE[file_path], True
 
 
 def build_engine_span(engine, minimum_version):
@@ -139,5 +171,38 @@ def build_cfdoc_error(function_or_tag, data):
     cfdoc["header"] = "Uh oh!"
     cfdoc["description"] = "I tried to load that doc for you but got this instead:"
     cfdoc["body"] = data["error_message"]
+
+    return cfdoc
+
+
+def build_completion_doc(function_call_params, data):
+    cfdoc = dict(CFDOCS_STYLES)
+    cfdoc["header"] = data["syntax"].split('(')[0] + "(...)"
+    if len(data["returns"]) > 0:
+        cfdoc["header"] += ":" + data["returns"]
+
+    cfdoc["description"] = ""
+    cfdoc["body"] = ""
+    description_params = []
+    if len(data["params"]) > 0:
+        for index, param in enumerate(data["params"]):
+
+            if function_call_params.named_params:
+                active_name = function_call_params.params[function_call_params.current_index][0] or ""
+                is_active = active_name.lower() == param["name"].lower()
+            else:
+                is_active = index == function_call_params.current_index
+
+            if is_active:
+                param_variables = {"name": param["name"], "description": param["description"].replace("\n", "<br>"), "values": ""}
+                if "values" in param and len(param["values"]):
+                    param_variables["values"] = "<em>values:</em> " + ", ".join([str(value) for value in param["values"]])
+
+                cfdoc["body"] = sublime.expand_variables("<p>${description}</p><p>${values}</p>", param_variables)
+                description_params.append("<span class=\"active\">" + param["name"] + "</span>")
+            else:
+                description_params.append(param["name"])
+
+        cfdoc["description"] = ", ".join(description_params)
 
     return cfdoc

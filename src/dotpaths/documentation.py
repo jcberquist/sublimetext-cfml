@@ -52,6 +52,27 @@ def get_goto_cfml_file(cfml_view):
     return None
 
 
+def get_completions_doc(cfml_view):
+    if not cfml_view.project_name or not cfml_view.function_call_params or not cfml_view.function_call_params.method:
+        return None
+
+    if len(cfml_view.function_call_params.dot_context) > 1:
+        return None
+
+    start_pt = cfml_view.function_call_params.dot_context[0].name_region.begin()
+    cfc_path, file_path, dot_path, temp_function_name, region = cfc_utils.find_cfc(cfml_view, start_pt)
+
+    if file_path:
+        function_name = cfml_view.function_call_params.function_name
+        metadata = model_index.get_extended_metadata_by_file_path(cfml_view.project_name, file_path)
+        if cfml_view.function_call_params.function_name in metadata["functions"]:
+            header = dot_path.split(".").pop() + "." + metadata["functions"][function_name].name + "()"
+            doc, callback = model_index.get_function_call_params_doc(cfml_view.project_name, file_path, cfml_view.function_call_params, header)
+            return cfml_view.CompletionDoc(doc, callback)
+
+    return None
+
+
 def on_navigate(view, file_path, href):
     view.window().open_file(file_path)
 

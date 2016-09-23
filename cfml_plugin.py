@@ -1,6 +1,11 @@
 import sublime_plugin
 from .src.bootstrap import *
+from .src.bootstrap import _plugin_loaded
 from .src import completions, events, utils
+
+
+def plugin_loaded():
+    _plugin_loaded()
 
 
 class CfmlEventListener(sublime_plugin.EventListener):

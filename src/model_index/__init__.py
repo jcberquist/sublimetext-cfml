@@ -1,12 +1,13 @@
 import sublime
-from .. import events
-from .. import utils
 from .component_project_index import *
-from .documentation import get_documentation, build_documentation, get_method_documentation, build_method_documentation
+from .documentation import get_documentation, build_documentation
+from .documentation import get_method_documentation, build_method_documentation
+from .documentation import get_function_call_params_doc, build_function_call_params_doc
 from .navigate_to_method import CfmlNavigateToMethodCommand
 
 __all__ = [
     "build_documentation",
+    "build_function_call_params_doc",
     "build_method_documentation",
     "CfmlNavigateToMethodCommand",
     "get_completions_by_dot_path",
@@ -16,6 +17,7 @@ __all__ = [
     "get_extended_metadata_by_file_path",
     "get_file_path_by_dot_path",
     "get_file_paths",
+    "get_function_call_params_doc",
     "get_metadata_by_dot_path",
     "get_metadata_by_file_path",
     "get_method_documentation",

@@ -5,8 +5,10 @@ from . import utils
 from .cfml_view import CfmlView
 
 DOC_TEMPLATE = ""
+COMPLETION_DOC_TEMPLATE = ""
 PAGINATION_TEMPLATE = ""
 
+doc_window = None
 documentation_sources = []
 
 
@@ -25,10 +27,12 @@ def get_inline_documentation(cfml_view):
     return docs
 
 
-def plugin_loaded():
-    global DOC_TEMPLATE, PAGINATION_TEMPLATE
-    DOC_TEMPLATE = sublime.load_resource("Packages/" + utils.get_plugin_name() + "/templates/inline_documentation.html").replace("\r", "")
-    PAGINATION_TEMPLATE = sublime.load_resource("Packages/" + utils.get_plugin_name() + "/templates/pagination.html").replace("\r", "")
+def _plugin_loaded():
+    global DOC_TEMPLATE, COMPLETION_DOC_TEMPLATE, PAGINATION_TEMPLATE
+    root_path = "Packages/" + utils.get_plugin_name() + "/templates"
+    DOC_TEMPLATE = sublime.load_resource(root_path + "/inline_documentation.html").replace("\r", "")
+    COMPLETION_DOC_TEMPLATE = sublime.load_resource(root_path + "/completion_doc.html").replace("\r", "")
+    PAGINATION_TEMPLATE = sublime.load_resource(root_path + "/pagination.html").replace("\r", "")
 
 
 def build_links(links):
@@ -48,15 +52,16 @@ def build_pagination(current_index, total_pages):
     return sublime.expand_variables(PAGINATION_TEMPLATE, pagination_variables)
 
 
-def build_doc_html(inline_doc):
-    return sublime.expand_variables(DOC_TEMPLATE, inline_doc)
+def build_doc_html(inline_doc, completion_doc):
+    template = DOC_TEMPLATE if not completion_doc else COMPLETION_DOC_TEMPLATE
+    return sublime.expand_variables(template, inline_doc)
 
 
-def get_on_navigate(view, docs, current_index):
+def get_on_navigate(view, docs, current_index, completion_doc):
     def on_navigate(href):
         if href.startswith("page_"):
             new_index = int(href.split("_").pop())
-            display_documentation(view, docs, new_index)
+            display_documentation(view, docs, new_index, completion_doc)
         elif docs[current_index].on_navigate:
             docs[current_index].on_navigate(href)
         else:
@@ -64,18 +69,36 @@ def get_on_navigate(view, docs, current_index):
     return on_navigate
 
 
-def generate_documentation(docs, current_index):
+def on_hide():
+    global doc_window
+    doc_window = None
+
+
+def generate_documentation(docs, current_index, completion_doc):
     doc_html_variables = dict(docs[current_index].doc_html_variables)
     doc_html_variables["pagination"] = build_pagination(current_index, len(docs)) if len(docs) > 1 else ""
     doc_html_variables["links"] = build_links(doc_html_variables["links"]) if "links" in doc_html_variables else ""
 
-    return build_doc_html(doc_html_variables)
+    return build_doc_html(doc_html_variables, completion_doc)
 
 
-def display_documentation(view, docs, current_index=0):
-    doc_html = generate_documentation(docs, current_index)
-    on_navigate = get_on_navigate(view, docs, current_index)
-    view.show_popup(doc_html, flags=sublime.COOPERATE_WITH_AUTO_COMPLETE, max_width=1024, max_height=480, on_navigate=on_navigate)
+def display_documentation(view, docs, current_index=0, completion_doc=False):
+    global doc_window
+    doc_html = generate_documentation(docs, current_index, completion_doc)
+    on_navigate = get_on_navigate(view, docs, current_index, completion_doc)
+    if completion_doc:
+        # print(doc_html)
+        if doc_window and doc_window == "completion_doc":
+            view.update_popup(doc_html)
+        else:
+            doc_window = "completion_doc"
+            view.show_popup(doc_html, flags=sublime.COOPERATE_WITH_AUTO_COMPLETE, on_navigate=on_navigate, on_hide=on_hide)
+    else:
+        if doc_window and doc_window == "inline_doc":
+            view.update_popup(doc_html)
+        else:
+            doc_window = "inline_doc"
+            view.show_popup(doc_html, max_width=1024, max_height=480, on_navigate=on_navigate, on_hide=on_hide)
 
 
 class CfmlInlineDocumentationCommand(sublime_plugin.TextCommand):
