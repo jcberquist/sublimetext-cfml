@@ -3,6 +3,12 @@
 	// this is accessible in the menu via Package Settings -> CFML -> Package Settings - User
 	// or via the command palette - CFML: User Package Settings
 
+	// BIF completions
+	// "basic" - only the function name
+	// "required" - only required params are included, and no types
+	// "full" - all params and types are included in the completion
+	"cfml_bif_completions": "required",
+
 	// if true, when a ">" is typed to end a tag the corresponding closing tag will be inserted	after the cursor position,
 	// except for the cfml tags listed in the "cfml_non_closing_tags" setting below
 	"cfml_auto_insert_closing_tag": false,

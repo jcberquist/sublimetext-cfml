@@ -51,7 +51,7 @@ def get_script_completions(cfml_view):
     if cfml_view.view.match_selector(cfml_view.position, "meta.function-call.parameters.cfml,meta.function-call.parameters.method.cfml"):
         completion_list.append(("argumentCollection\tparameter struct", "argumentCollection = ${1:parameters}"))
 
-    completion_list.extend(completions["cfml_functions"])
+    completion_list.extend(completions["cfml_functions"][utils.get_setting("cfml_bif_completions")])
     completion_list.extend(completions["cfml_cf_tags_in_script"])
     completion_list.extend(completions["cfml_tags_in_script"])
     return cfml_view.CompletionList(completion_list, 0, False)
@@ -62,7 +62,7 @@ def get_dot_completions(cfml_view):
     if len(cfml_view.dot_context) == 1 and cfml_view.dot_context[0].name == "cgi":
         return cfml_view.CompletionList(completions["cgi"], 1, True)
 
-    completion_list = completions["cfml_member_functions"]
+    completion_list = completions["cfml_member_functions"][utils.get_setting("cfml_bif_completions")]
     return cfml_view.CompletionList(completion_list, 0, False)
 
 
@@ -107,15 +107,21 @@ def load_completions():
             completions["cfml_tag_attribute_values"][tag_name][attribute_name] = [(v + '\t' + attribute_name, v) for v in tag_attribute_values[attribute_name]]
 
     # functions
-    completions["cfml_functions"] = [(funct + '\tfn (cfml)', funct + completions_data["cfml_functions"][funct]) for funct in sorted(completions_data["cfml_functions"].keys())]
-    function_names = [funct for funct in sorted(completions_data["cfml_functions"].keys())]
+    completions["cfml_functions"] = {"basic": [], "required": [], "full": []}
+    function_names = []
+    for funct in sorted(completions_data["cfml_functions"].keys()):
+        completions["cfml_functions"]["basic"].append((funct + '\tfn (cfml)', funct + "($0)"))
+        completions["cfml_functions"]["required"].append((funct + '\tfn (cfml)', funct + completions_data["cfml_functions"][funct][0]))
+        completions["cfml_functions"]["full"].append((funct + '\tfn (cfml)', funct + completions_data["cfml_functions"][funct][1]))
+        function_names.append(funct)
 
     # member functions
-    mem_func_comp = []
+    completions["cfml_member_functions"] = {"basic": [], "required": [], "full": []}
     for member_function_type in sorted(completions_data["cfml_member_functions"].keys()):
         for funct in sorted(completions_data["cfml_member_functions"][member_function_type].keys()):
-            mem_func_comp.append( (funct + '\t' + member_function_type + '.fn (cfml)', funct + completions_data["cfml_member_functions"][member_function_type][funct]))
-    completions["cfml_member_functions"] = mem_func_comp
+            completions["cfml_member_functions"]["basic"].append((funct + '\t' + member_function_type + '.fn (cfml)', funct + "($0)"))
+            completions["cfml_member_functions"]["required"].append((funct + '\t' + member_function_type + '.fn (cfml)', funct + completions_data["cfml_member_functions"][member_function_type][funct][0]))
+            completions["cfml_member_functions"]["full"].append((funct + '\t' + member_function_type + '.fn (cfml)', funct + completions_data["cfml_member_functions"][member_function_type][funct][1]))
 
     # CGI scope
     cgi = load_json_data("cgi")
