@@ -68,7 +68,7 @@ def get_minimal_file_string(view):
     return min_string
 
 
-class CfmlFunctionCall():
+class CfmlFunctionCallParams():
 
     param_regex = re.compile(r"^(?:([\w]+)\s*=\s*)?(.*)$", re.M | re.S)
 
@@ -99,13 +99,13 @@ class CfmlFunctionCall():
                 self.current_index = len(self.params)
             if cfml_view.view.scope_name(pt) == separator_scope:
                 current_element = cfml_view.view.substr(sublime.Region(start, pt)).strip()
-                param = re.match(CfmlFunctionCall.param_regex, current_element)
+                param = re.match(CfmlFunctionCallParams.param_regex, current_element)
                 self.params.append(param.groups())
                 start = pt + 1
 
         final_element = cfml_view.view.substr(sublime.Region(start, pt)).strip()
         if len(final_element) > 0 or start != self.params_region.begin() + 1:
-            param = re.match(CfmlFunctionCall.param_regex, final_element)
+            param = re.match(CfmlFunctionCallParams.param_regex, final_element)
             self.params.append(param.groups())
 
         if len(self.params) > 0:
@@ -202,7 +202,7 @@ class CfmlView():
 
     def get_function_call_params(self, pt):
         if self.view.match_selector(pt, "source.cfml.script meta.function-call.parameters"):
-            return CfmlFunctionCall(self, pt)
+            return CfmlFunctionCallParams(self, pt)
         return None
 
     def get_string_metadata(self, file_string):
