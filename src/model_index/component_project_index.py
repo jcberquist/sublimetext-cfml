@@ -174,7 +174,10 @@ def get_extended_metadata_by_file_path(project_name, file_path):
 
 
 def get_completions_by_file_path(project_name, file_path):
-    return component_index.projects.get(project_name, dict).get("data", dict).get("completions", dict).get(file_path, None)
+    completions = component_index.projects.get(project_name, dict).get("data", dict).get("completions", dict).get(file_path, None)
+    if completions:
+        return completions[utils.get_setting("cfml_cfc_completions")]
+    return None
 
 
 def get_file_path_by_dot_path(project_name, dot_path):

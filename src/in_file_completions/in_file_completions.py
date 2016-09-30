@@ -3,7 +3,7 @@ from ..model_index.completions import build_file_completions
 
 
 def get_script_completions(cfml_view):
-    completions = build_file_completions(cfml_view.view_metadata)
+    completions = build_file_completions(cfml_view.view_metadata)[utils.get_setting("cfml_cfc_completions")]
     completions = [make_completion(completion, cfml_view.file_path) for completion in completions["functions"]]
     if len(completions) > 0:
         return cfml_view.CompletionList(completions, 2, False)
@@ -17,7 +17,7 @@ def get_dot_completions(cfml_view):
     for symbol in cfml_view.dot_context:
         if not symbol.is_function:
             if symbol.name == "this":
-                completions = build_file_completions(cfml_view.view_metadata)
+                completions = build_file_completions(cfml_view.view_metadata)[utils.get_setting("cfml_cfc_completions")]
                 completions = [make_completion(completion, cfml_view.file_path) for completion in completions["functions"]]
                 return cfml_view.CompletionList(completions, 1, True)
 
