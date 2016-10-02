@@ -12,6 +12,7 @@ from . import testbox
 from .build_cfml_tmlanguage import CfmlBuildTmlanguageCommand
 from .cfcs import CfmlDiPropertyCommand
 from .cfc_dotted_path import CfmlCfcDottedPathCommand
+from .completions import CfmlUpdateCompletionDocCommand
 from .controller_view_toggle import CfmlToggleControllerViewCommand
 from .color_scheme_styles import CfmlColorSchemeStylesCommand
 from .goto_cfml_file import CfmlGotoFileCommand

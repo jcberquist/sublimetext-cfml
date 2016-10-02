@@ -1,5 +1,4 @@
-import sublime
-from . import utils
+import sublime_plugin
 from . import inline_documentation
 from .cfml_view import CfmlView
 
@@ -44,3 +43,22 @@ def get_completions(view, position, prefix):
     if len(docs) > 0:
         inline_documentation.display_documentation(view, docs, 0, True)
     return full_completion_list
+
+
+class CfmlUpdateCompletionDocCommand(sublime_plugin.TextCommand):
+
+    def run(self, edit):
+        self.view.run_command("insert_snippet", {"contents": ","})
+        if inline_documentation.doc_window == "completion_doc":
+            position = self.view.sel()[0].begin()
+            cfml_view = CfmlView(self.view, position)
+            docs = []
+            for callback in completion_doc_sources:
+                inline_doc = callback(cfml_view)
+                if inline_doc:
+                    docs.append(inline_doc)
+
+            if len(docs) > 0:
+                inline_documentation.display_documentation(self.view, docs, 0, True)
+            else:
+                self.view.hide_popup()

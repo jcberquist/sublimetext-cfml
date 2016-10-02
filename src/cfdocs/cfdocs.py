@@ -197,12 +197,14 @@ def build_completion_doc(function_call_params, data):
                 param_variables = {"name": param["name"], "description": param["description"].replace("\n", "<br>"), "values": ""}
                 if "values" in param and len(param["values"]):
                     param_variables["values"] = "<em>values:</em> " + ", ".join([str(value) for value in param["values"]])
-
-                cfdoc["body"] = sublime.expand_variables("<p>${description}</p><p>${values}</p>", param_variables)
+                if len(param_variables["description"]) > 0 or len(param_variables["values"]) > 0:
+                    cfdoc["body"] = sublime.expand_variables("<p>${description}</p><p>${values}</p>", param_variables)
                 description_params.append("<span class=\"active\">" + param["name"] + "</span>")
+            elif param["required"]:
+                description_params.append("<span class=\"required\">" + param["name"] + "</span>")
             else:
-                description_params.append(param["name"])
+                description_params.append("<span class=\"optional\">" + param["name"] + "</span>")
 
-        cfdoc["description"] = ", ".join(description_params)
+        cfdoc["description"] = "(" + ", ".join(description_params) + ")"
 
     return cfdoc

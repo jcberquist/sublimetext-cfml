@@ -184,8 +184,10 @@ def build_function_call_params_doc(extended_metadata, function_call_params, head
                     model_doc["body"] += "<p>" + arg["hint"] + "</p>"
 
                 description_args.append("<span class=\"active\">" + arg["name"] + "</span>")
+            elif arg["required"]:
+                description_args.append("<span class=\"required\">" + arg["name"] + "</span>")
             else:
-                description_args.append(arg["name"])
+                description_args.append("<span class=\"optional\">" + arg["name"] + "</span>")
 
         model_doc["description"] = "(" + ", ".join(description_args) + ")"
 

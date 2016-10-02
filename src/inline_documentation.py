@@ -54,7 +54,10 @@ def build_pagination(current_index, total_pages):
 
 def build_doc_html(inline_doc, completion_doc):
     template = DOC_TEMPLATE if not completion_doc else COMPLETION_DOC_TEMPLATE
-    return sublime.expand_variables(template, inline_doc)
+    html = sublime.expand_variables(template, inline_doc)
+    if completion_doc:
+        html = html.replace("<div class=\"body\"></div>", "")
+    return html
 
 
 def get_on_navigate(view, docs, current_index, completion_doc):
@@ -87,7 +90,6 @@ def display_documentation(view, docs, current_index=0, completion_doc=False):
     doc_html = generate_documentation(docs, current_index, completion_doc)
     on_navigate = get_on_navigate(view, docs, current_index, completion_doc)
     if completion_doc:
-        # print(doc_html)
         if doc_window and doc_window == "completion_doc":
             view.update_popup(doc_html)
         else:

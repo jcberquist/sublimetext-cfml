@@ -132,5 +132,13 @@
     "context": [
       {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
     ]
+  },
+  {
+    "keys": [","],
+    "command": "cfml_update_completion_doc",
+    "context": [
+      {"key": "selector", "operator": "equal", "operand": "source.cfml.script meta.function-call", "match_all":true},
+      {"key": "selection_empty", "operator": "equal", "operand": true, "match_all": true}
+    ]
   }
 ]
