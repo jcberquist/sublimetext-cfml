@@ -34,6 +34,9 @@
 	// should end with trailing "/" - e.g. 'C:/github/cfdocs/data/en/'
 	"cfdocs_path": null,
 
+	// completion docs for BIFs and indexed components
+	"cfml_completion_docs": true,
+
 	// provide method completions for variables referring to instantiated components
 	// e.g. myvar = new path.to.cfc();
 	"instantiated_component_completions": true,

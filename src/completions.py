@@ -1,5 +1,6 @@
 import sublime_plugin
 from . import inline_documentation
+from . import utils
 from .cfml_view import CfmlView
 
 completion_sources = []
@@ -30,10 +31,11 @@ def get_completions(view, position, prefix):
             if completionlist.exclude_lower_priority:
                 minimum_priority = completionlist.priority
 
-    for callback in completion_doc_sources:
-        inline_doc = callback(cfml_view)
-        if inline_doc:
-            docs.append(inline_doc)
+    if utils.get_setting("cfml_completion_docs"):
+        for callback in completion_doc_sources:
+            inline_doc = callback(cfml_view)
+            if inline_doc:
+                docs.append(inline_doc)
 
     full_completion_list = []
     for completionlist in sorted(completion_lists, key=lambda comp_list: comp_list.priority, reverse=True):
