@@ -1,0 +1,30 @@
+CFML v0.16.0 Changelog:
+
+- Added attribute name scope to component `extends` keyword
+  https://github.com/jcberquist/sublimetext-cfml/issues/49
+
+- Added options to control the verboseness of completions for built-in functions
+  as well as for completions from indexed components. There are two new package
+  settings for these: `cfml_bif_completions` and `cfml_cfc_completions`.
+  Both of these have three options: `basic`, `required`, and `full`. When set
+  to `basic`, completions using only the function name will be inserted. When set
+  to `required`, only required arguments will be included in the completion, and
+  no argument types. Setting these to `full` will cause all arguments to be
+  included in the completions, and argument types will be included as well.
+
+  This last setting (`full`) matches the behavior of the completions till now -
+  HEADS UP, I have changed the default completion style to `required`. To get the
+  previous completion style back, you just need to override these settings in your
+  user package settings file.
+
+- Added completion docs that display alongside the auto-complete when entering
+  function call parameters. These docs are available when entering parameters for
+  built-in functions, as well as parameters for indexed components.
+
+  For the built-in functions, the documentation from cfdocs.org for that function
+  parameter is displayed. For indexed components, the doc includes the parameter
+  type, whether it is required, and its default value, if it has one. If the
+  parameter has a docblock hint, that will be displayed as well.
+
+  These completion docs are enabled by default, but you can turn them off by setting
+  the package setting `cfml_completion_docs` to false in your user package settings.
