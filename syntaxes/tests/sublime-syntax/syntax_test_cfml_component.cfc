@@ -3,19 +3,19 @@
 <!--- <- embedding.cfml source.cfml meta.tag.cfml meta.class.cfml punctuation.definition.tag.begin.cfml --->
  <!--- <- embedding.cfml source.cfml meta.tag.cfml meta.class.cfml entity.name.tag.cfml storage.type.class.cfml --->
 extends="base.test"
-<!--- <- meta.class.inheritance.cfml storage.modifier.extends.cfml --->
+<!--- <- meta.class.inheritance.cfml entity.other.attribute-name.cfml storage.modifier.extends.cfml --->
 <!---  ^ meta.class.inheritance.cfml punctuation.separator.key-value.cfml --->
 <!---   ^ meta.class.inheritance.cfml string.quoted.double.cfml punctuation.definition.string.begin.cfml --->
 <!---    ^ meta.class.inheritance.cfml string.quoted.double.cfml entity.other.inherited-class.cfml --->
 <!---              ^ embedding.cfml source.cfml meta.tag.cfml meta.class.cfml --->
 extends='base.test'
-<!--- <- meta.class.inheritance.cfml storage.modifier.extends.cfml --->
+<!--- <- meta.class.inheritance.cfml entity.other.attribute-name.cfml storage.modifier.extends.cfml --->
 <!---  ^ meta.class.inheritance.cfml punctuation.separator.key-value.cfml --->
 <!---   ^ meta.class.inheritance.cfml string.quoted.single.cfml punctuation.definition.string.begin.cfml --->
 <!---    ^ meta.class.inheritance.cfml string.quoted.single.cfml entity.other.inherited-class.cfml --->
 <!---              ^ embedding.cfml source.cfml meta.tag.cfml meta.class.cfml --->
 extends=base.test
-<!--- <- meta.class.inheritance.cfml storage.modifier.extends.cfml --->
+<!--- <- meta.class.inheritance.cfml entity.other.attribute-name.cfml storage.modifier.extends.cfml --->
 <!---  ^ meta.class.inheritance.cfml punctuation.separator.key-value.cfml --->
 <!---   ^ meta.class.inheritance.cfml string.unquoted.cfml entity.other.inherited-class.cfml --->
 <!---            ^ embedding.cfml source.cfml meta.tag.cfml meta.class.cfml --->

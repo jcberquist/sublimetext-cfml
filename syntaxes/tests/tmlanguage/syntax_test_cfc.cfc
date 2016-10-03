@@ -1,18 +1,18 @@
 // SYNTAX TEST "cfml.tmLanguage"
 component extends = "root.model.text"
-//        ^ meta.class.inheritance.cfml storage.modifier.extends.cfml
+//        ^ meta.class.inheritance.cfml entity.other.attribute-name.cfml storage.modifier.extends.cfml
 //                ^ meta.class.inheritance.cfml punctuation.separator.key-value.cfml
 //                  ^ meta.class.inheritance.cfml string.quoted.double.cfml punctuation.definition.string.begin.cfml
 //                   ^ meta.class.inheritance.cfml string.quoted.double.cfml entity.other.inherited-class.cfml
 //                                   ^ embedding.cfml source.cfml.script meta.class.declaration.cfml -string -entity
 extends = 'root.model.text'
-// <- meta.class.inheritance.cfml storage.modifier.extends.cfml
+// <- meta.class.inheritance.cfml entity.other.attribute-name.cfml storage.modifier.extends.cfml
 //      ^ meta.class.inheritance.cfml punctuation.separator.key-value.cfml
 //        ^ meta.class.inheritance.cfml string.quoted.single.cfml punctuation.definition.string.begin.cfml
 //         ^ meta.class.inheritance.cfml string.quoted.single.cfml entity.other.inherited-class.cfml
 //                         ^ embedding.cfml source.cfml.script meta.class.declaration.cfml -string -entity
 extends = root.model.text
-// <- meta.class.inheritance.cfml storage.modifier.extends.cfml
+// <- meta.class.inheritance.cfml entity.other.attribute-name.cfml storage.modifier.extends.cfml
 //      ^ meta.class.inheritance.cfml punctuation.separator.key-value.cfml
 //        ^ meta.class.inheritance.cfml string.unquoted.cfml entity.other.inherited-class.cfml
 //                       ^ embedding.cfml source.cfml.script meta.class.declaration.cfml -entity

@@ -1209,7 +1209,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.modifier.extends.cfml</string>
+					<string>entity.other.attribute-name.cfml storage.modifier.extends.cfml</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -2102,7 +2102,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>storage.modifier.extends.cfml</string>
+							<string>entity.other.attribute-name.cfml storage.modifier.extends.cfml</string>
 						</dict>
 						<key>2</key>
 						<dict>

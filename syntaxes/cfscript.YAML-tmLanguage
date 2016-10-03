@@ -503,7 +503,7 @@ repository:
     - name: meta.class.inheritance.cfml
       begin: (?i)\b(extends)\s*(=)\s*
       beginCaptures:
-        '1': {name: storage.modifier.extends.cfml}
+        '1': {name: entity.other.attribute-name.cfml storage.modifier.extends.cfml}
         '2': {name: punctuation.separator.key-value.cfml}
       end: ((")([a-zA-Z0-9:.]+)?("))|((')([a-zA-Z0-9:.]+)?('))|([a-zA-Z0-9:.]+)|(?=[^a-zA-Z0-9:.])
       endCaptures:

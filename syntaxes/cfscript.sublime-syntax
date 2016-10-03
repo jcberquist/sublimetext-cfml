@@ -475,7 +475,7 @@ contexts:
   component-attributes:
     - match: (?i)\b(extends)\s*(=)\s*
       captures:
-        1: storage.modifier.extends.cfml
+        1: entity.other.attribute-name.cfml storage.modifier.extends.cfml
         2: punctuation.separator.key-value.cfml
       push:
         - meta_scope: meta.class.inheritance.cfml
