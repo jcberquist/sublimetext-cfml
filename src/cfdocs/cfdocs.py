@@ -47,7 +47,10 @@ def get_inline_documentation(cfml_view):
         doc_name = "cffunction"
 
     if doc_name:
-        return get_cfdoc(doc_name, doc_priority, cfml_view)
+        data, success = get_cfdoc(doc_name)
+        if success:
+            return cfml_view.Documentation(build_cfdoc(doc_name, data), None, doc_priority)
+        return cfml_view.Documentation(build_cfdoc_error(doc_name, data), None, doc_priority)
 
     return None
 
@@ -62,24 +65,39 @@ def get_completion_docs(cfml_view):
     return None
 
 
-def get_cfdoc(function_or_tag, doc_priority, cfml_view):
-    if utils.get_setting("cfdocs_path"):
-        data, success = load_cfdoc(function_or_tag)
-    else:
-        data, success = fetch_cfdoc(function_or_tag)
-    if success:
-        return cfml_view.Documentation(build_cfdoc(function_or_tag, data), None, doc_priority)
-    return cfml_view.Documentation(build_cfdoc_error(function_or_tag, data), None, doc_priority)
-
-
 def get_completion_doc(cfml_view):
-    if utils.get_setting("cfdocs_path"):
-        data, success = load_cfdoc(cfml_view.function_call_params.function_name)
-    else:
-        data, success = fetch_cfdoc(cfml_view.function_call_params.function_name)
+    data, success = get_cfdoc(cfml_view.function_call_params.function_name)
     if success:
         return cfml_view.CompletionDoc(build_completion_doc(cfml_view.function_call_params, data), None)
     return cfml_view.Documentation(build_cfdoc_error(cfml_view.function_call_params, data), None)
+
+
+def get_cfdoc(function_or_tag):
+    if utils.get_setting("cfdocs_path"):
+        return load_cfdoc(function_or_tag)
+    return fetch_cfdoc(function_or_tag)
+
+
+def load_cfdoc(function_or_tag):
+    global CFDOCS_CACHE
+    file_path = function_or_tag + ".json"
+    if file_path not in CFDOCS_CACHE:
+        full_file_path = utils.get_setting("cfdocs_path") + file_path
+        try:
+            with open(full_file_path, "r", encoding="utf-8") as f:
+                json_string = f.read()
+        except:
+            data = {"error_message": "Unable to read " + function_or_tag + ".json"}
+            return data, False
+        try:
+            data = json.loads(json_string)
+        except ValueError as e:
+            data = {"error_message": "Unable to decode " + function_or_tag + ".json<br>ValueError: " + str(e)}
+            return data, False
+
+        CFDOCS_CACHE[file_path] = data
+
+    return CFDOCS_CACHE[file_path], True
 
 
 def fetch_cfdoc(function_or_tag):
@@ -94,28 +112,6 @@ def fetch_cfdoc(function_or_tag):
             data = {"error_message": "Unable to fetch " + function_or_tag + ".json<br>" + str(e)}
             return data, False
 
-        try:
-            data = json.loads(json_string)
-        except ValueError as e:
-            data = {"error_message": "Unable to decode " + function_or_tag + ".json<br>ValueError: " + str(e)}
-            return data, False
-
-        CFDOCS_CACHE[file_path] = data
-
-    return CFDOCS_CACHE[file_path], True
-
-
-def load_cfdoc(function_or_tag):
-    global CFDOCS_CACHE
-    file_path = function_or_tag + ".json"
-    if file_path not in CFDOCS_CACHE:
-        full_file_path = utils.get_setting("cfdocs_path") + file_path
-        try:
-            with open(full_file_path, "r", encoding="utf-8") as f:
-                json_string = f.read()
-        except:
-            data = {"error_message": "Unable to read " + function_or_tag + ".json"}
-            return data, False
         try:
             data = json.loads(json_string)
         except ValueError as e:

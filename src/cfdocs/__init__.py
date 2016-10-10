@@ -1,4 +1,4 @@
-from .cfdocs import get_inline_documentation, get_completion_docs
+from .cfdocs import get_inline_documentation, get_completion_docs, get_cfdoc
 from .. import completions
 from .. import inline_documentation
 

@@ -1,8 +1,9 @@
 import sublime
 import json
 from .. import utils
+from .. import cfdocs
 
-COMPLETION_FILES = ["cfml_tags", "cfml_functions", "cfml_member_functions"]
+COMPLETION_FILES = ["cfml_tags", "cfml_functions", "cfml_member_functions", "cfml_function_params"]
 DOC_STYLES = {
     "side_color": "#4C9BB0",
     "header_color": "#306B7B",
@@ -50,6 +51,12 @@ def get_script_completions(cfml_view):
 
     if cfml_view.view.match_selector(cfml_view.position, "meta.function-call.parameters.cfml,meta.function-call.parameters.method.cfml"):
         completion_list.append(("argumentCollection\tparameter struct", "argumentCollection = ${1:parameters}"))
+
+    if cfml_view.view.match_selector(cfml_view.position, "source.cfml.script meta.function-call.parameters"):
+        param_completions = get_param_completions(cfml_view)
+        if param_completions:
+            completion_list.extend(param_completions)
+            return cfml_view.CompletionList(completion_list, 3, True)
 
     completion_list.extend(completions["cfml_functions"][utils.get_setting("cfml_bif_completions")])
     completion_list.extend(completions["cfml_cf_tags_in_script"])
@@ -115,6 +122,15 @@ def load_completions():
         completions["cfml_functions"]["full"].append((funct + '\tfn (cfml)', funct + completions_data["cfml_functions"][funct][1]))
         function_names.append(funct)
 
+    # function params
+    completions["cfml_function_params"] = {}
+    for funct in sorted(completions_data["cfml_function_params"].keys()):
+        completions["cfml_function_params"][funct] = {}
+        for param in sorted(completions_data["cfml_function_params"][funct].keys()):
+            completions["cfml_function_params"][funct][param] = []
+            for value in completions_data["cfml_function_params"][funct][param]:
+                completions["cfml_function_params"][funct][param].append((value + '\t' + param, value))
+
     # member functions
     completions["cfml_member_functions"] = {"basic": [], "required": [], "full": []}
     for member_function_type in sorted(completions_data["cfml_member_functions"].keys()):
@@ -145,3 +161,39 @@ def make_cf_script_tag_completion(tag, required_attrs):
     for index, attr in enumerate(required_attrs, 1):
         attrs.append(' ' + attr + '="$' + str(index) + '"')
     return (tag + '\ttag (cfml)', tag + "(" + ",".join(attrs) + "$0 )")
+
+
+def get_param_completions(cfml_view):
+    if (
+        not cfml_view.function_call_params or
+        not cfml_view.function_call_params.support or
+        cfml_view.function_call_params.method or
+        cfml_view.function_call_params.function_name not in completions["cfml_function_params"]
+    ):
+        return None
+
+    data, success = cfdocs.get_cfdoc(cfml_view.function_call_params.function_name)
+    if not success:
+        return None
+
+    active_param = get_active_param(data["params"], cfml_view.function_call_params)
+    if not active_param:
+        return None
+
+    if active_param not in completions["cfml_function_params"][cfml_view.function_call_params.function_name]:
+        return None
+
+    return completions["cfml_function_params"][cfml_view.function_call_params.function_name][active_param]
+
+
+def get_active_param(params, function_call_params):
+    if len(params) > 0:
+        for index, param in enumerate(params):
+            if function_call_params.named_params:
+                active_name = function_call_params.params[function_call_params.current_index][0] or ""
+                is_active = active_name.lower() == param["name"].lower()
+            else:
+                is_active = index == function_call_params.current_index
+            if is_active:
+                return param["name"].lower()
+    return None

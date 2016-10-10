@@ -1,0 +1,589 @@
+{
+    "addsoaprequestheader": {
+        "mustunderstand": ["true", "false"]
+    },
+    "addsoapresponseheader": {
+        "mustunderstand": ["true", "false"]
+    },
+    "arrayappend": {
+        "merge": ["true", "false"]
+    },
+    "arraydelete": {
+        "scope": ["one", "all"]
+    },
+    "arrayeach": {
+        "maxthreads": ["true", "false"],
+        "parallel": ["true", "false"]
+    },
+    "arrayevery": {
+        "maxthreads": ["true", "false"],
+        "parallel": ["true", "false"]
+    },
+    "arrayfilter": {
+        "maxthreads": ["true", "false"],
+        "parallel": ["true", "false"]
+    },
+    "arraymerge": {
+        "leaveindex": ["true", "false"]
+    },
+    "arraynew": {
+        "dimension": ["1", "2", "3"],
+        "unsynchronized": ["true", "false"]
+    },
+    "arraysome": {
+        "parallel": ["true", "false"]
+    },
+    "arraysort": {
+        "sort_order": ["asc", "desc"],
+        "sort_type": ["numeric", "text", "textnocase"]
+    },
+    "arraytolist": {
+        "delimiter": [", ", "|", "_", ";", ":"]
+    },
+    "binarydecode": {
+        "binaryencoding": ["hex", "uu", "base64"]
+    },
+    "binaryencode": {
+        "encoding": ["hex", "uu", "base64"]
+    },
+    "cachedelete": {
+        "throwonerror": ["true", "false"]
+    },
+    "cachegetsession": {
+        "iskey": ["true", "false"]
+    },
+    "cacheremove": {
+        "throwonerror": ["true", "false"]
+    },
+    "canonicalize": {
+        "restrictmixed": ["true", "false"],
+        "restrictmultiple": ["true", "false"],
+        "throwonerror": ["true", "false"]
+    },
+    "charsetdecode": {
+        "encoding": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+    },
+    "charsetencode": {
+        "encoding": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+    },
+    "collectionevery": {
+        "parallel": ["true", "false"]
+    },
+    "collectionfilter": {
+        "parallel": ["true", "false"]
+    },
+    "collectionmap": {
+        "parallel": ["true", "false"]
+    },
+    "collectionsome": {
+        "parallel": ["true", "false"]
+    },
+    "compress": {
+        "includebasefolder": ["true", "false"]
+    },
+    "contractpath": {
+        "placeholder": ["true", "false"]
+    },
+    "createobject": {
+        "type": ["component", "corba", "com", "java", "webservice", ".NET", "dotnet"]
+    },
+    "csrfgeneratetoken": {
+        "forcenew": ["true", "false"]
+    },
+    "datecompare": {
+        "datepart": ["yyyy", "m", "y", "d", "h", "n", "s"]
+    },
+    "datediff": {
+        "datepart": ["yyyy", "q", "m", "y", "d", "w", "ww", "h", "n", "s"]
+    },
+    "dateformat": {
+        "mask": ["short", "medium", "long", "full"]
+    },
+    "datepart": {
+        "datepart": ["yyyy", "q", "m", "y", "d", "w", "ww", "h", "n", "s", "l"]
+    },
+    "datetimeformat": {
+        "timezone": ["UTC", "GMT", "America/Chicago"]
+    },
+    "decrypt": {
+        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"],
+        "encoding": ["UU", "Base64", "Hex"]
+    },
+    "decryptbinary": {
+        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"]
+    },
+    "deserializejson": {
+        "strictmapping": ["true", "false"],
+        "usecustomserializer": ["true", "false"]
+    },
+    "directorycopy": {
+        "createpath": ["true", "false"],
+        "recurse": ["true", "false"]
+    },
+    "directorydelete": {
+        "recurse": ["true", "false"]
+    },
+    "directorylist": {
+        "listinfo": ["name", "path", "query"],
+        "recurse": ["true", "false"],
+        "type": ["file", "dir", "all"]
+    },
+    "each": {
+        "parallel": ["true", "false"]
+    },
+    "encodeforhtml": {
+        "canonicalize": ["true", "false"]
+    },
+    "encodeforhtmlattribute": {
+        "canonicalize": ["true", "false"]
+    },
+    "encodeforjavascript": {
+        "canonicalize": ["true", "false"]
+    },
+    "encrypt": {
+        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"],
+        "encoding": ["UU", "Base64", "Hex"]
+    },
+    "encryptbinary": {
+        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"]
+    },
+    "entityload": {
+        "unique": ["true", "false"]
+    },
+    "entityloadbyexample": {
+        "unique": ["true", "false"]
+    },
+    "entitysave": {
+        "forceinsert": ["true", "false"]
+    },
+    "fileread": {
+        "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii"]
+    },
+    "fileupload": {
+        "nameconflict": ["error", "skip", "overwrite", "makeunique"],
+        "strict": ["true", "false"]
+    },
+    "fileuploadall": {
+        "nameconflict": ["Error", "Skip", "Overwrite", "MakeUnique"]
+    },
+    "find": {
+        "start": ["1"]
+    },
+    "findnocase": {
+        "start": ["1"]
+    },
+    "generatepbkdfkey": {
+        "algorithm": ["PBKDF2WithHmacSHA1", "PBKDF2WithSHA1", "PBKDF2WithSHA224", "PBKDF2WithSHA256", "PBKDF2WithSHA384", "PBKDF2WithSHA512"],
+        "iterations": ["1000"]
+    },
+    "generatesecretkey": {
+        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"]
+    },
+    "getapplicationsettings": {
+        "suppressfunction": ["true", "false"]
+    },
+    "getencoding": {
+        "scope_name": ["form", "url"]
+    },
+    "getmetricdata": {
+        "mode": ["perf_monitor", "simple_load", "prev_req_time", "avg_req_time"]
+    },
+    "getsafehtml": {
+        "throwonerror": ["true", "false"]
+    },
+    "getsoaprequestheader": {
+        "asxml": ["true", "false"]
+    },
+    "getsoapresponseheader": {
+        "asxml": ["true", "false"]
+    },
+    "gettoken": {
+        "delimiters": [", ", "|", "_", ";", ":"]
+    },
+    "hash": {
+        "algorithm": ["CFMX_COMPAT", "MD5", "SHA", "SHA-256", "SHA-384", "SHA-512"],
+        "encoding": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+    },
+    "hmac": {
+        "algorithm": ["HMACMD5", "HMACSHA1", "HMACSHA256", "HMACSHA384", "HMACSHA512"],
+        "encoding": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+    },
+    "htmlcodeformat": {
+        "version": ["-1", "2.0", "3.2"]
+    },
+    "htmleditformat": {
+        "version": ["-1", "2.0", "3.2"]
+    },
+    "htmlparse": {
+        "casesensitive": ["true", "false"]
+    },
+    "iif": {
+        "condition": ["true", "false"]
+    },
+    "imageaddborder": {
+        "bordertype": ["zero", "constant", "copy", "reflect", "wrap"]
+    },
+    "imagedrawarc": {
+        "filled": ["true", "false"]
+    },
+    "imagedrawbeveledrect": {
+        "filled": ["true", "false"],
+        "raised": ["true", "false"]
+    },
+    "imagedrawlines": {
+        "filled": ["true", "false"],
+        "ispolygon": ["true", "false"]
+    },
+    "imagedrawoval": {
+        "filled": ["true", "false"]
+    },
+    "imagedrawrect": {
+        "filled": ["true", "false"]
+    },
+    "imagedrawroundrect": {
+        "filled": ["true", "false"]
+    },
+    "imagenew": {
+        "imagetype": ["rgb", "argb", "grayscale"]
+    },
+    "imageoverlay": {
+        "rule": ["SRC", "DST_IN", "DST_OUT", "DST_OVER", "SRC_IN", "SRC_OVER", "SRC_OUT"]
+    },
+    "imageresize": {
+        "blurfactor": ["true", "false"]
+    },
+    "imagescaletofit": {
+        "blurfactor": ["true", "false"]
+    },
+    "imagesetantialiasing": {
+        "antialias": ["true", "false"]
+    },
+    "imageshear": {
+        "direction": ["horizontal", "vertical"]
+    },
+    "imagewrite": {
+        "overwrite": ["true", "false"]
+    },
+    "imagewritebase64": {
+        "inhtmlformat": ["true", "false"],
+        "overwrite": ["true", "false"]
+    },
+    "ispdfarchive": {
+        "standard": ["1b", "2b", "3b"]
+    },
+    "isvalid": {
+        "type": ["Any", "Array", "Binary", "boolean", "creditcard", "date", "time", "email", "eurodate", "float", "Numeric", "guid", "integer", "Query", "range", "Regex", "regular_expression", "ssn", "social_security_number", "String", "Struct", "telephone", "URL", "UUID", "usdate", "variablename", "xml", "zipcode", "component"]
+    },
+    "javacast": {
+        "type": ["boolean", "double", "float", "int", "long", "string", "null", "byte", "bigdecimal", "char", "short"]
+    },
+    "listappend": {
+        "delimiters": [", ", "|", "_", ";", ":"]
+    },
+    "listavg": {
+        "multicharacterdelimiter": ["true", "false"]
+    },
+    "listchangedelims": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listcompact": {
+        "multicharacterdelimiter": ["true", "false"]
+    },
+    "listcontains": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listcontainsnocase": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listdeleteat": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listevery": {
+        "includeemptyfields": ["true", "false"],
+        "multicharacterdelimiter": ["true", "false"],
+        "parallel": ["true", "false"]
+    },
+    "listfind": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
+        "includeemptyvalues": ["true", "false"]
+    },
+    "listfindnocase": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
+        "includeemptyvalues": ["true", "false"]
+    },
+    "listfirst": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listgetat": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listindexexists": {
+        "includeemptyfields": ["true", "false"]
+    },
+    "listinsertat": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listitemtrim": {
+        "includeemptyfields": ["true", "false"]
+    },
+    "listlast": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listlen": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listmap": {
+        "includeemptyfields": ["true", "false"]
+    },
+    "listprepend": {
+        "delimiters": [", ", "|", ";", "-", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listqualify": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
+        "elements": ["all", "char"],
+        "includeemptyfields": ["true", "false"]
+    },
+    "listreduce": {
+        "includeemptyfields": ["true", "false"]
+    },
+    "listremoveduplicates": {
+        "ignorecase": ["true", "false"]
+    },
+    "listrest": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listsetat": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listsome": {
+        "includeemptyfields": ["true", "false"],
+        "multicharacterdelimiter": ["true", "false"],
+        "parallel": ["true", "false"]
+    },
+    "listsort": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listtoarray": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
+        "includeemptyfields": ["true", "false"],
+        "multicharacterdelimiter": ["true", "false"]
+    },
+    "listvaluecount": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "listvaluecountnocase": {
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "location": {
+        "addtoken": ["true", "false"]
+    },
+    "lscurrencyformat": {
+        "type": ["local", "international", "none"]
+    },
+    "lsdateformat": {
+        "mask": ["short", "medium", "long", "full"]
+    },
+    "lseurocurrencyformat": {
+        "type": ["local", "international", "none"]
+    },
+    "lstimeformat": {
+        "mask": ["short", "medium", "long"]
+    },
+    "ormexecutequery": {
+        "unique": ["true", "false"]
+    },
+    "parsedatetime": {
+        "pop_conversion": ["standard", "pop"]
+    },
+    "queryaddcolumn": {
+        "datatype": ["Integer", "Bigint", "Double", "Decimal", "Varchar", "Binary", "Bit", "Time", "Date"]
+    },
+    "queryeach": {
+        "parallel": ["true", "false"]
+    },
+    "queryevery": {
+        "parallel": ["true", "false"]
+    },
+    "queryexecute": {
+        "options": ["datasource", "cachename", "dbtype"],
+        "params": ["cfsqltype", "list"]
+    },
+    "queryfilter": {
+        "parallel": ["true", "false"]
+    },
+    "querymap": {
+        "parallel": ["true", "false"]
+    },
+    "querynew": {
+        "columntypelist": ["Integer", "BigInt", "Double", "Decimal", "VarChar", "Binary", "Bit", "Time", "Data"]
+    },
+    "querysome": {
+        "parallel": ["true", "false"]
+    },
+    "quotedvaluelist": {
+        "delimiter": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "rand": {
+        "algorithm": ["CFMX_COMPAT", "SHA1PRNG", "IBMSecureRandom"]
+    },
+    "randomize": {
+        "algorithm": ["CFMX_COMPAT", "SHA1PRNG", "IBMSecureRandom"]
+    },
+    "randrange": {
+        "algorithm": ["CFMX_COMPAT", "SHA1PRNG", "IBMSecureRandom", "NativePRNG", "NativePRNGBlocking", "NativePRNGNonBlocking"]
+    },
+    "refind": {
+        "returnsubexpressions": ["true", "false"],
+        "start": ["1"]
+    },
+    "refindnocase": {
+        "returnsubexpressions": ["true", "false"],
+        "string": ["1"]
+    },
+    "replace": {
+        "scope": ["one", "all"]
+    },
+    "replacenocase": {
+        "scope": ["one", "all"]
+    },
+    "rereplace": {
+        "scope": ["one", "all"]
+    },
+    "rereplacenocase": {
+        "scope": ["one", "all"]
+    },
+    "serializejson": {
+        "serializequerybycolumns": ["true", "false"],
+        "usecustomserializer": ["true", "false"]
+    },
+    "setencoding": {
+        "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+    },
+    "sizeof": {
+        "complex": ["true", "false"]
+    },
+    "spreadsheetaddcolumn": {
+        "insert": ["true", "false"]
+    },
+    "spreadsheetaddrow": {
+        "insert": ["true", "false"]
+    },
+    "spreadsheetaddrows": {
+        "includecolumnnames": ["true", "false"],
+        "insert": ["true", "false"]
+    },
+    "spreadsheetaddsplitpane": {
+        "position": ["LOWER_LEFT", "LOWER_RIGHT", "UPPER_LEFT", "UPPER_RIGHT"]
+    },
+    "spreadsheetnew": {
+        "xmlformat": ["true", "false"]
+    },
+    "spreadsheetwrite": {
+        "overwrite": ["true", "false"]
+    },
+    "structappend": {
+        "overwriteflag": ["true", "false"]
+    },
+    "structdelete": {
+        "indicatenotexisting": ["true", "false"]
+    },
+    "structevery": {
+        "parallel": ["true", "false"]
+    },
+    "structfindkey": {
+        "scope": ["one", "all"]
+    },
+    "structfindvalue": {
+        "scope": ["one", "all"]
+    },
+    "structinsert": {
+        "allowoverwrite": ["true", "false"]
+    },
+    "structkeylist": {
+        "delimiter": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "structkeytranslate": {
+        "deeptranslation": ["true", "false"],
+        "leaveoriginalkey": ["true", "false"]
+    },
+    "structnew": {
+        "structtype": ["ordered"]
+    },
+    "structsome": {
+        "parallel": ["true", "false"]
+    },
+    "structsort": {
+        "sorttype": ["numeric", "text", "textnocase"]
+    },
+    "systemoutput": {
+        "addnewline": ["true", "false"],
+        "doerrorstream": ["true", "false"]
+    },
+    "throw": {
+        "type": ["Custom", "Application", "Database", "Template", "Security", "Object", "MissingInclude", "Expression", "Lock", "SearchEngine"]
+    },
+    "timeformat": {
+        "mask": ["short", "medium", "long", "full"]
+    },
+    "tobase64": {
+        "encoding": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+    },
+    "toscript": {
+        "asformat": ["true", "false"],
+        "outputformat": ["true", "false"]
+    },
+    "tostring": {
+        "encoding": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+    },
+    "trace": {
+        "abort": ["true", "false"],
+        "inline": ["true", "false"]
+    },
+    "ucfirst": {
+        "doall": ["true", "false"],
+        "dolowerifalluppercase": ["true", "false"]
+    },
+    "urldecode": {
+        "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+    },
+    "urlencode": {
+        "force": ["true", "false"]
+    },
+    "urlencodedformat": {
+        "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+    },
+    "urlsessionformat": {
+        "requesturl": ["cgi.script_name"]
+    },
+    "valuelist": {
+        "delimiter": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+    },
+    "wrap": {
+        "strip": ["true", "false"]
+    },
+    "writedump": {
+        "abort": ["true", "false"],
+        "expand": ["true", "false"],
+        "format": ["html", "text"],
+        "metainfo": ["true", "false"],
+        "output": ["browser", "console", "filename"],
+        "showudfs": ["true", "false"]
+    },
+    "writelog": {
+        "application": ["true", "false"],
+        "log": ["Application", "Scheduler"],
+        "type": ["information", "warning", "error", "fatal"]
+    },
+    "writeoutput": {
+        "encodefor": ["html", "htmlattribute", "javascript", "css", "xml", "xmlattribute", "url", "xpath", "ldap", "dn"]
+    },
+    "xmlformat": {
+        "escapenewset": ["true", "false"]
+    },
+    "xmlnew": {
+        "casesensitive": ["true", "false"]
+    },
+    "xmlparse": {
+        "casesensitive": ["true", "false"]
+    }
+}
