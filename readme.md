@@ -42,6 +42,10 @@ Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](http:/
 
 Completions are included for tags and tag attributes, as well for built-in functions and member functions. Completions are also available for `Application.cfc` settings and methods.
 
+There are three completions styles for built-in functions. This is controlled by a package setting, `cfml_bif_completions`, which can be set to one of three options: `basic`, `required`, or `full`.  Setting this to `basic` will cause only the function name to be completed, with no function parameters inserted. `required`, which is the default setting, includes required parameters in the completion, but only their names, and no types. Setting this to `full` results in all parameters being included in the completion, as well as the parameters types.
+
+When entering a function call parameter for a built-in function a pop-up window with documentation from [cfdocs.org](http://cfdocs.org) for that parameter is shown. This can be disabled by setting `cfml_completion_docs` to `false` in your user package settings.
+
 ### Inline Documentation
 
 <kbd>F1</kbd> is mapped to an inline documentation command that provides an inline documentation popup based on the cursor position.
@@ -127,6 +131,8 @@ By default, implicit accessors are included in the completions.The `accessors` k
 These two settings work together, such that when a base CFC as well as another CFC that extends it are both indexed, and a mapping is specified such that the dot path in the `extends` can be resolved, the documentation and completions for the child CFC will include properties and methods from the base CFC. In addition, the dot paths of all indexed CFCs will be offered as completions in the `extends` attribute, the `createObject` function (where the type is `component`), as well as when using `new` to instantiate a CFC.
 
 Further, when an instantiated component has been assigned to a variable (e.g. `myVar = new path.to.mycfc()`), and that component has been indexed and a mapping specified for it, then method completions for that component will be offered when a `.` is typed after that variable name. The <kbd>F1</kbd> documentation command and the <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> jump to CFC command will also work on that variable name. (This behavior can be disabled by setting `instantiated_component_completions` to `false` in your user package settings.)
+
+*__Note__: completions from indexed components are available in three styles matching the completion styles for built-in functions. This is controlled by the `cfml_cfc_completions` package setting. Also, when entering parameters for indexed component method calls, a pop up window with information regarding that parameter is shown.*
 
 **Inject Property Command**
 
