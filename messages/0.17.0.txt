@@ -1,0 +1,12 @@
+CFML v0.17.0 Changelog:
+
+- Added completions for built-in function parameters where there is list of
+  possible values available in cfdocs.org data. For example, when entering an
+  algorithm for the `hmac()` function, a list of possible algorithms will be
+  offered.
+
+- This release will be the last release that supports Sublime Text build 3083. At
+  this point there have been a number of beta releases beyond 3083, so everyone
+  has access to a ST version that supports the newer `.sublime-syntax` format for
+  syntax highlighting. It is time consuming to support the `.tmLanguage` variant of
+  the CFML syntax, and it no longer seems necessary.
