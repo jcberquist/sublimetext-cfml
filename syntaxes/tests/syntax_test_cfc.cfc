@@ -221,6 +221,13 @@ public void function setup( required root.model.cava.connection connection ) {}
 //                                             ^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml
   var test = 'FROM myTable'
 //            ^^^^ meta.string.quoted.single.cfml source.sql keyword.other.DML.sql
+
+  var test3 = entityLoadByPK( "foo", "someId" );
+//            ^ meta.function-call.support.cfml meta.function-call.support.entity.cfml support.function.cfml
+  var test4 = entityLoad( "foo", {}, true );
+//            ^ meta.function-call.support.cfml meta.function-call.support.entity.cfml support.function.cfml
+  var test5 = entityNew( "foo" );
+//            ^ meta.function-call.support.cfml meta.function-call.support.entity.cfml support.function.cfml
 }
 // <- embedding.cfml source.cfml.script meta.class.body.cfml punctuation.definition.block.end.cfml
  // <- embedding.cfml source.cfml.script -meta

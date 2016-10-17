@@ -1218,6 +1218,12 @@ contexts:
       set:
         - meta_scope: meta.function-call.support.cfml
         - include: queryexecute-params
+    - match: (?i)\b(entity(?:load|loadbypk|new))(?=\()
+      captures:
+        1: support.function.cfml
+      set:
+        - meta_scope: meta.function-call.support.cfml meta.function-call.support.entity.cfml
+        - include: support-call-params
     - match: |-
         (?x)\b
           (?i:
@@ -1229,8 +1235,8 @@ contexts:
             |put|regionexists|regionnew|regionremove|remove|removeall|setproperties)|component(?:cacheclear
             |cachelist|info)|create(?:date|datetime|dynamicproxy|guid|object|odbcdate|odbcdatetime
             |odbctime|time|timespan|uniqueid|uuid)|date(?:add|compare|convert|diff|format|part
-            |timeformat)|entity(?:delete|load|loadbyexample|loadbypk|merge|namearray|namelist
-            |new|reload|save|toquery)|get(?:applicationmetadata|applicationsettings|authuser
+            |timeformat)|entity(?:delete|loadbyexample|merge|namearray|namelist|reload|save|toquery)
+            |get(?:applicationmetadata|applicationsettings|authuser
             |basetagdata|basetaglist|basetemplatepath|builtinfunction|canonicalpath|classpath
             |clientvariableslist|componentmetadata|contextroot|cpuusage|currentcontext|currenttemplatepath
             |directoryfrompath|encoding|exception|filefrompath|fileinfo|freespace|functioncalledname
