@@ -48,12 +48,6 @@
 	"cfml_tag_style": { "foreground": "#4C9BB0", "fontStyle": "" },
 	"cfml_tag_attribute_style": { "foreground": "#D9995E", "fontStyle": "" },
 
-	// tmlanguage sources to be used when building cfml.tmLanguage
-	"tmlanguage_html": "Packages/HTML/HTML.tmLanguage",
-	"tmlanguage_javascript": "Packages/JavaScript/JavaScript.tmLanguage",
-	"tmlanguage_css": "Packages/CSS/CSS.tmLanguage",
-	"tmlanguage_sql": "Packages/SQL/SQL.tmLanguage",
-
 	// default controller and view folder names that the
 	// toggle_controller_view command looks for when switching
 	// between controller method and corresponding view

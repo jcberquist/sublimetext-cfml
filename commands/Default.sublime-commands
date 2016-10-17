@@ -59,11 +59,6 @@
 				"contents": "{\n\t$0\n}\n"
 			}
 	},
-	// Build tmLanguage file
-	{
-		"caption": "CFML: Build tmLanguage Syntax File",
-		"command": "cfml_build_tmlanguage"
-	},
 	// Re-index active project
 	{
 		"caption": "CFML: Index Active Project",
