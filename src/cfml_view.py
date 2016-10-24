@@ -91,7 +91,11 @@ class CfmlFunctionCallParams():
             self.dot_context = cfml_view.dot_context = cfml_view.get_dot_context(prev_pt)
 
         start_scope_list = cfml_view.view.scope_name(self.params_region.begin()).strip().split(" ")[:-1]
-        separator_scope = " ".join(start_scope_list) + " " + start_scope_list[-2].replace("meta.", "punctuation.separator.") + " "
+        separator_scope = " ".join(start_scope_list) + " "
+        last_key = start_scope_list[-2].replace("meta.", "punctuation.separator.") + " "
+        for scope_name in ["entity.", "createcomponent.", "createjavaobject."]:
+            last_key = last_key.replace(scope_name, "")
+        separator_scope += last_key
 
         start = self.params_region.begin() + 1
         for pt in range(self.params_region.begin() + 1, self.params_region.end()):
