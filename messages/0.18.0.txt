@@ -1,0 +1,26 @@
+CFML v0.18.0 Changelog:
+
+- Removed `.tmLanguage` support from the package. The previous tagged release
+  (v0.17.0) will be the last release containing `.tmLanguage` syntax files.
+
+- Fixed an issue where, when indexing custom tag files, a file read failure on
+  an individual file was preventing the custom tag index from being generated.
+  https://github.com/jcberquist/sublimetext-cfml/issues/53
+
+- Persistent components are now indexed via their entity names when they are
+  contained in a project `cfc_folders` array. This index is used to offer
+  entity name completions when using the ORM functions `entityNew()`,
+  `entityLoad()`, and `entityLoadByPK()`.
+  https://github.com/jcberquist/sublimetext-cfml/issues/51
+
+  Also, using that same index, method completion support for variables
+  referencing persistent components has been added. For example, given
+  `myVar = entityLoadByPK("myentity", 1)`, after typing `myVar.`, completions
+  will be offered for the `myentity.cfc` component. (If the `entityname`
+  attribute is specified, it does takes precedence over the file name in
+  determining the component entity name.) This support also extends to the F1
+  documentation command, as well as the CTRL+ALT+click go to source command.
+  https://github.com/jcberquist/sublimetext-cfml/issues/50
+
+  If you wish to disable this behavior you can set the package setting
+  `instantiated_component_completions` to `false` in your user package settings.
