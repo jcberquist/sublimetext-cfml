@@ -5,6 +5,7 @@ from . import dotpaths
 from . import cfdocs
 from . import cfcs
 from . import custom_tags
+from . import entities
 from . import fw1
 from . import in_file_completions
 from . import inline_documentation

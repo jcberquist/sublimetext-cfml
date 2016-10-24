@@ -1,0 +1,114 @@
+import re
+import sublime
+from .. import model_index
+from .. import utils
+
+
+entity_name_re = r"""
+\(\s*["']([$_\w.]+)["']
+"""
+entity_name_re = re.compile(entity_name_re, re.I | re.X)
+
+entityload_re = r"""
+\(\s*["']([$_\w.]+)["'].*true\s*\)
+"""
+entityload_re = re.compile(entityload_re, re.I | re.X)
+
+
+def get_entity_name(source_string, function_name):
+    en = re.search(entityload_re if function_name == "entityload" else entity_name_re, source_string)
+    if en:
+        return en.group(1).lower()
+    return None
+
+
+def is_possible_entity(dot_context):
+    if dot_context[0].is_function:
+        return False
+    if len(dot_context) == 1:
+        return True
+    if len(dot_context) == 2 and dot_context[1].name == "variables":
+        return True
+    return False
+
+
+def find_entity(cfml_view, position):
+    """
+    returns entity_name, function_name, region
+    """
+    if cfml_view.view.match_selector(position, "meta.function-call.support.entity.cfml"):
+        function_name, function_region, args_region = cfml_view.get_function_call(position)
+        entity_name = get_entity_name(cfml_view.view.substr(args_region), function_name)
+        return entity_name, None, sublime.Region(function_region.begin(), args_region.end())
+
+    if cfml_view.view.match_selector(position, "meta.function-call.method"):
+        function_name, function_name_region, function_args_region = cfml_view.get_function_call(position)
+        if cfml_view.view.substr(function_name_region.begin() - 1) == ".":
+            dot_context = cfml_view.get_dot_context(function_name_region.begin() - 1)
+
+            if cfml_view.view.match_selector(dot_context[-1].name_region.begin(), "meta.function-call.support.entity.cfml"):
+                entity_name = get_entity_name(cfml_view.view.substr(dot_context[-1].args_region), dot_context[-1].name)
+                region = sublime.Region(dot_context[-1].function_region.begin(), dot_context[-1].args_region.end())
+                return entity_name, function_name, region
+
+            if is_possible_entity(dot_context):
+                entity_name, temp, region = find_entity_by_var_assignment(cfml_view, position, dot_context[0].name)
+                return entity_name, function_name, region
+
+    if cfml_view.view.match_selector(position, "variable.other, meta.property.cfml"):
+        r = cfml_view.view.word(position)
+        dot_context = cfml_view.get_dot_context(r.begin() - 1)
+        if (len(dot_context) == 0
+           or (len(dot_context) == 1 and dot_context[0].name == "variables")):
+            return find_entity_by_var_assignment(cfml_view, position, cfml_view.view.substr(r).lower())
+
+    return None, None, None
+
+
+def find_entity_by_var_assignment(cfml_view, position, var_name):
+    empty_tuple = None, None, None
+
+    if not utils.get_setting("instantiated_component_completions"):
+        return empty_tuple
+
+    var_assignment_pt = cfml_view.find_variable_assignment(position, var_name)
+    if not var_assignment_pt:
+        return empty_tuple
+
+    if not cfml_view.view.match_selector(var_assignment_pt, "meta.function-call.support.entity.cfml"):
+        return empty_tuple
+
+    entity_name, function_name, region = find_entity(cfml_view, var_assignment_pt)
+
+    if entity_name is None:
+        return empty_tuple
+
+    next_pt = utils.get_next_character(cfml_view.view, region.end())
+    if cfml_view.view.substr(next_pt) != ".":
+        return entity_name, function_name, region
+
+    # if next char is a `.`, try to determine if what follows is init method
+    if not cfml_view.view.match_selector(next_pt + 1, "meta.function-call.method"):
+        return empty_tuple
+
+    function_name, function_name_region, function_args_region = cfml_view.get_function_call(next_pt + 1)
+
+    if not function_name:
+        return empty_tuple
+
+    file_path = model_index.get_file_path_by_entity_name(cfml_view.project_name, entity_name)
+    metadata = model_index.get_extended_metadata_by_file_path(cfml_view.project_name, file_path["file_path"])
+
+    if metadata["initmethod"] is None:
+        if function_name != 'init':
+            return empty_tuple
+    else:
+        if metadata["initmethod"] != function_name:
+            return empty_tuple
+
+    next_pt = utils.get_next_character(cfml_view.view, function_args_region.end())
+
+    if cfml_view.view.substr(next_pt) == ".":
+        return empty_tuple
+
+    return entity_name, function_name, region
