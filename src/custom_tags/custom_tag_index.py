@@ -11,7 +11,9 @@ def index(custom_tag_path):
     for path in os.listdir(custom_tag_path):
         if path.endswith(".cfm") or path.endswith(".cfc"):
             full_file_path = custom_tag_path.replace("\\", "/") + '/' + path
-            custom_tags[full_file_path] = index_file(full_file_path)
+            file_index = index_file(full_file_path)
+            if file_index:
+                custom_tags[full_file_path] = file_index
     return custom_tags
 
 
@@ -21,7 +23,7 @@ def index_file(full_file_path):
             file_string = f.read()
     except:
         print("CFML: unable to read file - " + full_file_path)
-        return {}
+        return None
 
     file_index = {"tag_name": full_file_path.split("/").pop()[:-4]}
     file_index.update(parse_cfm_file_string(file_string))
