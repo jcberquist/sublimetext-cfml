@@ -1,7 +1,7 @@
 import sublime
 import time
 from functools import partial
-from os.path import dirname
+from os.path import dirname, splitext
 from ..project_index import ProjectIndex
 from .. import utils
 from .. import cfc_indexer
@@ -10,12 +10,16 @@ from . import completions
 __all__ = [
     "component_index",
     "get_completions_by_dot_path",
+    "get_completions_by_entity_name",
     "get_completions_by_file_path",
     "get_dot_paths",
+    "get_entities",
     "get_extended_metadata_by_file_path",
     "get_file_path_by_dot_path",
+    "get_file_path_by_entity_name",
     "get_file_paths",
     "get_metadata_by_dot_path",
+    "get_metadata_by_entity_name",
     "get_metadata_by_file_path",
     "get_project_data",
     "resolve_path",
@@ -41,6 +45,7 @@ class ComponentProjectIndex(ProjectIndex):
         start_time = time.clock()
         index = {}
         dot_path_map = {}
+        entities = {}
         print("CFML: indexing components in project '" + project_name + "'")
 
         for cfc_folder in sorted(cfc_folders, key=lambda d: d["path"]):
@@ -49,7 +54,8 @@ class ComponentProjectIndex(ProjectIndex):
             index.update(path_index)
 
         dot_path_map = build_dot_paths(index, mappings, project_file_dir)
-        self.projects[project_name]["data"] = {"index": index, "dot_paths": dot_path_map, "completions": {}}
+        entities = build_entities(index)
+        self.projects[project_name]["data"] = {"index": index, "dot_paths": dot_path_map, "entities": entities, "completions": {}}
         self.projects[project_name]["data"]["completions"] = completions.build(project_name, index.keys(), get_extended_metadata_by_file_path)
 
         print("CFML: indexing components in project '" + project_name + "' completed - " + str(len(index)) + " files indexed in " + "{0:.2f}".format(time.clock() - start_time) + " seconds")
@@ -58,11 +64,13 @@ class ComponentProjectIndex(ProjectIndex):
     def update_project(self, project_name, updated_project_data):
         with self.lock:
             if project_name in self.projects:
-                print("CFML: updating project '" + project_name + "'" )
+                print("CFML: updating project '" + project_name + "'")
                 self.projects[project_name]["project_data"] = updated_project_data
                 mappings = updated_project_data.get("mappings", [])
                 dot_path_map = build_dot_paths(self.projects[project_name]["data"]["index"], mappings, dirname(project_name))
+                entities = build_entities(self.projects[project_name]["data"]["index"])
                 self.projects[project_name]["data"]["dot_paths"] = dot_path_map
+                self.projects[project_name]["data"]["entities"] = entities
                 self.projects[project_name]["data"]["completions"] = completions.build(project_name, get_file_paths(project_name), get_extended_metadata_by_file_path)
         self.notify_listeners(project_name)
 
@@ -76,7 +84,9 @@ class ComponentProjectIndex(ProjectIndex):
                     index = self.projects[project_name]["data"]["index"];
                     mappings = get_project_data(project_name).get("mappings", [])
                     dot_path_map = build_dot_paths(index, mappings, dirname(project_name))
+                    entities = build_entities(index)
                     self.projects[project_name]["data"]["dot_paths"] = dot_path_map
+                    self.projects[project_name]["data"]["entities"] = entities
                     self.projects[project_name]["data"]["completions"] = completions.build(project_name, get_file_paths(project_name), get_extended_metadata_by_file_path)
             self.notify_listeners(project_name)
 
@@ -88,7 +98,9 @@ class ComponentProjectIndex(ProjectIndex):
                     project_index = self.projects[project_name]["data"]["index"]
                     project_data = self.projects[project_name]["data"]["project_data"]
                     dot_path_map = build_dot_paths(project_index, project_data.get("mappings", []), dirname(project_name))
+                    entities = build_entities(project_index)
                     self.projects[project_name]["data"]["dot_paths"] = dot_path_map
+                    self.projects[project_name]["data"]["entities"] = entities
                     self.projects[project_name]["data"]["completions"] = completions.build(project_name, get_file_paths(project_name), get_extended_metadata_by_file_path)
             self.notify_listeners(project_name)
 
@@ -109,6 +121,19 @@ def build_dot_paths(path_index, mappings, project_file_dir):
                 dot_path = ".".join(path_parts)[:-4]
                 dot_paths[dot_path.lower()] = {"file_path": file_path, "dot_path": dot_path}
     return dot_paths
+
+
+def build_entities(path_index):
+    entities = {}
+    for file_path in path_index:
+        metadata = path_index[file_path]
+        if not metadata["persistent"]:
+            continue
+        cfc_path, file_ext = splitext(file_path)
+        cfc_name = utils.normalize_path(cfc_path).split("/").pop()
+        entity_name = metadata["entityname"] if metadata["entityname"] else cfc_name
+        entities[entity_name.lower()] = {"file_path": file_path, "entity_name": entity_name}
+    return entities
 
 
 def resolve_path(project_name, file_path, extends):
@@ -165,6 +190,10 @@ def get_dot_paths(project_name):
     return component_index.projects.get(project_name, dict).get("data", dict).get("dot_paths", dict)
 
 
+def get_entities(project_name):
+    return component_index.projects.get(project_name, dict).get("data", dict).get("entities", dict)
+
+
 def get_metadata_by_file_path(project_name, file_path):
     return component_index.projects.get(project_name, dict).get("data", dict).get("index", dict).get(file_path, None)
 
@@ -181,7 +210,11 @@ def get_completions_by_file_path(project_name, file_path):
 
 
 def get_file_path_by_dot_path(project_name, dot_path):
-    return component_index.projects.get(project_name, dict).get("data", dict).get("dot_paths", dict).get(dot_path, None)
+    return component_index.projects.get(project_name, dict).get("data", dict).get("dot_paths", dict).get(dot_path.lower(), None)
+
+
+def get_file_path_by_entity_name(project_name, entity_name):
+    return component_index.projects.get(project_name, dict).get("data", dict).get("entities", dict).get(entity_name.lower(), None)
 
 
 def get_metadata_by_dot_path(project_name, dot_path):
@@ -191,8 +224,22 @@ def get_metadata_by_dot_path(project_name, dot_path):
     return None
 
 
+def get_metadata_by_entity_name(project_name, entity_name):
+    cfc_file_path = get_file_path_by_entity_name(project_name, entity_name)
+    if cfc_file_path:
+        return get_metadata_by_file_path(project_name, cfc_file_path["file_path"])
+    return None
+
+
 def get_completions_by_dot_path(project_name, dot_path):
     cfc_file_path = get_file_path_by_dot_path(project_name, dot_path)
+    if cfc_file_path:
+        return get_completions_by_file_path(project_name, cfc_file_path["file_path"])
+    return None
+
+
+def get_completions_by_entity_name(project_name, entity_name):
+    cfc_file_path = get_file_path_by_entity_name(project_name, entity_name)
     if cfc_file_path:
         return get_completions_by_file_path(project_name, cfc_file_path["file_path"])
     return None
