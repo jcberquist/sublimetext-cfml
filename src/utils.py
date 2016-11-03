@@ -46,7 +46,7 @@ def normalize_path(path, root_path=None):
     if not os.path.isabs(path) and root_path is not None:
         path = os.path.normpath(os.path.join(root_path, path))
     normalized_path = path.replace("\\", "/")
-    if normalized_path[-1] == "/":
+    if len(normalized_path) > 0 and normalized_path[-1] == "/":
         normalized_path = normalized_path[:-1]
     return normalized_path
 

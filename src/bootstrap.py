@@ -25,3 +25,4 @@ from .formatting.cfml_format import CfmlFormatCommand, CfmlFormatMenuCommand
 
 def _plugin_loaded():
     inline_documentation._plugin_loaded()
+    testbox._plugin_loaded()

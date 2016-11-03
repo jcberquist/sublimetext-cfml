@@ -4,15 +4,15 @@ import sublime
 import sublime_plugin
 import json
 import os
+import urllib.parse
 import urllib.request
 from functools import partial
 from .. import utils
 
-SYNTAX_EXT = "sublime-syntax" if int(sublime.version()) >= 3092 else "hidden-tmLanguage"
 RESULTS_TEMPLATES = {"logo": "", "bundle": "", "results": "", "global_exception": "", "legend": ""}
 
 
-def plugin_loaded():
+def _plugin_loaded():
     sublime.set_timeout_async(load)
 
 
@@ -25,35 +25,55 @@ def load():
 class TestboxCommand(sublime_plugin.WindowCommand):
 
     def run(self, test_type="", **kwargs):
-
-        if not len(self.get_setting("testbox_runner_url")):
-            sublime.message_dialog("No TestBox runner URL has been defined for this project.")
-            return
-
         project_file_dir = utils.normalize_path(os.path.dirname(self.window.project_file_name())) if self.window.project_file_name() else None
-
-        testbox_tests_root = utils.normalize_path(self.get_setting("testbox_tests_root"), project_file_dir) + '/'
-
+        tests_root = utils.normalize_path(self.get_setting("tests_root"), project_file_dir) + '/'
         directory, filename, ext = self.get_path_parts(self.window.active_view().file_name())
-        full_url = self.get_setting("testbox_runner_url")
+        test_directory = ""
         test_bundle = ""
 
         if test_type in ["directory", "cfc"]:
-            if not directory.startswith(testbox_tests_root):
-                print(testbox_tests_root, directory)
-                sublime.message_dialog("\"testbox_tests_root\" is missing, cannot determine dotted path for directory.")
+            if not directory.startswith(tests_root):
+                print(tests_root, directory)
+                sublime.message_dialog("\"testbox.tests_root\" is missing, cannot determine dotted path for directory.")
                 return
-            full_url += self.get_dotted_directory(testbox_tests_root, directory)
-        else:
-            full_url += self.get_setting("testbox_default_directory")
+            test_directory = self.get_dotted_directory(tests_root, directory)
 
         if test_type == "cfc":
             if ext != "cfc":
                 sublime.message_dialog("Invalid file type, only \"cfc\" extension is valid for TestBox tests.")
                 return
-            test_bundle = self.get_dotted_directory(testbox_tests_root, directory) + "." + filename
-            full_url += "&testBundles=" + test_bundle
+            test_bundle = self.get_dotted_directory(tests_root, directory) + "." + filename
 
+        runner = self.get_setting("runner")
+
+        if not runner:
+            sublime.message_dialog("No TestBox runner has been defined for this project.")
+            return
+
+        if isinstance(runner, str):
+            self.setup_tests(project_file_dir, self.get_runner_url(runner, test_directory, test_bundle), test_bundle)
+        elif isinstance(runner, list):
+            if len(runner) == 1:
+                k, v = runner[0].popitem()
+                runner_url = self.get_runner_url(v, test_directory, test_bundle)
+                self.setup_tests(project_file_dir, runner_url, test_bundle)
+            else:
+                self.select_runner(project_file_dir, runner, test_directory, test_bundle)
+
+    def select_runner(self, project_file_dir, runner_url, test_directory, test_bundle):
+        items = []
+        for r in runner_url:
+            for k in r:
+                items.append([k, r[k]])
+
+        def on_done(index):
+            if index != -1:
+                runner_url = self.get_runner_url(items[index][1], test_directory, test_bundle)
+                self.setup_tests(project_file_dir, runner_url, test_bundle)
+
+        self.window.show_quick_panel(items, on_done)
+
+    def setup_tests(self, project_file_dir, runner_url, test_bundle):
         if not hasattr(self, "output_view"):
             self.output_view = self.window.create_output_panel("testbox")
 
@@ -66,7 +86,7 @@ class TestboxCommand(sublime_plugin.WindowCommand):
         self.output_view.settings().set("gutter", False)
         self.output_view.settings().set("scroll_past_end", False)
         self.output_view.settings().set("color_scheme", "Packages/" + utils.get_plugin_name() + "/color-schemes/testbox.hidden-tmTheme")
-        self.output_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/testbox." + SYNTAX_EXT)
+        self.output_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/testbox.sublime-syntax")
 
         # As per Default/exec.py
         # Call create_output_panel a second time after assigning the above
@@ -77,30 +97,80 @@ class TestboxCommand(sublime_plugin.WindowCommand):
         self.output_view.run_command("append", {"characters": RESULTS_TEMPLATES["logo"], "force": True, "scroll_to_end": True})
 
         # run async
-        sublime.set_timeout_async(partial(self.run_tests, full_url, test_bundle))
+        sublime.set_timeout_async(partial(self.run_tests, runner_url, test_bundle))
 
-    def run_tests(self, full_url, test_bundle):
+    def run_tests(self, runner_url, test_bundle):
         sublime.status_message("TestBox: running tests")
-        print("TestBox: " + full_url)
+        print("TestBox: " + runner_url)
 
         try:
-            json_string = urllib.request.urlopen(full_url).read().decode("utf-8")
+            json_string = urllib.request.urlopen(runner_url).read().decode("utf-8")
             result_string = render_result(json.loads(json_string), test_bundle)
         except:
-            result_string = "\nError when trying to fetch:\n" + full_url
+            result_string = "\nError when trying to fetch:\n" + runner_url
             result_string += "\nPlease verify the URL is valid and returns the test results in JSON."
 
         self.output_view.run_command("append", {"characters": result_string, "force": True, "scroll_to_end": False})
 
     def get_setting(self, setting_key):
-        if setting_key in self.window.project_data():
-            return self.window.project_data()[setting_key]
+        # search in project settings, then box.json in root project folders, finally in package settings
+        if "testbox" in self.window.project_data() and setting_key in self.window.project_data()["testbox"]:
+            return self.window.project_data()["testbox"][setting_key]
+
+        project_file_dir = self.window.project_file_name() and os.path.dirname(self.window.project_file_name())
+        for folder in self.window.project_data()["folders"]:
+            setting = self.get_box_json_setting(folder["path"], project_file_dir, setting_key)
+            if setting:
+                return setting
+
         package_settings = sublime.load_settings("cfml_package.sublime-settings")
-        return package_settings.get(setting_key, "")
+        return package_settings.get("testbox", {}).get(setting_key, "")
+
+    def get_box_json_setting(self, folder, project_file_dir, setting_key):
+        project_path = utils.normalize_path(folder, project_file_dir)
+
+        for file_name in os.listdir(project_path):
+            if file_name.lower() == "box.json":
+                break
+        else:
+            return None
+
+        try:
+            with open(project_path + "/" + file_name, "r", encoding="utf-8") as f:
+                box_json = json.loads(f.read())
+        except:
+            print("CFML: Unable to load box.json file in " + project_path)
+            return None
+
+        if "testbox" in box_json and setting_key in box_json["testbox"]:
+            return box_json["testbox"][setting_key]
+
+        return None
+
+    def get_runner_url(self, runner_url, test_directory, test_bundle):
+        split_url = urllib.parse.urlsplit(runner_url)
+        qs = {"reporter": ["json"]}
+        for k, v in urllib.parse.parse_qs(split_url.query, True).items():
+            if k.lower() == "reporter":
+                continue
+            if k.lower() == "directory" and len(test_directory) > 0:
+                continue
+            if k.lower() == "testbundles" and len(test_bundle) > 0:
+                continue
+            qs[k] = v
+
+        if len(test_directory) > 0:
+            qs["directory"] = [test_directory]
+
+        if len(test_bundle) > 0:
+            qs["testBundles"] = [test_bundle]
+
+        runner_tuple = split_url.scheme, split_url.netloc, split_url.path, urllib.parse.urlencode(qs, True), split_url.fragment
+        return urllib.parse.urlunsplit(runner_tuple)
 
     def get_testbox_results(self, project_file_dir):
-        testbox_results = self.get_setting("testbox_results")
-        testbox_results["server_root"] = utils.normalize_path(testbox_results["server_root"]) + "/"
+        testbox_results = self.get_setting("results")
+        testbox_results["server_root"] = utils.normalize_path(testbox_results["server_root"], project_file_dir) + "/"
         testbox_results["sublime_root"] = utils.normalize_path(testbox_results["sublime_root"], project_file_dir) + "/"
         return testbox_results
 
@@ -147,13 +217,13 @@ def lcase_keys(source):
 
 
 def filter_stats_dict(source):
-    stat_keys = ["path","totalduration","totalbundles","totalsuites","totalspecs"]
-    stat_keys.extend(["totalpass","totalfail","totalerror","totalskipped"])
+    stat_keys = ["path", "totalduration", "totalbundles", "totalsuites", "totalspecs"]
+    stat_keys.extend(["totalpass", "totalfail", "totalerror", "totalskipped"])
     return {key: str(source[key]) for key in stat_keys if key in source}
 
 
 def filter_exception_dict(source):
-    exception_keys = ["type","message","detail","stacktrace"]
+    exception_keys = ["type", "message", "detail", "stacktrace"]
     return {key: str(source[key]) for key in exception_keys if key in source}
 
 
@@ -167,7 +237,7 @@ def get_status_bit(status):
 def build_stacktrace(stack, tabs):
     stacktrace = ""
     for row in stack:
-        stacktrace += tabs + "     " + row["template"] + ":" + str(row["line"]) + "\n"
+        stacktrace += tabs + "     " + row["template"].replace("\\", "/") + ":" + str(row["line"]) + "\n"
     return stacktrace
 
 

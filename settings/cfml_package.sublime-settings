@@ -54,18 +54,21 @@
 	"controller_folders": ["controllers", "handlers"],
 	"view_folders": ["views"],
 
-	// testbox settings
+	// testbox completion settings
 	// these can also be set on a per project basis
 	// settings contained in a project override the package settings
 	"testbox_enabled": true,
 	"testbox_folders": ["tests"],
 
-	// testbox test runner
+	// testbox test runner settings
 	// these settings should be set per project
-	"testbox_runner_url": "http://localhost:8888/testbox/system/Testbox.cfc?method=runremote&reporter=json&directory=",
-	"testbox_default_directory": "tests",
-	"testbox_tests_root": "",
-	"testbox_results": {"server_root": "", "sublime_root": ""},
+	// if there is a `box.json` file in the root of a project
+	// these settings can be placed there as well
+	"testbox": {
+		"runner": "http://localhost:8888/testbox/system/Testbox.cfc?method=runremote",
+		"tests_root": "",
+		"results": {"server_root": "", "sublime_root": ""}
+	},
 
 	// framework one settings
 	// these can also be set on a per project basis
