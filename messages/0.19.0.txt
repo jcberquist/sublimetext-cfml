@@ -1,0 +1,21 @@
+CFML v0.19.0 Changelog:
+
+- Removed `cfml-icon.tmPreferences` which set a default sidebar icon for
+  CFML files. This package is now supported by the "zz File Icons" package
+  (https://packagecontrol.io/packages/zz%20File%20Icons) and specifying an
+  icon in the package conflicted with it.
+
+- When running TestBox tests via the build menu, the root folder(s) of your
+  project will be searched for a `box.json` file containing a testbox runner
+  setting, if you do not specify a testbox runner in your project file.
+  Please see https://github.com/jcberquist/sublimetext-cfml#testbox for more
+  details. IMPORTANT, if you have been using the TestBox runner, this update
+  includes a BREAKING CHANGE with regard to the structure of the TestBox
+  settings. See also:
+  https://github.com/jcberquist/sublimetext-cfml/issues/54
+
+- Custom tag indexing support has been updated to allow the omission of the
+  `prefix` key when specifying custom tag folders in your project file. When
+  this is done, custom tags in that folder will be offered as `<cf_customtag>`
+  style completions.
+  https://github.com/jcberquist/sublimetext-cfml/issues/55
