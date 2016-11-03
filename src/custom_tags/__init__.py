@@ -20,11 +20,11 @@ def get_completions(cfml_view):
 
 
 def get_tags(cfml_view):
-    if (cfml_view.previous_char == "<"):
+    if cfml_view.previous_char == "<":
         completion_list = get_prefix_completions(cfml_view.project_name)
         if completion_list:
             return cfml_view.CompletionList(completion_list, 0, False)
-    elif (cfml_view.previous_char == ":"):
+    elif cfml_view.previous_char == ":":
         prefix = cfml_view.view.substr(cfml_view.view.word(cfml_view.prefix_start - 1))
         completion_list = get_tag_completions(cfml_view.project_name, prefix)
         if completion_list:
@@ -36,8 +36,9 @@ def get_tag_attributes(cfml_view):
     if not cfml_view.tag_name:
         return None
 
-    if ":" in cfml_view.tag_name and cfml_view.project_name in custom_tags.projects:
-        completion_list = get_tag_attribute_completions(cfml_view.project_name, cfml_view.tag_name)
-        if completion_list:
-            return cfml_view.CompletionList(completion_list, 0, False)
+    if cfml_view.project_name in custom_tags.projects:
+        if ":" in cfml_view.tag_name or cfml_view.tag_name.lower().startswith("cf_"):
+            completion_list = get_tag_attribute_completions(cfml_view.project_name, cfml_view.tag_name)
+            if completion_list:
+                return cfml_view.CompletionList(completion_list, 0, False)
     return None

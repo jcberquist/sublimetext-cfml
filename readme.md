@@ -140,7 +140,7 @@ Further, when an instantiated component has been assigned to a variable (e.g. `m
 
 ### Custom Tags
 
-Support is offered on a per project basis for custom tags as used with a `<cfimport>` tag and a custom tag prefix. Here is an example project file (other settings have been removed):
+Support is offered on a per project basis for custom tags. This can be set up to function as used with a `<cfimport>` tag and a custom tag prefix, or with the generic `<cf_customtag>` format. Here is an example project file (other settings have been removed):
 
 ```
 {
@@ -157,6 +157,8 @@ Support is offered on a per project basis for custom tags as used with a `<cfimp
 *__Note__: the path specified above can either be an absolute path, or a relative path. If it is a relative path, it will be calculated relative to the location of `.sublime-project` file.*
 
 Once this is done, `page` will be offered as a custom tag prefix completion, and then after entering `<page:` a list of tags in the custom tag folder will be offered. After a tag has been entered, completions for every `attributes` scope variable found in that custom tag file will be offered.
+
+**Important**: Alternatively, the `prefix` key can be omitted - in that case the custom tags in that folder will be offered as `cf_tagname` completions.
 
 You can use the <kbd>F1</kbd> documentation command to get some minimal documentation about that custom tag, and <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> can be used to jump to the custom tag file.
 

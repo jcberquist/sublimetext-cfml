@@ -98,7 +98,8 @@ def generate_tag_map(custom_tag_folders, index, project_file_dir):
         root_path = utils.normalize_path(tag_folder["path"], project_file_dir)
         for file_path in index:
             if file_path.startswith(root_path):
-                tag_map[tag_folder["prefix"] + ":" + index[file_path]["tag_name"]] = file_path
+                prefix = tag_folder["prefix"] + ":" if "prefix" in tag_folder else "cf_"
+                tag_map[prefix + index[file_path]["tag_name"]] = file_path
     return tag_map
 
 
@@ -110,14 +111,16 @@ def generate_completions_and_closing_tags(custom_tag_folders, index, project_fil
 
     for tag_folder in custom_tag_folders:
         root_path = utils.normalize_path(tag_folder["path"], project_file_dir)
-        prefixes.append((tag_folder["prefix"] + '\tcustom tag prefix (cfml)', tag_folder["prefix"] + ":"))
+        if "prefix" in tag_folder:
+            prefixes.append((tag_folder["prefix"] + '\tcustom tag prefix (cfml)', tag_folder["prefix"] + ":"))
         for file_path in index:
             if file_path.startswith(root_path + "/"):
-                if tag_folder["prefix"] not in tags:
-                    tags[tag_folder["prefix"]] = []
-                key = tag_folder["prefix"] + ":" + index[file_path]["tag_name"]
-                tags[tag_folder["prefix"]].append(make_tag_completion(tag_folder["prefix"], index[file_path]["tag_name"]))
-                attributes[key] = [(a + "\t" + index[file_path]["tag_name"], a + "=\"$1\"") for a in index[file_path]["attributes"]]
+                prefix = tag_folder["prefix"] if "prefix" in tag_folder else "cf_"
+                if prefix not in tags:
+                    tags[prefix] = []
+                key = prefix + (":" if "prefix" in tag_folder else "") + index[file_path]["tag_name"]
+                tags[prefix].append(make_tag_completion(prefix, index[file_path]["tag_name"]))
+                attributes[key] = [(a + "\t" + key, a + "=\"$1\"") for a in index[file_path]["attributes"]]
                 if index[file_path]["has_end_tag"]:
                     closing_tags.append(key)
 
@@ -125,7 +128,9 @@ def generate_completions_and_closing_tags(custom_tag_folders, index, project_fil
 
 
 def make_tag_completion(prefix, tag):
-    return (tag + "\tcustom tag (" + prefix + ")", tag)
+    suffix = " (" + prefix + ")" if prefix != "cf_" else ""
+    comp_prefix = "cf_" if prefix == "cf_" else ""
+    return (comp_prefix + tag + "\tcustom tag" + suffix, comp_prefix + tag)
 
 #############
 
@@ -137,8 +142,13 @@ def resync_project(project_name):
 
 
 def get_prefix_completions(project_name):
+    completions = []
     if project_name in custom_tags.projects:
-        return custom_tags.projects[project_name]["data"]["completions"]["prefixes"]
+        completions.extend(custom_tags.projects[project_name]["data"]["completions"]["prefixes"])
+        if "cf_" in custom_tags.projects[project_name]["data"]["completions"]["tags"]:
+            completions.extend(custom_tags.projects[project_name]["data"]["completions"]["tags"]["cf_"])
+        if len(completions) > 0:
+            return completions
     return None
 
 
