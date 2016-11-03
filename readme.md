@@ -6,7 +6,7 @@ You can install this package via [Package Control](https://packagecontrol.io/). 
 
 Manual installation is also possible by downloading the repository and placing it in a folder within your Sublime packages folder. (See below for more information.)
 
-*Please ensure that you are running at least build 3083 of Sublime Text 3, as some of the features of the package will not work otherwise. If you are on build 3092+ the package will use the new `sublime-syntax` syntax highlighting.*
+*Please ensure that you are running at least build 3103 of Sublime Text 3. As of v0.18.0 this package only uses `sublime-syntax` syntax highlighting.*
 
 ### Acknowledgements
 
