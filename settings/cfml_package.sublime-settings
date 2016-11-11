@@ -27,7 +27,7 @@
 	"cfml_between_tag_pair": "default",
 
 	// tags that shouldn't be closed when auto closing tags
-	"cfml_non_closing_tags": ["cfabort","cfargument","cfbreak","cfcontinue","cfdirectory","cfdump","cfelse","cfelseif","cffile","cfflush","cfheader","cfhttpparam","cfimage","cfinclude","cflocation","cflog","cfparam","cfprocessingdirective","cfproperty","cfqueryparam","cfrethrow","cfreturn","cfset","cfsetting","cfthrow"],
+	"cfml_non_closing_tags": ["cfabort","cfargument","cfbreak","cfcontent","cfcontinue","cfdirectory","cfdump","cfelse","cfelseif","cffile","cfflush","cfheader","cfhttpparam","cfimage","cfinclude","cflocation","cflog","cfparam","cfprocessingdirective","cfproperty","cfqueryparam","cfrethrow","cfreturn","cfset","cfsetting","cfthrow"],
 	"html_non_closing_tags": ["area","base","br","col","command","embed","hr","img","input","link","meta","param","source"],
 
 	// file path to local version of cfdocs json data folder
