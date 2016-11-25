@@ -59,12 +59,10 @@
 				"contents": "{\n\t$0\n}\n"
 			}
 	},
-	// Re-index active project
 	{
 		"caption": "CFML: Index Active Project",
 		"command": "cfml_index_project"
 	},
-	// Toggle CFML tag color scheme styles
 	{
 		"caption": "CFML: Toggle Color Scheme Styles",
 		"command": "cfml_color_scheme_styles"
