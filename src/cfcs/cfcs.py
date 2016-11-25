@@ -97,9 +97,9 @@ def get_cfc_metadata(project_name, cfc_name):
 
 
 def get_completion(completion, cfc_info):
-    hint = cfc_info["name"]
-    if cfc_info["file_path"] != completion.file_path:
-        hint = completion.file_path.split("/").pop()
+    hint = completion.hint
+    if hint != "method" and cfc_info["file_path"] == completion.file_path:
+        hint = cfc_info["name"]
     return completion.key + "\t" + hint, completion.content
 
 

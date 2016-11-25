@@ -39,7 +39,7 @@ def get_dot_completions(cfml_view):
                         comp = model_index.get_completions_by_file_path(cfml_view.project_name, extends_file_path)
 
                     if comp:
-                        completions = [(completion.key + "\t" + completion.file_path.split("/").pop(), completion.content) for completion in comp["functions"]]
+                        completions = [(completion.key + "\t" + completion.hint, completion.content) for completion in comp["functions"]]
                         return cfml_view.CompletionList(completions, 1, True)
 
     return None
@@ -48,5 +48,5 @@ def get_dot_completions(cfml_view):
 def make_completion(comp, file_path):
     hint = "this"
     if len(comp.file_path) > 0 and comp.file_path != file_path:
-        hint = comp.file_path.split("/").pop()
+        hint = comp.hint
     return (comp.key + "\t" + hint, comp.content)

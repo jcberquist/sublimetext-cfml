@@ -15,6 +15,14 @@
 	// "full" - all params and types are included in the completion
 	"cfml_cfc_completions": "required",
 
+	// component completion names - please note that "full" completions
+	// block Sublime Text from including local buffer completions in the
+	// completion list. You can use a plugin such as `All Autocomplete` to
+	// get around this.
+	// "basic" - only the function name
+	// "full" - includes `():returntype` - e.g. `getSomething():struct`
+	"cfml_cfc_completion_names": "basic",
+
 	// if true, when a ">" is typed to end a tag the corresponding closing tag will be inserted	after the cursor position,
 	// except for the cfml tags listed in the "cfml_non_closing_tags" setting below
 	"cfml_auto_insert_closing_tag": false,

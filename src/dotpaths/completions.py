@@ -167,7 +167,7 @@ def get_completions_by_component_name(view, project_name, component_name):
         filtered_completions = []
         for completion in comp["functions"]:
             if not completion.private:
-                filtered_completions.append((completion.key + "\t" + completion.file_path.split("/").pop(), completion.content))
+                filtered_completions.append((completion.key + "\t" + completion.hint, completion.content))
         return filtered_completions
 
     return None

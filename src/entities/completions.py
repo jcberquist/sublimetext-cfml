@@ -69,7 +69,8 @@ def get_completions_by_entity_name(project_name, entity_name):
         filtered_completions = []
         for completion in comp["functions"]:
             if not completion.private:
-                filtered_completions.append((completion.key + "\t" + completion.file_path.split("/").pop(), completion.content))
+                hint = "method" if completion.hint == "method" else entity_name
+                filtered_completions.append((completion.key + "\t" + hint, completion.content))
         return filtered_completions
 
     return None

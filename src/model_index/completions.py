@@ -1,6 +1,7 @@
 from collections import namedtuple
+from .. import utils
 
-CfcCompletion = namedtuple("CfcCompletion", "key content file_path accessor private")
+CfcCompletion = namedtuple("CfcCompletion", "key hint content file_path accessor private")
 
 # note that the completion tuples include 4 elements, so they will need to be modified before
 # being returned by subscribers
@@ -35,11 +36,17 @@ def make_completions(funct_meta, funct_cfcs, completion_type):
 
 
 def make_completion(funct, cfc_file_path, completion_type):
-    key_string = funct.name + "()"
-    if funct.meta["returntype"]:
-        key_string += ":" + funct.meta["returntype"]
+    key = funct.name
+    hint = "method"
+    if utils.get_setting("cfml_cfc_completion_names") == "full":
+        key += "()"
+        if funct.meta["returntype"]:
+            key += ":" + funct.meta["returntype"]
+        hint = cfc_file_path.split("/").pop().split(".")[0]
+
     return CfcCompletion(
-        key_string,
+        key,
+        hint,
         funct.name + "(" + make_arguments_string(funct.meta["arguments"], completion_type) + ")",
         cfc_file_path,
         funct.implicit,
