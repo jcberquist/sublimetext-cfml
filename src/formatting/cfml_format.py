@@ -85,6 +85,7 @@ class CfmlFormatCommand(sublime_plugin.TextCommand):
         if "delimited_scopes" in self.commands:
             tick = time.time()
             self.region_updates(edit, delimited_scopes.format_delimited_scopes(self))
+            # self.region_updates(edit, anonymous_functions.format_anonymous_functions(self))
             timing.append(('delimited_scopes', time.time() - tick))
         if "method_chains" in self.commands:
             tick = time.time()
@@ -129,10 +130,35 @@ class CfmlFormatCommand(sublime_plugin.TextCommand):
             return self.view.sel()[0], True
         if current_method:
             pt = self.view.sel()[0].begin()
-            if self.view.match_selector(pt, "source.cfml.script meta.class"):
-                selector = "source.cfml.script meta.class.body.cfml meta.function.body.cfml"
-                function_region = utils.get_scope_region_containing_point(self.view, pt, selector)
-                return function_region, False
+            decl_selector = "source.cfml.script meta.class.body.cfml meta.function.declaration.cfml"
+            body_selector = "source.cfml.script meta.class.body.cfml meta.function.body.cfml"
+
+            in_funct_decl = self.view.match_selector(pt, decl_selector)
+            in_funct_body = self.view.match_selector(pt, body_selector)
+
+            if not in_funct_decl and not in_funct_body:
+                return None, False
+
+            scope_name = self.view.scope_name(pt)
+
+            if in_funct_decl:
+                selector = "meta.function.declaration.cfml " * scope_name.count("meta.function.declaration.cfml")
+                funct_decl_region = utils.get_scope_region_containing_point(self.view, pt, selector)
+                funct_body_pt = funct_decl_region.end()
+                scope_name = self.view.scope_name(funct_body_pt)
+                selector = "meta.function.body.cfml " * scope_name.count("meta.function.body.cfml")
+                funct_body_region = utils.get_scope_region_containing_point(self.view, funct_body_pt, selector)
+            else:
+                selector = "meta.function.body.cfml " * scope_name.count("meta.function.body.cfml")
+                funct_body_region = utils.get_scope_region_containing_point(self.view, pt, selector)
+                funct_decl_pt = funct_body_region.begin() - 1
+                scope_name = self.view.scope_name(funct_decl_pt)
+                selector = "meta.function.declaration.cfml " * scope_name.count("meta.function.declaration.cfml")
+                funct_decl_region = utils.get_scope_region_containing_point(self.view, funct_decl_pt, selector)
+
+            function_region = sublime.Region(funct_decl_region.begin(), funct_body_region.end())
+            print(function_region)
+            return function_region, False
 
         return sublime.Region(0, self.view.size()), False
 

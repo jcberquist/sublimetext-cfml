@@ -32,7 +32,7 @@ DELIMITED_SCOPE_LIST = [DELIMITED_SCOPES[k]["scope"] for k in DELIMITED_SCOPES]
 
 DelimitedScope = namedtuple(
     "DelimitedScope",
-    "scope_type, scope_region, inline_string, has_multi_element_break, elements"
+    "scope_type, scope_region, inline_string, has_multi_element_break, elements, element_regions"
 )
 
 
@@ -54,12 +54,13 @@ def format_delimited_scopes(cfml_format):
                 break
 
     formatted_params = []
+    anonymous_functions = find_anonymous_functions(cfml_format)
     for pt in region_starts:
         ds = parse_delimited_scope(cfml_format, pt)
 
         indent_column = cfml_format.line_indent_column(ds.scope_region.begin())
         ds_start_column = cfml_format.pt_column(ds.scope_region.begin())
-        formatted_str = render_delimited_scope(cfml_format, ds, indent_column, ds_start_column)
+        formatted_str = render_delimited_scope(cfml_format, ds, indent_column, ds_start_column, anonymous_functions)
 
         if cfml_format.view.substr(ds.scope_region) != formatted_str:
             formatted_params.append((ds.scope_region, formatted_str))
@@ -75,6 +76,36 @@ def determine_scope_type(scope_list):
           ):
             return scope_type
     return None
+
+
+def find_anonymous_functions(cfml_format):
+    selector_cache = {}
+    anonymous_functions = []
+    for funct_decl_r in cfml_format.find_by_selector("meta.function-call.parameters meta.function.anonymous.cfml"):
+        nested_region = False
+        for r in anonymous_functions:
+            nested_region = r.contains(funct_decl_r)
+            if nested_region:
+                break
+        if nested_region:
+            continue
+
+        scope_name = cfml_format.view.scope_name(funct_decl_r.begin()).rstrip()
+        depth = scope_name.count("meta.function-call.parameters")
+
+        funct_body_selector = ("meta.function-call.parameters " * depth) + "meta.function.body.cfml"
+        if funct_body_selector not in selector_cache:
+            selector_cache[funct_body_selector] = cfml_format.find_by_selector(funct_body_selector)
+
+        for funct_body_r in selector_cache[funct_body_selector]:
+            if funct_body_r.begin() == funct_decl_r.end():
+                break
+        else:
+            continue
+
+        anonymous_functions.append(sublime.Region(funct_decl_r.begin(), funct_body_r.end()))
+
+    return anonymous_functions
 
 
 def parse_delimited_scope(cfml_format, scope_pt):
@@ -130,7 +161,8 @@ def parse_delimited_scope(cfml_format, scope_pt):
 
     scope_region = sublime.Region(scope_pt, current_pt + 1)
     inline_string = render_delimited_scope_inline(cfml_format, scope_type, scope_region, elements)
-    return DelimitedScope(scope_type, scope_region, inline_string, has_multi_element_break, elements)
+    element_regions = get_element_regions(elements)
+    return DelimitedScope(scope_type, scope_region, inline_string, has_multi_element_break, elements, element_regions)
 
 
 def render_delimited_scope_inline(cfml_format, scope_type, scope_region, elements):
@@ -165,6 +197,18 @@ def render_delimited_scope_inline(cfml_format, scope_type, scope_region, element
     return begin + scope_string + end
 
 
+def get_element_regions(elements):
+    element_regions = []
+    for el in elements:
+        if len(el) == 0:
+            element_regions.append(None)
+            continue
+        start_pt = el[0].scope_region.begin() if isinstance(el[0], DelimitedScope) else el[0].begin()
+        end_pt = el[-1].scope_region.end() if isinstance(el[-1], DelimitedScope) else el[-1].end()
+        element_regions.append(sublime.Region(start_pt, end_pt))
+    return element_regions
+
+
 def scope_depth(view, pt):
     depth = 0
     for scope_name in view.scope_name(pt).split(" "):
@@ -173,7 +217,38 @@ def scope_depth(view, pt):
     return depth
 
 
-def is_multiline(settings, singleline_max_col, ds, ds_start_column):
+def is_funct_call_with_anon_function(cfml_format, ds, singleline_max_col, ds_start_column, anonymous_functions):
+    if ds.scope_type != "function_call":
+        return False
+    if len(ds.element_regions) < 1 or len(ds.element_regions) > 3:
+        return False
+
+    contained_functs = []
+    for anon_funct_r in anonymous_functions:
+        if ds.scope_region.contains(anon_funct_r):
+            contained_functs.append(anon_funct_r)
+
+    if len(contained_functs) != 1:
+        return False
+
+    funct_str = cfml_format.view.substr(contained_functs[0]).strip()
+    for el_r in ds.element_regions:
+        if cfml_format.view.substr(el_r).strip() == funct_str:
+            break
+    else:
+        return False
+
+    lines = ds.inline_string.split("\n")
+    if (ds_start_column + len(lines[0])) > singleline_max_col:
+        return False
+    for line in lines[1:]:
+        if len(line) > singleline_max_col:
+            return False
+
+    return True
+
+
+def is_multiline(cfml_format, ds, singleline_max_col, ds_start_column):
     if len(ds.inline_string.replace(" ", "")) == 2:
         return False
     region_columns = len(ds.inline_string)
@@ -190,7 +265,7 @@ def is_multiline(settings, singleline_max_col, ds, ds_start_column):
     return False
 
 
-def render_ds_element(cfml_format, el, indent_column, ds_start_column):
+def render_ds_element(cfml_format, el, indent_column, ds_start_column, anonymous_functions):
     el_str = ""
     for part in el:
         if isinstance(part, DelimitedScope):
@@ -202,20 +277,23 @@ def render_ds_element(cfml_format, el, indent_column, ds_start_column):
                 last_start_column = ds_start_column + cfml_format.text_columns(el_str) + 1
                 last_indent_column = indent_column
 
-            el_str += render_delimited_scope(cfml_format, part, last_indent_column, last_start_column)
+            el_str += render_delimited_scope(cfml_format, part, last_indent_column, last_start_column, anonymous_functions)
         else:
             el_str += cfml_format.view.substr(part)
 
     return el_str.strip()
 
 
-def render_delimited_scope(cfml_format, ds, indent_column, ds_start_column):
+def render_delimited_scope(cfml_format, ds, indent_column, ds_start_column, anonymous_functions):
     settings = cfml_format.get_setting(ds.scope_type, default={})
     multiline = settings.get("multiline", {})
     singleline_max_col = cfml_format.get_setting("singleline_max_col")
     after_comma_spacing = settings.get("after_comma_spacing")
 
-    if not is_multiline(settings, singleline_max_col, ds, ds_start_column):
+    if is_funct_call_with_anon_function(cfml_format, ds, singleline_max_col, ds_start_column, anonymous_functions):
+        return ds.inline_string
+
+    if not is_multiline(cfml_format, ds, singleline_max_col, ds_start_column):
         return ds.inline_string
 
     el_indent_col = indent_column + cfml_format.tab_size
@@ -235,10 +313,10 @@ def render_delimited_scope(cfml_format, ds, indent_column, ds_start_column):
     if multiline.get("leading_comma"):
         formatted_str += "  " if after_comma_spacing and after_comma_spacing == "spaced" else " "
 
-    formatted_str += render_ds_element(cfml_format, ds.elements[0], el_indent_col, el_indent_col + start_col_offset)
+    formatted_str += render_ds_element(cfml_format, ds.elements[0], el_indent_col, el_indent_col + start_col_offset, anonymous_functions)
     if len(ds.elements) > 1:
         formatted_str += separator
-        formatted_str += separator.join([render_ds_element(cfml_format, e, el_indent_col, el_indent_col + start_col_offset) for e in ds.elements[1:]])
+        formatted_str += separator.join([render_ds_element(cfml_format, e, el_indent_col, el_indent_col + start_col_offset, anonymous_functions) for e in ds.elements[1:]])
 
     formatted_str += "\n" + indent
 
