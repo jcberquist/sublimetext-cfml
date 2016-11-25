@@ -82,7 +82,7 @@ def load_cfdoc(function_or_tag):
     global CFDOCS_CACHE
     file_path = function_or_tag + ".json"
     if file_path not in CFDOCS_CACHE:
-        full_file_path = utils.get_setting("cfdocs_path") + file_path
+        full_file_path = utils.normalize_path(utils.get_setting("cfdocs_path")) + "/" + file_path
         try:
             with open(full_file_path, "r", encoding="utf-8") as f:
                 json_string = f.read()
