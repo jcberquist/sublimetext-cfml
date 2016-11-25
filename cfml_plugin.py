@@ -17,6 +17,9 @@ class CfmlEventListener(sublime_plugin.EventListener):
         events.trigger('on_close', view)
 
     def on_post_save_async(self, view):
+        if not view.file_name():
+            print("CFML: file was saved and closed - it is not possible to determine the file path.")
+            return
         events.trigger('on_post_save_async', view)
 
     def on_post_text_command(self, view, command_name, args):
