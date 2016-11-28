@@ -85,7 +85,6 @@ class CfmlFormatCommand(sublime_plugin.TextCommand):
         if "delimited_scopes" in self.commands:
             tick = time.time()
             self.region_updates(edit, delimited_scopes.format_delimited_scopes(self))
-            # self.region_updates(edit, anonymous_functions.format_anonymous_functions(self))
             timing.append(('delimited_scopes', time.time() - tick))
         if "method_chains" in self.commands:
             tick = time.time()
