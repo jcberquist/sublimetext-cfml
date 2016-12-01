@@ -1,3 +1,4 @@
+import sublime
 import sublime_plugin
 from .src.bootstrap import *
 from .src.bootstrap import _plugin_loaded
@@ -48,6 +49,15 @@ class CfmlEventListener(sublime_plugin.EventListener):
             return None
 
         return completions.get_completions(view, locations[0], prefix)
+
+    def on_hover(self, view, point, hover_zone):
+        if hover_zone != sublime.HOVER_TEXT:
+            return
+
+        if not view.match_selector(point, "embedding.cfml"):
+            return
+
+        view.run_command("cfml_inline_documentation", {"pt": point, "doc_type": "hover_doc"})
 
 
 class CloseCfmlTagCommand(sublime_plugin.TextCommand):

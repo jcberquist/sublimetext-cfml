@@ -50,7 +50,7 @@ def get_setting(view, setting_key):
 
 def extends_testbox(cfml_view):
     if cfml_view.view_metadata["extends"]:
-        return cfml_view.view_metadata["extends"] == "testbox.system.basespec"
+        return cfml_view.view_metadata["extends"].lower() == "testbox.system.basespec"
     return False
 
 
@@ -92,26 +92,36 @@ def get_script_completions(cfml_view):
     return None
 
 
-def get_inline_documentation(cfml_view):
+def get_inline_documentation(cfml_view, doc_type):
     if not get_setting(cfml_view.view, "testbox_enabled") or not is_testbox_file(cfml_view):
         return None
 
     if cfml_view.view.match_selector(cfml_view.position, "meta.function-call.method.cfml"):
         function_name, function_name_region, function_args_region = utils.get_function_call(cfml_view.view, cfml_view.position)
+        region = sublime.Region(function_name_region.begin(), function_args_region.end())
+        if doc_type == "hover_doc" and not function_name_region.contains(cfml_view.position):
+            return None
         if cfml_view.view.substr(function_name_region.begin() - 1) == ".":
             dot_context = cfml_view.get_dot_context(function_name_region.begin() - 1)
             if dot_context[-1].name == "expect":
                 if function_name in testbox["documentation"]["expectation"]:
-                    return cfml_view.Documentation(get_documentation(function_name, testbox["documentation"]["expectation"][function_name]), None, 2)
+                    doc = get_documentation(function_name, testbox["documentation"]["expectation"][function_name])
+                    return cfml_view.Documentation([dot_context[-1].name_region, region], doc, None, 2)
                 if len(function_name) > 3 and function_name[:3] == "not" and function_name[3:] in testbox["documentation"]["expectation"]:
-                    return cfml_view.Documentation(get_documentation(function_name, testbox["documentation"]["expectation"][function_name[3:]], True), None, 2)
+                    doc = testbox["documentation"]["expectation"][function_name[3:]]
+                    return cfml_view.Documentation([dot_context[-1].name_region, region], get_documentation(function_name, doc, True), None, 2)
             if dot_context[-1].name == "assert" and function_name in testbox["documentation"]["assertion"]:
-                return cfml_view.Documentation(get_documentation(function_name, testbox["documentation"]["assertion"][function_name]), None, 2)
+                doc = get_documentation(function_name, testbox["documentation"]["assertion"][function_name])
+                return cfml_view.Documentation([dot_context[-1].name_region, region], doc, None, 2)
 
     if cfml_view.view.match_selector(cfml_view.position, "meta.function-call.cfml"):
         function_name, function_name_region, function_args_region = utils.get_function_call(cfml_view.view, cfml_view.position)
+        region = sublime.Region(function_name_region.begin(), function_args_region.end())
+        if doc_type == "hover_doc" and not function_name_region.contains(cfml_view.position):
+            return None
         if function_name in testbox["documentation"]["basespec"]:
-            return cfml_view.Documentation(get_documentation(function_name, testbox["documentation"]["basespec"][function_name]), None, 2)
+            doc = get_documentation(function_name, testbox["documentation"]["basespec"][function_name])
+            return cfml_view.Documentation([region], doc, None, 2)
 
     return None
 

@@ -10,7 +10,7 @@ STYLES = {
 }
 
 
-def get_inline_documentation(cfml_view):
+def get_inline_documentation(cfml_view, doc_type):
     if not cfml_view.project_name:
         return None
 
@@ -20,7 +20,7 @@ def get_inline_documentation(cfml_view):
         file_path, tag_info = get_index_by_tag_name(cfml_view.project_name, tag_name)
         if (file_path):
             doc, callback = get_documentation(cfml_view.view, tag_name, file_path, tag_info)
-            return cfml_view.Documentation(doc, callback, 2)
+            return cfml_view.Documentation(None, doc, callback, 2)
 
     return None
 

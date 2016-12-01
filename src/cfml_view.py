@@ -1,13 +1,14 @@
 import re
 import sublime
+from collections import defaultdict
 from collections import namedtuple
 from . import utils
 from .cfc_indexer import parse_cfc_file_string
 from .model_index import get_extended_metadata_by_file_path, resolve_path
 
 CompletionList = namedtuple("CompletionList", "completions priority exclude_lower_priority")
-Documentation = namedtuple('Documentation', 'doc_html_variables on_navigate priority')
-CompletionDoc = namedtuple('CompletionDoc', 'doc_html_variables on_navigate')
+Documentation = namedtuple('Documentation', 'doc_regions doc_html_variables on_navigate priority')
+CompletionDoc = namedtuple('CompletionDoc', 'doc_regions doc_html_variables on_navigate')
 GotoCfmlFile = namedtuple('GotoCfmlFile', 'file_path symbol')
 
 
@@ -126,6 +127,7 @@ class CfmlView():
         self.prefix = prefix
         self.position = position
         self.function_call_params = None
+        self._cache = defaultdict(dict)
         self.CompletionList = CompletionList
         self.Documentation = Documentation
         self.CompletionDoc = CompletionDoc
@@ -187,22 +189,36 @@ class CfmlView():
             self.tag_name = utils.get_tag_name(self.view, self.prefix_start)
         self.tag_attribute_name = utils.get_tag_attribute_name(self.view, self.prefix_start)
 
-    def get_dot_context(self, pt):
-        return utils.get_dot_context(self.view, pt)
+    def get_dot_context(self, pt, cachable=True):
+        if not cachable or pt not in self._cache["get_dot_context"]:
+            self._cache["get_dot_context"][pt] = utils.get_dot_context(self.view, pt)
 
-    def get_struct_context(self, pt):
-        return utils.get_struct_context(self.view, pt)
+        return self._cache["get_dot_context"][pt]
+
+    def get_struct_context(self, pt, cachable=True):
+        if not cachable or pt not in self._cache["get_function"]:
+            self._cache["get_struct_context"][pt] = utils.get_struct_context(self.view, pt)
+
+        return self._cache["get_struct_context"][pt]
 
     def get_struct_var_assignment(self, pt):
         struct_context = self.get_struct_context(pt)
         variable_name = ".".join([symbol.name for symbol in reversed(struct_context)])
         return variable_name
 
-    def get_function(self, pt):
-        return utils.get_function(self.view, pt)
+    def get_function(self, pt, cachable=True):
+        if not cachable or pt not in self._cache["get_function"]:
+            self._cache["get_function"][pt] = utils.get_function(self.view, pt)
 
-    def get_function_call(self, pt, support=False):
-        return utils.get_function_call(self.view, pt, support)
+        return self._cache["get_function"][pt]
+
+    def get_function_call(self, pt, support=False, cachable=True):
+        cache_key = (pt, support)
+
+        if not cachable or cache_key not in self._cache["get_function_call"]:
+            self._cache["get_function_call"][cache_key] = utils.get_function_call(self.view, pt, support)
+
+        return self._cache["get_function_call"][cache_key]
 
     def get_function_call_params(self, pt):
         if self.view.match_selector(pt, "source.cfml.script meta.function-call.parameters"):
@@ -212,5 +228,11 @@ class CfmlView():
     def get_string_metadata(self, file_string):
         return parse_cfc_file_string(file_string)
 
-    def find_variable_assignment(self, position, variable_name):
-        return utils.find_variable_assignment(self.view, position, variable_name)
+    def find_variable_assignment(self, position, variable_name, cachable=True):
+        cache_key = (position, variable_name)
+
+        if not cachable or cache_key not in self._cache["find_variable_assignment"]:
+            var_assignment = utils.find_variable_assignment(self.view, position, variable_name)
+            self._cache["find_variable_assignment"][cache_key] = var_assignment
+
+        return self._cache["find_variable_assignment"][cache_key]

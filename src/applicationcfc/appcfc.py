@@ -51,7 +51,7 @@ def get_dot_completions(cfml_view):
 
 def get_script_completions(cfml_view):
     if cfml_view.file_name == "application.cfc":
-        if cfml_view.view.match_selector(cfml_view.position, "meta.class.body.cfml -meta.function"):
+        if cfml_view.view.match_selector(cfml_view.position, "meta.class.body.cfml -meta.function -meta.struct-literal"):
             return cfml_view.CompletionList(appcfc["methods"], 1, False)
 
         key = cfml_view.get_struct_var_assignment(cfml_view.position)
@@ -61,7 +61,7 @@ def get_script_completions(cfml_view):
     return None
 
 
-def get_inline_documentation(cfml_view):
+def get_inline_documentation(cfml_view, doc_type):
     if cfml_view.file_name != "application.cfc":
         return None
 
@@ -80,16 +80,17 @@ def get_inline_documentation(cfml_view):
         if cfml_view.view.match_selector(cfml_view.position, "meta.property, meta.struct-literal.key.cfml, variable.other.readwrite.cfml"):
             key += "." + cfml_view.view.substr(word_region).lower()
         if key in appcfc["settings_docs"]:
-            return cfml_view.Documentation(get_documentation(key, appcfc["settings_docs"][key]), None, 1)
+            return cfml_view.Documentation([word_region], get_documentation(key, appcfc["settings_docs"][key]), None, 1)
         parent_key = ".".join(key.split(".")[:-1])
         if parent_key in appcfc["settings_docs"]:
-            return cfml_view.Documentation(get_documentation(parent_key, appcfc["settings_docs"][parent_key]), None, 1)
+            return cfml_view.Documentation([word_region, context[0].name_region], get_documentation(parent_key, appcfc["settings_docs"][parent_key]), None, 1)
 
     # methods
-    if cfml_view.view.match_selector(cfml_view.position, "meta.function.cfml"):
+    if cfml_view.view.match_selector(cfml_view.position, "meta.function.cfml, meta.function.declaration.cfml"):
         function_name, function_name_region, function_region = cfml_view.get_function(cfml_view.position)
+        region = sublime.Region(function_name_region.begin(), function_region.end())
         if function_name in appcfc["methods_docs"]:
-            return cfml_view.Documentation(get_documentation(function_name, appcfc["methods_docs"][function_name]), None, 1)
+            return cfml_view.Documentation([region], get_documentation(function_name, appcfc["methods_docs"][function_name]), None, 1)
 
     return None
 

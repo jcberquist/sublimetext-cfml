@@ -43,7 +43,7 @@ def get_completions(view, position, prefix):
             full_completion_list.extend(completionlist.completions)
 
     if len(docs) > 0:
-        inline_documentation.display_documentation(view, docs, 0, True)
+        inline_documentation.display_documentation(view, docs, "completion_doc", 0)
     return full_completion_list
 
 
@@ -61,6 +61,6 @@ class CfmlUpdateCompletionDocCommand(sublime_plugin.TextCommand):
                     docs.append(inline_doc)
 
             if len(docs) > 0:
-                inline_documentation.display_documentation(self.view, docs, 0, True)
+                inline_documentation.display_documentation(self.view, docs, "completion_doc", 0)
             else:
                 self.view.hide_popup()

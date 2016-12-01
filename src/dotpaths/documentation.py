@@ -1,6 +1,5 @@
 from functools import partial
 from .. import model_index
-from .. import utils
 from . import cfc_utils
 
 STYLES = {
@@ -11,11 +10,11 @@ STYLES = {
 }
 
 
-def get_inline_documentation(cfml_view):
+def get_inline_documentation(cfml_view, doc_type):
     if not cfml_view.project_name:
         return None
 
-    cfc_path, file_path, dot_path, function_name, region = cfc_utils.find_cfc(cfml_view, cfml_view.position)
+    cfc_path, file_path, dot_path, function_name, regions = cfc_utils.find_cfc(cfml_view, cfml_view.position)
 
     if file_path:
         if dot_path:
@@ -24,13 +23,11 @@ def get_inline_documentation(cfml_view):
                 if function_name in metadata["functions"]:
                     header = dot_path.split(".").pop() + "." + metadata["functions"][function_name].name + "()"
                     doc, callback = model_index.get_method_documentation(cfml_view.view, cfml_view.project_name, file_path, function_name, header)
-                    return cfml_view.Documentation(doc, callback, 2)
+                    return cfml_view.Documentation(regions, doc, callback, 2)
             doc, callback = model_index.get_documentation(cfml_view.view, cfml_view.project_name, file_path, dot_path)
-            return cfml_view.Documentation(doc, callback, 2)
+            return cfml_view.Documentation(regions, doc, callback, 2)
         doc, callback = get_documentation(cfml_view.view, file_path, cfc_path)
-        return cfml_view.Documentation(doc, callback, 2)
-
-    # check for assigned variable
+        return cfml_view.Documentation(regions, doc, callback, 2)
 
     return None
 
@@ -68,7 +65,7 @@ def get_completions_doc(cfml_view):
         if cfml_view.function_call_params.function_name in metadata["functions"]:
             header = dot_path.split(".").pop() + "." + metadata["functions"][function_name].name + "()"
             doc, callback = model_index.get_function_call_params_doc(cfml_view.project_name, file_path, cfml_view.function_call_params, header)
-            return cfml_view.CompletionDoc(doc, callback)
+            return cfml_view.CompletionDoc(None, doc, callback)
 
     return None
 

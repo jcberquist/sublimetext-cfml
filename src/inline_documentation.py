@@ -1,5 +1,6 @@
 import sublime
 import sublime_plugin
+import time
 import webbrowser
 from . import utils
 from .cfml_view import CfmlView
@@ -16,11 +17,11 @@ def add_documentation_source(callback):
     documentation_sources.append(callback)
 
 
-def get_inline_documentation(cfml_view):
+def get_inline_documentation(cfml_view, doc_type):
     docs = []
 
     for callback in documentation_sources:
-        inline_doc = callback(cfml_view)
+        inline_doc = callback(cfml_view, doc_type)
         if inline_doc:
             docs.append(inline_doc)
 
@@ -52,19 +53,19 @@ def build_pagination(current_index, total_pages):
     return sublime.expand_variables(PAGINATION_TEMPLATE, pagination_variables)
 
 
-def build_doc_html(inline_doc, completion_doc):
-    template = DOC_TEMPLATE if not completion_doc else COMPLETION_DOC_TEMPLATE
+def build_doc_html(inline_doc, doc_type):
+    template = DOC_TEMPLATE if doc_type != "completion_doc" else COMPLETION_DOC_TEMPLATE
     html = sublime.expand_variables(template, inline_doc)
-    if completion_doc:
+    if doc_type == "completion_doc":
         html = html.replace("<div class=\"body\"></div>", "")
     return html
 
 
-def get_on_navigate(view, docs, current_index, completion_doc):
+def get_on_navigate(view, docs, doc_type, current_index, pt):
     def on_navigate(href):
         if href.startswith("page_"):
             new_index = int(href.split("_").pop())
-            display_documentation(view, docs, new_index, completion_doc)
+            display_documentation(view, docs, doc_type, pt, new_index)
         elif docs[current_index].on_navigate:
             docs[current_index].on_navigate(href)
         else:
@@ -72,42 +73,62 @@ def get_on_navigate(view, docs, current_index, completion_doc):
     return on_navigate
 
 
-def on_hide():
+def on_hide(view):
     global doc_window
     doc_window = None
+    view.erase_regions("cfml_docs")
 
 
-def generate_documentation(docs, current_index, completion_doc):
+def generate_documentation(docs, current_index, doc_type):
     doc_html_variables = dict(docs[current_index].doc_html_variables)
     doc_html_variables["pagination"] = build_pagination(current_index, len(docs)) if len(docs) > 1 else ""
     doc_html_variables["links"] = build_links(doc_html_variables["links"]) if "links" in doc_html_variables else ""
 
-    return build_doc_html(doc_html_variables, completion_doc)
+    return build_doc_html(doc_html_variables, doc_type), docs[current_index].doc_regions
 
 
-def display_documentation(view, docs, current_index=0, completion_doc=False):
+def merge_regions(regions):
+    merged_regions = []
+    for region in sorted(regions):
+        if len(merged_regions) > 0 and merged_regions[-1].end() == region.begin():
+            merged_regions[-1] = sublime.Region(merged_regions[-1].begin(), region.end())
+        else:
+            merged_regions.append(region)
+    return merged_regions
+
+
+def display_documentation(view, docs, doc_type, pt=-1, current_index=0):
     global doc_window
-    doc_html = generate_documentation(docs, current_index, completion_doc)
-    on_navigate = get_on_navigate(view, docs, current_index, completion_doc)
-    if completion_doc:
+    view.erase_regions("cfml_docs")
+    doc_html, doc_regions = generate_documentation(docs, current_index, doc_type)
+    on_navigate = get_on_navigate(view, docs, doc_type, current_index, pt)
+
+    if doc_type == "completion_doc":
         if doc_window and doc_window == "completion_doc":
             view.update_popup(doc_html)
         else:
             doc_window = "completion_doc"
-            view.show_popup(doc_html, flags=sublime.COOPERATE_WITH_AUTO_COMPLETE, on_navigate=on_navigate, on_hide=on_hide)
+            view.show_popup(doc_html, flags=sublime.COOPERATE_WITH_AUTO_COMPLETE, on_navigate=on_navigate, on_hide=lambda: on_hide(view))
     else:
-        if doc_window and doc_window == "inline_doc":
-            view.update_popup(doc_html)
-        else:
-            doc_window = "inline_doc"
-            view.show_popup(doc_html, max_width=1024, max_height=480, on_navigate=on_navigate, on_hide=on_hide)
+        if doc_regions and utils.get_setting("inline_doc_regions_highlight"):
+            view.add_regions("cfml_docs", merge_regions(doc_regions), "source", flags=sublime.DRAW_NO_FILL)
+        doc_window = "inline_doc"
+        flags = sublime.HIDE_ON_MOUSE_MOVE_AWAY if doc_type == "hover_doc" else 0
+        view.show_popup(doc_html, location=pt, flags=flags, max_width=1024, max_height=480, on_navigate=on_navigate, on_hide=lambda: on_hide(view))
 
 
 class CfmlInlineDocumentationCommand(sublime_plugin.TextCommand):
 
-    def run(self, edit):
-        position = self.view.sel()[0].begin()
+    def run(self, edit, doc_type="inline_doc", pt=None):
+        if doc_type == "hover_doc" and not utils.get_setting("cfml_hover_docs"):
+            return
+
+        tick = time.time()
+        position = pt if pt else self.view.sel()[0].begin()
         cfml_view = CfmlView(self.view, position)
-        docs = get_inline_documentation(cfml_view)
+        docs = get_inline_documentation(cfml_view, doc_type)
         if len(docs) > 0:
-            display_documentation(self.view, sorted(docs, key=lambda doc: doc.priority, reverse=True))
+            display_documentation(self.view, sorted(docs, key=lambda doc: doc.priority, reverse=True), doc_type, position)
+        diff = time.time() - tick
+        if utils.get_setting("cfml_log_doc_time"):
+            print("CFML: inline documentation completed in " + "{:.0f}".format(diff * 1000) + "ms")

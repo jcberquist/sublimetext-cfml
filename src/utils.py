@@ -323,7 +323,7 @@ def find_variable_assignment(view, position, variable_name):
                 function_region = get_current_function_body(view, r.end(), False)
                 if not function_region or not function_region.contains(position):
                     continue
-            return r.end()
+            return r
     return None
 
 

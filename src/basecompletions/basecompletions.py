@@ -73,7 +73,7 @@ def get_dot_completions(cfml_view):
     return cfml_view.CompletionList(completion_list, 0, False)
 
 
-def get_inline_documentation(cfml_view):
+def get_inline_documentation(cfml_view, doc_type):
 
     if cfml_view.view.match_selector(cfml_view.position, "meta.property.constant"):
         word = cfml_view.view.word(cfml_view.position)
@@ -83,7 +83,7 @@ def get_inline_documentation(cfml_view):
             if key in cgi:
                 doc = dict(DOC_STYLES)
                 doc.update(cgi[key])
-                return cfml_view.Documentation(doc, None, 1)
+                return cfml_view.Documentation([word], doc, None, 1)
 
     return None
 

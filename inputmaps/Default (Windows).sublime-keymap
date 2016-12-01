@@ -70,6 +70,7 @@
   {
     "keys": ["f1"],
     "command": "cfml_inline_documentation",
+    "args": {"doc_type": "inline_doc"},
     "context": [
       {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
     ]

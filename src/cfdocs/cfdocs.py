@@ -23,13 +23,15 @@ CFDOCS_ENGINES = {
 }
 
 
-def get_inline_documentation(cfml_view):
+def get_inline_documentation(cfml_view, doc_type):
     doc_name = None
+    doc_regions = None
     doc_priority = 0
 
     # functions
     if cfml_view.view.match_selector(cfml_view.position, "meta.function-call.support.cfml"):
         doc_name, function_name_region, function_args_region = cfml_view.get_function_call(cfml_view.position, True)
+        doc_regions = [sublime.Region(function_name_region.begin(), function_args_region.end())]
 
     # tags
     elif cfml_view.view.match_selector(cfml_view.position, "meta.tag.cfml,meta.tag.script.cfml,meta.tag.script.cf.cfml"):
@@ -37,6 +39,9 @@ def get_inline_documentation(cfml_view):
         if doc_name and doc_name[:2] != "cf":
             # tag in script
             doc_name = "cf" + doc_name
+
+    elif doc_type == "hover_doc":
+        return None
 
     # script component, interface, function
     elif cfml_view.view.match_selector(cfml_view.position, "meta.class.declaration.cfml"):
@@ -49,8 +54,8 @@ def get_inline_documentation(cfml_view):
     if doc_name:
         data, success = get_cfdoc(doc_name)
         if success:
-            return cfml_view.Documentation(build_cfdoc(doc_name, data), None, doc_priority)
-        return cfml_view.Documentation(build_cfdoc_error(doc_name, data), None, doc_priority)
+            return cfml_view.Documentation(doc_regions, build_cfdoc(doc_name, data), None, doc_priority)
+        return cfml_view.Documentation(doc_regions, build_cfdoc_error(doc_name, data), None, doc_priority)
 
     return None
 
@@ -68,8 +73,8 @@ def get_completion_docs(cfml_view):
 def get_completion_doc(cfml_view):
     data, success = get_cfdoc(cfml_view.function_call_params.function_name)
     if success:
-        return cfml_view.CompletionDoc(build_completion_doc(cfml_view.function_call_params, data), None)
-    return cfml_view.Documentation(build_cfdoc_error(cfml_view.function_call_params, data), None)
+        return cfml_view.CompletionDoc(None, build_completion_doc(cfml_view.function_call_params, data), None)
+    return None
 
 
 def get_cfdoc(function_or_tag):

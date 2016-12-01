@@ -34,33 +34,41 @@ def is_possible_entity(dot_context):
 
 def find_entity(cfml_view, position):
     """
-    returns entity_name, function_name, region
+    returns entity_name, function_name, regions
     """
     if cfml_view.view.match_selector(position, "meta.function-call.support.entity.cfml"):
         function_name, function_region, args_region = cfml_view.get_function_call(position)
+        region = sublime.Region(function_region.begin(), args_region.end())
         entity_name = get_entity_name(cfml_view.view.substr(args_region), function_name)
-        return entity_name, None, sublime.Region(function_region.begin(), args_region.end())
+        return entity_name, None, [region]
 
     if cfml_view.view.match_selector(position, "meta.function-call.method"):
         function_name, function_name_region, function_args_region = cfml_view.get_function_call(position)
+        funct_region = sublime.Region(function_name_region.begin(), function_args_region.end())
         if cfml_view.view.substr(function_name_region.begin() - 1) == ".":
             dot_context = cfml_view.get_dot_context(function_name_region.begin() - 1)
 
             if cfml_view.view.match_selector(dot_context[-1].name_region.begin(), "meta.function-call.support.entity.cfml"):
-                entity_name = get_entity_name(cfml_view.view.substr(dot_context[-1].args_region), dot_context[-1].name)
                 region = sublime.Region(dot_context[-1].function_region.begin(), dot_context[-1].args_region.end())
-                return entity_name, function_name, region
+                entity_name = get_entity_name(cfml_view.view.substr(dot_context[-1].args_region), dot_context[-1].name)
+                return entity_name, function_name, [region, funct_region]
 
             if is_possible_entity(dot_context):
-                entity_name, temp, region = find_entity_by_var_assignment(cfml_view, position, dot_context[0].name)
-                return entity_name, function_name, region
+                entity_name, temp, regions = find_entity_by_var_assignment(cfml_view, position, dot_context[0].name)
+                if regions:
+                    regions.append(dot_context[0].name_region)
+                    regions.append(funct_region)
+                return entity_name, function_name, regions
 
     if cfml_view.view.match_selector(position, "variable.other, meta.property.cfml"):
-        r = cfml_view.view.word(position)
-        dot_context = cfml_view.get_dot_context(r.begin() - 1)
+        var_region = cfml_view.view.word(position)
+        dot_context = cfml_view.get_dot_context(var_region.begin() - 1)
         if (len(dot_context) == 0
            or (len(dot_context) == 1 and dot_context[0].name == "variables")):
-            return find_entity_by_var_assignment(cfml_view, position, cfml_view.view.substr(r).lower())
+            entity_name, function_name, regions = find_entity_by_var_assignment(cfml_view, position, cfml_view.view.substr(var_region).lower())
+            if regions:
+                regions.append(var_region)
+            return entity_name, function_name, regions
 
     return None, None, None
 
@@ -71,21 +79,23 @@ def find_entity_by_var_assignment(cfml_view, position, var_name):
     if not utils.get_setting("instantiated_component_completions"):
         return empty_tuple
 
-    var_assignment_pt = cfml_view.find_variable_assignment(position, var_name)
-    if not var_assignment_pt:
+    var_assignment_region = cfml_view.find_variable_assignment(position, var_name)
+    if not var_assignment_region:
         return empty_tuple
 
-    if not cfml_view.view.match_selector(var_assignment_pt, "meta.function-call.support.entity.cfml"):
+    if not cfml_view.view.match_selector(var_assignment_region.end(), "meta.function-call.support.entity.cfml"):
         return empty_tuple
 
-    entity_name, function_name, region = find_entity(cfml_view, var_assignment_pt)
+    entity_name, function_name, regions = find_entity(cfml_view, var_assignment_region.end())
 
     if entity_name is None:
         return empty_tuple
 
-    next_pt = utils.get_next_character(cfml_view.view, region.end())
+    regions.append(var_assignment_region)
+    next_pt = utils.get_next_character(cfml_view.view, regions[0].end())
+
     if cfml_view.view.substr(next_pt) != ".":
-        return entity_name, function_name, region
+        return entity_name, function_name, regions
 
     # if next char is a `.`, try to determine if what follows is init method
     if not cfml_view.view.match_selector(next_pt + 1, "meta.function-call.method"):
@@ -111,4 +121,4 @@ def find_entity_by_var_assignment(cfml_view, position, var_name):
     if cfml_view.view.substr(next_pt) == ".":
         return empty_tuple
 
-    return entity_name, function_name, region
+    return entity_name, function_name, regions

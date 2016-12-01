@@ -1,12 +1,13 @@
+import sublime
 from .. import model_index, utils
 from . import cfcs
 
 
-def get_inline_documentation(cfml_view):
+def get_inline_documentation(cfml_view, doc_type):
     if not cfml_view.project_name:
         return None
 
-    cfc_info, metadata, function_name = find_cfc(cfml_view)
+    cfc_info, metadata, function_name, regions = find_cfc(cfml_view)
 
     if cfc_info:
         if function_name:
@@ -14,7 +15,7 @@ def get_inline_documentation(cfml_view):
             doc, callback = model_index.get_method_documentation(cfml_view.view, cfml_view.project_name, cfc_info["file_path"], function_name, header)
         else:
             doc, callback = model_index.get_documentation(cfml_view.view, cfml_view.project_name, cfc_info["file_path"], cfc_info["name"])
-        return cfml_view.Documentation(doc, callback, 2)
+        return cfml_view.Documentation(regions, doc, callback, 2)
 
     return None
 
@@ -23,7 +24,7 @@ def get_goto_cfml_file(cfml_view):
     if not cfml_view.project_name:
         return None
 
-    cfc_info, metadata, function_name = find_cfc(cfml_view)
+    cfc_info, metadata, function_name, regions = find_cfc(cfml_view)
 
     if cfc_info:
         if function_name:
@@ -51,7 +52,7 @@ def get_completions_doc(cfml_view):
         if cfml_view.function_call_params.function_name in metadata["functions"]:
             header = cfc_info["name"] + "." + metadata["functions"][cfml_view.function_call_params.function_name].name + "()"
             doc, callback = model_index.get_function_call_params_doc(cfml_view.project_name, cfc_info["file_path"], cfml_view.function_call_params, header)
-            return cfml_view.CompletionDoc(doc, callback)
+            return cfml_view.CompletionDoc(None, doc, callback)
 
     return None
 
@@ -59,6 +60,7 @@ def get_completions_doc(cfml_view):
 def find_cfc(cfml_view):
     if cfml_view.view.match_selector(cfml_view.position, "meta.function-call.method"):
         function_name, function_name_region, function_args_region = cfml_view.get_function_call(cfml_view.position)
+        region = sublime.Region(function_name_region.begin(), function_args_region.end())
         if cfml_view.view.substr(function_name_region.begin() - 1) == ".":
             dot_context = cfml_view.get_dot_context(function_name_region.begin() - 1)
             # check for known cfc name
@@ -68,12 +70,13 @@ def find_cfc(cfml_view):
                 symbol = dot_context[-1]
                 if symbol.is_function and symbol.name.startswith("get") and cfcs.has_cfc(cfml_view.project_name, symbol.name[3:]):
                     symbol_name = symbol.name[3:]
+                    symbol_region = symbol.name_region
 
             if symbol_name:
                 cfc_info = cfcs.get_cfc_info(cfml_view.project_name, symbol_name)
                 metadata = cfcs.get_cfc_metadata(cfml_view.project_name, symbol_name)
                 if function_name in metadata["functions"]:
-                    return cfc_info, metadata, function_name
+                    return cfc_info, metadata, function_name, [region, symbol_region]
 
     # check for cfc
     cfc_name = None
@@ -87,18 +90,20 @@ def find_cfc(cfml_view):
         if cfc_name and not cfc_name_region.contains(cfml_view.position):
             cfc_name = None
     elif cfml_view.view.match_selector(cfml_view.position, "meta.tag.property.name.cfml"):
-        cfc_name = cfml_view.view.substr(cfml_view.view.word(cfml_view.position)).lower()
+        cfc_name_region = cfml_view.view.word(cfml_view.position)
+        cfc_name = cfml_view.view.substr(cfc_name_region).lower()
     elif cfml_view.view.match_selector(cfml_view.position, "meta.function-call.cfml variable.function.cfml"):
-        var_name = cfml_view.view.substr(cfml_view.view.word(cfml_view.position)).lower()
+        cfc_name_region = cfml_view.view.word(cfml_view.position)
+        var_name = cfml_view.view.substr(cfc_name_region).lower()
         if var_name.startswith("get"):
             cfc_name = var_name[3:]
 
     if cfc_name and cfcs.has_cfc(cfml_view.project_name, cfc_name):
         metadata = cfcs.get_cfc_metadata(cfml_view.project_name, cfc_name)
         cfc_info = cfcs.get_cfc_info(cfml_view.project_name, cfc_name)
-        return cfc_info, metadata, None
+        return cfc_info, metadata, None, [cfc_name_region]
 
-    return None, None, None
+    return None, None, None, None
 
 
 def get_dot_context(cfml_view, position):

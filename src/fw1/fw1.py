@@ -104,7 +104,7 @@ def get_script_completions(cfml_view):
     return None
 
 
-def get_inline_documentation(cfml_view):
+def get_inline_documentation(cfml_view, doc_type):
     if not get_setting(cfml_view.view, "fw1_enabled"):
         return None
 
@@ -126,29 +126,32 @@ def get_inline_documentation(cfml_view):
         if cfml_view.view.match_selector(cfml_view.position, "meta.property,meta.struct-literal.key,variable.other"):
             key += "." + cfml_view.view.substr(word_region).lower()
         if key in fw1["settings_docs"]:
-            return cfml_view.Documentation(get_documentation(key, fw1["settings_docs"][key]), None, 2)
+            return cfml_view.Documentation([word_region], get_documentation(key, fw1["settings_docs"][key]), None, 2)
         parent_key = ".".join(key.split(".")[:-1])
         if parent_key in fw1["settings_docs"]:
-            return cfml_view.Documentation(get_documentation(parent_key, fw1["settings_docs"][parent_key]), None, 2)
+            return cfml_view.Documentation([context[0].name_region, word_region], get_documentation(parent_key, fw1["settings_docs"][parent_key]), None, 2)
 
     # methods
     if view_extends_fw1 and cfml_view.view.match_selector(cfml_view.position, "meta.function.declaration.cfml"):
         function_name, function_name_region, function_region = cfml_view.get_function(cfml_view.position)
+        region = sublime.Region(function_name_region.begin(), function_region.end())
         if function_name in fw1["methods_docs"]:
-            return cfml_view.Documentation(get_documentation(function_name, fw1["methods_docs"][function_name]), None, 2)
+            return cfml_view.Documentation([region], get_documentation(function_name, fw1["methods_docs"][function_name]), None, 2)
 
     if view_extends_fw1 or view_file_type in ["view", "layout"]:
         if cfml_view.view.match_selector(cfml_view.position, "meta.function-call"):
             function_name, function_name_region, function_args_region = cfml_view.get_function_call(cfml_view.position)
+            region = sublime.Region(function_name_region.begin(), function_args_region.end())
             if function_name in fw1["methods_docs"]:
-                return cfml_view.Documentation(get_documentation(function_name, fw1["methods_docs"][function_name]), None, 2)
+                return cfml_view.Documentation([region], get_documentation(function_name, fw1["methods_docs"][function_name]), None, 2)
 
     if view_file_type == "controller" and cfml_view.view.match_selector(cfml_view.position, "meta.function-call.method"):
             function_name, function_name_region, function_args_region = cfml_view.get_function_call(cfml_view.position)
+            region = sublime.Region(function_name_region.begin(), function_args_region.end())
             if cfml_view.view.substr(function_name_region.begin() - 1) == ".":
                 dot_context = utils.get_dot_context(cfml_view.view, function_name_region.begin() - 1)
                 if dot_context[-1].name in ["fw", "framework"] and function_name in fw1["methods_docs"]:
-                    return cfml_view.Documentation(get_documentation(function_name, fw1["methods_docs"][function_name]), None, 2)
+                    return cfml_view.Documentation([region], get_documentation(function_name, fw1["methods_docs"][function_name]), None, 2)
 
     return None
 

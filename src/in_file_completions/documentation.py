@@ -3,31 +3,28 @@ from functools import partial
 from .. import utils, model_index
 
 
-SYNTAX_EXT = "sublime-syntax" if int(sublime.version()) >= 3092 else "tmLanguage"
-
-
-def get_inline_documentation(cfml_view):
-    extended_meta, function_name, header = get_function_info(cfml_view, cfml_view.position)
+def get_inline_documentation(cfml_view, doc_type):
+    extended_meta, function_name, header, regions = get_function_info(cfml_view, cfml_view.position)
 
     if extended_meta:
         doc, callback = get_function_documentation(cfml_view.view, extended_meta, function_name, header)
-        return cfml_view.Documentation(doc, callback, 2)
+        return cfml_view.Documentation(regions, doc, callback, 2)
 
-    extended_meta, file_path, header = get_cfc_info(cfml_view, cfml_view.position)
+    extended_meta, file_path, header, regions = get_cfc_info(cfml_view, cfml_view.position)
     if extended_meta:
         doc, callback = get_documentation(cfml_view.view, extended_meta, file_path, header)
-        return cfml_view.Documentation(doc, callback, 2)
+        return cfml_view.Documentation(regions, doc, callback, 2)
 
     return None
 
 
 def get_goto_cfml_file(cfml_view):
 
-    extended_meta, function_name, header = get_function_info(cfml_view, cfml_view.position)
+    extended_meta, function_name, header, regions = get_function_info(cfml_view, cfml_view.position)
     if extended_meta:
         return cfml_view.GotoCfmlFile(extended_meta["function_file_map"][function_name], extended_meta["functions"][function_name].name)
 
-    extended_meta, file_path, header = get_cfc_info(cfml_view, cfml_view.position)
+    extended_meta, file_path, header, regions = get_cfc_info(cfml_view, cfml_view.position)
     if extended_meta:
         return cfml_view.GotoCfmlFile(file_path, None)
 
@@ -40,8 +37,7 @@ def get_completion_docs(cfml_view):
 
         if header:
             model_doc = model_index.build_function_call_params_doc(cfml_view.view_metadata, cfml_view.function_call_params, header)
-            # callback = partial(on_navigate, cfml_view.view, extended_meta["function_file_map"][function_name], extended_meta["function_file_map"])
-            return cfml_view.CompletionDoc(model_doc, None)
+            return cfml_view.CompletionDoc(None, model_doc, None)
 
     return None
 
@@ -51,24 +47,26 @@ def get_function_info(cfml_view, pt):
         function_name, function_name_region, function_args_region = cfml_view.get_function_call(pt)
         if function_name in cfml_view.view_metadata["functions"]:
             header = cfml_view.view_metadata["functions"][function_name].name + "()"
-            return cfml_view.view_metadata, function_name, header
+            region = sublime.Region(function_name_region.begin(), function_args_region.end())
+            return cfml_view.view_metadata, function_name, header, [region]
 
     if cfml_view.view.match_selector(pt, "meta.function-call.method.cfml"):
         function_name, function_name_region, function_args_region = cfml_view.get_function_call(pt)
+        region = sublime.Region(function_name_region.begin(), function_args_region.end())
         if cfml_view.view.substr(function_name_region.begin() - 1) == ".":
             dot_context = cfml_view.get_dot_context(function_name_region.begin() - 1)
 
             if dot_context[0].name == "this":
                 if function_name in cfml_view.view_metadata["functions"]:
                     header = cfml_view.view_metadata["functions"][function_name].name + "()"
-                    return cfml_view.view_metadata, function_name, header
+                    return cfml_view.view_metadata, function_name, header, [region, dot_context[0].name_region]
 
             if dot_context[0].name == "super":
                 if cfml_view.view_metadata and function_name in cfml_view.view_metadata["functions"]:
                     header = cfml_view.view_metadata["functions"][function_name].name + "()"
-                    return cfml_view.view_metadata, function_name, header
+                    return cfml_view.view_metadata, function_name, header, [region, dot_context[0].name_region]
 
-    return None, None, None
+    return None, None, None, None
 
 
 def get_function_call_params_header(cfml_view):
@@ -94,15 +92,15 @@ def get_cfc_info(cfml_view, pt):
     file_path = cfml_view.file_path or ""
 
     if cfml_view.view.match_selector(pt, "variable.language.this.cfml"):
-        return cfml_view.view_metadata, file_path, "this"
+        return cfml_view.view_metadata, file_path, "this", [cfml_view.view.word(pt)]
 
     if cfml_view.view.match_selector(pt, "variable.language.super.cfml"):
         extends_file_path = model_index.resolve_path(cfml_view.project_name, file_path, cfml_view.view_metadata["extends"])
         extended_meta = model_index.get_extended_metadata_by_file_path(cfml_view.project_name, extends_file_path)
         if extended_meta:
-            return extended_meta, extends_file_path, cfml_view.view_metadata["extends"]
+            return extended_meta, extends_file_path, cfml_view.view_metadata["extends"], [cfml_view.view.word(pt)]
 
-    return None, None, None
+    return None, None, None, None
 
 
 def on_navigate(view, file_path, function_file_map, href):
@@ -132,7 +130,7 @@ def get_function_documentation(view, extended_meta, function_name, header):
         with open(function_file_path, "r", encoding="utf-8") as f:
             file_string = f.read()
         cfml_minihtml_view = view.window().create_output_panel("cfml_minihtml")
-        cfml_minihtml_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/cfml." + SYNTAX_EXT)
+        cfml_minihtml_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/cfml.sublime-syntax")
         cfml_minihtml_view.run_command("append", {"characters": file_string, "force": True, "scroll_to_end": True})
         model_doc = model_index.build_method_documentation(extended_meta, function_name, header, cfml_minihtml_view)
         view.window().destroy_output_panel("cfml_minihtml")
