@@ -90,7 +90,9 @@ def generate_documentation(docs, current_index, doc_type):
 def merge_regions(regions):
     merged_regions = []
     for region in sorted(regions):
-        if len(merged_regions) > 0 and merged_regions[-1].end() == region.begin():
+        if len(merged_regions) > 0 and merged_regions[-1].contains(region):
+            continue
+        elif len(merged_regions) > 0 and merged_regions[-1].end() == region.begin():
             merged_regions[-1] = sublime.Region(merged_regions[-1].begin(), region.end())
         else:
             merged_regions.append(region)
