@@ -38,7 +38,7 @@ def make_completions(funct_meta, funct_cfcs, completion_type):
 def make_completion(funct, cfc_file_path, completion_type):
     key = funct.name
     hint = "method"
-    if utils.get_setting("cfml_cfc_completion_names") == "full":
+    if utils.get_setting("cfc_completion_names") == "full":
         key += "()"
         if funct.meta["returntype"]:
             key += ":" + funct.meta["returntype"]
