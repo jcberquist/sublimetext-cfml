@@ -7,7 +7,7 @@ def get_inline_documentation(cfml_view, doc_type):
     extended_meta, function_name, header, regions = get_function_info(cfml_view, cfml_view.position)
 
     if extended_meta:
-        doc, callback = get_function_documentation(cfml_view.view, extended_meta, function_name, header)
+        doc, callback = get_function_documentation(cfml_view.view, cfml_view.project_name, extended_meta, function_name, header)
         return cfml_view.Documentation(regions, doc, callback, 2)
 
     extended_meta, file_path, header, regions = get_cfc_info(cfml_view, cfml_view.position)
@@ -123,19 +123,14 @@ def get_documentation(view, extended_meta, file_path, header):
     return model_doc, callback
 
 
-def get_function_documentation(view, extended_meta, function_name, header):
+def get_function_documentation(view, project_name, extended_meta, function_name, header):
     function_file_path = extended_meta["function_file_map"][function_name]
     view_file_path = utils.normalize_path(view.file_name()) if view.file_name() else ""
     if len(function_file_path) > 0 and function_file_path != view_file_path:
-        with open(function_file_path, "r", encoding="utf-8") as f:
-            file_string = f.read()
-        cfml_minihtml_view = view.window().create_output_panel("cfml_minihtml")
-        cfml_minihtml_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/cfml.sublime-syntax")
-        cfml_minihtml_view.run_command("append", {"characters": file_string, "force": True, "scroll_to_end": True})
-        model_doc = model_index.build_method_documentation(extended_meta, function_name, header, cfml_minihtml_view)
-        view.window().destroy_output_panel("cfml_minihtml")
+        model_doc, callback = model_index.get_method_documentation(view, project_name, function_file_path, function_name, header)
     else:
-        model_doc = model_index.build_method_documentation(extended_meta, function_name, header, view)
+        function_preview = model_index.build_method_preview(view, function_name)
+        model_doc = model_index.build_method_documentation(extended_meta, function_name, header, function_preview)
+        callback = partial(on_navigate, view, extended_meta["function_file_map"][function_name], extended_meta["function_file_map"])
 
-    callback = partial(on_navigate, view, extended_meta["function_file_map"][function_name], extended_meta["function_file_map"])
     return model_doc, callback

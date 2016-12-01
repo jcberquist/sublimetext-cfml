@@ -1,6 +1,6 @@
 import sublime
 from functools import partial
-from .component_project_index import get_extended_metadata_by_file_path
+from .component_project_index import get_extended_metadata_by_file_path, get_cache_by_file_path
 from .. import utils, minihtml
 
 
@@ -85,21 +85,33 @@ def build_documentation(extended_metadata, file_path, header):
 
 def get_method_documentation(view, project_name, file_path, function_name, header):
     extended_metadata = get_extended_metadata_by_file_path(project_name, file_path)
-
     function_file_path = extended_metadata["function_file_map"][function_name]
-    with open(function_file_path, "r", encoding="utf-8") as f:
-        file_string = f.read()
-    cfml_minihtml_view = view.window().create_output_panel("cfml_minihtml")
-    cfml_minihtml_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/cfml." + SYNTAX_EXT)
-    cfml_minihtml_view.run_command("append", {"characters": file_string, "force": True, "scroll_to_end": True})
-
-    model_doc = build_method_documentation(extended_metadata, function_name, header, cfml_minihtml_view)
-    view.window().destroy_output_panel("cfml_minihtml")
+    method_preview = cached_method_preview(view, project_name, function_file_path, function_name)
+    model_doc = build_method_documentation(extended_metadata, function_name, header, method_preview)
     callback = partial(on_navigate, view, file_path, extended_metadata["function_file_map"])
     return model_doc, callback
 
 
-def build_method_documentation(extended_metadata, function_name, header, view=None):
+def build_method_preview(cfml_minihtml_view, function_name):
+    function_region = get_function_region(cfml_minihtml_view, function_name)
+    css, html = minihtml.from_view(cfml_minihtml_view, function_region)
+    return {"css": css, "html": html}
+
+
+def cached_method_preview(view, project_name, function_file_path, function_name):
+    cache = get_cache_by_file_path(project_name, function_file_path)
+    if function_name not in cache:
+        with open(function_file_path, "r", encoding="utf-8") as f:
+            file_string = f.read()
+        cfml_minihtml_view = view.window().create_output_panel("cfml_minihtml")
+        cfml_minihtml_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/cfml." + SYNTAX_EXT)
+        cfml_minihtml_view.run_command("append", {"characters": file_string, "force": True, "scroll_to_end": True})
+        cache[function_name] = build_method_preview(cfml_minihtml_view, function_name)
+        view.window().destroy_output_panel("cfml_minihtml")
+    return cache[function_name]
+
+
+def build_method_documentation(extended_metadata, function_name, header, method_preview=None):
     function_file_path = extended_metadata["function_file_map"][function_name]
 
     funct = extended_metadata["functions"][function_name]
@@ -134,13 +146,10 @@ def build_method_documentation(extended_metadata, function_name, header, view=No
             model_doc["body"] += "</li>"
         model_doc["body"] += "</ul>"
 
-    if view:
-        function_region = get_function_region(view, function_name)
-        css, html = minihtml.from_view(view, function_region)
-        css = css.replace("<style>", "").replace("</style>", "")
-
+    if method_preview:
+        css = method_preview["css"].replace("<style>", "").replace("</style>", "")
         model_doc["styles"] = css
-        model_doc["body"] += html
+        model_doc["body"] += method_preview["html"]
 
     return model_doc
 

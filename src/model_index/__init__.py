@@ -1,7 +1,7 @@
 import sublime
 from .component_project_index import *
 from .documentation import get_documentation, build_documentation
-from .documentation import get_method_documentation, build_method_documentation
+from .documentation import get_method_documentation, build_method_documentation, build_method_preview
 from .documentation import get_function_call_params_doc, build_function_call_params_doc
 from .navigate_to_method import CfmlNavigateToMethodCommand
 
@@ -9,6 +9,7 @@ __all__ = [
     "build_documentation",
     "build_function_call_params_doc",
     "build_method_documentation",
+    "build_method_preview",
     "CfmlNavigateToMethodCommand",
     "get_completions_by_dot_path",
     "get_completions_by_entity_name",

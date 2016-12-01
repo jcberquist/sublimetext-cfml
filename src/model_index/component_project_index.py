@@ -55,7 +55,8 @@ class ComponentProjectIndex(ProjectIndex):
 
         dot_path_map = build_dot_paths(index, mappings, project_file_dir)
         entities = build_entities(index)
-        self.projects[project_name]["data"] = {"index": index, "dot_paths": dot_path_map, "entities": entities, "completions": {}}
+        cache = {file_path: {} for file_path in index}
+        self.projects[project_name]["data"] = {"index": index, "dot_paths": dot_path_map, "entities": entities, "completions": {}, "cache": cache}
         self.projects[project_name]["data"]["completions"] = completions.build(project_name, index.keys(), get_extended_metadata_by_file_path)
 
         print("CFML: indexing components in project '" + project_name + "' completed - " + str(len(index)) + " files indexed in " + "{0:.2f}".format(time.clock() - start_time) + " seconds")
@@ -81,7 +82,8 @@ class ComponentProjectIndex(ProjectIndex):
             with self.lock:
                 if project_name in self.projects:
                     self.projects[project_name]["data"]["index"].update({file_path: file_index})
-                    index = self.projects[project_name]["data"]["index"];
+                    self.projects[project_name]["data"]["cache"][file_path] = {}
+                    index = self.projects[project_name]["data"]["index"]
                     mappings = get_project_data(project_name).get("mappings", [])
                     dot_path_map = build_dot_paths(index, mappings, dirname(project_name))
                     entities = build_entities(index)
@@ -95,6 +97,7 @@ class ComponentProjectIndex(ProjectIndex):
             with self.lock:
                 if project_name in self.projects and file_path in self.projects[project_name]["data"]["index"]:
                     del self.projects[project_name]["data"]["index"][file_path]
+                    del self.projects[project_name]["data"]["cache"][file_path]
                     project_index = self.projects[project_name]["data"]["index"]
                     project_data = self.projects[project_name]["data"]["project_data"]
                     dot_path_map = build_dot_paths(project_index, project_data.get("mappings", []), dirname(project_name))
@@ -207,6 +210,10 @@ def get_completions_by_file_path(project_name, file_path):
     if completions:
         return completions[utils.get_setting("cfml_cfc_completions")]
     return None
+
+
+def get_cache_by_file_path(project_name, file_path):
+    return component_index.projects.get(project_name, dict).get("data", dict).get("cache", dict).get(file_path, dict)
 
 
 def get_file_path_by_dot_path(project_name, dot_path):
