@@ -1,0 +1,41 @@
+CFML v0.20.0 Changelog:
+
+- Added the following tags to the default list of tags that do not receive a
+  closing tag: `cfcontent`, `cfparam`, `cfflush`, `cffile`, `cfdirectory`,
+  `cfheader`, `cfhttpparam`, `cflog`, and `cfimage`.
+  https://github.com/jcberquist/sublimetext-cfml/pull/58
+  https://github.com/jcberquist/sublimetext-cfml/pull/59
+
+- Component method completions are no longer of the form `method():returntype`
+  by default, as it turns out this format blocks Sublime Text from including
+  local buffer completions in the completion list. Instead the completion names
+  now only include the method name. It is possible to get the old completion
+  name style back via a new package setting `cfc_completion_names` - the
+  two options for it are "basic" and "full". (If this setting is changed, you
+  will need to run the `CFML: Index Active Project` command via the command
+  palette for the change to take effect for indexed components.) If you do want
+  to use the old completion style a plugin such as `All Autocomplete` can be
+  used as a workaround to get local buffer completions back into the completion
+  list. See the issue below for more discussion:
+  https://github.com/jcberquist/sublimetext-cfml/issues/57
+
+- For Sublime Text builds 3116+ running the documention command on mouse hover
+  is now supported. This is enabled by default, but can be disabled by setting
+  the package setting `cfml_hover_docs` to false in your user package settings.
+
+- The documentation command now highlights the relevant regions of the code
+  to which the displayed documentation pertains. This is enabled by default,
+  but can be disabled by setting the package setting
+  `inline_doc_regions_highlight` to false in your user package settings.
+
+- When using the CFML formatting command to format the current function, it
+  will now format the function declaration as well as the function body.
+
+- When formatting a function call that contains an anonymous function, e.g.:
+
+    myArray.map(function(item) {
+      return item.key;
+    });
+
+  the anonymous function will be kept inline with the opening parenthesis,
+  instead of always being placed on a new line.

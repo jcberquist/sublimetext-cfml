@@ -48,7 +48,7 @@ When entering a function call parameter for a built-in function a pop-up window 
 
 ### Inline Documentation
 
-<kbd>F1</kbd> is mapped to an inline documentation command that provides an inline documentation popup based on the cursor position.
+<kbd>F1</kbd> is mapped to an inline documentation command that provides an inline documentation popup based on the cursor position. For Sublime Text builds 3116+ running the documention command on mouse hover is also supported. This is enabled by default, but can be disabled by setting the package setting `cfml_hover_docs` to false in your user package settings.
 
 *You can always override the default key binding in your user key bindings file.*
 
@@ -132,7 +132,7 @@ These two settings work together, such that when a base CFC as well as another C
 
 Further, when an instantiated component has been assigned to a variable (e.g. `myVar = new path.to.mycfc()`), and that component has been indexed and a mapping specified for it, then method completions for that component will be offered when a `.` is typed after that variable name. The <kbd>F1</kbd> documentation command and the <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> jump to CFC command will also work on that variable name. (This behavior can be disabled by setting `instantiated_component_completions` to `false` in your user package settings.)
 
-*__Note__: completions from indexed components are available in three styles matching the completion styles for built-in functions. This is controlled by the `cfml_cfc_completions` package setting. Also, when entering parameters for indexed component method calls, a pop up window with information regarding that parameter is shown.*
+*__Note__: completions from indexed components are available in three styles matching the completion styles for built-in functions. This is controlled by the `cfml_cfc_completions` package setting. Also, when entering parameters for indexed component method calls, a pop up window with information regarding that parameter is shown. Completion names are available in two styles, controlled by the `cfc_completion_names` package setting. (The two options for it are "basic" and "full"; if this setting is changed, you will need to run the `CFML: Index Active Project` command via the command palette for the change to take effect for indexed components.) The reason for these options is that completion names in the `full` style, which are of the form `method():returntype`, block Sublime Text from including local buffer completions in the completion list. The `basic` style, which only includes the method names is therefore the default. If you do want to use the `full` completion style a plugin such as [All Autocomplete](https://packagecontrol.io/packages/All%20Autocomplete) can be used as a workaround to get local buffer completions back into the completion list.*
 
 **Inject Property Command**
 
