@@ -23,8 +23,7 @@ class CfmlDiPropertyCommand(sublime_plugin.TextCommand):
         if not cfml_view.project_name:
             return
 
-        # cfc_info, metadata, function_name = find_cfc(view, position, project_name)
-        cfc_info, metadata, function_name = documentation.find_cfc(cfml_view)
+        cfc_info, metadata, function_name, regions = documentation.find_cfc(cfml_view)
 
         if cfc_info:
             self.insert_property(edit, cfc_info["name"])
