@@ -99,7 +99,7 @@ class ComponentProjectIndex(ProjectIndex):
                     del self.projects[project_name]["data"]["index"][file_path]
                     del self.projects[project_name]["data"]["cache"][file_path]
                     project_index = self.projects[project_name]["data"]["index"]
-                    project_data = self.projects[project_name]["data"]["project_data"]
+                    project_data = self.projects[project_name]["project_data"]
                     dot_path_map = build_dot_paths(project_index, project_data.get("mappings", []), dirname(project_name))
                     entities = build_entities(project_index)
                     self.projects[project_name]["data"]["dot_paths"] = dot_path_map
