@@ -62,7 +62,7 @@ def get_completions_doc(cfml_view):
     if file_path:
         function_name = cfml_view.function_call_params.function_name
         metadata = model_index.get_extended_metadata_by_file_path(cfml_view.project_name, file_path)
-        if cfml_view.function_call_params.function_name in metadata["functions"]:
+        if metadata and cfml_view.function_call_params.function_name in metadata["functions"]:
             header = dot_path.split(".").pop() + "." + metadata["functions"][function_name].name + "()"
             doc, callback = model_index.get_function_call_params_doc(cfml_view.project_name, file_path, cfml_view.function_call_params, header)
             return cfml_view.CompletionDoc(None, doc, callback)

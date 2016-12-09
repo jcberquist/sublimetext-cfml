@@ -47,18 +47,18 @@ def find_entity(cfml_view, position):
         funct_region = sublime.Region(function_name_region.begin(), function_args_region.end())
         if cfml_view.view.substr(function_name_region.begin() - 1) == ".":
             dot_context = cfml_view.get_dot_context(function_name_region.begin() - 1)
+            if len(dot_context):
+                if cfml_view.view.match_selector(dot_context[-1].name_region.begin(), "meta.function-call.support.entity.cfml"):
+                    region = sublime.Region(dot_context[-1].function_region.begin(), dot_context[-1].args_region.end())
+                    entity_name = get_entity_name(cfml_view.view.substr(dot_context[-1].args_region), dot_context[-1].name)
+                    return entity_name, function_name, [region, funct_region]
 
-            if cfml_view.view.match_selector(dot_context[-1].name_region.begin(), "meta.function-call.support.entity.cfml"):
-                region = sublime.Region(dot_context[-1].function_region.begin(), dot_context[-1].args_region.end())
-                entity_name = get_entity_name(cfml_view.view.substr(dot_context[-1].args_region), dot_context[-1].name)
-                return entity_name, function_name, [region, funct_region]
-
-            if is_possible_entity(dot_context):
-                entity_name, temp, regions = find_entity_by_var_assignment(cfml_view, position, dot_context[0].name)
-                if regions:
-                    regions.append(dot_context[0].name_region)
-                    regions.append(funct_region)
-                return entity_name, function_name, regions
+                if is_possible_entity(dot_context):
+                    entity_name, temp, regions = find_entity_by_var_assignment(cfml_view, position, dot_context[0].name)
+                    if regions:
+                        regions.append(dot_context[0].name_region)
+                        regions.append(funct_region)
+                    return entity_name, function_name, regions
 
     if cfml_view.view.match_selector(position, "variable.other, meta.property.cfml"):
         var_region = cfml_view.view.word(position)

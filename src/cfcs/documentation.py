@@ -66,7 +66,7 @@ def find_cfc(cfml_view):
             # check for known cfc name
             symbol_name, symbol_region = cfcs.search_dot_context_for_cfc(cfml_view.project_name, dot_context)
             # also check for getter being used to access cfc
-            if not symbol_name:
+            if not symbol_name and len(dot_context):
                 symbol = dot_context[-1]
                 if symbol.is_function and symbol.name.startswith("get") and cfcs.has_cfc(cfml_view.project_name, symbol.name[3:]):
                     symbol_name = symbol.name[3:]

@@ -143,7 +143,7 @@ def get_dot_completions(cfml_view):
             component_name = component_tuple[0]
 
     if component_name:
-        completions = get_completions_by_component_name(cfml_view.view, cfml_view.project_name, component_name)
+        completions = get_completions_by_component_name(cfml_view, component_name)
         if completions:
             return cfml_view.CompletionList(completions, 1, True)
 
@@ -156,12 +156,13 @@ def get_completions(project_name, cfc_path, completion_type):
     return []
 
 
-def get_completions_by_component_name(view, project_name, component_name):
-    comp = model_index.get_completions_by_dot_path(project_name, component_name.lower())
+def get_completions_by_component_name(cfml_view, component_name):
+    comp = model_index.get_completions_by_dot_path(cfml_view.project_name, component_name.lower())
 
     if not comp:
-        folder_cfc_path = cfc_utils.get_folder_cfc_path(view, project_name, component_name)
-        comp = model_index.get_completions_by_dot_path(project_name, folder_cfc_path)
+        folder_cfc_path = cfc_utils.get_folder_cfc_path(cfml_view, component_name)
+        if folder_cfc_path:
+            comp = model_index.get_completions_by_dot_path(cfml_view.project_name, folder_cfc_path)
 
     if comp:
         filtered_completions = []

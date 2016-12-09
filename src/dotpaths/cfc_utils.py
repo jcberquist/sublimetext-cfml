@@ -110,25 +110,25 @@ def find_cfc(cfml_view, position):
         funct_region = sublime.Region(function_name_region.begin(), function_args_region.end())
         if cfml_view.view.substr(function_name_region.begin() - 1) == ".":
             dot_context = cfml_view.get_dot_context(function_name_region.begin() - 1)
+            if len(dot_context):
+                if cfml_view.view.match_selector(dot_context[-1].name_region.begin(), "meta.instance.constructor.cfml"):
+                    r = utils.get_scope_region_containing_point(cfml_view.view, dot_context[-1].name_region.begin(), "meta.instance.constructor.cfml")
+                    cfc_path = cfml_view.view.substr(r)[4:].split("(")[0]
+                    file_path, dot_path = get_cfc_file_info(cfml_view, cfc_path)
+                    return cfc_path, file_path, dot_path, function_name, [r, funct_region]
 
-            if cfml_view.view.match_selector(dot_context[-1].name_region.begin(), "meta.instance.constructor.cfml"):
-                r = utils.get_scope_region_containing_point(cfml_view.view, dot_context[-1].name_region.begin(), "meta.instance.constructor.cfml")
-                cfc_path = cfml_view.view.substr(r)[4:].split("(")[0]
-                file_path, dot_path = get_cfc_file_info(cfml_view, cfc_path)
-                return cfc_path, file_path, dot_path, function_name, [r, funct_region]
+                if cfml_view.view.match_selector(dot_context[-1].name_region.begin(), "meta.function-call.support.createcomponent.cfml"):
+                    r = utils.get_scope_region_containing_point(cfml_view.view, dot_context[-1].name_region.begin(), "meta.function-call.support.createcomponent.cfml")
+                    cfc_path = get_component_name(cfml_view.view.substr(r))
+                    file_path, dot_path = get_cfc_file_info(cfml_view, cfc_path)
+                    return cfc_path, file_path, dot_path, function_name, [r, funct_region]
 
-            if cfml_view.view.match_selector(dot_context[-1].name_region.begin(), "meta.function-call.support.createcomponent.cfml"):
-                r = utils.get_scope_region_containing_point(cfml_view.view, dot_context[-1].name_region.begin(), "meta.function-call.support.createcomponent.cfml")
-                cfc_path = get_component_name(cfml_view.view.substr(r))
-                file_path, dot_path = get_cfc_file_info(cfml_view, cfc_path)
-                return cfc_path, file_path, dot_path, function_name, [r, funct_region]
-
-            if is_possible_cfc_instance(dot_context):
-                cfc_path, file_path, dot_path, temp, regions = find_cfc_by_var_assignment(cfml_view, position, dot_context[0].name)
-                if regions:
-                    regions.append(dot_context[0].name_region)
-                    regions.append(funct_region)
-                return cfc_path, file_path, dot_path, function_name, regions
+                if is_possible_cfc_instance(dot_context):
+                    cfc_path, file_path, dot_path, temp, regions = find_cfc_by_var_assignment(cfml_view, position, dot_context[0].name)
+                    if regions:
+                        regions.append(dot_context[0].name_region)
+                        regions.append(funct_region)
+                    return cfc_path, file_path, dot_path, function_name, regions
 
     if cfml_view.view.match_selector(position, "variable.other, meta.property.cfml"):
         var_region = cfml_view.view.word(position)
