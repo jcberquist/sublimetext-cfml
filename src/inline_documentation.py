@@ -1,6 +1,7 @@
 import sublime
 import sublime_plugin
 import time
+import uuid
 import webbrowser
 from . import utils
 from .cfml_view import CfmlView
@@ -73,10 +74,10 @@ def get_on_navigate(view, docs, doc_type, current_index, pt):
     return on_navigate
 
 
-def on_hide(view):
+def on_hide(view, doc_region_id):
     global doc_window
     doc_window = None
-    view.erase_regions("cfml_docs")
+    view.erase_regions(doc_region_id)
 
 
 def generate_documentation(docs, current_index, doc_type):
@@ -101,7 +102,7 @@ def merge_regions(regions):
 
 def display_documentation(view, docs, doc_type, pt=-1, current_index=0):
     global doc_window
-    view.erase_regions("cfml_docs")
+    doc_region_id = str(uuid.uuid4())
     doc_html, doc_regions = generate_documentation(docs, current_index, doc_type)
     on_navigate = get_on_navigate(view, docs, doc_type, current_index, pt)
 
@@ -110,13 +111,13 @@ def display_documentation(view, docs, doc_type, pt=-1, current_index=0):
             view.update_popup(doc_html)
         else:
             doc_window = "completion_doc"
-            view.show_popup(doc_html, flags=sublime.COOPERATE_WITH_AUTO_COMPLETE, on_navigate=on_navigate, on_hide=lambda: on_hide(view))
+            view.show_popup(doc_html, flags=sublime.COOPERATE_WITH_AUTO_COMPLETE, on_navigate=on_navigate, on_hide=lambda: on_hide(view, doc_region_id))
     else:
         if doc_regions and utils.get_setting("inline_doc_regions_highlight"):
-            view.add_regions("cfml_docs", merge_regions(doc_regions), "source", flags=sublime.DRAW_NO_FILL)
+            view.add_regions(doc_region_id, merge_regions(doc_regions), "source", flags=sublime.DRAW_NO_FILL)
         doc_window = "inline_doc"
         flags = sublime.HIDE_ON_MOUSE_MOVE_AWAY if doc_type == "hover_doc" else 0
-        view.show_popup(doc_html, location=pt, flags=flags, max_width=1024, max_height=480, on_navigate=on_navigate, on_hide=lambda: on_hide(view))
+        view.show_popup(doc_html, location=pt, flags=flags, max_width=1024, max_height=480, on_navigate=on_navigate, on_hide=lambda: on_hide(view, doc_region_id))
 
 
 class CfmlInlineDocumentationCommand(sublime_plugin.TextCommand):
