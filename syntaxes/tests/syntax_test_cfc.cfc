@@ -76,7 +76,7 @@ default="string";
 //              ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.tag.script.cfml entity.name.tag.script.cfml
 //                   ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.tag.script.cfml entity.other.attribute-name.cfml
     var test = "#foo
-//              ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml string.quoted.double.cfml constant.character.hash.cfml
+//              ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.string.quoted.double.cfml constant.character.hash.cfml
     # true";
 
     foo = document;
@@ -219,9 +219,9 @@ public void function setup( required root.model.cava.connection connection ) {}
 //                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml
   thisQuery = queryExecute(params = {}, sql = "SELECT * FROM myTable");
 //                                             ^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml
-  var test = 'FROM myTable'
-//            ^^^^ meta.string.quoted.single.cfml source.sql keyword.other.DML.sql
-
+  var test = "FROM myTable WHERE test = '#obj.property#'"
+//            ^^^^ meta.string.quoted.double.cfml source.sql keyword.other.DML.sql
+//                                            ^^^^^^^^ source.cfml.script source.sql source.cfml.script meta.property.cfml
   var test3 = entityLoadByPK( "foo", "someId" );
 //            ^ meta.function-call.support.cfml meta.function-call.support.entity.cfml support.function.cfml
   var test4 = entityLoad( "foo", {}, true );

@@ -47,6 +47,9 @@
     <!--- <- meta.function-call.cfml meta.function-call.parameters.cfml entity.other.function-parameter.cfml --->
 )>
 
+<cfquery>SELECT * FROM #obj.property# WHERE s = '#obj.prop#'</cfquery>
+<!---                       ^^^^^^^^ source.cfml.script source.sql source.cfml.script meta.property.cfml --->
+<!---                                                 ^^^^ source.cfml.script source.sql source.cfml.script meta.property.cfml --->
 <cfscript>
 foo = 'hello world';
 <!--- <- embedding.cfml text.html.cfml source.cfml.script variable.other.readwrite.cfml --->

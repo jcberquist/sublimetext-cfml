@@ -91,7 +91,7 @@ def get_previous_word(view, position):
 
 
 def get_scope_region_containing_point(view, pt, scope):
-    scope_count = view.scope_name(pt).count(scope)
+    scope_count = view.scope_name(pt).count(scope) - view.scope_name(pt).count("." + scope)
     if scope_count == 0:
         return None
     scope_to_find = " ".join([scope] * scope_count)

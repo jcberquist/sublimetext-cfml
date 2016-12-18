@@ -253,7 +253,7 @@ contexts:
       scope: punctuation.definition.string.begin.cfml
       push:
         - meta_include_prototype: false
-        - meta_scope: string.quoted.single.cfml
+        - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
         - match: (?={{sql_lookahead}})
           set: string-sql-single
         - match: (?=\S)
@@ -262,7 +262,7 @@ contexts:
       scope: punctuation.definition.string.begin.cfml
       push:
         - meta_include_prototype: false
-        - meta_scope: string.quoted.double.cfml
+        - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
         - match: (?={{sql_lookahead}})
           set: string-sql-double
         - match: (?=\S)
@@ -270,13 +270,13 @@ contexts:
 
   string-single:
     - meta_include_prototype: false
-    - meta_scope: string.quoted.single.cfml
+    - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
     - match: ('')
       scope: constant.character.escape.quote.cfml
     - match: (')
       scope: punctuation.definition.string.end.cfml
       pop: true
-    - include: scope:embedding.cfml#hash-delimiters
+    - include: scope:embedding.cfml#string-hash-delimiters
 
   string-sql-single:
     - meta_include_prototype: false
@@ -291,18 +291,18 @@ contexts:
           scope: constant.character.escape.quote.cfml
         - match: (?=')
           pop: true
-        - include: scope:embedding.cfml#hash-delimiters
+        - include: scope:embedding.cfml#sql-hash-delimiters
 
   string-double:
     - meta_include_prototype: false
-    - meta_scope: string.quoted.double.cfml
+    - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
     - match: ("")
       scope: constant.character.escape.quote.cfml
     - match: (")
       captures:
         1: punctuation.definition.string.end.cfml
       pop: true
-    - include: scope:embedding.cfml#hash-delimiters
+    - include: scope:embedding.cfml#string-hash-delimiters
 
   string-sql-double:
     - meta_include_prototype: false
@@ -318,7 +318,7 @@ contexts:
           scope: constant.character.escape.quote.cfml
         - match: (?=")
           pop: true
-        - include: scope:embedding.cfml#hash-delimiters
+        - include: scope:embedding.cfml#sql-hash-delimiters
 
   sql-string:
     - match: '"'
@@ -335,7 +335,7 @@ contexts:
               scope: constant.character.escape.quote.cfml
             - match: (?=")
               pop: true
-            - include: scope:embedding.cfml#hash-delimiters
+            - include: scope:embedding.cfml#sql-hash-delimiters
     - match: "'"
       scope: string.quoted.single.cfml punctuation.definition.string.begin.cfml
       push:
@@ -350,7 +350,7 @@ contexts:
               scope: constant.character.escape.quote.cfml
             - match: (?=')
               pop: true
-            - include: scope:embedding.cfml#hash-delimiters
+            - include: scope:embedding.cfml#sql-hash-delimiters
 
   constructor:
     - match: '\b(new)\s+'
@@ -481,21 +481,21 @@ contexts:
         - meta_scope: meta.class.inheritance.cfml
         - match: (")([a-zA-Z0-9:.]+)?(")
           captures:
-            0: string.quoted.double.cfml
+            0: meta.string.quoted.double.cfml string.quoted.double.cfml
             1: punctuation.definition.string.begin.cfml
             2: entity.other.inherited-class.cfml
             3: punctuation.definition.string.end.cfml
           pop: true
         - match: (')([a-zA-Z0-9:.]+)?(')
           captures:
-            0: string.quoted.single.cfml
+            0: string.quoted.single.cfml string.quoted.single.cfml
             1: punctuation.definition.string.begin.cfml
             2: entity.other.inherited-class.cfml
             3: punctuation.definition.string.end.cfml
           pop: true
         - match: ([a-zA-Z0-9:.]+)
           captures:
-            0: string.unquoted.cfml
+            0: meta.string.unquoted.cfml string.unquoted.cfml
             1: entity.other.inherited-class.cfml
           pop: true
         - match: (?=[^a-zA-Z0-9:.])
@@ -792,24 +792,24 @@ contexts:
               scope: punctuation.definition.string.begin.cfml
               push:
                 - meta_include_prototype: false
-                - meta_scope: meta.struct-literal.key.cfml string.quoted.single.cfml
+                - meta_scope: meta.struct-literal.key.cfml meta.string.quoted.single.cfml string.quoted.single.cfml
                 - meta_content_scope: entity.name.function.cfml
                 - match: (')
                   captures:
                     1: punctuation.definition.string.end.cfml
                   pop: true
-                - include: scope:embedding.cfml#hash-delimiters
+                - include: scope:embedding.cfml#string-hash-delimiters
             - match: '"'
               scope: punctuation.definition.string.begin.cfml
               push:
                 - meta_include_prototype: false
-                - meta_scope: meta.struct-literal.key.cfml string.quoted.double.cfml
+                - meta_scope: meta.struct-literal.key.cfml meta.string.quoted.double.cfml string.quoted.double.cfml
                 - meta_content_scope: entity.name.function.cfml
                 - match: (")
                   captures:
                     1: punctuation.definition.string.end.cfml
                   pop: true
-                - include: scope:embedding.cfml#hash-delimiters
+                - include: scope:embedding.cfml#string-hash-delimiters
             - match: '{{identifier}}'
               scope: meta.struct-literal.key.cfml entity.name.function.cfml
             - match: '(?=(:|=))'
@@ -1083,7 +1083,7 @@ contexts:
       captures:
         1: entity.name.tag.script.cfml
         3: storage.type.cfml
-        4: string.unquoted.cfml meta.tag.property.name.cfml
+        4: meta.string.unquoted.cfml string.unquoted.cfml meta.tag.property.name.cfml
       push:
         - meta_scope: meta.tag.script.cfml meta.tag.property.cfml
         - match: (?=;)
@@ -1104,15 +1104,15 @@ contexts:
           captures:
             1: entity.other.attribute-name.cfml
             2: punctuation.separator.key-value.cfml
-            3: string.quoted.double.cfml
+            3: meta.string.quoted.double.cfml string.quoted.double.cfml
             4: punctuation.definition.string.begin.cfml
             5: meta.tag.property.name.cfml
             6: punctuation.definition.string.end.cfml
-            7: string.quoted.single.cfml
+            7: meta.string.quoted.single.cfml string.quoted.single.cfml
             8: punctuation.definition.string.begin.cfml
             9: meta.tag.property.name.cfml
             10: punctuation.definition.string.end.cfml
-            11: string.unquoted.cfml meta.tag.property.name.cfml
+            11: meta.string.unquoted.cfml string.unquoted.cfml meta.tag.property.name.cfml
         - include: scope:embedding.cfml#tag-generic-attribute
     - match: (?i)\b(param)(?!\s+in\b)(?=\s+(name|default|max|maxLength|min|pattern|type)\s*=)
       captures:
@@ -1121,13 +1121,13 @@ contexts:
     - match: (?i)\b(param)(?!\s+in\b)\s+([_$a-zA-Z][$\w\.]*)(?=\s+(name|default|max|maxLength|min|pattern|type))
       captures:
         1: entity.name.tag.script.cfml
-        2: string.unquoted.cfml
+        2: meta.string.unquoted.cfml string.unquoted.cfml
       push: tag-generic-attribute-script
     - match: (?i)\b(param)(?!\s+in\b)(\s+([_$a-zA-Z][$\w]*))?\s+([_$a-zA-Z][$\w\.]*\b)
       captures:
         1: entity.name.tag.script.cfml
         3: storage.type.cfml
-        4: string.unquoted.cfml
+        4: meta.string.unquoted.cfml string.unquoted.cfml
       push: tag-generic-attribute-script
     - match: (?i)\b(param)(?!\s+in\b)(?=(\s+[a-zA-Z]|\s*[{;]|\s*$))
       captures:
