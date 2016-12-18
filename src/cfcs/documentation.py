@@ -41,7 +41,7 @@ def get_completions_doc(cfml_view):
 
     symbol_name, symbol_region = cfcs.search_dot_context_for_cfc(cfml_view.project_name, cfml_view.function_call_params.dot_context)
     # also check for getter being used to access cfc
-    if not symbol_name:
+    if not symbol_name and len(cfml_view.function_call_params.dot_context):
         symbol = cfml_view.function_call_params.dot_context[-1]
         if symbol.is_function and symbol.name.startswith("get") and cfcs.has_cfc(cfml_view.project_name, symbol.name[3:]):
             symbol_name = symbol.name[3:]

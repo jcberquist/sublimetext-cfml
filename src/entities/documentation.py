@@ -49,7 +49,7 @@ def get_completions_doc(cfml_view):
     if not cfml_view.project_name or not cfml_view.function_call_params or not cfml_view.function_call_params.method:
         return None
 
-    if len(cfml_view.function_call_params.dot_context) > 1:
+    if len(cfml_view.function_call_params.dot_context) != 1:
         return None
 
     start_pt = cfml_view.function_call_params.dot_context[0].name_region.begin()
