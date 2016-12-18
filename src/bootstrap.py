@@ -11,7 +11,7 @@ from . import in_file_completions
 from . import inline_documentation
 from . import testbox
 from .cfcs import CfmlDiPropertyCommand
-from .cfc_dotted_path import CfmlCfcDottedPathCommand
+from .cfc_dotted_path import CfmlCfcDottedPathCommand, CfmlSidebarCfcDottedPathCommand
 from .completions import CfmlUpdateCompletionDocCommand
 from .controller_view_toggle import CfmlToggleControllerViewCommand
 from .color_scheme_styles import CfmlColorSchemeStylesCommand
