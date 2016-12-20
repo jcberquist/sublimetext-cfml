@@ -678,17 +678,30 @@ contexts:
         - include: scope:embedding.cfml#tag-generic-attribute
 
   arrow-function-declaration:
+    - match: '\s*(=>)\s*(?=\n|//|/*)'
+      scope: meta.function.declaration.cfml
+      captures:
+        1: storage.type.function.arrow.cfml
+      set: arrow-function-declaration-continuation
     - match: '\s*(=>)\s*(?=\{)'
       scope: meta.function.declaration.cfml
       captures:
         1: storage.type.function.arrow.cfml
       set: function-block
-    - match: '(\s*(=>))\s*'
+    - match: '(\s*(=>))\s*(?=\S)'
       captures:
         0: meta.function.declaration.cfml
         2: storage.type.function.arrow.cfml
       set: arrow-function-concise-body
     - include: function-declaration-parameters
+
+  arrow-function-declaration-continuation:
+    - meta_content_scope: meta.function.declaration.cfml
+    - include: comments
+    - match: '(?=\{)'
+      set: function-block
+    - match: '(?=\S)'
+      set: arrow-function-concise-body
 
   arrow-function-concise-body:
     - meta_content_scope: meta.function.body.cfml

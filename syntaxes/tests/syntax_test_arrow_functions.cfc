@@ -217,4 +217,8 @@ component {
 //                 ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -constant.numeric.cfml
 //                  ^ -punctuation.terminator.statement.cfml
 
+var test = (a) =>
+{ }
+// <- source.cfml.script meta.class.body.cfml meta.function.body.cfml punctuation.definition.block.begin.cfml -meta.struct-literal.cfml
+
 }
