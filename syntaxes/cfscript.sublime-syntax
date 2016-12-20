@@ -358,10 +358,10 @@ contexts:
         1: keyword.operator.new.cfml
       push:
         - meta_scope: meta.instance.constructor.cfml
-        - match: '\b{{identifier}}(?=\()'
+        - match: '\b\d*{{identifier}}(?=\()'
           scope: entity.name.class.cfml
           set: constructor-params
-        - match: '\b{{identifier}}\b|\.'
+        - match: '\b\d*{{identifier}}\b\.'
           scope: entity.name.class.cfml
         - match: ""
           pop: true

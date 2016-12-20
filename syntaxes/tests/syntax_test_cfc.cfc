@@ -228,6 +228,18 @@ public void function setup( required root.model.cava.connection connection ) {}
 //            ^ meta.function-call.support.cfml meta.function-call.support.entity.cfml support.function.cfml
   var test5 = entityNew( "foo" );
 //            ^ meta.function-call.support.cfml meta.function-call.support.entity.cfml support.function.cfml
+
+  new 123Foo();
+//    ^^^^^^ source.cfml.script meta.class.body.cfml meta.instance.constructor.cfml entity.name.class.cfml
+
+  new 1path.123Foo();
+//    ^^^^^^^^^^^^ source.cfml.script meta.class.body.cfml meta.instance.constructor.cfml entity.name.class.cfml
+
+  new .foo();
+//    ^ source.cfml.script meta.class.body.cfml punctuation.accessor.cfml
+//     ^^^ meta.function-call.method.cfml variable.function.cfml
+
+
 }
 // <- embedding.cfml source.cfml.script meta.class.body.cfml punctuation.definition.block.end.cfml
  // <- embedding.cfml source.cfml.script -meta
