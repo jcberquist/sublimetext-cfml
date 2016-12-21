@@ -172,6 +172,10 @@ public void function setup( required root.model.cava.connection connection ) {}
     "key" = value,
 //  ^ meta.struct-literal.key.cfml string.quoted.double.cfml
 //        ^ punctuation.separator.key-value.cfml -string
+    456: 'A valid struct',
+//  ^^^ meta.struct-literal.key.cfml
+//     ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
+//                       ^ punctuation.separator.struct-literal.cfml
     key: function() {},
 //  ^ meta.function.declaration.cfml meta.struct-literal.key.cfml entity.name.function.cfml
 //     ^ meta.function.declaration.cfml punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml

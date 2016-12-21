@@ -843,7 +843,7 @@ contexts:
             - include: string
             - match: '(?=.|\n)'
               pop: true
-        - match: '{{identifier}}(?=\s*[:=])'
+        - match: '[_$[:alnum:]]+(?=\s*[:=])'
           scope: meta.struct-literal.key.cfml
         - match: '(:|=)\s*'
           captures:
