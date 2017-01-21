@@ -1,13 +1,25 @@
 import sublime
 import json
+import time
 import urllib.request
 import urllib.error
+from collections import deque
 from .. import utils
 
 CFDOCS_CACHE = {}
+CFDOCS_FAILED_REQUESTS = deque()
 
 CFDOCS_PARAM_TEMPLATE = '<strong>${name}</strong><p>${description}</p><p>${values}</p>'
 CFDOCS_BASE_URL = "https://raw.githubusercontent.com/foundeo/cfdocs/master/data/en/"
+CFDOCS_HTTP_ERROR_MESSAGE = """
+<p>HTTP requests to GitHub seem to be failing at the moment. This means that
+cfdocs.org documentation is not currently available.</p>
+<p>To avoid seeing this error message on mouse hover you can set the `cfml_hover_docs`
+setting to false in your user package settings.</p>
+<p>Please note that it is possible to load cfdocs.org data from a local drive by cloning or
+downloading the cfdocs.org repo (https://github.com/foundeo/cfdocs) and using the `cfdocs_path`
+package setting to point to the data folder of the repository.</p>
+"""
 
 CFDOCS_STYLES = {
     "side_color": "#18BC9C",
@@ -106,14 +118,22 @@ def load_cfdoc(function_or_tag):
 
 
 def fetch_cfdoc(function_or_tag):
-    global CFDOCS_CACHE
+    global CFDOCS_CACHE, CFDOCS_FAILED_REQUESTS
     file_path = function_or_tag + ".json"
 
     if file_path not in CFDOCS_CACHE:
+        while len(CFDOCS_FAILED_REQUESTS) and int(time.time() - CFDOCS_FAILED_REQUESTS[0]) > 1800:
+            CFDOCS_FAILED_REQUESTS.popleft()
+
+        if len(CFDOCS_FAILED_REQUESTS) > 2:
+            data = {"error_message": CFDOCS_HTTP_ERROR_MESSAGE}
+            return data, False
+
         full_url = CFDOCS_BASE_URL + file_path
         try:
             json_string = urllib.request.urlopen(full_url).read().decode("utf-8")
         except urllib.error.HTTPError as e:
+            CFDOCS_FAILED_REQUESTS.append(time.time())
             data = {"error_message": "Unable to fetch " + function_or_tag + ".json<br>" + str(e)}
             return data, False
 
