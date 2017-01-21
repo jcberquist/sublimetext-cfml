@@ -177,7 +177,8 @@
         "iterations": ["1000"]
     },
     "generatesecretkey": {
-        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"]
+        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"],
+        "keysize": ["128", "256"]
     },
     "getapplicationsettings": {
         "suppressfunction": ["true", "false"]
@@ -284,7 +285,8 @@
         "multicharacterdelimiter": ["true", "false"]
     },
     "listchangedelims": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
+        "includeemptyvalues": ["true", "false"]
     },
     "listcompact": {
         "multicharacterdelimiter": ["true", "false"]
@@ -330,7 +332,8 @@
         "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
     },
     "listlen": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
+        "includeemptyvalues": ["true", "false"]
     },
     "listmap": {
         "includeemptyfields": ["true", "false"]
@@ -437,11 +440,16 @@
         "start": ["1"]
     },
     "refindnocase": {
-        "returnsubexpressions": ["true", "false"],
-        "string": ["1"]
+        "returnsubexpressions": ["true", "false"]
     },
     "replace": {
         "scope": ["one", "all"]
+    },
+    "replacelist": {
+        "includeemptyfields": ["true", "false"]
+    },
+    "replacelistnocase": {
+        "includeemptyfields": ["true", "false"]
     },
     "replacenocase": {
         "scope": ["one", "all"]
