@@ -170,8 +170,11 @@ class TestboxCommand(sublime_plugin.WindowCommand):
 
     def get_testbox_results(self, project_file_dir):
         testbox_results = self.get_setting("results")
-        testbox_results["server_root"] = utils.normalize_path(testbox_results["server_root"], project_file_dir) + "/"
-        testbox_results["sublime_root"] = utils.normalize_path(testbox_results["sublime_root"], project_file_dir) + "/"
+        for key in ["server_root", "sublime_root"]:
+            testbox_results[key] = utils.normalize_path(testbox_results[key], project_file_dir)
+            if len(testbox_results[key]) > 0:
+                testbox_results[key] += "/"
+
         return testbox_results
 
     def get_path_parts(self, file_name):
