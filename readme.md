@@ -24,6 +24,7 @@ Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](http:/
 
 ### Table of Contents
 
+- [Installation](#installation)
 - [Completions](#completions)
 - [Inline Documentation](#inline-documentation)
 - [A Note about Settings](#a-note-about-settings)
@@ -37,6 +38,18 @@ Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](http:/
 - [TestBox](#testbox)
 - [Framework One](#framework-one)
 - [Manual Installation](#manual-installation)
+
+### Installation
+
+Follow the instuctions on https://packagecontrol.io/installation to install Package Control to Sublime Text 3.
+
+Open the command pallete (CTRL-SHIFT-P) and select 'package control install package'
+
+Wait for the list to open and find "CFML" with a subtitle on this github repo (.../jcberquist/...)
+
+Select it to install
+
+Restart Sublime Text 3
 
 ### Completions
 
