@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>scope</key>
-	<string>source.cfml meta.function-call, source.cfml meta.instance.constructor</string>
-	<key>settings</key>
-	<dict>
-		<key>showInIndexedSymbolList</key>
-		<string>0</string>
-		<key>showInSymbolList</key>
-		<string>0</string>
-	</dict>
+    <key>scope</key>
+    <string>source.cfml meta.function-call, source.cfml meta.instance.constructor</string>
+    <key>settings</key>
+    <dict>
+        <key>showInIndexedSymbolList</key>
+        <string>0</string>
+        <key>showInSymbolList</key>
+        <string>0</string>
+    </dict>
 </dict>
 </plist>
