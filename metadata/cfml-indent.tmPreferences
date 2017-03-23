@@ -1,37 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>name</key>
-	<string>cfml-indent</string>
-	<key>scope</key>
-	<string>source.cfml - source.cfml.script</string>
-	<key>settings</key>
-	<dict>
-		<key>decreaseIndentPattern</key>
-		<string>(?x)
-		^\s*
-		(
-		&lt;/(cf)
-		[A-Za-z0-9]+\b[^&gt;]*&gt;
-		|-?--&gt;
-		)</string>
-		<key>increaseIndentPattern</key>
-		<string>(?x)
-			^\s*
-				&lt;
-				(?!
-					(?i:!---?|/|cfset|cfparam|cfdump|cfargument|cfabort
-					|cfimport|cfcontent|cfbreak|cfinclude|cfcatch|cfcontinue
-					|cflocation|cfsetting|cffile|cflog|cfobject|cfinvoke|cfimport
-					|cfforward|cfreturn|cfthrow|cfproperty|cfhtmlhead|cfheader
-					|cftrace
-					)
-				)
-				[^&gt;]*
-				&gt;
-			\s*$
-  	</string>
-  </dict>
+    <key>name</key>
+    <string>cfml-indent</string>
+    <key>scope</key>
+    <string>embedding.cfml, embedding.cfml text.html.cfml</string>
+    <key>settings</key>
+    <dict>
+        <key>decreaseIndentPattern</key>
+        <string><![CDATA[(?x)
+            ^\s*
+            (
+                    </(?!html)[A-Za-z0-9-]+\b[^>]*>
+                |   ---?>
+                |   \}
+                |   <cfelse[^>]*>
+            )
+        ]]></string>
+        <key>batchDecreaseIndentPattern</key>
+        <string><![CDATA[(?x)
+            ^\s*
+            (
+                    </(?!html)[A-Za-z0-9-]+\b[^>]*>
+                |   ---?>
+                |   \}
+                |   <cfelse[^>]*>
+            )
+        ]]></string>
+        <key>increaseIndentPattern</key>
+        <string><![CDATA[(?x)
+            ^\s*
+            (
+                    \{[^}"']*$
+                |   <!--(?!.*-->)
+                |   <(?!
+                        (?i:
+                            \?|area|base|br|col|frame|hr|html|img|input|link|meta|param|
+                            cfabort|cfargument|cfbreak|cfcontent|cfcontinue|cfdirectory|
+                            cfdump|cffile|cfflush|cfheader|cfhttpparam|cfimage|
+                            cfinclude|cflocation|cflog|cfparam|cfprocessingdirective|cfproperty|
+                            cfqueryparam|cfrethrow|cfreturn|cfset|cfsetting|cfthrow|[^>]*/>
+                        )
+                    )
+                        ([A-Za-z0-9-]+)(?=\s|>)\b[^>]*>(?!.*</\2>)
+            )
+        ]]></string>
+        <key>batchIncreaseIndentPattern</key>
+        <string><![CDATA[(?x)
+            ^\s*
+            (
+                    \{[^}"']*$
+                |   <!--(?!.*-->)
+                |   <(?!
+                        (?i:
+                            \?|area|base|br|col|frame|hr|html|img|input|link|meta|param|
+                            cfabort|cfargument|cfbreak|cfcontent|cfcontinue|cfdirectory|
+                            cfdump|cffile|cfflush|cfheader|cfhttpparam|cfimage|
+                            cfinclude|cflocation|cflog|cfparam|cfprocessingdirective|cfproperty|
+                            cfqueryparam|cfrethrow|cfreturn|cfset|cfsetting|cfthrow|[^>]*/>
+                        )
+                    )
+                        ([A-Za-z0-9-]+)(?=\s|>)\b[^>]*>(?!.*</\2>)
+            )
+        ]]></string>
+    </dict>
 </dict>
 </plist>
