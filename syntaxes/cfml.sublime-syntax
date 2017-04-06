@@ -319,6 +319,8 @@ contexts:
         - include: scope:source.cfml.script#comments
         - include: scope:source.cfml.script#expressions
   sql-hash-delimiters:
+    - match: \\(?=#)
+      scope: constant.character.escape.sql
     - match: '##'
       scope: constant.character.escape.hash.cfml
     - match: '#'
