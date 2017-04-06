@@ -2,6 +2,7 @@ import sublime
 from .. import utils
 from .delimited_scopes import DELIMITED_SCOPES
 
+OPERATOR_SELECTOR = "source.cfml.script keyword.operator -source.sql"
 WHITESPACE_CONTAINER_START = ",".join([DELIMITED_SCOPES[k]["start"] for k in DELIMITED_SCOPES])
 WHITESPACE_CONTAINER_END = ",".join([DELIMITED_SCOPES[k]["end"] for k in DELIMITED_SCOPES])
 
@@ -30,7 +31,7 @@ def format_operators(cfml_format):
 
     space_str = " " if padding == "spaced" else ""
 
-    operators = cfml_format.find_by_selector("source.cfml.script keyword.operator -source.sql")
+    operators = cfml_format.find_by_selector(OPERATOR_SELECTOR)
 
     for r in operators:
         operator = cfml_format.view.substr(r)
@@ -54,7 +55,13 @@ def format_operators(cfml_format):
         next_pt = utils.get_next_character(cfml_format.view, r.end())
         if not cfml_format.view.match_selector(next_pt, WHITESPACE_CONTAINER_END):
             replacement_region = sublime.Region(r.end(), next_pt)
-            if padding_strip_newlines:
+            if (
+                operator in ["+", "-"]
+                and cfml_format.view.match_selector(prev_pt, OPERATOR_SELECTOR)
+                and cfml_format.view.match_selector(next_pt, "constant.numeric.cfml")
+            ):
+                substitutions.append((replacement_region, ""))
+            elif padding_strip_newlines:
                 substitutions.append((replacement_region, space_str))
             else:
                 next_str = cfml_format.view.substr(replacement_region)
