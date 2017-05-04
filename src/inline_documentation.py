@@ -10,6 +10,26 @@ DOC_TEMPLATE = ""
 COMPLETION_DOC_TEMPLATE = ""
 PAGINATION_TEMPLATE = ""
 
+BASE_STYLES = {
+    "color": "#000000",
+    "background_color": "#FFFFFF",
+    "paragraph_color": "#272B33",
+    "color_alt": "#5E5E5E",
+    "box_bg_color": "#F4F4F4",
+    "pre_bg_color": "#F8F8F8",
+    "code_bg_color": "#F8F8F8"
+}
+
+BASE_ADAPTIVE_STYLES = {
+    "color": "var(--foreground)",
+    "background_color": "color(var(--background) blend(var(--foreground) 95%))",
+    "paragraph_color": "color(var(--foreground) blend(var(--background) 95%))",
+    "color_alt": "color(var(--foreground) blend(var(--background) 80%))",
+    "box_bg_color": "color(var(--background) blend(var(--foreground) 85%))",
+    "pre_bg_color": "color(var(--background) blend(var(--foreground) 80%))",
+    "code_bg_color": "color(var(--background) blend(var(--foreground) 80%))"
+}
+
 doc_window = None
 documentation_sources = []
 
@@ -38,7 +58,7 @@ def _plugin_loaded():
 
 
 def build_links(links):
-    html_links = ['<a class="link" href="' + link["href"] + '">' + link["text"] + '</a>' for link in links]
+    html_links = ['<a href="' + link["href"] + '">' + link["text"] + '</a>' for link in links]
     return "<br>".join(html_links)
 
 
@@ -81,7 +101,22 @@ def on_hide(view, doc_region_id):
 
 
 def generate_documentation(docs, current_index, doc_type):
-    doc_html_variables = dict(docs[current_index].doc_html_variables)
+    doc_html_variables = dict(docs[current_index].doc_html_variables["html"])
+
+    if utils.get_setting("adaptive_doc_styles"):
+        doc_html_variables.update(BASE_ADAPTIVE_STYLES)
+        doc_html_variables.update(docs[current_index].doc_html_variables["adaptive_styles"])
+    else:
+        doc_html_variables.update(BASE_STYLES)
+        doc_html_variables.update(docs[current_index].doc_html_variables["styles"])
+
+    for key in ['header_color', 'header_bg_color']:
+        for mod in ['light', 'dark']:
+            mod_key = key + '_' + mod
+            if mod_key not in doc_html_variables:
+                doc_html_variables[mod_key] = doc_html_variables[key]
+
+
     doc_html_variables["pagination"] = build_pagination(current_index, len(docs)) if len(docs) > 1 else ""
     doc_html_variables["links"] = build_links(doc_html_variables["links"]) if "links" in doc_html_variables else ""
 
@@ -117,7 +152,8 @@ def display_documentation(view, docs, doc_type, pt=-1, current_index=0):
             view.add_regions(doc_region_id, merge_regions(doc_regions), "source", flags=sublime.DRAW_NO_FILL)
         doc_window = "inline_doc"
         flags = sublime.HIDE_ON_MOUSE_MOVE_AWAY if doc_type == "hover_doc" else 0
-        view.show_popup(doc_html, location=pt, flags=flags, max_width=1024, max_height=480, on_navigate=on_navigate, on_hide=lambda: on_hide(view, doc_region_id))
+        # print(doc_html)
+        view.show_popup(doc_html, location=pt, flags=flags, max_width=768, max_height=480, on_navigate=on_navigate, on_hide=lambda: on_hide(view, doc_region_id))
 
 
 class CfmlInlineDocumentationCommand(sublime_plugin.TextCommand):

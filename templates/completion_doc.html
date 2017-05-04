@@ -1,50 +1,55 @@
-<html>
 <body>
 <style>
 html {
-    background-color: #333333;
+    color: ${color};
 }
 body {
-    font-size: 10pt;
-    color: #FFFFFF;
     margin: 0;
     padding: 2px;
+    background-color: ${background_color};
 }
 h1 {
     margin: 0;
-    font-size: 1em;
-    color: #FFFFFF;
-    background-color: #555555;
+    font-size: 1rem;
     padding: 3px;
+    background-color: ${header_bg_color};
+    color: ${header_color};
+}
+html.dark h1 {
+    background-color: ${header_bg_color_dark};
+    color: ${header_color_dark};
+}
+html.light h1 {
+    background-color: ${header_bg_color_light};
+    color: ${header_color_light};
 }
 p {
-    color: #FFFFFF;
     padding: 2px 0 0;
     margin: 2px 0 0;
 }
 .params {
-    background-color: #444444;
-    font-size: .9em;
+    font-size: 0.9rem;
     margin: 2px 0 0;
     padding: 2px;
+    background-color: ${box_bg_color};
 }
 .active {
-    font-size: 1.1em;
+    font-size: 1rem;
     font-weight: bold;
-    color: #91E22C;
+    color: var(--greenish);
 }
 .required {
-    color: #FFFFFF;
+    color: ${color};
 }
 .optional {
-    color: #EEEEEE;
     font-style: italic;
+    color: ${paragraph_color};
 }
 .body {
-    background-color: #444;
-    font-size: .9em;
+    font-size: 0.9rem;
     margin: 1px 0 0;
     padding: 3px;
+    background-color: ${pre_bg_color};
 }
 </style>
 <h1>${header}</h1>
@@ -53,4 +58,3 @@ p {
 <div>${links}</div>
 ${pagination}
 </body>
-</html>

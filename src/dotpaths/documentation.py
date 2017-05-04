@@ -4,9 +4,16 @@ from . import cfc_utils
 
 STYLES = {
     "side_color": "#4C9BB0",
-    "header_color": "#306B7B",
+    "link_color": "#306B7B",
     "header_bg_color": "#E4EEF1",
-    "text_color": "#272B33"
+    "header_color": "#306B7B"
+}
+
+ADAPTIVE_STYLES = {
+    "side_color": "color(var(--bluish) blend(var(--background) 60%))",
+    "link_color": "color(var(--bluish) blend(var(--foreground) 45%))",
+    "header_bg_color": "color(var(--bluish) blend(var(--background) 60%))",
+    "header_color": "color(var(--foreground) blend(var(--bluish) 95%))"
 }
 
 
@@ -75,11 +82,11 @@ def on_navigate(view, file_path, href):
 
 
 def get_documentation(view, file_path, header):
-    cfc_doc = dict(STYLES)
-    cfc_doc["links"] = []
+    cfc_doc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
+    cfc_doc["html"]["links"] = []
 
-    cfc_doc["header"] = header
-    cfc_doc["description"] = "<strong>path</strong>: <a class=\"alt-link\" href=\"__go_to_component\">" + file_path + "</a>"
+    cfc_doc["html"]["header"] = header
+    cfc_doc["html"]["description"] = "<strong>path</strong>: <a class=\"plain-link\" href=\"__go_to_component\">" + file_path + "</a>"
 
     callback = partial(on_navigate, view, file_path)
     return cfc_doc, callback

@@ -3,14 +3,19 @@ from functools import partial
 from .component_project_index import get_extended_metadata_by_file_path, get_cache_by_file_path
 from .. import utils, minihtml
 
-
 STYLES = {
     "side_color": "#4C9BB0",
-    "header_color": "#306B7B",
+    "link_color": "#306B7B",
     "header_bg_color": "#E4EEF1",
-    "text_color": "#272B33"
+    "header_color": "#306B7B"
 }
-SYNTAX_EXT = "sublime-syntax" if int(sublime.version()) >= 3092 else "tmLanguage"
+
+ADAPTIVE_STYLES = {
+    "side_color": "color(var(--bluish) blend(var(--background) 60%))",
+    "link_color": "color(var(--bluish) blend(var(--foreground) 45%))",
+    "header_bg_color": "color(var(--bluish) blend(var(--background) 60%))",
+    "header_color": "color(var(--foreground) blend(var(--bluish) 95%))"
+}
 
 
 def on_navigate(view, file_path, function_file_map, href):
@@ -33,52 +38,53 @@ def get_documentation(view, project_name, file_path, header):
 
 
 def build_documentation(extended_metadata, file_path, header):
-    model_doc = dict(STYLES)
-    model_doc["links"] = []
-    model_doc["description"] = ""
+    model_doc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
 
-    model_doc["header"] = header
+    model_doc["html"]["links"] = []
+    model_doc["html"]["description"] = ""
+
+    model_doc["html"]["header"] = header
     if file_path:
-        model_doc["description"] += "<strong>path</strong>: <a class=\"alt-link\" href=\"__go_to_component\">" + file_path + "</a><br>"
+        model_doc["html"]["description"] += "<strong>path</strong>: <a class=\"plain-link\" href=\"__go_to_component\">" + file_path + "</a><br>"
 
     if "hint" in extended_metadata and extended_metadata["hint"]:
-        model_doc["description"] += "<div class=\"doc-box\">" + extended_metadata["hint"] + "</div>"
+        model_doc["html"]["description"] += "<div class=\"doc-box\">" + extended_metadata["hint"] + "</div>"
 
     for key in ["entityname", "extends"]:
         if key in extended_metadata and extended_metadata[key]:
-            model_doc["description"] += "<strong>" + key + "</strong>: " + extended_metadata[key] + "<br>"
+            model_doc["html"]["description"] += "<strong>" + key + "</strong>: " + extended_metadata[key] + "<br>"
 
     for key in ["accessors", "persistent"]:
         if extended_metadata[key]:
-            model_doc["description"] += "<strong>" + key + "</strong>: true"
+            model_doc["html"]["description"] += "<strong>" + key + "</strong>: true"
 
-    model_doc["body"] = ""
+    model_doc["html"]["body"] = ""
     if len(extended_metadata["properties"]) > 0:
         properties = parse_properties(file_path, extended_metadata)
         if len(properties) > 0:
-            model_doc["body"] += "<h2>Properties</h2>"
-            model_doc["body"] += "<div class=\"property-box\">"
-            model_doc["body"] += "</div><div class=\"property-box\">".join(properties)
-            model_doc["body"] += "</div>"
+            model_doc["html"]["body"] += "<h2>Properties</h2>"
+            model_doc["html"]["body"] += "<div class=\"property-box\">"
+            model_doc["html"]["body"] += "</div><div class=\"property-box\">".join(properties)
+            model_doc["html"]["body"] += "</div>"
 
     if len(extended_metadata["functions"]) > 0:
         functions = parse_functions(file_path, extended_metadata)
         if "constructor" in functions:
             # we have a constructor
-            model_doc["body"] += "<h2>Constructor</h2>"
-            model_doc["body"] += "<div class=\"method-box\">" + functions["constructor"] + "</div>"
+            model_doc["html"]["body"] += "<h2>Constructor</h2>"
+            model_doc["html"]["body"] += "<div class=\"method-box\">" + functions["constructor"] + "</div>"
 
         if len(functions["public"]) > 0:
-            model_doc["body"] += "<h2>Public Methods</h2>"
-            model_doc["body"] += "<div class=\"method-box\">"
-            model_doc["body"] += "</div><div class=\"method-box\">".join(functions["public"])
-            model_doc["body"] += "</div>"
+            model_doc["html"]["body"] += "<h2>Public Methods</h2>"
+            model_doc["html"]["body"] += "<div class=\"method-box\">"
+            model_doc["html"]["body"] += "</div><div class=\"method-box\">".join(functions["public"])
+            model_doc["html"]["body"] += "</div>"
 
         if len(functions["private"]) > 0:
-            model_doc["body"] += "<h2>Private Methods</h2>"
-            model_doc["body"] += "<div class=\"method-box\">"
-            model_doc["body"] += "</div><div class=\"method-box\">".join(functions["private"])
-            model_doc["body"] += "</div>"
+            model_doc["html"]["body"] += "<h2>Private Methods</h2>"
+            model_doc["html"]["body"] += "<div class=\"method-box\">"
+            model_doc["html"]["body"] += "</div><div class=\"method-box\">".join(functions["private"])
+            model_doc["html"]["body"] += "</div>"
 
     return model_doc
 
@@ -100,56 +106,60 @@ def build_method_preview(cfml_minihtml_view, function_name):
 
 def cached_method_preview(view, project_name, function_file_path, function_name):
     cache = get_cache_by_file_path(project_name, function_file_path)
-    if function_name not in cache:
+    current_color_scheme = view.settings().get("color_scheme")
+    if function_name not in cache or cache[function_name]["color_scheme"] != current_color_scheme:
         with open(function_file_path, "r", encoding="utf-8") as f:
             file_string = f.read()
         cfml_minihtml_view = view.window().create_output_panel("cfml_minihtml")
-        cfml_minihtml_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/cfml." + SYNTAX_EXT)
+        cfml_minihtml_view.assign_syntax("Packages/" + utils.get_plugin_name() + "/syntaxes/cfml.sublime-syntax")
         cfml_minihtml_view.run_command("append", {"characters": file_string, "force": True, "scroll_to_end": True})
-        cache[function_name] = build_method_preview(cfml_minihtml_view, function_name)
+        cache[function_name] = {
+            "color_scheme": current_color_scheme,
+            "preview": build_method_preview(cfml_minihtml_view, function_name)
+        }
         view.window().destroy_output_panel("cfml_minihtml")
-    return cache[function_name]
+    return cache[function_name]["preview"]
 
 
 def build_method_documentation(extended_metadata, function_name, header, method_preview=None):
     function_file_path = extended_metadata["function_file_map"][function_name]
 
     funct = extended_metadata["functions"][function_name]
-    model_doc = dict(STYLES)
-    model_doc["links"] = []
+    model_doc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
+    model_doc["html"]["links"] = []
 
-    model_doc["header"] = header
+    model_doc["html"]["header"] = header
     if funct.meta["access"] and len(funct.meta["access"]) > 0:
-        model_doc["header"] = "<em>" + funct.meta["access"] + "</em> " + model_doc["header"]
+        model_doc["html"]["header"] = "<em>" + funct.meta["access"] + "</em> " + model_doc["html"]["header"]
     if funct.meta["returntype"] and len(funct.meta["returntype"]) > 0:
-        model_doc["header"] += ":" + funct.meta["returntype"]
+        model_doc["html"]["header"] += ":" + funct.meta["returntype"]
 
-    model_doc["description"] = "<strong>path</strong>: <a class=\"alt-link\" href=\"" + funct.name + "\">" + function_file_path + "</a>"
+    model_doc["html"]["description"] = "<strong>path</strong>: <a class=\"plain-link\" href=\"" + funct.name + "\">" + function_file_path + "</a>"
 
     if "hint" in funct.meta and funct.meta["hint"]:
-        model_doc["description"] += "<div class=\"doc-box\">" + funct.meta["hint"] + "</div>"
+        model_doc["html"]["description"] += "<div class=\"doc-box\">" + funct.meta["hint"] + "</div>"
 
-    model_doc["body"] = ""
+    model_doc["html"]["body"] = ""
     if len(funct.meta["arguments"]) > 0:
-        model_doc["body"] += "<ul>"
+        model_doc["html"]["body"] += "<ul>"
         for arg in funct.meta["arguments"]:
-            model_doc["body"] += "<li>"
+            model_doc["html"]["body"] += "<li>"
             if arg["required"]:
-                model_doc["body"] += "required "
+                model_doc["html"]["body"] += "required "
             if arg["type"]:
-                model_doc["body"] += "<em>" + arg["type"] + "</em> "
-            model_doc["body"] += "<strong>" + arg["name"] + "</strong>"
+                model_doc["html"]["body"] += "<em>" + arg["type"] + "</em> "
+            model_doc["html"]["body"] += "<strong>" + arg["name"] + "</strong>"
             if arg["default"]:
-                model_doc["body"] += " = " + arg["default"]
+                model_doc["html"]["body"] += " = " + arg["default"]
             if "hint" in arg and arg["hint"]:
-                model_doc["body"] += "<div class=\"doc-box\">" + arg["hint"] + "</div>"
-            model_doc["body"] += "</li>"
-        model_doc["body"] += "</ul>"
+                model_doc["html"]["body"] += "<div class=\"doc-box\">" + arg["hint"] + "</div>"
+            model_doc["html"]["body"] += "</li>"
+        model_doc["html"]["body"] += "</ul>"
 
     if method_preview:
         css = method_preview["css"].replace("<style>", "").replace("</style>", "")
-        model_doc["styles"] = css
-        model_doc["body"] += method_preview["html"]
+        model_doc["html"]["styles"] = css
+        model_doc["html"]["body"] += method_preview["html"]
 
     return model_doc
 
@@ -162,17 +172,17 @@ def get_function_call_params_doc(project_name, file_path, function_call_params, 
 
 
 def build_function_call_params_doc(extended_metadata, function_call_params, header):
-    model_doc = dict(STYLES)
+    model_doc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
     funct = extended_metadata["functions"][function_call_params.function_name]
 
-    model_doc["header"] = header
+    model_doc["html"]["header"] = header
     if funct.meta["access"] and len(funct.meta["access"]) > 0:
-        model_doc["header"] = "<em>" + funct.meta["access"] + "</em> " + model_doc["header"]
+        model_doc["html"]["header"] = "<em>" + funct.meta["access"] + "</em> " + model_doc["html"]["header"]
     if funct.meta["returntype"] and len(funct.meta["returntype"]) > 0:
-        model_doc["header"] += ":" + funct.meta["returntype"]
+        model_doc["html"]["header"] += ":" + funct.meta["returntype"]
 
-    model_doc["description"] = ""
-    model_doc["body"] = ""
+    model_doc["html"]["description"] = ""
+    model_doc["html"]["body"] = ""
     description_args = []
 
     if len(funct.meta["arguments"]) > 0:
@@ -185,12 +195,12 @@ def build_function_call_params_doc(extended_metadata, function_call_params, head
                 is_active = index == function_call_params.current_index
 
             if is_active:
-                model_doc["body"] += "type: <em>" + (arg["type"] + "</em><br>" if arg["type"] else "any</em><br>")
-                model_doc["body"] += "required: " + ("true<br>" if arg["required"] else "false<br>")
+                model_doc["html"]["body"] += "type: <em>" + (arg["type"] + "</em><br>" if arg["type"] else "any</em><br>")
+                model_doc["html"]["body"] += "required: " + ("true<br>" if arg["required"] else "false<br>")
                 if arg["default"]:
-                    model_doc["body"] += "default: " + arg["default"] + "<br>"
+                    model_doc["html"]["body"] += "default: " + arg["default"] + "<br>"
                 if "hint" in arg and arg["hint"]:
-                    model_doc["body"] += "<p>" + arg["hint"] + "</p>"
+                    model_doc["html"]["body"] += "<p>" + arg["hint"] + "</p>"
 
                 description_args.append("<span class=\"active\">" + arg["name"] + "</span>")
             elif arg["required"]:
@@ -198,7 +208,7 @@ def build_function_call_params_doc(extended_metadata, function_call_params, head
             else:
                 description_args.append("<span class=\"optional\">" + arg["name"] + "</span>")
 
-        model_doc["description"] = "(" + ", ".join(description_args) + ")"
+        model_doc["html"]["description"] = "(" + ", ".join(description_args) + ")"
 
     return model_doc
 
@@ -224,7 +234,7 @@ def is_public_function(function):
 
 
 def parse_function(function, funct_file_path, file_path):
-    result = "<a class=\"alt-link\" href=\"" + function.name + "\">"
+    result = "<a class=\"plain-link\" href=\"" + function.name + "\">"
     result += function.name + "(" + ("..." if function.meta["arguments"] else "") + ")"
     if function.meta["returntype"]:
         result += ":" + function.meta["returntype"]

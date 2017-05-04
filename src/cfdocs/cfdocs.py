@@ -21,11 +21,20 @@ downloading the cfdocs.org repo (https://github.com/foundeo/cfdocs) and using th
 package setting to point to the data folder of the repository.</p>
 """
 
-CFDOCS_STYLES = {
+STYLES = {
     "side_color": "#18BC9C",
+    "link_color": "#18BC9C",
     "header_color": "#C7254E",
-    "header_bg_color": "#F9F2F4",
-    "text_color": "#272B33"
+    "header_bg_color": "#F9F2F4"
+}
+
+ADAPTIVE_STYLES = {
+    "side_color": "#18BC9C",
+    "link_color": "#18BC9C",
+    "header_bg_color": "color(#C7254E blend(var(--background) 85%))",
+    "header_color": "color(#C7254E blend(var(--foreground) 10%))",
+    "header_bg_color_light": "#F9F2F4",
+    "header_color_light": "#C7254E"
 }
 
 CFDOCS_ENGINES = {
@@ -157,53 +166,53 @@ def build_engine_span(engine, minimum_version):
 
 
 def build_cfdoc(function_or_tag, data):
-    cfdoc = dict(CFDOCS_STYLES)
-    cfdoc["links"] = [{"href": "http://cfdocs.org" + "/" + function_or_tag, "text": "cfdocs.org" + "/" + function_or_tag}]
-    cfdoc["header"] = data["syntax"].replace("<", "&lt;").replace(">", "&gt;")
+    cfdoc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
+    cfdoc["html"]["links"] = [{"href": "http://cfdocs.org" + "/" + function_or_tag, "text": "cfdocs.org" + "/" + function_or_tag}]
+    cfdoc["html"]["header"] = data["syntax"].replace("<", "&lt;").replace(">", "&gt;")
     if len(data["returns"]) > 0:
-        cfdoc["header"] += ":" + data["returns"]
+        cfdoc["html"]["header"] += ":" + data["returns"]
 
-    cfdoc["description"] = "<div class=\"engines\">"
+    cfdoc["html"]["description"] = "<div class=\"engines\">"
     for engine in sorted(CFDOCS_ENGINES):
         if engine not in data["engines"]:
             continue
-        cfdoc["description"] += build_engine_span(engine, data["engines"][engine]["minimum_version"])
-    cfdoc["description"] += "</div>"
+        cfdoc["html"]["description"] += build_engine_span(engine, data["engines"][engine]["minimum_version"])
+    cfdoc["html"]["description"] += "</div>"
 
-    cfdoc["description"] += data["description"].replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
+    cfdoc["html"]["description"] += data["description"].replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
 
-    cfdoc["body"] = ""
+    cfdoc["html"]["body"] = ""
     if len(data["params"]) > 0:
-        cfdoc["body"] = "<ul>"
+        cfdoc["html"]["body"] = "<ul>"
         for param in data["params"]:
             param_variables = {"name": param["name"], "description": param["description"].replace("\n", "<br>"), "values": ""}
             if "values" in param and len(param["values"]):
                 param_variables["values"] = "<em>values:</em> " + ", ".join([str(value) for value in param["values"]])
-            cfdoc["body"] += "<li>" + sublime.expand_variables(CFDOCS_PARAM_TEMPLATE, param_variables) + "</li>"
-        cfdoc["body"] += "</ul>"
+            cfdoc["html"]["body"] += "<li>" + sublime.expand_variables(CFDOCS_PARAM_TEMPLATE, param_variables) + "</li>"
+        cfdoc["html"]["body"] += "</ul>"
 
     return cfdoc
 
 
 def build_cfdoc_error(function_or_tag, data):
-    cfdoc = dict(CFDOCS_STYLES)
-    cfdoc["side_color"] = "#F2777A"
-    cfdoc["header_bg_color"] = "#FFFFFF"
-    cfdoc["header"] = "Uh oh!"
-    cfdoc["description"] = "I tried to load that doc for you but got this instead:"
-    cfdoc["body"] = data["error_message"]
+    cfdoc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
+    cfdoc["html"]["side_color"] = "#F2777A"
+    cfdoc["html"]["header_bg_color"] = "#FFFFFF"
+    cfdoc["html"]["header"] = "Uh oh!"
+    cfdoc["html"]["description"] = "I tried to load that doc for you but got this instead:"
+    cfdoc["html"]["body"] = data["error_message"]
 
     return cfdoc
 
 
 def build_completion_doc(function_call_params, data):
-    cfdoc = dict(CFDOCS_STYLES)
-    cfdoc["header"] = data["syntax"].split('(')[0] + "(...)"
+    cfdoc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
+    cfdoc["html"]["header"] = data["syntax"].split('(')[0] + "(...)"
     if len(data["returns"]) > 0:
-        cfdoc["header"] += ":" + data["returns"]
+        cfdoc["html"]["header"] += ":" + data["returns"]
 
-    cfdoc["description"] = ""
-    cfdoc["body"] = ""
+    cfdoc["html"]["description"] = ""
+    cfdoc["html"]["body"] = ""
     description_params = []
     if len(data["params"]) > 0:
         for index, param in enumerate(data["params"]):
@@ -219,13 +228,13 @@ def build_completion_doc(function_call_params, data):
                 if "values" in param and len(param["values"]):
                     param_variables["values"] = "<em>values:</em> " + ", ".join([str(value) for value in param["values"]])
                 if len(param_variables["description"]) > 0 or len(param_variables["values"]) > 0:
-                    cfdoc["body"] = sublime.expand_variables("<p>${description}</p><p>${values}</p>", param_variables)
+                    cfdoc["html"]["body"] = sublime.expand_variables("<p>${description}</p><p>${values}</p>", param_variables)
                 description_params.append("<span class=\"active\">" + param["name"] + "</span>")
             elif param["required"]:
                 description_params.append("<span class=\"required\">" + param["name"] + "</span>")
             else:
                 description_params.append("<span class=\"optional\">" + param["name"] + "</span>")
 
-        cfdoc["description"] = "(" + ", ".join(description_params) + ")"
+        cfdoc["html"]["description"] = "(" + ", ".join(description_params) + ")"
 
     return cfdoc

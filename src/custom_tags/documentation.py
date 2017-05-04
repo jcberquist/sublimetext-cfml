@@ -4,9 +4,17 @@ from .custom_tags import get_index_by_tag_name
 
 STYLES = {
     "side_color": "#934CB0",
-    "header_color": "#352F38",
+    "link_color": "#306B7B",
     "header_bg_color": "#EDE4F1",
-    "text_color": "#352F38"
+    "header_color": "#352F38",
+    "paragraph_color": "#352F38"
+}
+
+ADAPTIVE_STYLES = {
+    "side_color": "color(var(--orangish) blend(var(--background) 60%))",
+    "link_color": "color(var(--orangish) blend(var(--foreground) 45%))",
+    "header_bg_color": "color(var(--orangish) blend(var(--background) 60%))",
+    "header_color": "color(var(--foreground) blend(var(--orangish) 95%))"
 }
 
 
@@ -44,15 +52,15 @@ def on_navigate(view, file_path, href):
 
 
 def get_documentation(view, tag_name, file_path, tag_info):
-    custom_tag_doc = dict(STYLES)
-    custom_tag_doc["links"] = []
+    custom_tag_doc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
+    custom_tag_doc["html"]["links"] = []
 
-    custom_tag_doc["header"] = tag_name
-    custom_tag_doc["description"] = "<strong>path</strong>: <a class=\"alt-link\" href=\"__go_to_customtag\">" + file_path + "</a>"
+    custom_tag_doc["html"]["header"] = tag_name
+    custom_tag_doc["html"]["description"] = "<strong>path</strong>: <a class=\"plain-link\" href=\"__go_to_customtag\">" + file_path + "</a>"
 
-    custom_tag_doc["body"] = "<br>"
-    custom_tag_doc["body"] += "<strong>Closing tag:</strong> " + ("true" if tag_info["has_end_tag"] else "false") + "<br>"
-    custom_tag_doc["body"] += "<strong>Attributes:</strong> " + ", ".join(tag_info["attributes"])
+    custom_tag_doc["html"]["body"] = "<br>"
+    custom_tag_doc["html"]["body"] += "<strong>Closing tag:</strong> " + ("true" if tag_info["has_end_tag"] else "false") + "<br>"
+    custom_tag_doc["html"]["body"] += "<strong>Attributes:</strong> " + ", ".join(tag_info["attributes"])
 
     callback = partial(on_navigate, view, file_path)
     return custom_tag_doc, callback

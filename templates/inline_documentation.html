@@ -1,118 +1,120 @@
+<body>
 <style>
 html {
-	color: #000000;
+    color: ${color};
 }
 body {
-	font-size: 10pt;
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
+    background-color: ${side_color};
 }
-a {
-	color: #0000EE;
-}
-.outer-container {
-
-	background-color: ${side_color};
-	margin: 0;
-	padding: 0;
-}
-.inner-container {
-	background-color: #FFFFFF;
-	margin-left: 3px;
-	padding: 5px;
-	padding-right: 10px;
+.container {
+    margin-left: 3px;
+    padding: 5px;
+    padding-right: 10px;
+    background-color: ${background_color};
 }
 h1 {
-	font-size: 1em;
-	margin: 1px;
-	padding: 2px;
-	background-color: ${header_bg_color};
-	color: ${header_color};
+    font-size: 1rem;
+    margin: 1px;
+    padding: 2px;
+    background-color: ${header_bg_color};
+    color: ${header_color};
+}
+html.dark h1 {
+    background-color: ${header_bg_color_dark};
+    color: ${header_color_dark};
+}
+html.light h1 {
+    background-color: ${header_bg_color_light};
+    color: ${header_color_light};
 }
 h2 {
-	font-size: 1em;
-	margin: 1px;
-	padding: 2px;
-	color: ${header_color};
+    font-size: 1rem;
+    margin: 1px;
+    padding: 2px;
+    color: ${header_color};
+}
+a {
+    margin: 1px;
+    padding: 2px;
+    color: ${link_color};
+}
+a.plain-link {
+    text-decoration: none;
 }
 p {
-	margin: 1px;
-	padding: 2px;
-	color: ${text_color};
-}
-.link {
-	margin: 1px;
-	padding: 2px;
-	color: ${side_color};
-}
-.alt-link {
-	margin: 1px;
-	padding: 2px;
-	color: ${header_color};
-	text-decoration: none;
+    margin: 1px;
+    padding: 2px;
+    color: ${paragraph_color};
 }
 .doc-box {
-	color: #5E5E5E;
+    color: ${color_alt};
 }
 .property-box {
-	margin: 3px 2px;
-	padding: 5px 3px;
-	background-color: #F8F8F8;
+    margin: 3px 2px;
+    padding: 5px 3px;
+    background-color: ${box_bg_color};
+    border-radius: 3px;
 }
 .method-box {
-	margin: 5px 2px;
-	padding: 6px 4px;
-	background-color: #F8F8F8;
+    margin: 5px 2px;
+    padding: 6px 4px;
+    background-color: ${box_bg_color};
+    border-radius: 3px;
 }
 .method-args {
-	margin: 5px;
-	padding-left: 15px;
-	color: #333;
-	font-size: 9pt;
+    margin: 5px;
+    padding-left: 15px;
+    font-size: 1rem;
+    color: ${paragraph_color};
 }
 .pre {
-	padding: 5px;
-	background-color: #F2F2F2;
-	color: #333333;
-	font-size: 9pt;
+    padding: 5px;
+    background-color: ${pre_bg_color};
+    color: ${paragraph_color};
 }
 .code {
-	background-color: #F5F5F5;
-	color: #333333;
+    background-color: ${code_bg_color};
+    color: ${paragraph_color};
 }
 .pagination {
-	font-size: 9pt;
-	background-color: #DDDDDD;
-	padding-top: 2px;
-	padding-bottom: 2px;
-	padding-left: 10px;
-	padding-right: 10px;
+    color: #000000;
+    background-color: #DDDDDD;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.pagination a {
+    color: #0000EE;
 }
 .engines {
-	font-size: 9pt;
-	padding-top: 2px;
-	padding-bottom: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
 }
 .coldfusion {
-	background-color: #069;
-	color: #FFFFFF;
+    background-color: #069;
+    color: #FFFFFF;
+    border-radius: 3px;
 }
 .lucee {
-	background-color: #449CAF;
-	color: #FFFFFF;
+    background-color: #449CAF;
+    color: #FFFFFF;
+    border-radius: 3px;
 }
 .openbd {
-	background-color: #2FA5D7;
-	color: #FFFFFF;
+    background-color: #2FA5D7;
+    color: #FFFFFF;
+    border-radius: 3px;
 }
 ${styles}
 </style>
-<div class="outer-container">
-<div class="inner-container">
+<div class="container">
 <h1>${header}</h1>
 <p>${description}</p>
 <div>${body}</div>
 <div>${links}</div>
 </div>
-</div>
 ${pagination}
+</body>

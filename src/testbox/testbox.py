@@ -2,11 +2,20 @@ import sublime
 import json
 from .. import utils
 
-DOC_STYLES = {
+STYLES = {
     "side_color": "#336B81",
+    "link_color": "#336B81",
     "header_color": "#379AC1",
     "header_bg_color": "#E1E1E1",
-    "text_color": "#585B31"
+    "paragraph_color": "#585B31",
+    "color_alt": "#585B31"
+}
+
+ADAPTIVE_STYLES = {
+    "side_color": "color(#336B81 blend(var(--background) 60%))",
+    "link_color": "color(#336B81 blend(var(--foreground) 45%))",
+    "header_bg_color": "color(#336B81 blend(var(--background) 60%))",
+    "header_color": "color(var(--foreground) blend(#379AC1 95%))"
 }
 
 testbox = {"completions": {}, "documentation": {}}
@@ -127,12 +136,12 @@ def get_inline_documentation(cfml_view, doc_type):
 
 
 def get_documentation(key, metadata, negated=False):
-    testbox_doc = dict(DOC_STYLES)
-    testbox_doc["header"] = metadata["header"]
-    testbox_doc["description"] = metadata["description"]
-    testbox_doc["body"] = metadata["body"]
-    testbox_doc["links"] = metadata["links"]
+    testbox_doc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
+    testbox_doc["html"]["header"] = metadata["header"]
+    testbox_doc["html"]["description"] = metadata["description"]
+    testbox_doc["html"]["body"] = metadata["body"]
+    testbox_doc["html"]["links"] = metadata["links"]
 
     if negated:
-        testbox_doc["header"] += " (negated)"
+        testbox_doc["html"]["header"] += " (negated)"
     return testbox_doc
