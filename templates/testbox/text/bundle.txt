@@ -1,0 +1,9 @@
+=============================================================
+${path} (${totalduration})
+=============================================================
+->[Suites/Specs: ${totalsuites}/${totalspecs}]
+->[Pass: ${totalpass}]
+->[Failures: ${totalfail}]
+->[Errors: ${totalerror}]
+->[Skipped: ${totalskipped}]
+

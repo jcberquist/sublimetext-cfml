@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------------
+| Passed  | Failed  | Errored | Skipped | Time    | Bundles | Suites  | Specs   |
+---------------------------------------------------------------------------------
+| ${totalpass} | ${totalfail} | ${totalerror} | ${totalskipped} | ${totalduration} | ${totalbundles} | ${totalsuites} | ${totalspecs} |
+---------------------------------------------------------------------------------

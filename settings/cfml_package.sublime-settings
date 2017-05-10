@@ -84,6 +84,7 @@
 	"testbox": {
 		"runner": "http://localhost:8888/testbox/system/Testbox.cfc?method=runremote",
 		"tests_root": "",
+		"reporter": "compacttext", // options are `compacttext` and `text`
 		"results": {"server_root": "", "sublime_root": ""}
 	},
 

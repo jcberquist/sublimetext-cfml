@@ -5,34 +5,49 @@ scope: testbox
 hidden: true
 contexts:
   main:
-    - match: '[\w\s\.]+\s\(\d+\sms\)$'
-      scope: testbox.header
-    - match: '\->\['
-      push:
-        - meta_scope: testbox.totals
-        - match: \]
-          pop: true
-        - match: 'Pass: ([1-9]\d*)'
-          captures:
-            1: testbox.success
-        - match: 'Failures: ([1-9]\d*)'
-          captures:
-            1: testbox.failure
-        - match: 'Errors: ([1-9]\d*)'
-          captures:
-            1: testbox.error
-        - match: 'Skipped: ([1-9]\d*)'
-          captures:
-            1: testbox.skipped
-    - match: \(\+\).*$
-      scope: testbox.success
-    - match: \(!\).*$
-      scope: testbox.failure
-    - match: \(X\).*$
-      scope: testbox.error
-    - match: \(\-\).*$
-      scope: testbox.skipped    
+    - match: '^\|(?=\s\d+\s+\|)'
+      push: [skipped, error, failure, success]
+    - match: 'Pass:|\[Passed:'
+      push: success
+    - match: 'Failures:|\[Failed:'
+      push: failure
+    - match: 'Errors:|\[Errors:'
+      push: error
+    - match: 'Skipped:|\[Skipped:'
+      push: skipped
+    - match: \(([+P])\)
+      captures:
+        1: testbox.success
+    - match: \((!)\)
+      captures:
+        1: testbox.failure
+    - match: \((X)\)
+      captures:
+        1: testbox.error
+    - match: \((-)\)
+      captures:
+        1: testbox.skipped
     - match: \S.*testbox[\\/]system.*:\d+$
       scope: testbox.stack.testbox
     - match: \S.*:\d+$
       scope: testbox.stack
+  success:
+    - match: '[1-9]\d*'
+      scope: testbox.success
+    - match: \S
+      pop: true
+  failure:
+    - match: '[1-9]\d*'
+      scope: testbox.failure
+    - match: \S
+      pop: true
+  error:
+    - match: '[1-9]\d*'
+      scope: testbox.error
+    - match: \S
+      pop: true
+  skipped:
+    - match: '[1-9]\d*'
+      scope: testbox.skipped
+    - match: \S
+      pop: true

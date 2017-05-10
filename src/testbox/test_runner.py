@@ -9,7 +9,10 @@ import urllib.request
 from functools import partial
 from .. import utils
 
-RESULTS_TEMPLATES = {"logo": "", "bundle": "", "results": "", "global_exception": "", "legend": ""}
+RESULT_TEMPLATES = {
+    "compacttext": {"logo": "", "bundle": "", "results": "", "global_exception": "", "legend": ""},
+    "text": {"logo": "", "bundle": "", "results": "", "global_exception": "", "legend": ""}
+}
 
 
 def _plugin_loaded():
@@ -17,9 +20,11 @@ def _plugin_loaded():
 
 
 def load():
-    global RESULTS_TEMPLATES
-    for template in RESULTS_TEMPLATES:
-        RESULTS_TEMPLATES[template] = sublime.load_resource("Packages/" + utils.get_plugin_name() + "/templates/testbox/" + template + ".txt").replace("\r", "")
+    global RESULT_TEMPLATES
+    for n in RESULT_TEMPLATES:
+        for t in RESULT_TEMPLATES[n]:
+            r = "Packages/" + utils.get_plugin_name() + "/templates/testbox/" + n + "/" + t + ".txt"
+            RESULT_TEMPLATES[n][t] = sublime.load_resource(r).replace("\r", "")
 
 
 class TestboxCommand(sublime_plugin.WindowCommand):
@@ -78,6 +83,7 @@ class TestboxCommand(sublime_plugin.WindowCommand):
             self.output_view = self.window.create_output_panel("testbox")
 
         testbox_results = self.get_testbox_results(project_file_dir)
+        reporter = self.get_setting("reporter")
 
         self.output_view.settings().set("result_file_regex", testbox_results["server_root"] + "([^\\s].*):([0-9]+)$")
         self.output_view.settings().set("result_base_dir", testbox_results["sublime_root"])
@@ -94,18 +100,18 @@ class TestboxCommand(sublime_plugin.WindowCommand):
         self.window.create_output_panel("testbox")
 
         self.window.run_command("show_panel", {"panel": "output.testbox"})
-        self.output_view.run_command("append", {"characters": RESULTS_TEMPLATES["logo"], "force": True, "scroll_to_end": True})
+        self.output_view.run_command("append", {"characters": RESULT_TEMPLATES[reporter]["logo"], "force": True, "scroll_to_end": True})
 
         # run async
-        sublime.set_timeout_async(partial(self.run_tests, runner_url, test_bundle))
+        sublime.set_timeout_async(partial(self.run_tests, runner_url, test_bundle, reporter))
 
-    def run_tests(self, runner_url, test_bundle):
+    def run_tests(self, runner_url, test_bundle, reporter):
         sublime.status_message("TestBox: running tests")
         print("TestBox: " + runner_url)
 
         try:
             json_string = urllib.request.urlopen(runner_url).read().decode("utf-8")
-            result_string = render_result(json.loads(json_string), test_bundle)
+            result_string = render_result(json.loads(json_string), test_bundle, reporter)
         except:
             result_string = "\nError when trying to fetch:\n" + runner_url
             result_string += "\nPlease verify the URL is valid and returns the test results in JSON."
@@ -190,24 +196,25 @@ class TestboxCommand(sublime_plugin.WindowCommand):
 # result rendering
 
 
-def render_result(result_data, test_bundle):
+def render_result(result_data, test_bundle, reporter):
     # lowercase all the keys since we can't guarantee the casing coming from CFML
     result_data = lcase_keys(result_data)
-    result_string = sublime.expand_variables(RESULTS_TEMPLATES["results"], filter_stats_dict(result_data)) + "\n"
+    padToLen = 7 if reporter == "compacttext" else 0
+    result_string = sublime.expand_variables(RESULT_TEMPLATES[reporter]["results"], filter_stats_dict(result_data, padToLen))
 
     for bundle in result_data["bundlestats"]:
         if len(test_bundle) and bundle["path"] != test_bundle:
             continue
 
-        result_string += "\n" + sublime.expand_variables(RESULTS_TEMPLATES["bundle"], filter_stats_dict(bundle)) + "\n"
+        result_string += sublime.expand_variables(RESULT_TEMPLATES[reporter]["bundle"], filter_stats_dict(bundle))
 
         if isinstance(bundle["globalexception"], dict):
-            result_string += "\n" + sublime.expand_variables(RESULTS_TEMPLATES["global_exception"], filter_exception_dict(bundle["globalexception"])) + "\n"
+            result_string += sublime.expand_variables(RESULT_TEMPLATES[reporter]["global_exception"], filter_exception_dict(bundle["globalexception"])) + "\n"
 
         for suite in bundle["suitestats"]:
-            result_string += "\n" + gen_suite_report(suite)
+            result_string += gen_suite_report(bundle, suite, reporter)
 
-    result_string += "\n" + RESULTS_TEMPLATES["legend"]
+    result_string += "\n" + RESULT_TEMPLATES[reporter]["legend"]
     return result_string
 
 
@@ -219,10 +226,28 @@ def lcase_keys(source):
     return source
 
 
-def filter_stats_dict(source):
-    stat_keys = ["path", "totalduration", "totalbundles", "totalsuites", "totalspecs"]
-    stat_keys.extend(["totalpass", "totalfail", "totalerror", "totalskipped"])
-    return {key: str(source[key]) for key in stat_keys if key in source}
+def filter_stats_dict(source, padToLen=0):
+    stat_keys = [
+        "path",
+        "totalduration",
+        "totalbundles",
+        "totalsuites",
+        "totalspecs",
+        "totalpass",
+        "totalfail",
+        "totalerror",
+        "totalskipped"
+    ]
+
+    def paddedText(key, toLen):
+        txt = str(source[key])
+        if key == "totalduration":
+            txt = txt + " ms"
+        if toLen == 0 or len(txt) >= toLen:
+            return txt
+        return txt + " " * (toLen - len(txt))
+
+    return {key: paddedText(key, padToLen) for key in stat_keys if key in source}
 
 
 def filter_exception_dict(source):
@@ -234,7 +259,7 @@ def get_status_bit(status):
     status_dict = {"Failed": "!", "Error": "X", "Skipped": "-"}
     if status in status_dict:
         return status_dict[status]
-    return "+"
+    return "P"
 
 
 def build_stacktrace(stack, tabs):
@@ -244,11 +269,17 @@ def build_stacktrace(stack, tabs):
     return stacktrace
 
 
-def gen_suite_report(suiteStats, level=0):
+def gen_suite_report(bundleStats, suiteStats, reporter, level=0):
+    if reporter == "compacttext" and bundleStats["totalfail"] + bundleStats["totalerror"] == 0:
+        return ""
+
     tabs = "    " * level
     report = tabs + "(" + get_status_bit(suiteStats["status"]) + ")" + suiteStats["name"] + "\n"
     level += 1
     for spec in suiteStats["specstats"]:
+        if reporter == "compacttext" and spec["status"] not in ["Failed", "Error"]:
+            continue
+
         tabs = "    " * level
         report += tabs + "(" + get_status_bit(spec["status"]) + ")" + spec["name"] + " (" + str(spec["totalduration"]) + " ms)" + "\n"
 
@@ -262,6 +293,6 @@ def gen_suite_report(suiteStats, level=0):
                 report += build_stacktrace(spec["error"]["tagcontext"], tabs)
 
     for nestedSuite in suiteStats["suitestats"]:
-        report += gen_suite_report(nestedSuite, level + 1) + "\n"
+        report += gen_suite_report(bundleStats, nestedSuite, reporter, level + 1).strip() + "\n"
 
     return report
