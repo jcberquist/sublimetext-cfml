@@ -1,0 +1,21 @@
+CFML v0.22.0 Changelog:
+
+- Moved from separate menu entries for opening default package setting files and
+  user package setting files to one entry for each that opens the default and
+  user files side by side (as Sublime Text itself now does for its settings
+  files).
+
+- Inline documentation popups now make use of styling that adapts to the current
+  color scheme. (e.g. Color schemes with a dark background will now get popups
+  with a dark background as well.) You can disable this behavior by setting the
+  package setting `adaptive_doc_styles` to false in your user package settings.
+
+- Added a new testbox reporter: "compacttext". There are now two options for the
+  text output when tests are run, "text" and "compacttext". This is controlled
+  by the setting `testbox.reporter` and can be set in your package settings, project
+  settings, or in a box.json file at the root of  your project. The "compacttext"
+  style output is courtesy of work done by John Whish (@aliaspooryorik).
+
+- Added `TRUNCATE TABLE` and `BULK INSERT` to the list of strings that trigger
+  SQL string highlighting
+  https://github.com/jcberquist/sublimetext-cfml/issues/35#issuecomment-294524021
