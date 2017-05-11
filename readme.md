@@ -6,7 +6,7 @@ You can install this package via [Package Control](https://packagecontrol.io/). 
 
 Manual installation is also possible by downloading the repository and placing it in a folder within your Sublime packages folder. (See below for more information.)
 
-*Please ensure that you are running at least build 3103 of Sublime Text 3. As of v0.18.0 this package only uses `sublime-syntax` syntax highlighting.*
+*Please ensure that you are running at least build 3126 of Sublime Text 3. This package uses only `sublime-syntax` syntax highlighting and as of v0.21.0 takes advantage of features introduced in that beta build.*
 
 ### Acknowledgements
 
@@ -75,7 +75,7 @@ There are several settings files that you should be aware of, as they control mu
 
 **Package Settings**
 
-You can access the default package settings from the menu under `Package Settings -> CFML -> Package Settings - Default` or via the command palette: `CFML: Package Settings - Default`. To override any of these settings, use the user package settings file. This can be accessed under the menu `Package Settings -> CFML -> Package Settings - User` or via the command palette: `CFML: Package Settings - User`.
+You can access package settings from the menu under `Package Settings -> CFML -> Settings` or via the command palette: `CFML: Settings`. To override any of these settings, use the user package settings file. (The default settings and user settings open side by side.)
 
 **Project Settings**
 
@@ -83,7 +83,7 @@ Some settings are also (or only) able to be set on a per project basis. These se
 
 **Bindings**
 
-The default keyboard and mouse binding files are available in the menu under `Package Settings -> CFML -> Key Bindings - Default` and `Package Settings -> CFML -> Mouse Bindings - Default`. Or via the command palette at `CFML: Key Bindings - Default` and `CFML: Mouse Bindings - Default`. The user key and mouse  binding files are available in the same locations.
+The keyboard and mouse binding files are available in the menu under `Package Settings -> CFML -> Key Bindings` and `Package Settings -> CFML -> Mouse Bindings`. Or via the command palette at `CFML: Key Bindings` and `CFML: Mouse Bindings`. The default and user files open side by side.
 
 ### Default Key Bindings
 

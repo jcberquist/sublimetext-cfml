@@ -1,88 +1,57 @@
 [
-	{
-		"caption": "Preferences",
-		"mnemonic": "n",
-		"id": "preferences",
-		"children":
-		[
-			{
-				"caption": "Package Settings",
-				"mnemonic": "P",
-				"id": "package-settings",
-				"children":
-				[
-					{
-						"caption": "CFML",
-						"mnemonic": "C",
-						"children":
-						[
-							{
-								"command": "cfml_open_package_file", "args":
-								{
-									"file": "${packages}/{cfml_package_name}/settings/cfml_package.sublime-settings"
-								},
-								"caption": "Settings – Default"
-							},
-							{
-								"command": "open_file", "args":
-								{
-									"file": "${packages}/User/cfml_package.sublime-settings",
-									"contents": "{\n\t$0\n}\n"
-								},
-								"caption": "Settings – User"
-							},
-							{ "caption": "-" },
-							{
-								"command": "cfml_open_package_file", "args":
-								{
-									"file": "${packages}/{cfml_package_name}/inputmaps/Default ($platform).sublime-keymap"
-								},
-								"caption": "Key Bindings – Default"
-							},
-							{
-								"command": "open_file", "args":
-								{
-									"file": "${packages}/User/Default ($platform).sublime-keymap",
-									"contents": "[\n\t$0\n]\n"
-								},
-								"caption": "Key Bindings – User"
-							},
-							{ "caption": "-" },
-							{
-								"command": "cfml_open_package_file", "args":
-								{
-									"file": "${packages}/{cfml_package_name}/inputmaps/Default ($platform).sublime-mousemap"
-								},
-								"caption": "Mouse Bindings – Default"
-							},
-							{
-								"command": "open_file", "args":
-								{
-									"file": "${packages}/User/Default ($platform).sublime-mousemap",
-									"contents": "[\n\t$0\n]\n"
-								},
-								"caption": "Mouse Bindings – User"
-							},
-							{ "caption": "-" },
-							{
-								"command": "cfml_open_package_file", "args":
-								{
-									"file": "${packages}/{cfml_package_name}/settings/cfml_format.sublime-settings"
-								},
-								"caption": "Format Settings – Default"
-							},
-							{
-								"command": "open_file", "args":
-								{
-									"file": "${packages}/User/cfml_format.sublime-settings",
-									"contents": "{\n\t$0\n}\n"
-								},
-								"caption": "Format Settings – User"
-							}
-						]
-					}
-				]
-			}
-		]
-	}
+    {
+        "caption": "Preferences",
+        "mnemonic": "n",
+        "id": "preferences",
+        "children":
+        [
+            {
+                "caption": "Package Settings",
+                "mnemonic": "P",
+                "id": "package-settings",
+                "children":
+                [
+                    {
+                        "caption": "CFML",
+                        "mnemonic": "C",
+                        "children":
+                        [
+                            {
+                                "command": "cfml_edit_settings",
+                                "args": {
+                                    "file": "${packages}/{cfml_package_name}/settings/cfml_package.sublime-settings",
+                                    "default": "{\n\t$0\n}\n"
+                                },
+                                "caption": "Settings"
+                            },
+                            {
+                                "command": "cfml_edit_settings",
+                                "args": {
+                                    "file": "${packages}/{cfml_package_name}/inputmaps/Default ($platform).sublime-keymap",
+                                    "default": "[\n\t$0\n]\n"
+                                },
+                                "caption": "Key Bindings"
+                            },
+                            {
+                                "command": "cfml_edit_settings",
+                                "args": {
+                                    "file": "${packages}/{cfml_package_name}/inputmaps/Default ($platform).sublime-mousemap",
+                                    "contents": "[\n\t$0\n]\n"
+                                },
+                                "caption": "Mouse Bindings"
+                            },
+                            {
+                                "command": "cfml_edit_settings",
+                                "args": {
+                                    "file": "${packages}/{cfml_package_name}/settings/cfml_format.sublime-settings",
+                                    "default": "{\n\t$0\n}\n"
+                                },
+                                "caption": "Format Settings"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
 ]

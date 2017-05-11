@@ -1,70 +1,42 @@
 [
-	{
-		"caption": "CFML: Settings - Default",
-		"command": "cfml_open_package_file", "args":
-			{
-				"file": "${packages}/{cfml_package_name}/settings/cfml_package.sublime-settings"
-			}
-	},
-	{
-		"caption": "CFML: Settings - User",
-		"command": "open_file", "args":
-			{
-				"file": "${packages}/User/cfml_package.sublime-settings",
-				"contents": "{\n\t$0\n}\n"
-			}
-	},
-	{
-		"caption": "CFML: Key Bindings - Default",
-		"command": "cfml_open_package_file", "args":
-			{
-				"file": "${packages}/{cfml_package_name}/inputmaps/Default ($platform).sublime-keymap"
-			}
-	},
-	{
-		"caption": "CFML: Key Bindings - User",
-		"command": "open_file", "args":
-			{
-				"file": "${packages}/User/Default ($platform).sublime-keymap",
-				"contents": "[\n\t$0\n]\n"
-			}
-	},
-	{
-		"caption": "CFML: Mouse Bindings - Default",
-		"command": "cfml_open_package_file", "args":
-			{
-				"file": "${packages}/{cfml_package_name}/inputmaps/Default ($platform).sublime-mousemap"
-			}
-	},
-	{
-		"caption": "CFML: Mouse Bindings - User",
-		"command": "open_file", "args":
-			{
-				"file": "${packages}/User/Default ($platform).sublime-mousemap",
-				"contents": "[\n\t$0\n]\n"
-			}
-	},
-	{
-		"caption": "CFML: Format Settings - Default",
-		"command": "cfml_open_package_file", "args":
-			{
-				"file": "${packages}/{cfml_package_name}/settings/cfml_format.sublime-settings"
-			}
-	},
-	{
-		"caption": "CFML: Format Settings - User",
-		"command": "open_file", "args":
-			{
-				"file": "${packages}/User/cfml_format.sublime-settings",
-				"contents": "{\n\t$0\n}\n"
-			}
-	},
-	{
-		"caption": "CFML: Index Active Project",
-		"command": "cfml_index_project"
-	},
-	{
-		"caption": "CFML: Toggle Color Scheme Styles",
-		"command": "cfml_color_scheme_styles"
-	}
+    {
+        "caption": "CFML: Settings",
+        "command": "cfml_edit_settings",
+        "args": {
+            "file": "${packages}/{cfml_package_name}/settings/cfml_package.sublime-settings",
+            "default": "{\n\t$0\n}\n"
+        }
+    },
+    {
+        "caption": "CFML: Key Bindings",
+        "command": "cfml_edit_settings",
+        "args": {
+            "file": "${packages}/{cfml_package_name}/inputmaps/Default ($platform).sublime-keymap",
+            "default": "[\n\t$0\n]\n"
+        }
+    },
+    {
+        "caption": "CFML: Mouse Bindings",
+        "command": "cfml_edit_settings",
+        "args": {
+            "file": "${packages}/{cfml_package_name}/inputmaps/Default ($platform).sublime-mousemap",
+            "default": "[\n\t$0\n]\n"
+        }
+    },
+    {
+        "caption": "CFML: Format Settings",
+        "command": "cfml_edit_settings",
+        "args": {
+            "file": "${packages}/{cfml_package_name}/settings/cfml_format.sublime-settings",
+            "default": "{\n\t$0\n}\n"
+        }
+    },
+    {
+        "caption": "CFML: Index Active Project",
+        "command": "cfml_index_project"
+    },
+    {
+        "caption": "CFML: Toggle Color Scheme Styles",
+        "command": "cfml_color_scheme_styles"
+    }
 ]
