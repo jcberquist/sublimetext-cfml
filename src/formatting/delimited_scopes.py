@@ -4,26 +4,26 @@ from collections import namedtuple
 DELIMITED_SCOPES = {
     "struct": {
         "scope": "meta.struct-literal.cfml",
-        "start": "punctuation.definition.block.begin.cfml",
-        "end": "punctuation.definition.block.end.cfml",
+        "start": "punctuation.section.block.begin.cfml",
+        "end": "punctuation.section.block.end.cfml",
         "separator": "punctuation.separator.struct-literal.cfml"
     },
     "array": {
         "scope": "meta.array-literal.cfml",
-        "start": "punctuation.definition.brackets.begin.cfml",
-        "end": "punctuation.definition.brackets.end.cfml",
+        "start": "punctuation.section.brackets.begin.cfml",
+        "end": "punctuation.section.brackets.end.cfml",
         "separator": "punctuation.separator.array-literal.cfml"
     },
     "function_declaration": {
         "scope": "meta.function.parameters.cfml",
-        "start": "punctuation.definition.parameters.begin.cfml",
-        "end": "punctuation.definition.parameters.end.cfml",
+        "start": "punctuation.section.parameters.begin.cfml",
+        "end": "punctuation.section.parameters.end.cfml",
         "separator": "punctuation.separator.function.cfml"
     },
     "function_call": {
         "scope": "meta.function-call.parameters",
-        "start": "punctuation.definition.group.begin.cfml",
-        "end": "punctuation.definition.group.end.cfml",
+        "start": "punctuation.section.group.begin.cfml",
+        "end": "punctuation.section.group.end.cfml",
         "separator": "punctuation.separator.function-call"
     }
 }

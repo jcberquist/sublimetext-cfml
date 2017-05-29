@@ -101,8 +101,8 @@ def format_brackets(cfml_format):
     padding_strip_newlines = brackets.get("padding_strip_newlines", False)
     space_str = " " if brackets.get("padding") == "spaced" else ""
 
-    bracket_starts = cfml_format.find_by_selector("meta.brackets.cfml punctuation.definition.brackets.begin.cfml")
-    bracket_ends = cfml_format.find_by_selector("meta.brackets.cfml punctuation.definition.brackets.end.cfml")
+    bracket_starts = cfml_format.find_by_selector("meta.brackets.cfml punctuation.section.brackets.begin.cfml")
+    bracket_ends = cfml_format.find_by_selector("meta.brackets.cfml punctuation.section.brackets.end.cfml")
     substitutions = []
 
     for r in bracket_starts:

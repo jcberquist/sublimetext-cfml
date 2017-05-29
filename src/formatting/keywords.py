@@ -3,9 +3,9 @@ from .. import utils
 
 KEYWORD_SELECTOR = "source.cfml.script keyword.control"
 GROUP_SELECTOR = "meta.group.cfml"
-GROUP_START_SELECTOR = "meta.group.cfml punctuation.definition.group.begin.cfml"
-BLOCK_START_SELECTOR = "meta.block.cfml punctuation.definition.block.begin.cfml"
-BLOCK_END_SELECTOR = "meta.block.cfml punctuation.definition.block.end.cfml"
+GROUP_START_SELECTOR = "meta.group.cfml punctuation.section.group.begin.cfml"
+BLOCK_START_SELECTOR = "meta.block.cfml punctuation.section.block.begin.cfml"
+BLOCK_END_SELECTOR = "meta.block.cfml punctuation.section.block.end.cfml"
 WHILE_SELECTOR = " meta.while.cfml"
 PREVIOUS_BLOCK_SCOPES = {
     "while": "meta.do-while.cfml",
@@ -15,9 +15,9 @@ PREVIOUS_BLOCK_SCOPES = {
 }
 FUNCTION_SELECTOR = "source.cfml.script meta.function.declaration.cfml storage.type.function.cfml"
 FUNCTION_NAME_SELECTOR = "source.cfml.script meta.function.declaration.cfml entity.name.function.cfml"
-FUNCTION_GROUP_SELECTOR = "source.cfml.script meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml"
-FUNCTION_GROUP_END_SELECTOR = "source.cfml.script meta.function.parameters.cfml punctuation.definition.parameters.end.cfml"
-FUNCTION_BLOCK_START_SELECTOR = "source.cfml.script meta.function.body.cfml punctuation.definition.block.begin.cfml"
+FUNCTION_GROUP_SELECTOR = "source.cfml.script meta.function.parameters.cfml punctuation.section.parameters.begin.cfml"
+FUNCTION_GROUP_END_SELECTOR = "source.cfml.script meta.function.parameters.cfml punctuation.section.parameters.end.cfml"
+FUNCTION_BLOCK_START_SELECTOR = "source.cfml.script meta.function.body.cfml punctuation.section.block.begin.cfml"
 
 
 def format_keywords(cfml_format):

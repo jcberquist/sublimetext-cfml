@@ -4,8 +4,8 @@ from .. import utils
 from .delimited_scopes import DELIMITED_SCOPE_LIST
 
 Block = namedtuple("Block", "block_type, indent_pt, start_to_char, char_to_end, end_to_char")
-BLOCK_START_SELECTOR = "punctuation.definition.block.begin.cfml"
-BLOCK_END_SELECTOR = "punctuation.definition.block.end.cfml"
+BLOCK_START_SELECTOR = "punctuation.section.block.begin.cfml"
+BLOCK_END_SELECTOR = "punctuation.section.block.end.cfml"
 GROUP_SELECTOR = "meta.group, meta.function.parameters"
 
 

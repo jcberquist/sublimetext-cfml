@@ -5,13 +5,13 @@ component {
 //  ^ meta.function.declaration.cfml meta.struct-literal.key.cfml entity.name.function.cfml
 //     ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml -entity.name.function.cfml
 //      ^ -punctuation.separator.key-value.cfml
-//       ^ meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml
-//        ^ punctuation.definition.parameters.end.cfml -punctuation.definition.parameters.begin.cfml
-//         ^ -punctuation.definition.parameters.end.cfml -meta.function.parameters.cfml
+//       ^ meta.function.parameters.cfml punctuation.section.parameters.begin.cfml
+//        ^ punctuation.section.parameters.end.cfml -punctuation.section.parameters.begin.cfml
+//         ^ -punctuation.section.parameters.end.cfml -meta.function.parameters.cfml
 //          ^ storage.type.function.arrow.cfml
 //            ^ -storage.type.function.arrow.cfml
-//             ^ meta.function.body.cfml punctuation.definition.block.begin.cfml -meta.function.declaration.cfml
-//              ^ -punctuation.definition.block.begin.cfml
+//             ^ meta.function.body.cfml punctuation.section.block.begin.cfml -meta.function.declaration.cfml
+//              ^ -punctuation.section.block.begin.cfml
     },
     'key': () => {
 //  ^ meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.single.cfml punctuation.definition.string.begin.cfml
@@ -19,13 +19,13 @@ component {
 //      ^ punctuation.definition.string.end.cfml -entity.name.function.cfml
 //       ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml -string.quoted.single.cfml -punctuation.definition.string.end.cfml
 //        ^ -punctuation.separator.key-value.cfml
-//         ^ meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml
-//          ^ punctuation.definition.parameters.end.cfml -punctuation.definition.parameters.begin.cfml
-//           ^ -punctuation.definition.parameters.end.cfml -meta.function.parameters.cfml
+//         ^ meta.function.parameters.cfml punctuation.section.parameters.begin.cfml
+//          ^ punctuation.section.parameters.end.cfml -punctuation.section.parameters.begin.cfml
+//           ^ -punctuation.section.parameters.end.cfml -meta.function.parameters.cfml
 //            ^ storage.type.function.arrow.cfml
 //              ^ -storage.type.function.arrow.cfml
-//               ^ meta.function.body.cfml punctuation.definition.block.begin.cfml -meta.function.declaration.cfml
-//                ^ -punctuation.definition.block.begin.cfml
+//               ^ meta.function.body.cfml punctuation.section.block.begin.cfml -meta.function.declaration.cfml
+//                ^ -punctuation.section.block.begin.cfml
     },
     "key": () => {
 //  ^ meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.double.cfml punctuation.definition.string.begin.cfml
@@ -33,21 +33,21 @@ component {
 //      ^ punctuation.definition.string.end.cfml -entity.name.function.cfml
 //       ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml -punctuation.definition.string.end.cfml -string.quoted.double.cfml
 //        ^ -punctuation.separator.key-value.cfml
-//         ^ meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml
-//          ^ punctuation.definition.parameters.end.cfml -punctuation.definition.parameters.begin.cfml
-//           ^ -punctuation.definition.parameters.end.cfml -meta.function.parameters.cfml
+//         ^ meta.function.parameters.cfml punctuation.section.parameters.begin.cfml
+//          ^ punctuation.section.parameters.end.cfml -punctuation.section.parameters.begin.cfml
+//           ^ -punctuation.section.parameters.end.cfml -meta.function.parameters.cfml
 //            ^ storage.type.function.arrow.cfml
 //              ^ -storage.type.function.arrow.cfml
-//               ^ meta.function.body.cfml punctuation.definition.block.begin.cfml -meta.function.declaration.cfml
-//                ^ -punctuation.definition.block.begin.cfml
+//               ^ meta.function.body.cfml punctuation.section.block.begin.cfml -meta.function.declaration.cfml
+//                ^ -punctuation.section.block.begin.cfml
     },
     key: () => test,
 //  ^ meta.function.declaration.cfml meta.struct-literal.key.cfml entity.name.function.cfml
 //     ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml -entity.name.function.cfml
 //      ^ -punctuation.separator.key-value.cfml
-//       ^ meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml
-//        ^ punctuation.definition.parameters.end.cfml -punctuation.definition.parameters.begin.cfml
-//         ^ -punctuation.definition.parameters.end.cfml -meta.function.parameters.cfml
+//       ^ meta.function.parameters.cfml punctuation.section.parameters.begin.cfml
+//        ^ punctuation.section.parameters.end.cfml -punctuation.section.parameters.begin.cfml
+//         ^ -punctuation.section.parameters.end.cfml -meta.function.parameters.cfml
 //          ^ storage.type.function.arrow.cfml
 //            ^ -storage.type.function.arrow.cfml
 //             ^ meta.function.body.cfml variable.other.readwrite.cfml -meta.function.declaration.cfml
@@ -58,9 +58,9 @@ component {
 //      ^ punctuation.definition.string.end.cfml -entity.name.function.cfml
 //       ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml -string.quoted.single.cfml -punctuation.definition.string.end.cfml
 //        ^ -punctuation.separator.key-value.cfml
-//         ^ meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml
-//          ^ punctuation.definition.parameters.end.cfml -punctuation.definition.parameters.begin.cfml
-//           ^ -punctuation.definition.parameters.end.cfml -meta.function.parameters.cfml
+//         ^ meta.function.parameters.cfml punctuation.section.parameters.begin.cfml
+//          ^ punctuation.section.parameters.end.cfml -punctuation.section.parameters.begin.cfml
+//           ^ -punctuation.section.parameters.end.cfml -meta.function.parameters.cfml
 //            ^ storage.type.function.arrow.cfml
 //              ^ -storage.type.function.arrow.cfml
 //               ^ meta.function.body.cfml variable.other.readwrite.cfml -meta.function.declaration.cfml
@@ -71,9 +71,9 @@ component {
 //      ^ punctuation.definition.string.end.cfml -entity.name.function.cfml
 //       ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml -punctuation.definition.string.end.cfml -string.quoted.double.cfml
 //        ^ -punctuation.separator.key-value.cfml
-//         ^ meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml
-//          ^ punctuation.definition.parameters.end.cfml -punctuation.definition.parameters.begin.cfml
-//           ^ -punctuation.definition.parameters.end.cfml -meta.function.parameters.cfml
+//         ^ meta.function.parameters.cfml punctuation.section.parameters.begin.cfml
+//          ^ punctuation.section.parameters.end.cfml -punctuation.section.parameters.begin.cfml
+//           ^ -punctuation.section.parameters.end.cfml -meta.function.parameters.cfml
 //            ^ storage.type.function.arrow.cfml
 //              ^ -storage.type.function.arrow.cfml
 //               ^ meta.function.body.cfml variable.other.readwrite.cfml -meta.function.declaration.cfml
@@ -81,14 +81,14 @@ component {
   }
 
   (i) => { return i * 2 }
-  // <- meta.function.anonymous.cfml meta.function.declaration.cfml meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml
-// ^ variable.parameter.function.cfml -punctuation.definition.parameters.begin.cfml
-//  ^ punctuation.definition.parameters.end.cfml -variable.parameter.function.cfml
-//   ^ -punctuation.definition.parameters.end.cfml -meta.function.parameters.cfml
+  // <- meta.function.anonymous.cfml meta.function.declaration.cfml meta.function.parameters.cfml punctuation.section.parameters.begin.cfml
+// ^ variable.parameter.function.cfml -punctuation.section.parameters.begin.cfml
+//  ^ punctuation.section.parameters.end.cfml -variable.parameter.function.cfml
+//   ^ -punctuation.section.parameters.end.cfml -meta.function.parameters.cfml
 //    ^ storage.type.function.arrow.cfml
 //      ^ -storage.type.function.arrow.cfml
-//       ^ meta.function.body.cfml punctuation.definition.block.begin.cfml -meta.function.anonymous.cfml -meta.function.declaration.cfml
-//        ^ -punctuation.definition.block.begin.cfml
+//       ^ meta.function.body.cfml punctuation.section.block.begin.cfml -meta.function.anonymous.cfml -meta.function.declaration.cfml
+//        ^ -punctuation.section.block.begin.cfml
 //         ^ keyword.control.flow.cfml
 //               ^ -keyword.control.flow.cfml
 //                ^ variable.other.readwrite.cfml
@@ -97,8 +97,8 @@ component {
 //                   ^ -keyword.operator.arithmetic.cfml
 //                    ^ constant.numeric.cfml
 //                     ^ -constant.numeric.cfml
-//                      ^ punctuation.definition.block.end.cfml
-//                       ^ -meta.function.body.cfml -punctuation.definition.block.end.cfml
+//                      ^ punctuation.section.block.end.cfml
+//                       ^ -meta.function.body.cfml -punctuation.section.block.end.cfml
 
   a.b = (i) => i * 2;
   // <- meta.function.declaration.cfml support.class.cfml
@@ -107,10 +107,10 @@ component {
 //   ^ -meta.property.cfml -entity.name.function.cfml
 //    ^ keyword.operator.assignment.cfml
 //     ^ -keyword.operator.assignment.cfml
-//      ^ meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml
-//       ^ variable.parameter.function.cfml -punctuation.definition.parameters.begin.cfml
-//        ^ punctuation.definition.parameters.end.cfml -variable.parameter.function.cfml
-//         ^ -meta.function.parameters.cfml -punctuation.definition.parameters.end.cfml
+//      ^ meta.function.parameters.cfml punctuation.section.parameters.begin.cfml
+//       ^ variable.parameter.function.cfml -punctuation.section.parameters.begin.cfml
+//        ^ punctuation.section.parameters.end.cfml -variable.parameter.function.cfml
+//         ^ -meta.function.parameters.cfml -punctuation.section.parameters.end.cfml
 //          ^ storage.type.function.arrow.cfml
 //            ^ -storage.type.function.arrow.cfml
 //             ^ meta.function.body.cfml variable.other.readwrite.cfml -meta.function.declaration.cfml
@@ -128,12 +128,12 @@ component {
 //        ^ -variable.other.readwrite.cfml -entity.name.function.cfml
 //         ^ keyword.operator.assignment.cfml
 //          ^ -keyword.operator.assignment.cfml
-//           ^ meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml
-//            ^ -punctuation.definition.parameters.begin.cfml
+//           ^ meta.function.parameters.cfml punctuation.section.parameters.begin.cfml
+//            ^ -punctuation.section.parameters.begin.cfml
 //             ^ variable.parameter.function.cfml
 //                  ^ -variable.parameter.function.cfml
-//                   ^ punctuation.definition.parameters.end.cfml
-//                    ^ -meta.function.parameters.cfml -punctuation.definition.parameters.end.cfml
+//                   ^ punctuation.section.parameters.end.cfml
+//                    ^ -meta.function.parameters.cfml -punctuation.section.parameters.end.cfml
 //                     ^ storage.type.function.arrow.cfml
 //                       ^ -storage.type.function.arrow.cfml
 //                        ^ meta.function.body.cfml variable.other.readwrite.cfml -meta.function.declaration.cfml
@@ -151,24 +151,24 @@ component {
 //        ^ -variable.other.readwrite.cfml -entity.name.function.cfml
 //         ^ keyword.operator.assignment.cfml
 //          ^ -keyword.operator.assignment.cfml
-//           ^ meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml
-//            ^ -punctuation.definition.parameters.begin.cfml
+//           ^ meta.function.parameters.cfml punctuation.section.parameters.begin.cfml
+//            ^ -punctuation.section.parameters.begin.cfml
 //             ^ variable.parameter.function.cfml
 //                  ^ -variable.parameter.function.cfml
-//                   ^ punctuation.definition.parameters.end.cfml
-//                    ^ -meta.function.parameters.cfml -punctuation.definition.parameters.end.cfml
+//                   ^ punctuation.section.parameters.end.cfml
+//                    ^ -meta.function.parameters.cfml -punctuation.section.parameters.end.cfml
 //                     ^ storage.type.function.arrow.cfml
 //                       ^ -storage.type.function.arrow.cfml
-//                        ^ meta.function.body.cfml punctuation.definition.block.begin.cfml -meta.function.declaration.cfml
-//                         ^ -punctuation.definition.block.begin.cfml
+//                        ^ meta.function.body.cfml punctuation.section.block.begin.cfml -meta.function.declaration.cfml
+//                         ^ -punctuation.section.block.begin.cfml
 //                          ^ variable.other.readwrite.cfml
 //                               ^ -variable.other.readwrite.cfml
 //                                ^ keyword.operator.arithmetic.cfml
 //                                 ^ -keyword.operator.arithmetic.cfml
 //                                  ^ constant.numeric.cfml
 //                                   ^ -constant.numeric.cfml
-//                                    ^ punctuation.definition.block.end.cfml
-//                                     ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -punctuation.definition.block.end.cfml
+//                                    ^ punctuation.section.block.end.cfml
+//                                     ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -punctuation.section.block.end.cfml
 //                                      ^ -punctuation.terminator.statement.cfml
 
   var a
@@ -178,22 +178,22 @@ component {
 //  ^ -meta.property.cfml -entity.name.function.cfml
 //   ^ keyword.operator.assignment.cfml
 //    ^ -keyword.operator.assignment.cfml
-//     ^ meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml
-//      ^ variable.parameter.function.cfml -punctuation.definition.parameters.begin.cfml
-//       ^ punctuation.definition.parameters.end.cfml -variable.parameter.function.cfml
-//        ^ -meta.function.parameters.cfml -punctuation.definition.parameters.end.cfml
+//     ^ meta.function.parameters.cfml punctuation.section.parameters.begin.cfml
+//      ^ variable.parameter.function.cfml -punctuation.section.parameters.begin.cfml
+//       ^ punctuation.section.parameters.end.cfml -variable.parameter.function.cfml
+//        ^ -meta.function.parameters.cfml -punctuation.section.parameters.end.cfml
 //         ^ storage.type.function.arrow.cfml
 //           ^ -storage.type.function.arrow.cfml
-//            ^ meta.function.body.cfml punctuation.definition.block.begin.cfml -meta.function.declaration.cfml
-//             ^ -punctuation.definition.block.begin.cfml
+//            ^ meta.function.body.cfml punctuation.section.block.begin.cfml -meta.function.declaration.cfml
+//             ^ -punctuation.section.block.begin.cfml
 //              ^ variable.other.readwrite.cfml
 //               ^ -variable.other.readwrite.cfml
 //                ^ keyword.operator.arithmetic.cfml
 //                 ^ -keyword.operator.arithmetic.cfml
 //                  ^ constant.numeric.cfml
 //                   ^ -constant.numeric.cfml
-//                    ^ punctuation.definition.block.end.cfml
-//                     ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -punctuation.definition.block.end.cfml
+//                    ^ punctuation.section.block.end.cfml
+//                     ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -punctuation.section.block.end.cfml
 //                      ^ -punctuation.terminator.statement.cfml
 
   var a
@@ -203,10 +203,10 @@ component {
 //  ^ -meta.property.cfml -entity.name.function.cfml
 //   ^ keyword.operator.assignment.cfml
 //    ^ -keyword.operator.assignment.cfml
-//     ^ meta.function.parameters.cfml punctuation.definition.parameters.begin.cfml
-//      ^ variable.parameter.function.cfml -punctuation.definition.parameters.begin.cfml
-//       ^ punctuation.definition.parameters.end.cfml -variable.parameter.function.cfml
-//        ^ -meta.function.parameters.cfml -punctuation.definition.parameters.end.cfml
+//     ^ meta.function.parameters.cfml punctuation.section.parameters.begin.cfml
+//      ^ variable.parameter.function.cfml -punctuation.section.parameters.begin.cfml
+//       ^ punctuation.section.parameters.end.cfml -variable.parameter.function.cfml
+//        ^ -meta.function.parameters.cfml -punctuation.section.parameters.end.cfml
 //         ^ storage.type.function.arrow.cfml
 //           ^ -storage.type.function.arrow.cfml
 //            ^ meta.function.body.cfml variable.other.readwrite.cfml -meta.function.declaration.cfml
@@ -219,6 +219,6 @@ component {
 
 var test = (a) =>
 { }
-// <- source.cfml.script meta.class.body.cfml meta.function.body.cfml punctuation.definition.block.begin.cfml -meta.struct-literal.cfml
+// <- source.cfml.script meta.class.body.cfml meta.function.body.cfml punctuation.section.block.begin.cfml -meta.struct-literal.cfml
 
 }

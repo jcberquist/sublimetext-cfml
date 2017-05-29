@@ -46,11 +46,11 @@ contexts:
     - include: conditional
     - include: static
     - match: '\{'
-      scope: punctuation.definition.block.begin.cfml
+      scope: punctuation.section.block.begin.cfml
       push:
         - meta_scope: meta.block.cfml
         - match: '\}'
-          scope: punctuation.definition.block.end.cfml
+          scope: punctuation.section.block.end.cfml
           pop: true
         - include: statements
     - include: tag-in-script
@@ -64,10 +64,10 @@ contexts:
         - meta_scope: meta.switch.cfml
         - include: round-brackets
         - match: '\}'
-          scope: meta.block.cfml punctuation.definition.block.end.cfml
+          scope: meta.block.cfml punctuation.section.block.end.cfml
           pop: true
         - match: '\{'
-          scope: punctuation.definition.block.begin.cfml
+          scope: punctuation.section.block.begin.cfml
           push:
             - meta_scope: meta.block.cfml
             - match: '(?=\})'
@@ -85,24 +85,24 @@ contexts:
       push:
         - meta_scope: meta.do-while.cfml
         - match: '\{'
-          scope: punctuation.definition.block.begin.cfml
+          scope: punctuation.section.block.begin.cfml
           push:
             - meta_scope: meta.block.cfml
             - match: '\}'
-              scope: punctuation.definition.block.end.cfml
+              scope: punctuation.section.block.end.cfml
               pop: true
             - include: statements
         - match: \bwhile\b
           scope: keyword.control.loop.cfml
         - match: '\('
-          scope: punctuation.definition.group.begin.cfml
+          scope: punctuation.section.group.begin.cfml
           push:
             - meta_scope: meta.group.cfml
             - match: '(?=\))'
               pop: true
             - include: expressions
         - match: '\)'
-          scope: meta.group.cfml punctuation.definition.group.end.cfml
+          scope: meta.group.cfml punctuation.section.group.end.cfml
           pop: true
     - match: \bfor\b
       scope: keyword.control.loop.cfml
@@ -149,21 +149,21 @@ contexts:
 
   parens-block-scope:
     - match: '\('
-      scope: punctuation.definition.group.begin.cfml
+      scope: punctuation.section.group.begin.cfml
       push:
         - meta_scope: meta.group.cfml
         - match: '\)'
-          scope: punctuation.definition.group.end.cfml
+          scope: punctuation.section.group.end.cfml
           pop: true
         - include: expressions
     - include: block-scope
 
   block-scope:
     - match: '\}'
-      scope: meta.block.cfml punctuation.definition.block.end.cfml
+      scope: meta.block.cfml punctuation.section.block.end.cfml
       pop: true
     - match: '\{'
-      scope: punctuation.definition.block.begin.cfml
+      scope: punctuation.section.block.begin.cfml
       push:
         - meta_scope: meta.block.cfml
         - match: '(?=\})'
@@ -202,11 +202,11 @@ contexts:
 
   after-identifier:
     - match: '\['
-      scope: punctuation.definition.brackets.begin.cfml
+      scope: punctuation.section.brackets.begin.cfml
       push:
         - meta_scope: meta.brackets.cfml
         - match: '\]'
-          scope: punctuation.definition.brackets.end.cfml
+          scope: punctuation.section.brackets.end.cfml
           pop: true
         - include: expressions
     - match: '(?=[\S\n])'
@@ -355,7 +355,7 @@ contexts:
   constructor:
     - match: '\b(new)\s+'
       captures:
-        1: keyword.operator.new.cfml
+        1: keyword.operator.word.new.cfml
       push:
         - meta_scope: meta.instance.constructor.cfml
         - match: '\b\d*{{identifier}}(?=\()'
@@ -369,10 +369,10 @@ contexts:
   constructor-params:
     - meta_content_scope: meta.instance.constructor.cfml
     - match: '\)'
-      scope: meta.instance.constructor.cfml meta.function-call.parameters.method.cfml punctuation.definition.group.end.cfml
+      scope: meta.instance.constructor.cfml meta.function-call.parameters.method.cfml punctuation.section.group.end.cfml
       pop: true
     - match: '\('
-      scope: punctuation.definition.group.begin.cfml
+      scope: punctuation.section.group.begin.cfml
       push:
         - meta_scope: meta.function-call.parameters.method.cfml
         - match: '(?=\))'
@@ -397,7 +397,7 @@ contexts:
     - match: '--|\+\+'
       scope: keyword.operator.arithmetic.cfml
     - match: \bnew\b
-      scope: keyword.operator.new.cfml
+      scope: keyword.operator.word.new.cfml
     - match: \bin\b
       scope: keyword.operator.cfml
       push: after-operator
@@ -505,10 +505,10 @@ contexts:
   component-body:
     - meta_scope: meta.class.body.cfml
     - match: '\}'
-      scope: punctuation.definition.block.end.cfml
+      scope: punctuation.section.block.end.cfml
       pop: true
     - match: '\{'
-      scope: punctuation.definition.block.begin.cfml
+      scope: punctuation.section.block.begin.cfml
       push:
         - match: '(?=\})'
           pop: true
@@ -517,10 +517,10 @@ contexts:
   interface-body:
     - meta_scope: meta.interface.body.cfml
     - match: '\}'
-      scope: punctuation.definition.block.end.cfml
+      scope: punctuation.section.block.end.cfml
       pop: true
     - match: '\{'
-      scope: punctuation.definition.block.begin.cfml
+      scope: punctuation.section.block.begin.cfml
       push:
         - match: '(?=\})'
           pop: true
@@ -580,8 +580,8 @@ contexts:
         4: storage.type.return-type.primitive.cfml
         5: storage.type.return-type.object.cfml
         6: storage.type.return-type.object.array.cfml
-        7: meta.brackets.cfml punctuation.definition.brackets.begin.cfml
-        8: meta.brackets.cfml punctuation.definition.brackets.end.cfml
+        7: meta.brackets.cfml punctuation.section.brackets.begin.cfml
+        8: meta.brackets.cfml punctuation.section.brackets.end.cfml
         9: storage.type.function.cfml
         10: entity.name.function.constructor.cfml
         11: entity.name.function.cfml
@@ -731,10 +731,10 @@ contexts:
 
   function-block:
     - match: '\}'
-      scope: meta.function.body.cfml punctuation.definition.block.end.cfml
+      scope: meta.function.body.cfml punctuation.section.block.end.cfml
       pop: true
     - match: '\{'
-      scope: punctuation.definition.block.begin.cfml
+      scope: punctuation.section.block.begin.cfml
       push:
         - meta_scope: meta.function.body.cfml
         - match: '(?=\})'
@@ -743,11 +743,11 @@ contexts:
 
   function-declaration-parameters:
     - match: \(
-      scope: punctuation.definition.parameters.begin.cfml
+      scope: punctuation.section.parameters.begin.cfml
       push:
         - meta_scope: meta.function.declaration.cfml meta.function.parameters.cfml
         - match: \)
-          scope: punctuation.definition.parameters.end.cfml
+          scope: punctuation.section.parameters.end.cfml
           set: function-declaration-properties
         - match: ','
           scope: punctuation.separator.function.cfml
@@ -792,11 +792,11 @@ contexts:
 
   struct-literal:
     - match: '\{'
-      scope: punctuation.definition.block.begin.cfml
+      scope: punctuation.section.block.begin.cfml
       push:
         - meta_scope: meta.struct-literal.cfml
         - match: '\}'
-          scope: punctuation.definition.block.end.cfml
+          scope: punctuation.section.block.end.cfml
           pop: true
         - match: "(?=('[^']*'|\"[^\"]*\"|{{identifier}})\\s*(:|=)({{func_lookahead}}|{{arrow_func_lookahead}}))"
           push:
@@ -857,11 +857,11 @@ contexts:
 
   round-brackets:
     - match: \(
-      scope: punctuation.definition.group.begin.cfml
+      scope: punctuation.section.group.begin.cfml
       push:
         - meta_scope: meta.group.cfml
         - match: \)
-          scope: punctuation.definition.group.end.cfml
+          scope: punctuation.section.group.end.cfml
           set: after-identifier
         - include: expressions
     - match: \)
@@ -869,11 +869,11 @@ contexts:
 
   array-literal:
     - match: '\['
-      scope: punctuation.definition.brackets.begin.cfml
+      scope: punctuation.section.brackets.begin.cfml
       push:
         - meta_scope: meta.array-literal.cfml
         - match: '\]'
-          scope: punctuation.definition.brackets.end.cfml
+          scope: punctuation.section.brackets.end.cfml
           set: after-identifier
         - match: ','
           scope: punctuation.separator.array-literal.cfml
@@ -948,10 +948,10 @@ contexts:
 
   function-call-params:
     - match: '\)'
-      scope: meta.function-call.parameters.cfml punctuation.definition.group.end.cfml
+      scope: meta.function-call.parameters.cfml punctuation.section.group.end.cfml
       set: after-identifier
     - match: '\('
-      scope: punctuation.definition.group.begin.cfml
+      scope: punctuation.section.group.begin.cfml
       push:
         - meta_scope: meta.function-call.parameters.cfml
         - match: '(?=\))'
@@ -970,10 +970,10 @@ contexts:
 
   method-call-params:
     - match: '\)'
-      scope: meta.function-call.parameters.method.cfml punctuation.definition.group.end.cfml
+      scope: meta.function-call.parameters.method.cfml punctuation.section.group.end.cfml
       set: after-identifier
     - match: '\('
-      scope: punctuation.definition.group.begin.cfml
+      scope: punctuation.section.group.begin.cfml
       push:
         - meta_scope: meta.function-call.parameters.method.cfml
         - match: '(?=\))'
@@ -1362,10 +1362,10 @@ contexts:
       set:
         - meta_scope: meta.function-call.method.support.cfml
         - match: '\)'
-          scope: meta.function-call.parameters.method.support.cfml punctuation.definition.group.end.cfml
+          scope: meta.function-call.parameters.method.support.cfml punctuation.section.group.end.cfml
           pop: true
         - match: '\('
-          scope: punctuation.definition.group.begin.cfml
+          scope: punctuation.section.group.begin.cfml
           push:
             - meta_scope: meta.function-call.parameters.method.support.cfml
             - match: '(?=\))'
@@ -1384,10 +1384,10 @@ contexts:
 
   support-call-params:
     - match: '\)'
-      scope: meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml
+      scope: meta.function-call.parameters.support.cfml punctuation.section.group.end.cfml
       pop: true
     - match: '\('
-      scope: punctuation.definition.group.begin.cfml
+      scope: punctuation.section.group.begin.cfml
       push:
         - meta_scope: meta.function-call.parameters.support.cfml
         - match: '(?=\))'
@@ -1406,10 +1406,10 @@ contexts:
 
   queryexecute-params:
     - match: '\)'
-      scope: meta.function-call.parameters.support.cfml punctuation.definition.group.end.cfml
+      scope: meta.function-call.parameters.support.cfml punctuation.section.group.end.cfml
       pop: true
     - match: '\('
-      scope: punctuation.definition.group.begin.cfml
+      scope: punctuation.section.group.begin.cfml
       push:
         - meta_scope: meta.function-call.parameters.support.cfml
         - match: '(?=[,\)])'
