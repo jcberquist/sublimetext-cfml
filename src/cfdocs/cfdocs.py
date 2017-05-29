@@ -9,7 +9,7 @@ from .. import utils
 CFDOCS_CACHE = {}
 CFDOCS_FAILED_REQUESTS = deque()
 
-CFDOCS_PARAM_TEMPLATE = '<strong>${name}</strong><p>${description}</p><p>${values}</p>'
+CFDOCS_PARAM_TEMPLATE = '<div class="property-box"><strong>${name}</strong></div><p>${description}</p><p>${values}</p>'
 CFDOCS_BASE_URL = "https://raw.githubusercontent.com/foundeo/cfdocs/master/data/en/"
 CFDOCS_HTTP_ERROR_MESSAGE = """
 <p>HTTP requests to GitHub seem to be failing at the moment. This means that
@@ -22,19 +22,19 @@ package setting to point to the data folder of the repository.</p>
 """
 
 STYLES = {
-    "side_color": "#18BC9C",
-    "link_color": "#18BC9C",
-    "header_color": "#C7254E",
-    "header_bg_color": "#F9F2F4"
+    "side_color": "#158CBA",
+    "link_color": "#158CBA",
+    "header_color": "#158CBA",
+    "header_bg_color": "#EEEEEE"
 }
 
 ADAPTIVE_STYLES = {
-    "side_color": "#18BC9C",
-    "link_color": "#18BC9C",
-    "header_bg_color": "color(#C7254E blend(var(--background) 85%))",
-    "header_color": "color(#C7254E blend(var(--foreground) 10%))",
-    "header_bg_color_light": "#F9F2F4",
-    "header_color_light": "#C7254E"
+    "side_color": "#158CBA",
+    "link_color": "#158CBA",
+    "header_color_light": "#158CBA",
+    "header_bg_color_light": "#F8F8F8",
+    "header_color_dark": "#EEEEEE",
+    "header_bg_color_dark": "color(#158CBA blend(var(--background) 85%))"
 }
 
 CFDOCS_ENGINES = {
@@ -167,7 +167,7 @@ def build_engine_span(engine, minimum_version):
 
 def build_cfdoc(function_or_tag, data):
     cfdoc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
-    cfdoc["html"]["links"] = [{"href": "http://cfdocs.org" + "/" + function_or_tag, "text": "cfdocs.org" + "/" + function_or_tag}]
+    cfdoc["html"]["links"] = [{"href": "https://cfdocs.org" + "/" + function_or_tag, "text": "cfdocs.org" + "/" + function_or_tag}]
     cfdoc["html"]["header"] = data["syntax"].replace("<", "&lt;").replace(">", "&gt;")
     if len(data["returns"]) > 0:
         cfdoc["html"]["header"] += ":" + data["returns"]
@@ -179,17 +179,20 @@ def build_cfdoc(function_or_tag, data):
         cfdoc["html"]["description"] += build_engine_span(engine, data["engines"][engine]["minimum_version"])
     cfdoc["html"]["description"] += "</div>"
 
-    cfdoc["html"]["description"] += data["description"].replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
+    cfdoc["html"]["description"] += data["description"].replace("<", "&lt;").replace(">", "&gt;").replace("\n ", "<br>").replace("\n", "<br>")
 
     cfdoc["html"]["body"] = ""
     if len(data["params"]) > 0:
-        cfdoc["html"]["body"] = "<ul>"
+        cfdoc["html"]["body"] = "<h4>ARGUMENT REFERENCE</h4>" if data["type"] == "function" else "<h4>ATTRIBUTE REFERENCE</h4>"
         for param in data["params"]:
-            param_variables = {"name": param["name"], "description": param["description"].replace("\n", "<br>"), "values": ""}
+            param_variables = {"name": param["name"], "description": param["description"].replace("\n ", "<br>").replace("\n", "<br>"), "values": ""}
             if "values" in param and len(param["values"]):
                 param_variables["values"] = "<em>values:</em> " + ", ".join([str(value) for value in param["values"]])
-            cfdoc["html"]["body"] += "<li>" + sublime.expand_variables(CFDOCS_PARAM_TEMPLATE, param_variables) + "</li>"
-        cfdoc["html"]["body"] += "</ul>"
+            if "required" in param and param["required"]:
+                param_variables["description"] = "<span class=\"required\">&nbsp;Required&nbsp;</span><br>" + param_variables["description"]
+            elif "default" in param and len(str(param["default"])):
+                param_variables["description"] = "<em>Default:</em> <span class=\"code\">" + str(param["default"]) + "</span><br>" + param_variables["description"]
+            cfdoc["html"]["body"] += sublime.expand_variables(CFDOCS_PARAM_TEMPLATE, param_variables) + "\n"
 
     return cfdoc
 
