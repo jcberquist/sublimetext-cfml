@@ -1,0 +1,10 @@
+CFML v0.23.0 Changelog:
+
+- Updated some syntax highlighting scope names to match preferred scope names
+  in default syntaxes. This will require a RESTART of Sublime Text to load
+  properly, sorry!
+
+- Updated cfdocs.org popup styling
+
+- Added `DROP` to the list of strings that trigger SQL string highlighting
+  https://github.com/jcberquist/sublimetext-cfml/issues/35#issuecomment-308840280
