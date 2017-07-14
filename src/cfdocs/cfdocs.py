@@ -170,7 +170,7 @@ def build_cfdoc(function_or_tag, data):
     cfdoc["html"]["links"] = [{"href": "https://cfdocs.org" + "/" + function_or_tag, "text": "cfdocs.org" + "/" + function_or_tag}]
     cfdoc["html"]["header"] = data["syntax"].replace("<", "&lt;").replace(">", "&gt;")
     if len(data["returns"]) > 0:
-        cfdoc["html"]["header"] += ":" + data["returns"]
+        cfdoc["html"]["header"] += ": " + data["returns"]
 
     cfdoc["html"]["description"] = "<div class=\"engines\">"
     for engine in sorted(CFDOCS_ENGINES):
@@ -186,6 +186,8 @@ def build_cfdoc(function_or_tag, data):
         cfdoc["html"]["body"] = "<h4>ARGUMENT REFERENCE</h4>" if data["type"] == "function" else "<h4>ATTRIBUTE REFERENCE</h4>"
         for param in data["params"]:
             param_variables = {"name": param["name"], "description": param["description"].replace("\n ", "<br>").replace("\n", "<br>"), "values": ""}
+            if "type" in param and len(param["type"]):
+                param_variables["name"] += ": " + param["type"]
             if "values" in param and len(param["values"]):
                 param_variables["values"] = "<em>values:</em> " + ", ".join([str(value) for value in param["values"]])
             if "required" in param and param["required"]:
@@ -212,7 +214,7 @@ def build_completion_doc(function_call_params, data):
     cfdoc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
     cfdoc["html"]["header"] = data["syntax"].split('(')[0] + "(...)"
     if len(data["returns"]) > 0:
-        cfdoc["html"]["header"] += ":" + data["returns"]
+        cfdoc["html"]["header"] += ": " + data["returns"]
 
     cfdoc["html"]["description"] = ""
     cfdoc["html"]["body"] = ""
@@ -228,6 +230,8 @@ def build_completion_doc(function_call_params, data):
 
             if is_active:
                 param_variables = {"name": param["name"], "description": param["description"].replace("\n", "<br>"), "values": ""}
+                if "type" in param and len(param["type"]):
+                    param_variables["name"] += ": " + param["type"]
                 if "values" in param and len(param["values"]):
                     param_variables["values"] = "<em>values:</em> " + ", ".join([str(value) for value in param["values"]])
                 if len(param_variables["description"]) > 0 or len(param_variables["values"]) > 0:
