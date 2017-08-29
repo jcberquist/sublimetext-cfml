@@ -18,7 +18,7 @@ DELIMITED_SCOPES = {
         "scope": "meta.function.parameters.cfml",
         "start": "punctuation.section.parameters.begin.cfml",
         "end": "punctuation.section.parameters.end.cfml",
-        "separator": "punctuation.separator.function.cfml"
+        "separator": "punctuation.separator.parameter.function.cfml"
     },
     "function_call": {
         "scope": "meta.function-call.parameters",
@@ -81,29 +81,16 @@ def determine_scope_type(scope_list):
 def find_anonymous_functions(cfml_format):
     selector_cache = {}
     anonymous_functions = []
-    for funct_decl_r in cfml_format.find_by_selector("meta.function-call.parameters meta.function.anonymous.cfml"):
+    for anonymous_function_r in cfml_format.find_by_selector("meta.function-call.parameters meta.function.anonymous.cfml"):
         nested_region = False
         for r in anonymous_functions:
-            nested_region = r.contains(funct_decl_r)
+            nested_region = r.contains(anonymous_function_r)
             if nested_region:
                 break
         if nested_region:
             continue
 
-        scope_name = cfml_format.view.scope_name(funct_decl_r.begin()).rstrip()
-        depth = scope_name.count("meta.function-call.parameters")
-
-        funct_body_selector = ("meta.function-call.parameters " * depth) + "meta.function.body.cfml"
-        if funct_body_selector not in selector_cache:
-            selector_cache[funct_body_selector] = cfml_format.find_by_selector(funct_body_selector)
-
-        for funct_body_r in selector_cache[funct_body_selector]:
-            if funct_body_r.begin() == funct_decl_r.end():
-                break
-        else:
-            continue
-
-        anonymous_functions.append(sublime.Region(funct_decl_r.begin(), funct_body_r.end()))
+        anonymous_functions.append(anonymous_function_r)
 
     return anonymous_functions
 
