@@ -1,0 +1,32 @@
+CFML v0.24.0 Changelog:
+
+- Updated cfdocs.org popups to include display of param types. This was
+  contributed by Matthew Brown (@KamasamaK) in release v0.23.1 but didn't get
+  noted in the changelog.
+  https://github.com/jcberquist/sublimetext-cfml/pull/81
+
+- There has been a major update to the syntax highlighting files that
+  incorporates work done by Thomas Smith (@Thom1729) on the default JavaScript
+  syntax (see https://github.com/sublimehq/Packages/issues/1009). The CFScript
+  syntax is now able to exactly match expressions, and determine when they
+  terminate. This allows for significantly greater precision when parsing CFML
+  files. For example, consider the following line:
+
+    function go( param = a + b c ) {}
+
+  Correctly parsing syntax like that to identify `a + b` as an expression and
+  `c` as metadata (tag attribute effectively) was basically impossible
+  before, but is easy now.
+
+  My thanks to Thomas Smith for letting me use his work and for helping me out
+  with it.
+
+  Please note that most of the work on this update was done using Sublime Text
+  build 3142, which has had several bug fixes to the syntax highlighting engine
+  since 3126. The tests I have in place do pass on 3126, but please let me know
+  if you encounter any issues when using that build.
+
+- The CFScript syntax now distinguishes prefix, postfix, and binary operators.
+  Whitespace formatting of operators has been updated to take advantage of
+  this. (E.g. `i = -1;` will no longer get formatted to `i = - 1;` when
+  formatting with spacing around binary operators.)
