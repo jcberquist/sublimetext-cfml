@@ -1,33 +1,30 @@
 # CFML Package for Sublime Text 3
 
-This package provides CFML syntax highlighting as well as function and tag completions. It also has a number of other features, please see below for more information.
+This package provides CFML (ColdFusion Markup Language) support in Sublime Text 3. It includes syntax highlighting, function and tag completions, and inline documentation. It also includes a number of other features, so please see below for the full list.
 
-You can install this package via [Package Control](https://packagecontrol.io/). Please restart Sublime Text after installation.
-
-Manual installation is also possible by downloading the repository and placing it in a folder within your Sublime packages folder. (See below for more information.)
+You can install this package via [Package Control](https://packagecontrol.io/). The package name is [CFML](https://packagecontrol.io/packages/CFML). Sublime Text should be restarted after installation. Manual installation is also possible. See the [Installation](#installation) section below for more information about these options.
 
 *Please ensure that you are running at least build 3126 of Sublime Text 3. This package uses only `sublime-syntax` syntax highlighting and as of v0.21.0 takes advantage of features introduced in that beta build.*
 
 ### Acknowledgements
 
-This package was developed from the following packages:
+The following packages were used in the development of this package:
 
 * https://github.com/SublimeText/ColdFusion
-* https://github.com/sublimehq/Packages (especially the HTML and JavaScript syntaxes)
-* https://github.com/Benvie/JavaScriptNext.tmLanguage
+* https://github.com/sublimehq/Packages
 
-The current CFScript syntax is based on Will Bond's ([@wbond](https://github.com/wbond)) JavaScript syntax rewrite:
+The CFScript syntax is based on work done by Thomas Smith ([@Thom1729](https://github.com/Thom1729)) on the official JavaScript syntax:
 
-* https://github.com/sublimehq/Packages/blob/master/JavaScript/JavaScript.sublime-syntax
+* https://github.com/sublimehq/Packages/pull/1009
 
-Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](http://cfdocs.org), from which this package gets its function and tag data. Also, thanks to [@mjhagen](https://github.com/mjhagen) who helped me get this package off the ground.
+Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](https://cfdocs.org), from which this package gets its function and tag data. Also, thanks to [@mjhagen](https://github.com/mjhagen) who helped me get this package off the ground.
 
 ### Table of Contents
 
 - [Installation](#installation)
+- [Settings](#settings)
 - [Completions](#completions)
 - [Inline Documentation](#inline-documentation)
-- [A Note about Settings](#a-note-about-settings)
 - [Default Key Bindings](#default-key-bindings)
 - [CFC Indexing and Dot Paths](#cfc-indexing-and-dot-paths)
 - [Custom Tags](#custom-tags)
@@ -37,19 +34,68 @@ Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](http:/
 - [CommandBox](#commandbox)
 - [TestBox](#testbox)
 - [Framework One](#framework-one)
-- [Manual Installation](#manual-installation)
 
 ### Installation
 
-Follow the instuctions on https://packagecontrol.io/installation to install Package Control to Sublime Text 3.
+#### Via Package Control
 
-Open the command pallete (CTRL-SHIFT-P) and select 'package control install package'
+First ensure Package Control is installed. More recent versions of Sublime Text 3 include a menu option and command palette entry for installing Package Control. You can also follow the instuctions at https://packagecontrol.io/installation to install it.
 
-Wait for the list to open and find "CFML" with a subtitle on this github repo (.../jcberquist/...)
+Open the command palette (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on Windows, <kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac) and select `Package Control: Install Package`.
 
-Select it to install
+Wait for the list to open and find the `CFML` entry (subtitled with this github repo `github.com/jcberquist/sublimetext-cfml`), then select it to install.
 
-Restart Sublime Text 3
+Restart Sublime Text 3.
+
+Package Control will keep the CFML package up to date automatically for you.
+
+#### Manual Installation
+
+First locate your Sublime Text 3 packages directory. This can be easily done by opening the command palette in Sublime Text (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on Windows, <kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac), and running `Preferences: Browse Packages`.
+
+On Windows it will typically be something like this:
+
+    C:\Users\Username\AppData\Roaming\Sublime Text 3\Packages\
+
+On a Mac it will be something like this
+
+    /Users/Username/Library/Application Support/Sublime Text 3/Packages/
+
+*Via Git*
+
+Open Terminal or Command Prompt and `cd` into your packages directory, then run:
+
+    git clone https://github.com/jcberquist/sublimetext-cfml.git ./CFML
+
+Restart Sublime Text 3.
+
+As changes are made to this repository and the package is updated, simply run the following command inside the folder where you installed the package in order to get your copy of the package up to date:
+
+    git pull origin master
+
+*Via ZIP Download*
+
+Use the `Download ZIP` option to download a zip of the repository to your computer. (The master branch zip file is located at https://github.com/jcberquist/sublimetext-cfml/archive/master.zip) Unzip this, and copy the the contents of the resulting repository folder into a subdirectory named `CFML` in your Sublime Text packages directory.
+
+Restart Sublime Text 3.
+
+As changes are made to this repository and the package is updated you will need to repeat this process (replacing the old contents in the `CFML` subdirectory) in order to get your copy of the package up to date.
+
+### Settings
+
+There are several settings files that you should be aware of, as they control much of the functionality of the package. There are two ways to access each file, the first being through the menus, and the second being via the command palette, which you open with <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on Windows (<kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac).
+
+**Package Settings**
+
+You can access package settings from the menu under `Package Settings -> CFML -> Settings` or via the command palette: `CFML: Settings`. To override any of these settings, use the user package settings file. (The default settings and user settings open side by side.)
+
+**Project Settings**
+
+Some settings are also (or only) able to be set on a per project basis. These settings control the behavior of the package for a given project. You can access and edit project files from the menu under `Project -> Edit Project` or via the command palette: `Project: Edit Project`. (These will only be accessible after you have saved a project: `Project -> Save Project As` or `Project: Save As`.)
+
+**Bindings**
+
+The keyboard and mouse binding files are available in the menu under `Package Settings -> CFML -> Key Bindings` and `Package Settings -> CFML -> Mouse Bindings`. Or via the command palette at `CFML: Key Bindings` and `CFML: Mouse Bindings`. The default and user files open side by side.
 
 ### Completions
 
@@ -68,22 +114,6 @@ When entering a function call parameter for a built-in function a pop-up window 
 If the documentation command is run when the cursor is within a built-in function or tag it will load the [cfdocs.org](http://cfdocs.org) documentation for that function or tag. Thus, having the cursor anywhere within `dateFormat(myDate, "yyyy-mm-dd")` and pressing <kbd>F1</kbd> (by default) will trigger a popup displaying the documentation for `dateFormat`. Similarly, having the cursor anywhere within `<cfinclude template="myOtherTemplate.cfm">` and pressing <kbd>F1</kbd> will trigger the display of the documention for `cfinclude`. Inline documentation is also available for `Application.cfc` settings and methods.
 
 *If you have a copy of the cfdocs.org GitHub repository on your file system, there is a package setting, `"cfdocs_path"`, which can be set to the data directory of that repository (e.g. `"cfdocs_path": "C:/github/cfdocs/data/en/"`). If this is set, the cfdocs.org documentation will be loaded from the file system instead of being fetched via HTTP request. (See below for more information on package settings.)*
-
-### A Note about Settings
-
-There are several settings files that you should be aware of, as they control much of the functionality of the package. It is important to know how to access them. There are two ways to access each file, the first being through the menus, and the second being via the command palette, which you open with <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on Windows (<kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac).
-
-**Package Settings**
-
-You can access package settings from the menu under `Package Settings -> CFML -> Settings` or via the command palette: `CFML: Settings`. To override any of these settings, use the user package settings file. (The default settings and user settings open side by side.)
-
-**Project Settings**
-
-Some settings are also (or only) able to be set on a per project basis. These settings control the behavior of the package for a given project. You can access and edit project files from the menu under `Project -> Edit Project` or via the command palette: `Project: Edit Project`. (These will only be accessible after you have saved a project: `Project -> Save Project As` or `Project: Save As`.)
-
-**Bindings**
-
-The keyboard and mouse binding files are available in the menu under `Package Settings -> CFML -> Key Bindings` and `Package Settings -> CFML -> Mouse Bindings`. Or via the command palette at `CFML: Key Bindings` and `CFML: Mouse Bindings`. The default and user files open side by side.
 
 ### Default Key Bindings
 
@@ -221,28 +251,4 @@ All of the settings for TestBox can be seen in the default package settings.
 
 Framework One (https://github.com/framework-one/fw1) function completions and `variables.framework` setting completions are available. They are disabled by default, but can be enabled globally by adding `"fw1_enabled": true` to your CFML user package settings, or on a per project basis by adding the same setting to a project settings file. (Project based settings will override global settings. The default package settings for Framework One can be viewed in the CFML default package settings file.) The completions are offered in `Application.cfc` as well as in Framework One controller, view and layout files. (The folder names can be specified in the settings.) In controllers, Framework One method completions are offered after typing `framework.` and `fw.`.
 
-### Manual Installation
 
-Locate your Sublime Text 3 packages directory. This can be easily done by opening the command palette in Sublime Text (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on Windows, <kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac), and running `Preferences: Browse Packages`.
-
-On Windows it will typically be something like this:
-`C:\Users\Username\AppData\Roaming\Sublime Text 3\Packages\`
-
-On a Mac it will be something like this:
-`/Users/Username/Library/Application Support/Sublime Text 3/Packages/`
-
-#### Via Git
-
-Open Terminal or Command Prompt and cd into your packages directory, then run:
-
-    git clone https://github.com/jcberquist/sublimetext-cfml.git ./CFML
-
-The specified `./CFML` subdirectory is optional and if it is not included the package will be cloned into `sublimetext-cfml`.
-
-That's it, restart Sublime Text 3 - if you want to update the code to match this repo, simply run the following inside the folder where you installed the package:
-
-    git pull origin master
-
-#### Via ZIP Download
-
-Use the `Download ZIP` option to download a zip of the repository to your computer. Unzip this, and copy the repository folder into your Sublime Text packages directory. You can leave the folder name as is, or rename it (e.g. to `CFML`).
