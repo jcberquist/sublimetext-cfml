@@ -8,11 +8,11 @@ param name = "test" default = "#now()#";
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->
 <!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.other.attribute-name.cfml --->
 <!---         ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml string.quoted.double.cfml --->
-param name = "test" default = (now() * then);
+param name = "test" default = now() * then;
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->
 <!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.other.attribute-name.cfml --->
-<!---                          ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml support.function.cfml --->
-<!---                                  ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml variable.other.readwrite.cfml --->
+<!---                         ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml support.function.cfml --->
+<!---                                 ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml variable.other.readwrite.cfml --->
 param testVar;
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->
 <!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml string.unquoted.cfml --->
@@ -63,9 +63,11 @@ thread action="run" name="threadName" {
   <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.block.cfml variable.language.scope.cfml --->
 }
 
-cfhttp( url = "www.google.com" );
+cfhttp( url = "www.google.com" ) {
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cf.cfml entity.name.tag.script.cfml  --->
 <!---   ^ embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cf.cfml entity.other.attribute-name.cfml  --->
+
+}
 
 cfcExists( someArg = 1 );
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml variable.function.cfml  --->

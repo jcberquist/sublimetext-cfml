@@ -1,0 +1,421 @@
+%YAML 1.2
+%TAG ! tag:yaml-macros:cfml_macros:
+---
+# Started with https://github.com/SublimeText/ColdFusion
+name: CFML
+file_extensions:
+  - cfml
+  - cfm
+  - cfc
+scope: embedding.cfml
+
+variables:
+  attribute_name: '[_[:alpha:]][[:alnum:]_\-:]*'
+
+contexts:
+  else-pop:
+    - match: (?=\S)
+      pop: true
+
+  immediately-pop:
+    - match: (?=.|\n)
+      pop: true
+
+  main:
+    - match: (?i)(?=^\s*(/\*|//|import\b|(component|abstract\s*component|final\s*component|interface)(\s+|{)))
+      push: scope:source.cfml.script
+    - include: comments
+    - match: (?i)(?=<cf(component|interface)\b)
+      push:
+        - meta_scope: source.cfml
+        - include: cfcomponent
+        - include: cfinterface
+    - match: (?=\S)
+      push:
+        - meta_scope: text.html.cfml
+        - include: html
+
+  cfmltags:
+    - include: comments
+    - include: cffunction
+    - include: cfoutput
+    - include: cfquery
+    - include: tags-with-script
+    - include: cfscript
+    - include: cfproperty
+    - include: cfargument
+    - include: custom-tags
+    - include: generic-tag
+
+  html:
+    - include: cffunction-end-invalid
+    - match: (?=\S)
+      push:
+        - include: scope:text.html.basic
+      with_prototype:
+        - match: (?i)(?=</cffunction>)
+          pop: true
+        - include: cfmltags
+
+  cfcomponent:
+    - match: (?i)(<)(cfcomponent)
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml storage.type.class.cfml
+      push:
+        - meta_scope: meta.tag.cfml meta.class.cfml
+        - match: '>'
+          scope: punctuation.definition.tag.end.cfml
+          set: cfcomponent-contents
+        - include: cfcomponent-attributes
+
+  cfcomponent-attributes:
+    - !attribute
+      name: extends
+      meta_scope: meta.class.inheritance.cfml
+      name_scope: storage.modifier.extends.cfml
+      value_scope: entity.other.inherited-class.cfml
+    - include: tag-generic-attribute
+
+  cfcomponent-contents:
+    - meta_content_scope: meta.class.body.tag.cfml
+    - match: (?i)(</)(cfcomponent)(>)
+      captures:
+        0: meta.tag.cfml
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml storage.type.class.cfml
+        3: punctuation.definition.tag.end.cfml
+      pop: true
+    - include: cfmltags
+
+  cfinterface:
+    - match: (?i)(<)(cfinterface)
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml storage.type.interface.cfml
+      push:
+        - meta_scope: meta.tag.cfml meta.interface.cfml
+        - match: '>'
+          scope: punctuation.definition.tag.end.cfml
+          set: cfinterface-contents
+        - include: cfcomponent-attributes
+
+  cfinterface-contents:
+    - match: (?i)(</)(cfinterface)(>)
+      captures:
+        0: meta.tag.cfml
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml storage.type.interface.cfml
+        3: punctuation.definition.tag.end.cfml
+      pop: true
+    - include: comments
+    - include: cffunction
+
+  cffunction:
+    - match: (?i)(<)(cffunction)
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml storage.type.function.cfml
+      push:
+        - meta_scope: meta.tag.cfml meta.function.cfml
+        - match: '>'
+          scope: punctuation.definition.tag.end.cfml
+          set:
+            - meta_content_scope: meta.function.body.tag.cfml text.html.cfml
+            - include: cffunction-end-pop
+            - include: html
+        - !attribute
+          name: name
+          value_scope: entity.name.function.cfml
+        - !attribute
+          name: access
+          value_scope: storage.modifier.cfml
+        - !attribute
+          name: returntype
+          value_scope: scope:source.cfml.script#storage-types
+        - include: tag-generic-attribute
+
+  cffunction-end-invalid:
+    - match: (?i)(</)(cffunction)(>)
+      captures:
+        0: meta.tag.cfml
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
+        3: punctuation.definition.tag.end.cfml
+
+  cffunction-end-pop:
+    - match: (?i)(</)(cffunction)(>)
+      captures:
+        0: meta.tag.cfml
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml storage.type.function.cfml
+        3: punctuation.definition.tag.end.cfml
+      pop: true
+
+  cfoutput:
+    - match: (?i)(<)(cfoutput)
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
+      push:
+        - meta_scope: meta.tag.cfml
+        - match: '>'
+          scope: punctuation.definition.tag.end.cfml
+          set:
+            - meta_content_scope: meta.scope.cfoutput.cfml text.html.cfml
+            - include: cfoutput-end-pop
+            - include: cfoutput-html
+        - include: tag-generic-attribute
+
+  cfoutput-html:
+    - match: (?=\S)
+      push:
+        - include: scope:text.html.basic
+      with_prototype:
+        - match: (?i)(?=</cfoutput>)
+          pop: true
+        - include: template-expression
+        - include: cfmltags
+
+  cfoutput-end-pop:
+    - match: (?i)(</)(cfoutput)(>)
+      captures:
+        0: meta.tag.cfml
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
+        3: punctuation.definition.tag.end.cfml
+      pop: true
+
+  cfproperty:
+    - match: (?i)(<)(cfproperty)\b
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
+      push:
+        - meta_scope: meta.tag.cfml meta.tag.property.cfml
+        - match: '/?>'
+          scope: punctuation.definition.tag.end.cfml
+          pop: true
+        - include: cfproperty-attributes
+
+  cfproperty-attributes:
+    - !attribute
+      name: name
+      value_scope: meta.tag.property.name.cfml
+    - include: tag-generic-attribute
+
+  cfargument:
+    - match: (?i)(<)(cfargument)\b
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
+      push:
+        - meta_scope: meta.tag.cfml meta.tag.argument.cfml
+        - match: (/?>)
+          scope: punctuation.definition.tag.end.cfml
+          pop: true
+        - include: tag-generic-attribute
+
+  cfquery:
+    - match: (?i)(<)(cfquery)\b
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
+      push:
+        - - match: (?i)(</)(cfquery)(>)
+            captures:
+              0: meta.tag.cfml
+              1: punctuation.definition.tag.begin.cfml
+              2: entity.name.tag.cfml.end
+              3: punctuation.definition.tag.end.cfml
+            pop: true
+        - - meta_scope: meta.tag.cfml
+          - match: '>'
+            scope: punctuation.definition.tag.end.cfml
+            set:
+              - meta_content_scope: meta.scope.cfquery.cfml source.sql
+              - include: scope:source.sql
+            with_prototype:
+              - match: (?i)(?=</cfquery>)
+                pop: true
+              - include: comments
+              - include: sql-character-escape
+              - include: sql-template-expression
+              - include: cfmltags
+          - include: tag-generic-attribute
+
+  cfscript:
+    - match: (?i)(<)(cfscript)\b
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
+      push:
+        - meta_scope: meta.tag.cfml
+        - match: '>'
+          scope: punctuation.definition.tag.end.cfml
+          set:
+            - meta_content_scope: source.cfml.script
+            - match: (?i)(</)(cfscript)(>)
+              captures:
+                0: meta.tag.cfml
+                1: punctuation.definition.tag.begin.cfml
+                2: entity.name.tag.cfml
+                3: punctuation.definition.tag.end.cfml
+              pop: true
+            - include: scope:source.cfml.script
+        - match: \S
+          scope: invalid.illegal.attribute-name.cfml
+
+  tags-with-script:
+    - match: (?i)(<)(cfset|cfreturn|cfif|cfelseif)\b
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
+      push:
+        - meta_scope: meta.tag.cfml
+        - meta_content_scope: source.cfml.script
+        - match: (/?>)
+          scope: punctuation.definition.tag.end.cfml
+          pop: true
+        - match: (?=\S)
+          push: scope:source.cfml.script#expression-statement
+          with_prototype:
+            - match: (?=/?>)
+              pop: true
+
+  generic-tag:
+    - match: (?i)(<)(cf[a-z]+)
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
+      push:
+        - meta_scope: meta.tag.cfml
+        - match: (/?>)
+          scope: punctuation.definition.tag.end.cfml
+          pop: true
+        - include: tag-generic-attribute
+    - match: (?i)(</)(cf[a-z]+)(>)
+      captures:
+        0: meta.tag.cfml
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
+        3: punctuation.definition.tag.end.cfml
+
+
+  comments:
+    - match: <!---.*?--->
+      scope: comment.line.cfml
+    - match: <!---
+      scope: punctuation.definition.comment.cfml
+      push:
+        - meta_scope: comment.block.cfml
+        - match: --->
+          pop: true
+        - include: comments
+
+  template-expression:
+    !template_expression
+    meta_content_scope: source.cfml.script
+
+  sql-template-expression:
+    !template_expression
+    meta_content_scope: source.sql source.cfml.script
+    clear_scopes: 1
+
+  sql-character-escape:
+    - match: \\(?=#)
+      scope: constant.character.escape.sql
+
+  string-template-expression:
+    !template_expression
+    meta_content_scope: source.cfml.script
+    clear_scopes: 1
+
+  template-expression-contents:
+    - match: (?=#)
+      pop: true
+    - include: scope:source.cfml.script#comments
+    - match: (?=\S)
+      push: scope:source.cfml.script#expression
+
+  custom-tags:
+    - match: (?i)(<)(cf_[a-z]*)
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.custom.cfml
+      push:
+        - meta_scope: meta.tag.custom.cfml
+        - match: '/?>'
+          scope: punctuation.definition.tag.end.cfml
+          pop: true
+        - include: tag-generic-attribute
+    - match: (?i)(</)(cf_[a-z]*)(>)
+      captures:
+        0: meta.tag.custom.cfml
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.custom.cfml
+        3: punctuation.definition.tag.end.cfml
+    - match: (?i)(<)([a-z]+)(\:)([a-z]*)
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.custom.cfml
+        3: entity.name.tag.custom.cfml punctuation.separator.prefix.cfml
+        4: entity.name.tag.custom.cfml
+      push:
+        - meta_scope: meta.tag.custom.cfml
+        - match: '/?>'
+          scope: punctuation.definition.tag.end.cfml
+          pop: true
+        - include: tag-generic-attribute
+    - match: (?i)(</)([a-z]+\:[a-z]*)(>)
+      captures:
+        0: meta.tag.custom.cfml
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.custom.cfml
+        3: punctuation.definition.tag.end.cfml
+
+  string:
+    - match: "'"
+      scope: punctuation.definition.string.begin.cfml
+      set: string-content-single
+    - match: '"'
+      scope: punctuation.definition.string.begin.cfml
+      set: string-content-double
+
+  string-content-single:
+    - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
+    - match: "''"
+      scope: constant.character.escape.quote.cfml
+    - match: "'"
+      scope: punctuation.definition.string.end.cfml
+      pop: true
+    - include: string-template-expression
+
+  string-content-double:
+    - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
+    - match: '""'
+      scope: constant.character.escape.quote.cfml
+    - match: '"'
+      scope: punctuation.definition.string.end.cfml
+      pop: true
+    - include: string-template-expression
+
+  tag-generic-attribute:
+    - include: comments
+    - match: \b{{attribute_name}}\b
+      scope: entity.other.attribute-name.cfml
+      push:
+        - match: '='
+          scope: punctuation.separator.key-value.cfml
+          set:
+            - include: string
+            - match: (?=[^\s</>{;])
+              set:
+                - meta_scope: meta.string.unquoted.cfml string.unquoted.cfml
+                - match: (?=[\s</>{;])
+                  pop: true
+                - include: string-template-expression
+            - include: else-pop
+        - include: else-pop
+    - match: \S
+      scope: invalid.illegal.attribute-name.cfml

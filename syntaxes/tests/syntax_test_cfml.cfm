@@ -10,15 +10,16 @@
 <cfoutput>
 <!---     ^ embedding.cfml text.html.cfml meta.scope.cfoutput.cfml text.html.cfml --->
 #now()#
-<!--- <- embedding.cfml text.html.cfml meta.scope.cfoutput.cfml text.html.cfml constant.character.hash.cfml.start --->
+<!--- <- embedding.cfml text.html.cfml meta.scope.cfoutput.cfml text.html.cfml punctuation.definition.template-expression.begin.cfml --->
   <!--- <- embedding.cfml text.html.cfml meta.scope.cfoutput.cfml text.html.cfml source.cfml.script support.function.cfml --->
 </cfoutput>
 
 <cfquery name="test">
 <!--- this should be a comment <cfqueryparam value=""> --->
 <!---                           ^ embedding.cfml text.html.cfml meta.scope.cfquery.cfml source.sql comment.line.cfml --->
+'unclosed sql string
 </cfquery>
-
+<!--- <- -source.sql --->
 <cf_custom attrname="#test#">
 <!--- <- meta.tag.custom.cfml --->
  <!--- <- meta.tag.custom.cfml entity.name.tag.custom.cfml --->
@@ -48,11 +49,11 @@
 )>
 
 <cfquery>SELECT * FROM #obj.property# WHERE s = '#obj.prop#'</cfquery>
-<!---                       ^^^^^^^^ source.cfml.script source.sql source.cfml.script meta.property.cfml --->
-<!---                                                 ^^^^ source.cfml.script source.sql source.cfml.script meta.property.cfml --->
+<!---                       ^^^^^^^^ source.sql source.cfml.script meta.property.cfml --->
+<!---                                                 ^^^^ source.sql source.cfml.script meta.property.cfml --->
 <cfquery>BULK INSERT VAR1 FROM 'C:\#path#'</cfquery>
 <!---                             ^ source.sql string.quoted.single.sql constant.character.escape.sql  --->
-<!---                              ^ source.sql string.quoted.single.sql constant.character.hash.cfml.start --->
+<!---                              ^ source.sql string.quoted.single.sql punctuation.definition.template-expression.begin.cfml --->
 <cfscript>
 foo = 'hello world';
 <!--- <- embedding.cfml text.html.cfml source.cfml.script variable.other.readwrite.cfml --->
