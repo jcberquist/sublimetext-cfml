@@ -37,8 +37,8 @@
                         (?i:
                             \?|area|base|br|col|frame|hr|html|img|input|link|meta|param|
                             cfabort|cfargument|cfbreak|cfcontent|cfcontinue|cfdirectory|
-                            cfdump|cffile|cfflush|cfheader|cfhttpparam|cfimage|
-                            cfinclude|cflocation|cflog|cfparam|cfprocessingdirective|cfproperty|
+                            cfdump|cffile|cfflush|cfheader|cfhttpparam|cfimage|cfinclude|
+                            cfinput|cflocation|cflog|cfparam|cfprocessingdirective|cfproperty|
                             cfqueryparam|cfrethrow|cfreturn|cfset|cfsetting|cfthrow|[^>]*/>
                         )
                     )
@@ -55,8 +55,8 @@
                         (?i:
                             \?|area|base|br|col|frame|hr|html|img|input|link|meta|param|
                             cfabort|cfargument|cfbreak|cfcontent|cfcontinue|cfdirectory|
-                            cfdump|cffile|cfflush|cfheader|cfhttpparam|cfimage|
-                            cfinclude|cflocation|cflog|cfparam|cfprocessingdirective|cfproperty|
+                            cfdump|cffile|cfflush|cfheader|cfhttpparam|cfimage|cfinclude|
+                            cfinput|cflocation|cflog|cfparam|cfprocessingdirective|cfproperty|
                             cfqueryparam|cfrethrow|cfreturn|cfset|cfsetting|cfthrow|[^>]*/>
                         )
                     )
