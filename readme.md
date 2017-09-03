@@ -10,30 +10,30 @@ You can install this package via [Package Control](https://packagecontrol.io/). 
 
 The following packages were used in the development of this package:
 
-* <https://github.com/SublimeText/ColdFusion>
-* <https://github.com/sublimehq/Packages>
+- <https://github.com/SublimeText/ColdFusion>
+- <https://github.com/sublimehq/Packages>
 
 The CFScript syntax is based on work done by Thomas Smith ([@Thom1729](https://github.com/Thom1729)) on the official JavaScript syntax:
 
-* <https://github.com/sublimehq/Packages/pull/1009>
+- <https://github.com/sublimehq/Packages/pull/1009>
 
 Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](https://cfdocs.org), from which this package gets its function and tag data. Also, thanks to [@mjhagen](https://github.com/mjhagen) who helped me get this package off the ground.
 
 ### Table of Contents
 
-* [Installation](#installation)
-* [Settings](#settings)
-* [Completions](#completions)
-* [Inline Documentation](#inline-documentation)
-* [Default Key Bindings](#default-key-bindings)
-* [CFC Indexing and Dot Paths](#cfc-indexing-and-dot-paths)
-* [Custom Tags](#custom-tags)
-* [Code Formatting](#code-formatting)
-* [Custom Coloring for CFML Tags](#custom-coloring-for-cfml-tags)
-* [Controller/View Toggle](#controllerview-toggle)
-* [CommandBox](#commandbox)
-* [TestBox](#testbox)
-* [Framework One](#framework-one)
+- [Installation](#installation)
+- [Settings](#settings)
+- [Completions](#completions)
+- [Inline Documentation](#inline-documentation)
+- [Default Key Bindings](#default-key-bindings)
+- [CFC Indexing and Dot Paths](#cfc-indexing-and-dot-paths)
+- [Custom Tags](#custom-tags)
+- [Code Formatting](#code-formatting)
+- [Custom Coloring for CFML Tags](#custom-coloring-for-cfml-tags)
+- [Controller/View Toggle](#controllerview-toggle)
+- [CommandBox](#commandbox)
+- [TestBox](#testbox)
+- [Framework One](#framework-one)
 
 ### Installation
 
@@ -229,11 +229,11 @@ CFML MVC frameworks typically have the convention that a `controllers` and a `vi
 
 ### CommandBox
 
-[CommandBox](https://www.ortussolutions.com/products/commandbox) has been added as the default CFML build system. This simply means that running the build command (<kbd>F7</kbd> on Windows) on a CFML file will run `box ${filename}` as a shell command in the directory of the file and output the result in a pane within Sublime Text (it can also be selected from the build system menu available via <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>B</kbd>). For this to work, CommandBox needs to be installed, and the CommandBox `box` binary needs to be available system wide, so that `box` can be run in any directory (see <https://ortus.gitbooks.io/commandbox-documentation/content/setup/installation.html>).
+CommandBox (<https://www.ortussolutions.com/products/commandbox>) has been added as the default CFML build system. This simply means that running the build command (<kbd>F7</kbd> on Windows) on a CFML file will run `box ${filename}` as a shell command in the directory of the file and output the result in a pane within Sublime Text (it can also be selected from the build system menu available via <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>B</kbd>). For this to work, CommandBox needs to be installed, and the CommandBox `box` binary needs to be available system wide, so that `box` can be run in any directory (see <https://ortus.gitbooks.io/commandbox-documentation/content/setup/installation.html>).
 
 ### TestBox
 
-[TestBox](https://www.ortussolutions.com/products/testbox) completions and inline documentation are available for `BaseSpec` components. They are enabled by default, but can be disabled globally by adding `"testbox_enabled": false` to your CFML user package settings, or on a per project basis by adding the same setting to a project settings file. The completions and documentation are offered in any CFC that is contained under a folder named `tests` (alternate folders can be specified in the settings), as well as in any CFC that extends `testbox.system.BaseSpec`.
+TestBox (<https://www.ortussolutions.com/products/testbox>) completions and inline documentation are available for `BaseSpec` components. They are enabled by default, but can be disabled globally by adding `"testbox_enabled": false` to your CFML user package settings, or on a per project basis by adding the same setting to a project settings file. The completions and documentation are offered in any CFC that is contained under a folder named `tests` (alternate folders can be specified in the settings), as well as in any CFC that extends `testbox.system.BaseSpec`.
 
 There are three build system variants for running TestBox tests from within Sublime Text. The first is for running all of a project's tests, which can be used no matter what project files are open, so long as the active file is a CFML one. The next variant is for running all of the tests in the directory of the currently active file, while the last variant runs the tests in the currently active test CFC only. <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>B</kbd> calls up the build system menu, from which these options can be selected. Once one of the variants has been run, <kbd>CTRL</kbd>+<kbd>B</kbd> can used to run the last selected option again, without having to go through the menu.
 
@@ -250,4 +250,4 @@ All of the settings for TestBox can be seen in the default package settings.
 
 ### Framework One
 
-[Framework One](https://github.com/framework-one/fw1) function completions and `variables.framework` setting completions are available. They are disabled by default, but can be enabled globally by adding `"fw1_enabled": true` to your CFML user package settings, or on a per project basis by adding the same setting to a project settings file. (Project based settings will override global settings. The default package settings for Framework One can be viewed in the CFML default package settings file.) The completions are offered in `Application.cfc` as well as in Framework One controller, view and layout files. (The folder names can be specified in the settings.) In controllers, Framework One method completions are offered after typing `framework.` and `fw.`.
+Framework One (<https://github.com/framework-one/fw1>) function completions and `variables.framework` setting completions are available. They are disabled by default, but can be enabled globally by adding `"fw1_enabled": true` to your CFML user package settings, or on a per project basis by adding the same setting to a project settings file. (Project based settings will override global settings. The default package settings for Framework One can be viewed in the CFML default package settings file.) The completions are offered in `Application.cfc` as well as in Framework One controller, view and layout files. (The folder names can be specified in the settings.) In controllers, Framework One method completions are offered after typing `framework.` and `fw.`.
