@@ -4,67 +4,65 @@
     <key>name</key>
     <string>cfml-indent</string>
     <key>scope</key>
-    <string>embedding.cfml, embedding.cfml text.html.cfml</string>
+    <string>embedding.cfml source.cfml -source.cfml.script, embedding.cfml text.html</string>
     <key>settings</key>
     <dict>
         <key>decreaseIndentPattern</key>
         <string><![CDATA[(?x)
-            ^\s*
+            ^\s*+
             (
-                    </(?!html)[A-Za-z0-9-]+\b[^>]*>
+                    [^<>]*+</(?!html)[A-Za-z0-9-]+\b[^>]*>
                 |   ---?>
                 |   \}
-                |   <cfelse[^>]*>
+                |   [^<>]*+<cfelse[^>]*>
             )
         ]]></string>
         <key>batchDecreaseIndentPattern</key>
         <string><![CDATA[(?x)
-            ^\s*
+            ^\s*+
             (
-                    </(?!html)[A-Za-z0-9-]+\b[^>]*>
+                    [^<>]*+</(?!html)[A-Za-z0-9-]+\b[^>]*>
                 |   ---?>
                 |   \}
-                |   <cfelse[^>]*>
+                |   [^<>]*+<cfelse[^>]*>
             )
         ]]></string>
         <key>increaseIndentPattern</key>
         <string><![CDATA[(?x)
-            ^\s*
+            ^\s*+
             (
                     \{[^}"']*$
                 |   <!--(?!.*-->)
-                |   <(?!
-                        (?i:
-                            \?|area|base|br|col|frame|hr|html|img|input|link|meta|param|cfabort|
+                |   .*<(?!\?|
+                        (?i:area|base|br|col|frame|hr|html|img|input|link|meta|param|cfabort|
                             cfargument|cfbreak|cfcontent|cfcontinue|cfcookie|cfdirectory|cfdump|
                             cfexecute|cfexit|cffile|cfflush|cfheader|cfhttpparam|cfimage|cfimport|
                             cfindex|cfinclude|cfinput|cfinvokeargument|cflocation|cflog|cfloginuser|
                             cflogout|cfmailparam|cfobject|cfobjectcache|cfparam|cfprocessingdirective|
                             cfprocparam|cfprocresult|cfproperty|cfqueryparam|cfrethrow|cfreturn|
-                            cfschedule|cfsearch|cfset|cfsetting|cfthrow|[^>]*/>
-                        )
-                    )
-                        ([A-Za-z0-9-]+)(?=\s|>)\b[^>]*>(?!.*</\2>)
+                            cfschedule|cfsearch|cfset|cfsetting|cfthrow
+                        )\b
+                        |[^>]*/>)
+                    (?<html_tag>[A-Za-z0-9-]+)(?=\s|>)\b[^>]*>(?!.*</\k<html_tag>\s*>)
             )
         ]]></string>
         <key>batchIncreaseIndentPattern</key>
         <string><![CDATA[(?x)
-            ^\s*
+            ^\s*+
             (
                     \{[^}"']*$
                 |   <!--(?!.*-->)
-                |   <(?!
-                        (?i:
-                            \?|area|base|br|col|frame|hr|html|img|input|link|meta|param|cfabort|
+                |   .*<(?!\?|
+                        (?i:area|base|br|col|frame|hr|html|img|input|link|meta|param|cfabort|
                             cfargument|cfbreak|cfcontent|cfcontinue|cfcookie|cfdirectory|cfdump|
                             cfexecute|cfexit|cffile|cfflush|cfheader|cfhttpparam|cfimage|cfimport|
                             cfindex|cfinclude|cfinput|cfinvokeargument|cflocation|cflog|cfloginuser|
                             cflogout|cfmailparam|cfobject|cfobjectcache|cfparam|cfprocessingdirective|
                             cfprocparam|cfprocresult|cfproperty|cfqueryparam|cfrethrow|cfreturn|
-                            cfschedule|cfsearch|cfset|cfsetting|cfthrow|[^>]*/>
-                        )
-                    )
-                        ([A-Za-z0-9-]+)(?=\s|>)\b[^>]*>(?!.*</\2>)
+                            cfschedule|cfsearch|cfset|cfsetting|cfthrow
+                        )\b
+                        |[^>]*/>)
+                    (?<html_tag>[A-Za-z0-9-]+)(?=\s|>)\b[^>]*>(?!.*</\k<html_tag>\s*>)
             )
         ]]></string>
     </dict>

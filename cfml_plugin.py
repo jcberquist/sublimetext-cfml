@@ -68,7 +68,10 @@ class CloseCfmlTagCommand(sublime_plugin.TextCommand):
             cfml_only = self.view.match_selector(pt, "string")
             last_open_tag = utils.get_last_open_tag(self.view, pt - 1, cfml_only)
             if last_open_tag:
-                self.view.insert(edit, pt, "/" + last_open_tag + ">")
+                if len(self.view.sel()) == 1:
+                    self.view.run_command('insert', {'characters': "/" + last_open_tag + ">"})
+                else:
+                    self.view.insert(edit, pt, "/" + last_open_tag + ">")
             else:
                 # if there is no open tag print "/"
                 self.view.insert(edit, pt, "/")
