@@ -140,7 +140,7 @@ def get_struct_context(view, position):
         return context
 
     previous_char_point = get_char_point_before_scope(view, position, "meta.struct-literal.cfml")
-    if not view.match_selector(previous_char_point, "keyword.operator.assignment.cfml,punctuation.separator.key-value.cfml"):
+    if not view.match_selector(previous_char_point, "keyword.operator.assignment.binary.cfml,punctuation.separator.key-value.cfml"):
         return context
 
     previous_char_point = get_previous_character(view, previous_char_point)
