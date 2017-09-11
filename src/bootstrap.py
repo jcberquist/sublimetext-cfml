@@ -18,7 +18,7 @@ from .color_scheme_styles import CfmlColorSchemeStylesCommand
 from .goto_cfml_file import CfmlGotoFileCommand
 from .index_project_command import CfmlIndexProjectCommand
 from .inline_documentation import CfmlInlineDocumentationCommand
-from .testbox import TestboxCommand
+from .testbox import TestboxCommand, TestboxSpecOutlineCommand
 from .model_index import CfmlNavigateToMethodCommand
 from .formatting.cfml_format import CfmlFormatCommand, CfmlFormatMenuCommand
 

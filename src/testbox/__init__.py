@@ -1,6 +1,7 @@
 from .testbox import get_dot_completions, get_script_completions, get_inline_documentation
 from . import test_runner
 from .test_runner import TestboxCommand
+from .testbox_spec_outline import TestboxSpecOutlineCommand
 from .. import completions, inline_documentation
 
 
