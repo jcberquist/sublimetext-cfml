@@ -450,10 +450,14 @@ contexts:
       scope: punctuation.definition.tag.end.cfml
       pop: true
     - match: (?=\S)
-      push: scope:source.cfml.script#expression-statement
+      push: script-expression-statement
       with_prototype:
       - match: (?=/?>)
-        pop: true  
+        pop: true
+
+  script-expression-statement:
+  - include: scope:source.cfml.script#variable-declaration
+  - include: scope:source.cfml.script#expression-statement
 
   generic-tag:
   - match: (?i)(<)(cf[a-z]+)
@@ -472,7 +476,6 @@ contexts:
       1: punctuation.definition.tag.begin.cfml
       2: entity.name.tag.cfml
       3: punctuation.definition.tag.end.cfml
-
 
   comments:
   - match: <!---.*?--->
@@ -498,6 +501,7 @@ contexts:
       push:
       - meta_content_scope: source.cfml.script
       - include: template-expression-contents
+
   sql-template-expression:
   - match: '##'
     scope: constant.character.escape.hash.cfml
@@ -512,6 +516,7 @@ contexts:
       - clear_scopes: 1
       - meta_content_scope: source.sql source.cfml.script
       - include: template-expression-contents
+
   sql-character-escape:
   - match: \\(?=#)
     scope: constant.character.escape.sql
@@ -530,6 +535,7 @@ contexts:
       - clear_scopes: 1
       - meta_content_scope: source.cfml.script
       - include: template-expression-contents
+
   template-expression-contents:
   - match: (?=#)
     pop: true

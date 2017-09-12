@@ -45,6 +45,9 @@ extends=base.test
 <!---  ^ embedding.cfml source.cfml meta.tag.block.any.html entity.name.tag.block.any.html --->
 <!---                          ^ embedding.cfml source.cfml meta.tag.block.any.html string.quoted.double.html meta.tag.cfml entity.name.tag.cfml --->
     </cfsavecontent>
+
+    <cfset var a = 1>
+<!---      ^ storage.type.cfml --->
   </cffunction>
 
 </cfcomponent>

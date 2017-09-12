@@ -278,10 +278,14 @@ contexts:
           scope: punctuation.definition.tag.end.cfml
           pop: true
         - match: (?=\S)
-          push: scope:source.cfml.script#expression-statement
+          push: script-expression-statement
           with_prototype:
             - match: (?=/?>)
               pop: true
+
+  script-expression-statement:
+    - include: scope:source.cfml.script#variable-declaration
+    - include: scope:source.cfml.script#expression-statement
 
   generic-tag:
     - match: (?i)(<)(cf[a-z]+)
