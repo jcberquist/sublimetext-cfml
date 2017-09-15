@@ -1,4 +1,4 @@
-// SYNTAX TEST "cfml.sublime-syntax"
+// SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax"
 abstract component {
 // <- embedding.cfml source.cfml.script meta.class.declaration.cfml storage.modifier.cfml
 
@@ -22,12 +22,12 @@ abstract component {
 
     function test() {
       test.class::staticMethod();
-//    ^^^^^^^^^^ entity.name.class.cfml     
-//              ^^ punctuation.accessor.static.cfml    
-//                ^^^^^^^^^^^^ meta.function-call.method.static.cfml variable.function.static.cfml   
+//    ^^^^^^^^^^ entity.name.class.cfml
+//              ^^ punctuation.accessor.static.cfml
+//                ^^^^^^^^^^^^ meta.function-call.method.static.cfml variable.function.static.cfml
       test.class::staticVal;
-//    ^^^^^^^^^^ entity.name.class.cfml     
-//              ^^ punctuation.accessor.static.cfml    
-//                ^^^^^^^^^ meta.property.cfml 
+//    ^^^^^^^^^^ entity.name.class.cfml
+//              ^^ punctuation.accessor.static.cfml
+//                ^^^^^^^^^ meta.property.cfml
     }
 }

@@ -1,4 +1,4 @@
-<!--- SYNTAX TEST "cfml.sublime-syntax" --->
+<!--- SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax" --->
 <cfscript>
 param NAME="testVar";
 <!--- <- embedding.cfml text.html.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->

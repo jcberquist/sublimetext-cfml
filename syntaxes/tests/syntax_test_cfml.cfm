@@ -1,4 +1,4 @@
-<!--- SYNTAX TEST "cfml.sublime-syntax" --->
+<!--- SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax" --->
 <div>
  <!--- <- embedding.cfml text.html.cfml meta.tag entity.name.tag --->
 <cfset testArray = []>
@@ -7,6 +7,11 @@
 <!---  ^ embedding.cfml meta.tag source.cfml.script meta.function-call.support.cfml support.function.cfml --->
 <!---             ^ embedding.cfml meta.tag source.cfml.script meta.function-call.parameters.support.cfml punctuation.section.group.begin.cfml --->
 </div>
+
+<cfset a = "b > c">
+<!---         ^ string.quoted.double.cfml -punctuation.definition.tag.end.cfml --->
+<cfset a = b > c>
+<!---        ^ punctuation.definition.tag.end.cfml --->
 <cfoutput>
 <!---     ^ embedding.cfml text.html.cfml meta.scope.cfoutput.cfml text.html.cfml --->
 #now()#

@@ -277,15 +277,11 @@ contexts:
         - match: (/?>)
           scope: punctuation.definition.tag.end.cfml
           pop: true
+        - match: \bvar\b
+          scope: storage.type.cfml
+          push: scope:source.cfml.script#expression-statement-no-bracket
         - match: (?=\S)
-          push: script-expression-statement
-          with_prototype:
-            - match: (?=/?>)
-              pop: true
-
-  script-expression-statement:
-    - include: scope:source.cfml.script#variable-declaration
-    - include: scope:source.cfml.script#expression-statement
+          push: scope:source.cfml.script#expression-statement-no-bracket
 
   generic-tag:
     - match: (?i)(<)(cf[a-z]+)
@@ -304,7 +300,6 @@ contexts:
         1: punctuation.definition.tag.begin.cfml
         2: entity.name.tag.cfml
         3: punctuation.definition.tag.end.cfml
-
 
   comments:
     - match: <!---.*?--->

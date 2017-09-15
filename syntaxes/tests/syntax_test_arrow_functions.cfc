@@ -1,4 +1,4 @@
-// SYNTAX TEST "cfml.sublime-syntax"
+// SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax"
 component {
   var test = {
     key: () => {

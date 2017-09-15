@@ -1,4 +1,4 @@
-<!--- SYNTAX TEST "cfml.sublime-syntax" --->
+<!--- SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax" --->
 <cfparam name="test" type="string" default="hello">
 <!---    ^ embedding.cfml meta.tag.cfml entity.other.attribute-name.cfml --->
 <!---        ^ embedding.cfml meta.tag.cfml punctuation.separator.key-value.cfml --->

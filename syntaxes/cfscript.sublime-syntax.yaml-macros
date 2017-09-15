@@ -254,6 +254,10 @@ contexts:
     - match: (?=\S)
       set: [ expression-end-no-comma, expression-begin ]
 
+  expression-statement-no-bracket:
+    - match: (?=\S)
+      set: [ expression-end-no-bracket, expression-begin ]
+
   expression-end:
     - include: expression-break
     - include: postfix-operators
@@ -268,6 +272,11 @@ contexts:
     - match: (?=,)
       pop: true
     - include: expression-end
+
+  expression-end-no-bracket:
+    - match: (?=/?>)
+      pop: true
+    - include: expression-statement-end
 
   expression-statement-end:
     - match: \n

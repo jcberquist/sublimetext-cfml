@@ -1,4 +1,4 @@
-// SYNTAX TEST "cfml.sublime-syntax"
+// SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax"
 component extends = "root.model.text"
 //        ^ meta.class.inheritance.cfml entity.other.attribute-name.cfml storage.modifier.extends.cfml
 //                ^ meta.class.inheritance.cfml punctuation.separator.key-value.cfml
