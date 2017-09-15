@@ -1,0 +1,21 @@
+CFML v0.25.0 Changelog:
+
+- Added a TestBox Spec component outline command. Similar to the symbol list,
+  this command collects all the title param strings in a spec component and
+  displays them in an indented list for easy navigation and search. My thanks
+  to Eric Peterson (@elpete) for suggesting and testing this.
+
+  In order to use this you need to run the `testbox_spec_outline` command when
+  a TestBox Spec component is open. I have not added a default key binding for
+  this command, but an example binding you can add to your user key binding
+  file is given here:
+
+    {
+        "keys": ["ctrl+alt+t"],
+        "command": "testbox_spec_outline",
+        "context": [
+            {"key": "selector", "operand": "source.cfml", "operator": "equal"}
+        ]
+    }
+
+- Syntax highlighting fixes, see the recent commits on GitHub for more details
