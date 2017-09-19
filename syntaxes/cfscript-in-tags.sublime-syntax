@@ -1,20 +1,7 @@
 %YAML 1.2
 ---
-# Acknowledgments
-#
-# SublimeText ColdFusion:
-#   https://github.com/SublimeText/ColdFusion
-# JavaScript Next:
-#   https://github.com/Benvie/JavaScriptNext.tmLanguage
-# Default JavaScript syntax:
-#   https://github.com/sublimehq/Packages/blob/master/JavaScript/JavaScript.sublime-syntax
-#   (thanks to Will Bond (@wbond) for his *awesome* JavaScript syntax rewrite
-#
-#   https://github.com/sublimehq/Packages/pull/1009
-#   (thanks to Thomas Smith (@Thom1729) and his work on the JavaScript syntax)
-
-name: CFML Script
-scope: source.cfml.script
+name: CFML Script (Tags)
+scope: source.cfml.script.tags
 hidden: true
 variables:
   identifier: '[_$[:alpha:]][_$[:alnum:]]*'
@@ -311,14 +298,18 @@ contexts:
     set: [expression-end-no-comma, expression-begin]
 
   expression-push:
+  - include: angle-bracket-pop
+
   - match: (?=\S)
     push: [expression-end, expression-begin]
-
   expression-statement-push:
+  - include: angle-bracket-pop
+
   - match: (?=\S)
     push: [expression-statement-end, expression-begin]
 
   expression-no-comma-push:
+  - include: angle-bracket-pop
   - match: (?=\S)
     push: [expression-end-no-comma, expression-begin]
 
@@ -346,6 +337,7 @@ contexts:
   - include: expression-end
 
   expression-break:
+  - include: angle-bracket-pop
   - match: (?=[;})\]])
     pop: true
   - match: (?i)(?=</cfscript>)
@@ -1292,6 +1284,7 @@ contexts:
     - match: (?=\S)
       push: expression-no-comma
   - include: else-pop
+
   support-method-call:
   - match: |-
       (?x)(?i)\b(add|addautofilter|addborder|addcolumn|addfreezepane|addimage|addinfo|addpagebreaks
@@ -1343,3 +1336,6 @@ contexts:
         - match: (?=\S)
           push: expression-no-comma
       - include: else-pop
+  angle-bracket-pop:
+  - match: (?=/?>)
+    pop: true

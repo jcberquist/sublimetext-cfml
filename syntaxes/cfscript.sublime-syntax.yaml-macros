@@ -141,8 +141,7 @@ contexts:
     - include: tag-in-script-cf
     - match: (?={{func_lookahead}})
       push: function-declaration
-    - match: (?=\S)
-      push: expression-statement
+    - include: expression-statement-push
 
   conditional:
     - match: \bswitch\b
@@ -202,8 +201,7 @@ contexts:
         - match: \;
           scope: punctuation.terminator.statement.cfml
         - include: variable-declaration
-        - match: (?=\S)
-          push: expression
+        - include: expression-push
     - include: else-pop
 
   parenthesized-expression:
@@ -214,8 +212,7 @@ contexts:
         - match: \)
           scope: punctuation.section.group.end.cfml
           pop: true
-        - match: (?=\S)
-          push: expression
+        - include: expression-push
     - match: \)
       scope: invalid.illegal.stray.brace.round.cfml
       pop: true
@@ -228,8 +225,7 @@ contexts:
         - match: \)
           scope: punctuation.section.group.end.cfml
           pop: true
-        - match: (?=\S)
-          push: expression
+        - include: expression-push
 
   block-scope:
     - !block ['set', 'meta.block.cfml']
@@ -254,9 +250,17 @@ contexts:
     - match: (?=\S)
       set: [ expression-end-no-comma, expression-begin ]
 
-  expression-statement-no-bracket:
+  expression-push:
     - match: (?=\S)
-      set: [ expression-end-no-bracket, expression-begin ]
+      push: [ expression-end, expression-begin ]
+
+  expression-statement-push:
+    - match: (?=\S)
+      push: [ expression-statement-end, expression-begin ]
+
+  expression-no-comma-push:
+    - match: (?=\S)
+      push: [ expression-end-no-comma, expression-begin ]
 
   expression-end:
     - include: expression-break
@@ -272,11 +276,6 @@ contexts:
     - match: (?=,)
       pop: true
     - include: expression-end
-
-  expression-end-no-bracket:
-    - match: (?=/?>)
-      pop: true
-    - include: expression-statement-end
 
   expression-statement-end:
     - match: \n
@@ -739,8 +738,7 @@ contexts:
         - include: expression-break
         - match: ','
           scope: punctuation.separator.array-literal.cfml
-        - match: (?=\S)
-          push: expression-no-comma
+        - include: expression-no-comma-push
 
   property-access:
     - match: '\['
@@ -750,8 +748,7 @@ contexts:
         - match: '\]'
           scope: punctuation.section.brackets.end.cfml
           pop: true
-        - match: (?=\S)
-          push: expression
+        - include: expression-push
     - match: \.
       scope: punctuation.accessor.cfml
       push:

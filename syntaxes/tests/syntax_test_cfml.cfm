@@ -12,6 +12,10 @@
 <!---         ^ string.quoted.double.cfml -punctuation.definition.tag.end.cfml --->
 <cfset a = b > c>
 <!---        ^ punctuation.definition.tag.end.cfml --->
+<cfset a = (b > c)>
+<!---         ^ punctuation.definition.tag.end.cfml --->
+<cfset bob = (option eq 1) ? 'hello' : 'world'>
+<!---                                         ^ punctuation.definition.tag.end.cfml --->
 <cfoutput>
 <!---     ^ embedding.cfml text.html.cfml meta.scope.cfoutput.cfml text.html.cfml --->
 #now()#

@@ -1,0 +1,24 @@
+%YAML 1.2
+%TAG ! tag:yaml-macros:YAMLMacros.lib.extend:
+---
+!extend
+_base: cfscript.sublime-syntax
+name: CFML Script (Tags)
+scope: source.cfml.script.tags
+
+contexts: !merge
+  angle-bracket-pop:
+    - match: (?=/?>)
+      pop: true
+
+  expression-break: !prepend
+    - include: angle-bracket-pop
+
+  expression-push: !prepend
+    - include: angle-bracket-pop
+
+  expression-statement-push: !prepend
+    - include: angle-bracket-pop
+
+  expression-no-comma-push: !prepend
+    - include: angle-bracket-pop

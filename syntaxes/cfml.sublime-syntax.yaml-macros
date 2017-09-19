@@ -279,9 +279,9 @@ contexts:
           pop: true
         - match: \bvar\b
           scope: storage.type.cfml
-          push: scope:source.cfml.script#expression-statement-no-bracket
+          push: scope:source.cfml.script.tags#expression-statement
         - match: (?=\S)
-          push: scope:source.cfml.script#expression-statement-no-bracket
+          push: scope:source.cfml.script.tags#expression-statement
 
   generic-tag:
     - match: (?i)(<)(cf[a-z]+)
