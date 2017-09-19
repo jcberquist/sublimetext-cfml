@@ -45,6 +45,12 @@
 <!--- <- meta.tag.custom.cfml --->
   <!--- <- meta.tag.custom.cfml entity.name.tag.custom.cfml --->
 
+<cf_custom_tag-test>
+<!---     ^^^^^^^^^ meta.tag.custom.cfml entity.name.tag.custom.cfml --->
+
+</cf_custom_tag-test>
+<!---      ^^^^^^^^^ meta.tag.custom.cfml entity.name.tag.custom.cfml --->
+
 <cfif col eq 1>
 <!--- ^ meta.tag.cfml source.cfml.script variable.other.readwrite.cfml --->
 

@@ -9,9 +9,11 @@ file_extensions:
 scope: embedding.cfml
 
 variables:
+
   attribute_name: '[_[:alpha:]][[:alnum:]_\-:]*'
 
 contexts:
+
   else-pop:
   - match: (?=\S)
     pop: true
@@ -540,7 +542,7 @@ contexts:
     push: scope:source.cfml.script#expression
 
   custom-tags:
-  - match: (?i)(<)(cf_[a-z]*)
+  - match: (?i)(<)(cf_[a-z\-_]*)
     captures:
       1: punctuation.definition.tag.begin.cfml
       2: entity.name.tag.custom.cfml
@@ -550,13 +552,13 @@ contexts:
       scope: punctuation.definition.tag.end.cfml
       pop: true
     - include: tag-generic-attribute
-  - match: (?i)(</)(cf_[a-z]*)(>)
+  - match: (?i)(</)(cf_[a-z\-_]*)(>)
     captures:
       0: meta.tag.custom.cfml
       1: punctuation.definition.tag.begin.cfml
       2: entity.name.tag.custom.cfml
       3: punctuation.definition.tag.end.cfml
-  - match: (?i)(<)([a-z]+)(\:)([a-z]*)
+  - match: (?i)(<)([a-z]+)(\:)([a-z\-_]*)
     captures:
       1: punctuation.definition.tag.begin.cfml
       2: entity.name.tag.custom.cfml
@@ -568,7 +570,7 @@ contexts:
       scope: punctuation.definition.tag.end.cfml
       pop: true
     - include: tag-generic-attribute
-  - match: (?i)(</)([a-z]+\:[a-z]*)(>)
+  - match: (?i)(</)([a-z]+\:[a-z\-_]*)(>)
     captures:
       0: meta.tag.custom.cfml
       1: punctuation.definition.tag.begin.cfml
