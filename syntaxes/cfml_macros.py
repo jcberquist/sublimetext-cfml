@@ -93,8 +93,7 @@ def function_call_params(meta_scope, named_param_scope, delimiter_scope):
                     'push': 'expression-no-comma'
                 },
                 {
-                    'match': r'(?=\S)',
-                    'push': 'expression-no-comma'
+                    'include': 'expression-no-comma-push'
                 }
             ]
         },

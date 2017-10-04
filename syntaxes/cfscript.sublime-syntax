@@ -16,6 +16,7 @@
 name: CFML Script
 scope: source.cfml.script
 hidden: true
+
 variables:
   identifier: '[_$[:alpha:]][_$[:alnum:]]*'
   dot_path_identifier: '[_$[:alpha:]][_$[:alnum:].]*'
@@ -474,8 +475,7 @@ contexts:
             '1': entity.other.method-parameter.cfml
             '2': keyword.operator.assignment.binary.cfml
           push: expression-no-comma
-        - match: (?=\S)
-          push: expression-no-comma
+        - include: expression-no-comma-push
       - include: else-pop
     - - match: \b\d*{{identifier}}\b(\.)?
         scope: entity.name.class.cfml
@@ -693,7 +693,6 @@ contexts:
       - include: else-pop
     - - include: function-declaration-parameters
       - include: else-pop
-
   function-return-types:
   - match: (?i)(?=\bfunction\b(?!{{func_assignment_lookahead}}))
     pop: true
@@ -897,8 +896,7 @@ contexts:
               '1': entity.other.function-parameter.cfml
               '2': keyword.operator.assignment.binary.cfml
             push: expression-no-comma
-          - match: (?=\S)
-            push: expression-no-comma
+          - include: expression-no-comma-push
         - include: else-pop
   - match: (?={{identifier}}\s*\.\s*{{identifier}}\s*\()
     set:
@@ -948,8 +946,7 @@ contexts:
             '1': entity.other.method-parameter.cfml
             '2': keyword.operator.assignment.binary.cfml
           push: expression-no-comma
-        - match: (?=\S)
-          push: expression-no-comma
+        - include: expression-no-comma-push
       - include: else-pop
 
   static-method-call:
@@ -973,8 +970,7 @@ contexts:
             '1': entity.other.method-parameter.cfml
             '2': keyword.operator.assignment.binary.cfml
           push: expression-no-comma
-        - match: (?=\S)
-          push: expression-no-comma
+        - include: expression-no-comma-push
       - include: else-pop
 
   cfml-scopes:
@@ -1289,9 +1285,9 @@ contexts:
         '1': entity.other.function-parameter.cfml
         '2': keyword.operator.assignment.binary.cfml
       push: expression-no-comma
-    - match: (?=\S)
-      push: expression-no-comma
+    - include: expression-no-comma-push
   - include: else-pop
+
   support-method-call:
   - match: |-
       (?x)(?i)\b(add|addautofilter|addborder|addcolumn|addfreezepane|addimage|addinfo|addpagebreaks
@@ -1340,6 +1336,5 @@ contexts:
             '1': entity.other.method-parameter.cfml
             '2': keyword.operator.assignment.binary.cfml
           push: expression-no-comma
-        - match: (?=\S)
-          push: expression-no-comma
+        - include: expression-no-comma-push
       - include: else-pop

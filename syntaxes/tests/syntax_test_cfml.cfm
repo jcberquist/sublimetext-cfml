@@ -14,6 +14,8 @@
 <!---        ^ punctuation.definition.tag.end.cfml --->
 <cfset a = (b > c)>
 <!---         ^ punctuation.definition.tag.end.cfml --->
+<cfif isNull(a > b)>
+<!---          ^ punctuation.definition.tag.end.cfml --->
 <cfset bob = (option eq 1) ? 'hello' : 'world'>
 <!---                                         ^ punctuation.definition.tag.end.cfml --->
 <cfoutput>

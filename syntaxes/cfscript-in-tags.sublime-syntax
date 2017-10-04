@@ -3,6 +3,7 @@
 name: CFML Script (Tags)
 scope: source.cfml.script.tags
 hidden: true
+
 variables:
   identifier: '[_$[:alpha:]][_$[:alnum:]]*'
   dot_path_identifier: '[_$[:alpha:]][_$[:alnum:].]*'
@@ -299,12 +300,11 @@ contexts:
 
   expression-push:
   - include: angle-bracket-pop
-
   - match: (?=\S)
     push: [expression-end, expression-begin]
+
   expression-statement-push:
   - include: angle-bracket-pop
-
   - match: (?=\S)
     push: [expression-statement-end, expression-begin]
 
@@ -338,6 +338,7 @@ contexts:
 
   expression-break:
   - include: angle-bracket-pop
+
   - match: (?=[;})\]])
     pop: true
   - match: (?i)(?=</cfscript>)
@@ -371,8 +372,8 @@ contexts:
     set: expression-statement
 
   fallthrough:
-    - match: =>
-      scope: storage.type.function.arrow.cfml
+  - match: =>
+    scope: storage.type.function.arrow.cfml
 
   string:
   - match: "'"
@@ -466,8 +467,7 @@ contexts:
             '1': entity.other.method-parameter.cfml
             '2': keyword.operator.assignment.binary.cfml
           push: expression-no-comma
-        - match: (?=\S)
-          push: expression-no-comma
+        - include: expression-no-comma-push
       - include: else-pop
     - - match: \b\d*{{identifier}}\b(\.)?
         scope: entity.name.class.cfml
@@ -889,8 +889,7 @@ contexts:
               '1': entity.other.function-parameter.cfml
               '2': keyword.operator.assignment.binary.cfml
             push: expression-no-comma
-          - match: (?=\S)
-            push: expression-no-comma
+          - include: expression-no-comma-push
         - include: else-pop
   - match: (?={{identifier}}\s*\.\s*{{identifier}}\s*\()
     set:
@@ -940,8 +939,7 @@ contexts:
             '1': entity.other.method-parameter.cfml
             '2': keyword.operator.assignment.binary.cfml
           push: expression-no-comma
-        - match: (?=\S)
-          push: expression-no-comma
+        - include: expression-no-comma-push
       - include: else-pop
 
   static-method-call:
@@ -965,8 +963,7 @@ contexts:
             '1': entity.other.method-parameter.cfml
             '2': keyword.operator.assignment.binary.cfml
           push: expression-no-comma
-        - match: (?=\S)
-          push: expression-no-comma
+        - include: expression-no-comma-push
       - include: else-pop
 
   cfml-scopes:
@@ -1281,8 +1278,7 @@ contexts:
         '1': entity.other.function-parameter.cfml
         '2': keyword.operator.assignment.binary.cfml
       push: expression-no-comma
-    - match: (?=\S)
-      push: expression-no-comma
+    - include: expression-no-comma-push
   - include: else-pop
 
   support-method-call:
@@ -1333,9 +1329,9 @@ contexts:
             '1': entity.other.method-parameter.cfml
             '2': keyword.operator.assignment.binary.cfml
           push: expression-no-comma
-        - match: (?=\S)
-          push: expression-no-comma
+        - include: expression-no-comma-push
       - include: else-pop
+
   angle-bracket-pop:
   - match: (?=/?>)
     pop: true
