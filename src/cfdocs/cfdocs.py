@@ -169,7 +169,7 @@ def build_cfdoc(function_or_tag, data):
     cfdoc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
     cfdoc["html"]["links"] = [{"href": "https://cfdocs.org" + "/" + function_or_tag, "text": "cfdocs.org" + "/" + function_or_tag}]
     cfdoc["html"]["header"] = data["syntax"].replace("<", "&lt;").replace(">", "&gt;")
-    if len(data["returns"]) > 0:
+    if "returns" in data and len(data["returns"]) > 0:
         cfdoc["html"]["header"] += ": " + data["returns"]
 
     cfdoc["html"]["description"] = "<div class=\"engines\">"
@@ -213,7 +213,7 @@ def build_cfdoc_error(function_or_tag, data):
 def build_completion_doc(function_call_params, data):
     cfdoc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
     cfdoc["html"]["header"] = data["syntax"].split('(')[0] + "(...)"
-    if len(data["returns"]) > 0:
+    if "returns" in data and len(data["returns"]) > 0:
         cfdoc["html"]["header"] += ": " + data["returns"]
 
     cfdoc["html"]["description"] = ""
