@@ -1,7 +1,7 @@
 {
 	"this.applicationtimeout": {
-		"header": "this.applicationTimeout",
-		"description": "Enter the CreateTimeSpan function and values in days, hours, minutes, and seconds, separated  by commas, to specify the lifespan of application variables.",
+		"header": "<span class=\"variable-language\">this</span>.applicationTimeout",
+		"body": "Enter the CreateTimeSpan function and values in days, hours, minutes, and seconds, separated  by commas, to specify the lifespan of application variables.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -9,128 +9,128 @@
 		]
 	},
 	"this.authcookie": {
-		"header": "this.authCookie",
-		"description": "cfauthorization cookie settings",
+		"header": "<span class=\"variable-language\">this</span>.authCookie",
+		"body": "cfauthorization cookie settings",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.authcookie.disableupdate": {
-		"header": "this.authCookie.disableUpdate",
-		"description": "Disable update of cfauthorization cookie using cfcookie or cfheader tag",
+		"header": "<span class=\"variable-language\">this</span>.authCookie.disableUpdate",
+		"body": "Disable update of cfauthorization cookie using cfcookie or cfheader tag",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.authcookie.timeout": {
-		"header": "this.authCookie.timeout",
-		"description": "Auth Cookie age in days.",
+		"header": "<span class=\"variable-language\">this</span>.authCookie.timeout",
+		"body": "Auth Cookie age in days.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.bufferoutput": {
-		"header": "this.bufferOutput",
-		"description": "if set to true (default) the output written to the body of the tag is buffered and in case of a exception also outputted.  if set to false the content to body is ignored and not disabled when a failure in the body of the tag occur.",
+		"header": "<span class=\"variable-language\">this</span>.bufferOutput",
+		"body": "if set to true (default) the output written to the body of the tag is buffered and in case of a exception also outputted.  if set to false the content to body is ignored and not disabled when a failure in the body of the tag occur.",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.cache": {
-		"header": "this.cache",
-		"description": "Query cache settings",
+		"header": "<span class=\"variable-language\">this</span>.cache",
+		"body": "Query cache settings",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.cache.querysize": {
-		"header": "this.cache.querySize",
-		"description": "Maximum number of queries that can be cached. To be clear, this refers to automatic caching via cachedWithin and cachedAfter in the cfquery/queryExecute tag/function. You can store as many queries as you would like using cachePut. Well, as many as your RAM will allow. Be sensible, people.",
+		"header": "<span class=\"variable-language\">this</span>.cache.querySize",
+		"body": "Maximum number of queries that can be cached. To be clear, this refers to automatic caching via cachedWithin and cachedAfter in the cfquery/queryExecute tag/function. You can store as many queries as you would like using cachePut. Well, as many as your RAM will allow. Be sensible, people.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.cache.useinternalquerycache": {
-		"header": "this.cache.useInternalQueryCache",
-		"description": "If true, ColdFusion will store cached queries in the old non-cool non-Ehcache version of the cache.",
+		"header": "<span class=\"variable-language\">this</span>.cache.useInternalQueryCache",
+		"body": "If true, ColdFusion will store cached queries in the old non-cool non-Ehcache version of the cache.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.cachefunction": {
-		"header": "this.cacheFunction",
-		"description": "name of the cache used for function caching in this context",
+		"header": "<span class=\"variable-language\">this</span>.cacheFunction",
+		"body": "name of the cache used for function caching in this context",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.cacheinclude": {
-		"header": "this.cacheInclude",
-		"description": "name of the cache used to store data from a include",
+		"header": "<span class=\"variable-language\">this</span>.cacheInclude",
+		"body": "name of the cache used to store data from a include",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.cacheobject": {
-		"header": "this.cacheObject",
-		"description": "name of the cache used for object caching in this context",
+		"header": "<span class=\"variable-language\">this</span>.cacheObject",
+		"body": "name of the cache used for object caching in this context",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.cachequery": {
-		"header": "this.cacheQuery",
-		"description": "name of the cache used for query caching in this context",
+		"header": "<span class=\"variable-language\">this</span>.cacheQuery",
+		"body": "name of the cache used for query caching in this context",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.cacheresource": {
-		"header": "this.cacheResource",
-		"description": "name of the cache used to store data from ram resource in this context",
+		"header": "<span class=\"variable-language\">this</span>.cacheResource",
+		"body": "name of the cache used to store data from ram resource in this context",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.cachetemplate": {
-		"header": "this.cacheTemplate",
-		"description": "name of the cache used for template caching in this context",
+		"header": "<span class=\"variable-language\">this</span>.cacheTemplate",
+		"body": "name of the cache used for template caching in this context",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.chartstyledirectory": {
-		"header": "this.chartStyleDirectory",
-		"description": "Application specific chart styles directory.",
+		"header": "<span class=\"variable-language\">this</span>.chartStyleDirectory",
+		"body": "Application specific chart styles directory.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.clientcluster": {
-		"header": "this.clientCluster",
-		"description": "if set to true, lucee uses the storage backend for the client scope as master and Lucee checks for changes in the storage backend with every request,  if set to false (default), the storage is only used as slave, lucee only initially gets the data from the storage. Ignored for storage type \"memory\".",
+		"header": "<span class=\"variable-language\">this</span>.clientCluster",
+		"body": "if set to true, lucee uses the storage backend for the client scope as master and Lucee checks for changes in the storage backend with every request,  if set to false (default), the storage is only used as slave, lucee only initially gets the data from the storage. Ignored for storage type \"memory\".",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.clientmanagement": {
-		"header": "this.clientManagement",
-		"description": "Yes or No. Enables client variables. Default is No.",
+		"header": "<span class=\"variable-language\">this</span>.clientManagement",
+		"body": "Yes or No. Enables client variables. Default is No.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -138,8 +138,8 @@
 		]
 	},
 	"this.clientstorage": {
-		"header": "this.clientStorage",
-		"description": "Specifies how client variables are stored: - memory: the session is only kept in memory - cookie: the session is stored in the client cookie - file (default): the session is stored in a local file - \"datasource-name\"|\"cache-name\": when you select a name of an available datasource or cache, the client scope will be stored in there",
+		"header": "<span class=\"variable-language\">this</span>.clientStorage",
+		"body": "Specifies how client variables are stored: - memory: the session is only kept in memory - cookie: the session is stored in the client cookie - file (default): the session is stored in a local file - \"datasource-name\"|\"cache-name\": when you select a name of an available datasource or cache, the client scope will be stored in there",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -147,40 +147,40 @@
 		]
 	},
 	"this.clienttimeout": {
-		"header": "this.clientTimeout",
-		"description": "Enter the CreateTimeSpan function and values in days, hours, minutes, and seconds, separated by commas, to specify the lifespan of client variables. The default value is specified in the  Variables page of the Lucee Administrator.",
+		"header": "<span class=\"variable-language\">this</span>.clientTimeout",
+		"body": "Enter the CreateTimeSpan function and values in days, hours, minutes, and seconds, separated by commas, to specify the lifespan of client variables. The default value is specified in the  Variables page of the Lucee Administrator.",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.compileextforinclude": {
-		"header": "this.compileExtForInclude",
-		"description": "Specify the list of allowed file extensions as a comma-separated list for the cfinclude tag. Specifying a wildcard * in the list makes any file included using the cfinclude tag to be compiled. If any file included using the cfinclude tag is not found in this list, their content will be statically included. By default, files with the cfm and cfml extensions are always compiled irrespective of this setting.",
+		"header": "<span class=\"variable-language\">this</span>.compileExtForInclude",
+		"body": "Specify the list of allowed file extensions as a comma-separated list for the cfinclude tag. Specifying a wildcard * in the list makes any file included using the cfinclude tag to be compiled. If any file included using the cfinclude tag is not found in this list, their content will be statically included. By default, files with the cfm and cfml extensions are always compiled irrespective of this setting.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.componentpaths": {
-		"header": "this.componentPaths",
-		"description": "Contains component paths.",
+		"header": "<span class=\"variable-language\">this</span>.componentPaths",
+		"body": "Contains component paths.",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.compression": {
-		"header": "this.compression",
-		"description": "Enable compression (GZip) for the Lucee Response stream for text-based responses when supported by the client (Web Browser).",
+		"header": "<span class=\"variable-language\">this</span>.compression",
+		"body": "Enable compression (GZip) for the Lucee Response stream for text-based responses when supported by the client (Web Browser).",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.customtagpaths": {
-		"header": "this.customTagPaths",
-		"description": "Contains custom tag paths.",
+		"header": "<span class=\"variable-language\">this</span>.customTagPaths",
+		"body": "Contains custom tag paths.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -188,8 +188,8 @@
 		]
 	},
 	"this.datasource": {
-		"header": "this.datasource",
-		"description": "alias for default datasource",
+		"header": "<span class=\"variable-language\">this</span>.datasource",
+		"body": "alias for default datasource",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -197,8 +197,8 @@
 		]
 	},
 	"this.datasources": {
-		"header": "this.datasources",
-		"description": "A structure that contains datasources defintions.",
+		"header": "<span class=\"variable-language\">this</span>.datasources",
+		"body": "A structure that contains datasources defintions.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -206,72 +206,72 @@
 		]
 	},
 	"this.debuggingipaddresses": {
-		"header": "this.debuggingIPAddresses",
-		"description": "A list of IP addresses that need debugging.",
+		"header": "<span class=\"variable-language\">this</span>.debuggingIPAddresses",
+		"body": "A list of IP addresses that need debugging.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.defaultdatasource": {
-		"header": "this.defaultDatasource",
-		"description": "the default datasource for this environment",
+		"header": "<span class=\"variable-language\">this</span>.defaultDatasource",
+		"body": "the default datasource for this environment",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.enablerobustexception": {
-		"header": "this.enableRobustException",
-		"description": "Overrides the default administrator settings. It does not report compile-time exceptions.",
+		"header": "<span class=\"variable-language\">this</span>.enableRobustException",
+		"body": "Overrides the default administrator settings. It does not report compile-time exceptions.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.googlemapkey": {
-		"header": "this.googleMapKey",
-		"description": "The Google Maps API key required to embed Google Maps in your web pages.",
+		"header": "<span class=\"variable-language\">this</span>.googleMapKey",
+		"body": "The Google Maps API key required to embed Google Maps in your web pages.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.invokeimplicitaccessor": {
-		"header": "this.invokeImplicitAccessor",
-		"description": "alias for triggerDataMember",
+		"header": "<span class=\"variable-language\">this</span>.invokeImplicitAccessor",
+		"body": "alias for triggerDataMember",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.javasettings": {
-		"header": "this.javaSettings",
-		"description": "A structure allowing you to specify Java class paths to be made available to your code. Valid keys are:<br><br>- <strong>loadPaths</strong> (an array of paths to include when searching for Java libraries)<br>- <strong>loadColdFusionClassPath</strong> (a boolean indicating if the default class path should be used, defaults to false)<br>- <strong>reloadOnChange</strong> (a boolean indicating if the classpaths should be reloaded when they change, the default is false)",
+		"header": "<span class=\"variable-language\">this</span>.javaSettings",
+		"body": "A structure allowing you to specify Java class paths to be made available to your code. Valid keys are:<br><br>- <strong>loadPaths</strong> (an array of paths to include when searching for Java libraries)<br>- <strong>loadColdFusionClassPath</strong> (a boolean indicating if the default class path should be used, defaults to false)<br>- <strong>reloadOnChange</strong> (a boolean indicating if the classpaths should be reloaded when they change, the default is false)",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.locale": {
-		"header": "this.locale",
-		"description": "Sets the country/language locale for CFML processing. The locale value  determines the default format of date, time, number, and  currency values, according to language and regional  conventions.",
+		"header": "<span class=\"variable-language\">this</span>.locale",
+		"body": "Sets the country/language locale for CFML processing. The locale value  determines the default format of date, time, number, and  currency values, according to language and regional  conventions.",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.localmode": {
-		"header": "this.localMode",
-		"description": "Defines how the local scope of a function is invoked when a variable with no scope definition is used (default value set in the lucee administrator). - modern: the local scope is always invoked - classic (CFML standard): the local scope is only invoked when the key already exists in it",
+		"header": "<span class=\"variable-language\">this</span>.localMode",
+		"body": "Defines how the local scope of a function is invoked when a variable with no scope definition is used (default value set in the lucee administrator). - modern: the local scope is always invoked - classic (CFML standard): the local scope is only invoked when the key already exists in it",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.loginstorage": {
-		"header": "this.loginStorage",
-		"description": "storage for the login data:  - cookie: store login information in the Cookie scope  - session: store login information in the Session scope",
+		"header": "<span class=\"variable-language\">this</span>.loginStorage",
+		"body": "storage for the login data:  - cookie: store login information in the Cookie scope  - session: store login information in the Session scope",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -279,8 +279,8 @@
 		]
 	},
 	"this.mappings": {
-		"header": "this.mappings",
-		"description": "A structure that contains mappings. Each element in the structure consists of a key and a value.  The logical path is the key and the absolute path is the value.",
+		"header": "<span class=\"variable-language\">this</span>.mappings",
+		"body": "A structure that contains mappings. Each element in the structure consists of a key and a value.  The logical path is the key and the absolute path is the value.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -288,8 +288,8 @@
 		]
 	},
 	"this.name": {
-		"header": "this.name",
-		"description": "The name of your application. This name can be up to 64 characters long.  Required for application and session variables, optional for client variables",
+		"header": "<span class=\"variable-language\">this</span>.name",
+		"body": "The name of your application. This name can be up to 64 characters long.  Required for application and session variables, optional for client variables",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -297,8 +297,8 @@
 		]
 	},
 	"this.ormenabled": {
-		"header": "this.ormEnabled",
-		"description": "Specifies whether ORM should be enabled for the current application context.The default is false.",
+		"header": "<span class=\"variable-language\">this</span>.ormEnabled",
+		"body": "Specifies whether ORM should be enabled for the current application context.The default is false.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -306,8 +306,8 @@
 		]
 	},
 	"this.ormsettings": {
-		"header": "this.ormSettings",
-		"description": "A struct that defines all the ORM settings",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings",
+		"body": "A struct that defines all the ORM settings",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -315,8 +315,8 @@
 		]
 	},
 	"this.ormsettings.autogenmap": {
-		"header": "this.ormSettings.autoGenMap",
-		"description": "Specifies whether Lucee should automatically generate mapping for the persistent CFCs. If autogenmap=false, mapping should be provided in the form of \"{cfc-name}.cfc.hbm.xml\" files.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.autoGenMap",
+		"body": "Specifies whether Lucee should automatically generate mapping for the persistent CFCs. If autogenmap=false, mapping should be provided in the form of \"{cfc-name}.cfc.hbm.xml\" files.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -324,8 +324,8 @@
 		]
 	},
 	"this.ormsettings.automanagesession": {
-		"header": "this.ormSettings.autoManageSession",
-		"description": "Lets you specify if Lucee must manage Hibernate session automatically. If enabled: Lucee manages the session completely. That is, it decides when to flush the session, when to clear the session, and when to close the session. If disabled: The application is responsible for managing flushing, clearing, or closing of the session. The only exception is (in the case of transaction), when the transaction commits, the application flushes the session. Lucee closes the ORM session at the end of request irrespective of this flag being enabled or disabled.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.autoManageSession",
+		"body": "Lets you specify if Lucee must manage Hibernate session automatically. If enabled: Lucee manages the session completely. That is, it decides when to flush the session, when to clear the session, and when to close the session. If disabled: The application is responsible for managing flushing, clearing, or closing of the session. The only exception is (in the case of transaction), when the transaction commits, the application flushes the session. Lucee closes the ORM session at the end of request irrespective of this flag being enabled or disabled.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -333,8 +333,8 @@
 		]
 	},
 	"this.ormsettings.cacheconfig": {
-		"header": "this.ormSettings.cacheConfig",
-		"description": "Specifies the location of the configuration file that should be used by the secondary cache provider. This setting is used only when secondarycacheenabled=true.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.cacheConfig",
+		"body": "Specifies the location of the configuration file that should be used by the secondary cache provider. This setting is used only when secondarycacheenabled=true.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -342,8 +342,8 @@
 		]
 	},
 	"this.ormsettings.cacheprovider": {
-		"header": "this.ormSettings.cacheProvider",
-		"description": "Specifies the cache provider that should be used by ORM as secondary cache.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.cacheProvider",
+		"body": "Specifies the cache provider that should be used by ORM as secondary cache.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -351,8 +351,8 @@
 		]
 	},
 	"this.ormsettings.catalog": {
-		"header": "this.ormSettings.catalog",
-		"description": "Specifies the default Catalog that should be used by ORM.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.catalog",
+		"body": "Specifies the default Catalog that should be used by ORM.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -360,8 +360,8 @@
 		]
 	},
 	"this.ormsettings.cfclocation": {
-		"header": "this.ormSettings.cfcLocation",
-		"description": "Specifies the directory (or array of directories) that should be used by Lucee to search for persistent CFCs to generate the mapping. If cfclocation is set, Lucee looks at only the paths specified in it. If it is not set, Lucee looks at the application directory, its sub-directories, and its mapped directories to search for persistent CFCs.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.cfcLocation",
+		"body": "Specifies the directory (or array of directories) that should be used by Lucee to search for persistent CFCs to generate the mapping. If cfclocation is set, Lucee looks at only the paths specified in it. If it is not set, Lucee looks at the application directory, its sub-directories, and its mapped directories to search for persistent CFCs.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -369,8 +369,8 @@
 		]
 	},
 	"this.ormsettings.datasource": {
-		"header": "this.ormSettings.datasource",
-		"description": "Specifies the data source that should be used by ORM. If it is not specified here, then the data source specified for the application is picked up.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.datasource",
+		"body": "Specifies the data source that should be used by ORM. If it is not specified here, then the data source specified for the application is picked up.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -378,8 +378,8 @@
 		]
 	},
 	"this.ormsettings.dbcreate": {
-		"header": "this.ormSettings.dbCreate",
-		"description": "Hibernate can automatically create the tables for your application in the database. dbCreate takes the following values: -- update: Setting this value creates the table if it does not exist or update the table if it exists. -- dropcreate: Setting this value drops the table if it exists and then creates it. -- none: Setting this value does not change anything in the database schema.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.dbCreate",
+		"body": "Hibernate can automatically create the tables for your application in the database. dbCreate takes the following values: -- update: Setting this value creates the table if it does not exist or update the table if it exists. -- dropcreate: Setting this value drops the table if it exists and then creates it. -- none: Setting this value does not change anything in the database schema.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -387,8 +387,8 @@
 		]
 	},
 	"this.ormsettings.dialect": {
-		"header": "this.ormSettings.dialect",
-		"description": "Specifies the dialect.Lucee supports the following dialects: [Cache 2007.1, Cache71, Cache 2007.1, DB2, DB2/390, DB2/400, DB2390, DB2400, DB2AS400, DB2OS390, DataDirectOracle9, Derby, Firebird, FrontBase, H2, H2DB, HSQL, HSQLDB, Informix, Ingres, Interbase, JDataStore, MSSQL, Mckoi, MckoiSQL, MicrosoftSQLServer, Mimer, MimerSQL, MySQL, MySQL/InnoDB, MySQL/MyISAM, MySQL5, MySQL5/InnoDB, MySQL5InnoDB, MySQLInnoDB, MySQLMyISAM, MySQLwithInnoDB, MySQLwithMyISAM, Oracle, Oracle10g, Oracle8i, Oracle9, Oracle9i, Pointbase, PostgreSQL, PostgresPlus, Progress, SAPDB, SQLServer, Sybase, Sybase11, SybaseASE15, SybaseAnywhere, com.ddtek.jdbc.db2.DB2Driver, com.microsoft.jdbc.sqlserver.SQLServerDriver, oracle.jdbc.driver.OracleDriver, org.firebirdsql.jdbc.FBDriver, org.gjt.mm.mysql.Driver, org.h2.Driver, org.hsqldb.jdbcDriver, org.postgresql.Driver]",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.dialect",
+		"body": "Specifies the dialect.Lucee supports the following dialects: [Cache 2007.1, Cache71, Cache 2007.1, DB2, DB2/390, DB2/400, DB2390, DB2400, DB2AS400, DB2OS390, DataDirectOracle9, Derby, Firebird, FrontBase, H2, H2DB, HSQL, HSQLDB, Informix, Ingres, Interbase, JDataStore, MSSQL, Mckoi, MckoiSQL, MicrosoftSQLServer, Mimer, MimerSQL, MySQL, MySQL/InnoDB, MySQL/MyISAM, MySQL5, MySQL5/InnoDB, MySQL5InnoDB, MySQLInnoDB, MySQLMyISAM, MySQLwithInnoDB, MySQLwithMyISAM, Oracle, Oracle10g, Oracle8i, Oracle9, Oracle9i, Pointbase, PostgreSQL, PostgresPlus, Progress, SAPDB, SQLServer, Sybase, Sybase11, SybaseASE15, SybaseAnywhere, com.ddtek.jdbc.db2.DB2Driver, com.microsoft.jdbc.sqlserver.SQLServerDriver, oracle.jdbc.driver.OracleDriver, org.firebirdsql.jdbc.FBDriver, org.gjt.mm.mysql.Driver, org.h2.Driver, org.hsqldb.jdbcDriver, org.postgresql.Driver]",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -396,8 +396,8 @@
 		]
 	},
 	"this.ormsettings.eventhandling": {
-		"header": "this.ormSettings.eventHandling",
-		"description": "Specifies whether ORM Event callbacks should be given.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.eventHandling",
+		"body": "Specifies whether ORM Event callbacks should be given.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -405,8 +405,8 @@
 		]
 	},
 	"this.ormsettings.flushatrequestend": {
-		"header": "this.ormSettings.flushAtRequestEnd",
-		"description": "Specifies whether ormflush should be called automatically at request end. If flushatrequestend is false, ormflush is not called automatically at request end.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.flushAtRequestEnd",
+		"body": "Specifies whether ormflush should be called automatically at request end. If flushatrequestend is false, ormflush is not called automatically at request end.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -414,8 +414,8 @@
 		]
 	},
 	"this.ormsettings.logsql": {
-		"header": "this.ormSettings.logSQL",
-		"description": "Specifies whether the SQL queries that are executed by ORM will be logged. If LogSQL=true, the SQL queries are logged to the console.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.logSQL",
+		"body": "Specifies whether the SQL queries that are executed by ORM will be logged. If LogSQL=true, the SQL queries are logged to the console.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -423,8 +423,8 @@
 		]
 	},
 	"this.ormsettings.ormconfig": {
-		"header": "this.ormSettings.ormConfig",
-		"description": "The Hibernate configuration file. This file contains various configuration parameters like, dialect, cache settings, and mapping files that are required for the application. For more details, see www.hibernate.org/hib_docs/reference/en/html/session-configuration.html. The settings defined in the ormsettings override the settings defined in the Hibernate Configuration XML file.The connection information in the Hibernate Configuration XML file is however ignored because Lucee uses its own connection pool. You will need to use this only when you need to use a hibernate setting that is not available using ormsetting.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.ormConfig",
+		"body": "The Hibernate configuration file. This file contains various configuration parameters like, dialect, cache settings, and mapping files that are required for the application. For more details, see www.hibernate.org/hib_docs/reference/en/html/session-configuration.html. The settings defined in the ormsettings override the settings defined in the Hibernate Configuration XML file.The connection information in the Hibernate Configuration XML file is however ignored because Lucee uses its own connection pool. You will need to use this only when you need to use a hibernate setting that is not available using ormsetting.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -432,8 +432,8 @@
 		]
 	},
 	"this.ormsettings.savemapping": {
-		"header": "this.ormSettings.saveMapping",
-		"description": "Specifies whether the generated Hibernate mapping file has to be saved to disc. If you set the value to true, the Hibernate mapping XML file is saved with the filename \"CFC name\".hbm.xml in the same directory as the CFC. If any value of savemapping is specified in CFC, it will override the value specified in the ormsetting.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.saveMapping",
+		"body": "Specifies whether the generated Hibernate mapping file has to be saved to disc. If you set the value to true, the Hibernate mapping XML file is saved with the filename \"CFC name\".hbm.xml in the same directory as the CFC. If any value of savemapping is specified in CFC, it will override the value specified in the ormsetting.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -441,8 +441,8 @@
 		]
 	},
 	"this.ormsettings.schema": {
-		"header": "this.ormSettings.schema",
-		"description": "Specifies the default Schema that should be used by ORM.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.schema",
+		"body": "Specifies the default Schema that should be used by ORM.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -450,8 +450,8 @@
 		]
 	},
 	"this.ormsettings.secondarycacheenabled": {
-		"header": "this.ormSettings.secondaryCacheEnabled",
-		"description": "Specifies whether secondary caching should be enabled",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.secondaryCacheEnabled",
+		"body": "Specifies whether secondary caching should be enabled",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -459,8 +459,8 @@
 		]
 	},
 	"this.ormsettings.skipcfcwitherror": {
-		"header": "this.ormSettings.skipCFCWithError",
-		"description": "Lets you specify if Lucee must skip the CFCs that have errors. If set to true, Lucee ignores the CFCs that have errors. (not implemented yet)",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.skipCFCWithError",
+		"body": "Lets you specify if Lucee must skip the CFCs that have errors. If set to true, Lucee ignores the CFCs that have errors. (not implemented yet)",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -468,8 +468,8 @@
 		]
 	},
 	"this.ormsettings.sqlscript": {
-		"header": "this.ormSettings.sqlScript",
-		"description": "Path to the SQL script file that gets executed after ORM is initialized. This applies if dbcreate is set to dropcreate. This must be the absolute file path or the path relative to the application.The SQL script file lets you populate the tables before the application is accessed.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.sqlScript",
+		"body": "Path to the SQL script file that gets executed after ORM is initialized. This applies if dbcreate is set to dropcreate. This must be the absolute file path or the path relative to the application.The SQL script file lets you populate the tables before the application is accessed.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -477,8 +477,8 @@
 		]
 	},
 	"this.ormsettings.usedbformapping": {
-		"header": "this.ormSettings.useDbForMapping",
-		"description": "Specifies whether the database has to be inspected to identify the missing information required to generate the Hibernate mapping. The database is inspected to get the column data type, primary key and foreign key information.",
+		"header": "<span class=\"variable-language\">this</span>.ormSettings.useDbForMapping",
+		"body": "Specifies whether the database has to be inspected to identify the missing information required to generate the Hibernate mapping. The database is inspected to get the column data type, primary key and foreign key information.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -486,48 +486,48 @@
 		]
 	},
 	"this.requesttimeout": {
-		"header": "this.requestTimeout",
-		"description": "Sets the amount of time Lucee will wait for a request to finish before a request timeout will be raised. This means that the execution of the request will be stopped.",
+		"header": "<span class=\"variable-language\">this</span>.requestTimeout",
+		"body": "Sets the amount of time Lucee will wait for a request to finish before a request timeout will be raised. This means that the execution of the request will be stopped.",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.resourcecharset": {
-		"header": "this.resourceCharSet",
-		"description": "character set used for reading from/writing to various resources",
+		"header": "<span class=\"variable-language\">this</span>.resourceCharSet",
+		"body": "character set used for reading from/writing to various resources",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.restsettings": {
-		"header": "this.restSettings",
-		"description": "application REST settings",
+		"header": "<span class=\"variable-language\">this</span>.restSettings",
+		"body": "application REST settings",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.restsettings.cfclocation": {
-		"header": "this.restsettings.cfcLocation",
-		"description": "To publish the CFCs only in a particular location, provide comma-separated list of directories where the REST CFCs are located. The directory paths can be absolute or relative.If not set, all the CFCs from the application root are published.",
+		"header": "<span class=\"variable-language\">this</span>.restsettings.cfcLocation",
+		"body": "To publish the CFCs only in a particular location, provide comma-separated list of directories where the REST CFCs are located. The directory paths can be absolute or relative.If not set, all the CFCs from the application root are published.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.restsettings.skipcfcwitherror": {
-		"header": "this.restsettings.skipCFCWithError",
-		"description": "When an error occurs, continue publishing, ignoring the CFC that has caused the exception.If true, the CFC with error is ignored and the rest of the CFCs are published. By default it is false.If set to false, in case of an error, the application itself is not published. But other registered application are published.If an error occurs during application startup, the error is printed in console.Each application has separate log files for logging the issues.",
+		"header": "<span class=\"variable-language\">this</span>.restsettings.skipCFCWithError",
+		"body": "When an error occurs, continue publishing, ignoring the CFC that has caused the exception.If true, the CFC with error is ignored and the rest of the CFCs are published. By default it is false.If set to false, in case of an error, the application itself is not published. But other registered application are published.If an error occurs during application startup, the error is printed in console.Each application has separate log files for logging the issues.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.s3": {
-		"header": "this.s3",
-		"description": "A struct that defines default S3 settings, this settings can be overwritten as part of the S3 file path, the following keys are supported: - accessKeyId: S3 access key id - awsSecretKey: AWS (Amazon Web Service) Secret Key - defaultLocation(default:us): region for the bucket, possible values are [eu,us,us-west] - host(default:\"s3.amazonaws.com\"): hostname of the service",
+		"header": "<span class=\"variable-language\">this</span>.s3",
+		"body": "A struct that defines default S3 settings, this settings can be overwritten as part of the S3 file path, the following keys are supported: - accessKeyId: S3 access key id - awsSecretKey: AWS (Amazon Web Service) Secret Key - defaultLocation(default:us): region for the bucket, possible values are [eu,us,us-west] - host(default:\"s3.amazonaws.com\"): hostname of the service",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -535,24 +535,24 @@
 		]
 	},
 	"this.sameformfieldsasarray": {
-		"header": "this.sameFormFieldsAsArray",
-		"description": "If the form fields have the same name, ColdFusion converts the form fields as an array instead of a list. To do this, in the Application.cfc, specify the following: this.sameformfieldsasarray = \"true\". Note: The empty string values will be preserved only if this is set to true.",
+		"header": "<span class=\"variable-language\">this</span>.sameFormFieldsAsArray",
+		"body": "If the form fields have the same name, ColdFusion converts the form fields as an array instead of a list. To do this, in the Application.cfc, specify the following: this.sameformfieldsasarray = \"true\". Note: The empty string values will be preserved only if this is set to true.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.scopecascading": {
-		"header": "this.scopeCascading",
-		"description": "Depending on this setting Lucee scans certain scopes to find a variable called from the CFML source. This will only happen, when the variable is called without a scope. (Example: #myVar# instead of #variables.myVar#), the following values are supported: - strict: scans only the variables scope - small: scans the scopes variables,url,form - standard: scans the scopes variables,cgi,url,form,cookie",
+		"header": "<span class=\"variable-language\">this</span>.scopeCascading",
+		"body": "Depending on this setting Lucee scans certain scopes to find a variable called from the CFML source. This will only happen, when the variable is called without a scope. (Example: #myVar# instead of #variables.myVar#), the following values are supported: - strict: scans only the variables scope - small: scans the scopes variables,url,form - standard: scans the scopes variables,cgi,url,form,cookie",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.scriptprotect": {
-		"header": "this.scriptProtect",
-		"description": "Specifies whether to protect variables from cross-site scripting attacks",
+		"header": "<span class=\"variable-language\">this</span>.scriptProtect",
+		"body": "Specifies whether to protect variables from cross-site scripting attacks",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -560,8 +560,8 @@
 		]
 	},
 	"this.securejson": {
-		"header": "this.secureJSON",
-		"description": "A Boolean value that specifies whether to add a security prefix in front of the value that a function returns in JSON-format  in response to a remote call.",
+		"header": "<span class=\"variable-language\">this</span>.secureJSON",
+		"body": "A Boolean value that specifies whether to add a security prefix in front of the value that a function returns in JSON-format  in response to a remote call.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -569,8 +569,8 @@
 		]
 	},
 	"this.securejsonprefix": {
-		"header": "this.secureJSONPrefix",
-		"description": "The security prefix to put in front of the value that a function returns in JSON-format in response to a remote call if the secureJSON setting is true.",
+		"header": "<span class=\"variable-language\">this</span>.secureJSONPrefix",
+		"body": "The security prefix to put in front of the value that a function returns in JSON-format in response to a remote call if the secureJSON setting is true.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -578,120 +578,120 @@
 		]
 	},
 	"this.security": {
-		"header": "this.security",
-		"description": "Application security settings.",
+		"header": "<span class=\"variable-language\">this</span>.security",
+		"body": "Application security settings.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.security.antisamypolicy": {
-		"header": "this.security.antiSamyPolicy",
-		"description": "Specify the location of antisamy file to be used when no antisamy policy file is passed to the getSafeHTML or isSafeHTML functions. The policy file can be relative to the Application CFC path or an absolute path can be provided.",
+		"header": "<span class=\"variable-language\">this</span>.security.antiSamyPolicy",
+		"body": "Specify the location of antisamy file to be used when no antisamy policy file is passed to the getSafeHTML or isSafeHTML functions. The policy file can be relative to the Application CFC path or an absolute path can be provided.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.serialization": {
-		"header": "this.serialization",
-		"description": "Application serialization settings.",
+		"header": "<span class=\"variable-language\">this</span>.serialization",
+		"body": "Application serialization settings.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.serialization.preservecaseforquerycolumn": {
-		"header": "this.serialization.preserveCaseForQueryColumn",
-		"description": "If true, column case will be preserved.",
+		"header": "<span class=\"variable-language\">this</span>.serialization.preserveCaseForQueryColumn",
+		"body": "If true, column case will be preserved.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.serialization.preservecaseforstructkey": {
-		"header": "this.serialization.preserveCaseForStructKey",
-		"description": "Boolean that determines if case for struct keys should be preserved when serializing a struct to JSON.",
+		"header": "<span class=\"variable-language\">this</span>.serialization.preserveCaseForStructKey",
+		"body": "Boolean that determines if case for struct keys should be preserved when serializing a struct to JSON.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.serialization.serializequeryas": {
-		"header": "this.serialization.serializeQueryAs",
-		"description": "Determines how queries should be serialized to JSON. Possible values are row, column, and struct.",
+		"header": "<span class=\"variable-language\">this</span>.serialization.serializeQueryAs",
+		"body": "Determines how queries should be serialized to JSON. Possible values are row, column, and struct.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.serversideformvalidation": {
-		"header": "this.serverSideFormValidation",
-		"description": "Whether to enable validation on cfform fields when the form is submitted.",
+		"header": "<span class=\"variable-language\">this</span>.serverSideFormValidation",
+		"body": "Whether to enable validation on cfform fields when the form is submitted.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.sessioncluster": {
-		"header": "this.sessionCluster",
-		"description": "if set to true, lucee uses the storage backend for the session scope as master and Lucee checks for changes in the storage backend with every request,  if set to false (default), the storage is only used as slave, lucee only initially gets the data from the storage. Ignored for storage type \"memory\".",
+		"header": "<span class=\"variable-language\">this</span>.sessionCluster",
+		"body": "if set to true, lucee uses the storage backend for the session scope as master and Lucee checks for changes in the storage backend with every request,  if set to false (default), the storage is only used as slave, lucee only initially gets the data from the storage. Ignored for storage type \"memory\".",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.sessioncookie": {
-		"header": "this.sessionCookie",
-		"description": "Application session cookie settings.",
+		"header": "<span class=\"variable-language\">this</span>.sessionCookie",
+		"body": "Application session cookie settings.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.sessioncookie.disableupdate": {
-		"header": "this.sessionCookie.disableUpdate",
-		"description": "Disable update of cfid and cftoken cookie using cfcookie or cfheader tag",
+		"header": "<span class=\"variable-language\">this</span>.sessionCookie.disableUpdate",
+		"body": "Disable update of cfid and cftoken cookie using cfcookie or cfheader tag",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.sessioncookie.domain": {
-		"header": "this.sessionCookie.domain",
-		"description": "Domain for which the cookie should be set. This should match exactly with the domain, with which application would be accessed",
+		"header": "<span class=\"variable-language\">this</span>.sessionCookie.domain",
+		"body": "Domain for which the cookie should be set. This should match exactly with the domain, with which application would be accessed",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.sessioncookie.httponly": {
-		"header": "this.sessionCookie.httpOnly",
-		"description": "Specify whether session cookies have to be set as httponly or not. i.e. accessible only to Http requests",
+		"header": "<span class=\"variable-language\">this</span>.sessionCookie.httpOnly",
+		"body": "Specify whether session cookies have to be set as httponly or not. i.e. accessible only to Http requests",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.sessioncookie.secure": {
-		"header": "this.sessionCookie.secure",
-		"description": "Specify whether session cookies have to be set as secure or not. i.e. returned on any type of connection or only secured (https) connections",
+		"header": "<span class=\"variable-language\">this</span>.sessionCookie.secure",
+		"body": "Specify whether session cookies have to be set as secure or not. i.e. returned on any type of connection or only secured (https) connections",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.sessioncookie.timeout": {
-		"header": "this.sessionCookie.timeout",
-		"description": "Session Cookie age in days",
+		"header": "<span class=\"variable-language\">this</span>.sessionCookie.timeout",
+		"body": "Session Cookie age in days",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.sessionmanagement": {
-		"header": "this.sessionManagement",
-		"description": "Yes or No. Yes enables session variables. Default is No.",
+		"header": "<span class=\"variable-language\">this</span>.sessionManagement",
+		"body": "Yes or No. Yes enables session variables. Default is No.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -699,16 +699,16 @@
 		]
 	},
 	"this.sessionstorage": {
-		"header": "this.sessionStorage",
-		"description": "Specifies how Lucee stores session variables: - memory (default): the session is only kept in memory - cookie: the session is stored in the client cookie - file: the session is stored in a local file - \"datasource-name\"|\"cache-name\": when you select a name of an available datasource or cache, the session scope will be stored in there",
+		"header": "<span class=\"variable-language\">this</span>.sessionStorage",
+		"body": "Specifies how Lucee stores session variables: - memory (default): the session is only kept in memory - cookie: the session is stored in the client cookie - file: the session is stored in a local file - \"datasource-name\"|\"cache-name\": when you select a name of an available datasource or cache, the session scope will be stored in there",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.sessiontimeout": {
-		"header": "this.sessionTimeout",
-		"description": "Enter the CreateTimeSpan function and values in days, hours, minutes, and seconds, separated  by commas, to specify the lifespan of session variables. The default value is specified in the  Variables page of the Lucee Administrator.",
+		"header": "<span class=\"variable-language\">this</span>.sessionTimeout",
+		"body": "Enter the CreateTimeSpan function and values in days, hours, minutes, and seconds, separated  by commas, to specify the lifespan of session variables. The default value is specified in the  Variables page of the Lucee Administrator.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -716,16 +716,16 @@
 		]
 	},
 	"this.sessiontype": {
-		"header": "this.sessionType",
-		"description": "Lucee provide 2 kind of sessions: - cfml: session handled by Lucee - j2ee: session handled by the Servlet Engine used Default value is defined in the Lucee Web Administrator. \"j2ee\" can not use a session storage.",
+		"header": "<span class=\"variable-language\">this</span>.sessionType",
+		"body": "Lucee provide 2 kind of sessions: - cfml: session handled by Lucee - j2ee: session handled by the Servlet Engine used Default value is defined in the Lucee Web Administrator. \"j2ee\" can not use a session storage.",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.setclientcookies": {
-		"header": "this.setClientCookies",
-		"description": "Yes or No. Yes enables client cookies. Default is Yes. If you set this attribute to  \"No\", Lucee does not automatically send the CFID and CFTOKEN cookies to the client browser;  you must manually code CFID and CFTOKEN on the URL for every page that uses Session or Client variables.",
+		"header": "<span class=\"variable-language\">this</span>.setClientCookies",
+		"body": "Yes or No. Yes enables client cookies. Default is Yes. If you set this attribute to  \"No\", Lucee does not automatically send the CFID and CFTOKEN cookies to the client browser;  you must manually code CFID and CFTOKEN on the URL for every page that uses Session or Client variables.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -733,8 +733,8 @@
 		]
 	},
 	"this.setdomaincookies": {
-		"header": "this.setDomainCookies",
-		"description": "Yes or No. Sets the CFID and CFTOKEN cookies for a domain, not just a single host.  Applications that are running on clusters must set this value to Yes. The default is No.",
+		"header": "<span class=\"variable-language\">this</span>.setDomainCookies",
+		"body": "Yes or No. Sets the CFID and CFTOKEN cookies for a domain, not just a single host.  Applications that are running on clusters must set this value to Yes. The default is No.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -742,80 +742,80 @@
 		]
 	},
 	"this.smtpserversettings": {
-		"header": "this.smtpServerSettings",
-		"description": "A struct that contains the following values: server, username, and password.If no value is specified, takes the value in the administrator.",
+		"header": "<span class=\"variable-language\">this</span>.smtpServerSettings",
+		"body": "A struct that contains the following values: server, username, and password.If no value is specified, takes the value in the administrator.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.strictnumbervalidation": {
-		"header": "this.strictNumberValidation",
-		"description": "True/False. Default is true. The IsValid function for the integer and numeric types allowed the currency symbols at the start and commas inside the number.In ColdFusion 11, the isValid function behaves in a different way. Setting strictnumbervalidation to false makes the isValid function to behave in a way just like in the previous versions (ColdFusion 10 or earlier). Note that this setting also changes the behavior of the following tags:cfargumentcfparamcfform",
+		"header": "<span class=\"variable-language\">this</span>.strictNumberValidation",
+		"body": "True/False. Default is true. The IsValid function for the integer and numeric types allowed the currency symbols at the start and commas inside the number.In ColdFusion 11, the isValid function behaves in a different way. Setting strictnumbervalidation to false makes the isValid function to behave in a way just like in the previous versions (ColdFusion 10 or earlier). Note that this setting also changes the behavior of the following tags:cfargumentcfparamcfform",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.suppressremotecomponentcontent": {
-		"header": "this.suppressRemoteComponentContent",
-		"description": "Suppress content written to response stream when a Component is invoked remotely. Only works if the content was not flushed before.",
+		"header": "<span class=\"variable-language\">this</span>.suppressRemoteComponentContent",
+		"body": "Suppress content written to response stream when a Component is invoked remotely. Only works if the content was not flushed before.",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.timeout": {
-		"header": "this.timeout",
-		"description": "This number represents how long an individual request can take. Timeout set using  overrides the timeout in the Application.cfc using this.timeout=\"\".",
+		"header": "<span class=\"variable-language\">this</span>.timeout",
+		"body": "This number represents how long an individual request can take. Timeout set using  overrides the timeout in the Application.cfc using this.timeout=\"\".",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.timezone": {
-		"header": "this.timezone",
-		"description": "change the timezone defintion for the current application context.",
+		"header": "<span class=\"variable-language\">this</span>.timezone",
+		"body": "change the timezone defintion for the current application context.",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.triggerdatamember": {
-		"header": "this.triggerDataMember",
-		"description": "If there is no accessible data member (property, element of the this scope) inside a component,  Lucee searches for available matching \"getters\" or \"setters\" for the requested property.  The following example should clarify this behaviour.  \"somevar = myComponent.properyName\".  If \"myComponent\" has no accessible data member named \"propertyName\",  Lucee searches for a function member (method) named \"getPropertyName\".",
+		"header": "<span class=\"variable-language\">this</span>.triggerDataMember",
+		"body": "If there is no accessible data member (property, element of the this scope) inside a component,  Lucee searches for available matching \"getters\" or \"setters\" for the requested property.  The following example should clarify this behaviour.  \"somevar = myComponent.properyName\".  If \"myComponent\" has no accessible data member named \"propertyName\",  Lucee searches for a function member (method) named \"getPropertyName\".",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.typechecking": {
-		"header": "this.typeChecking",
-		"description": "If disabled, Lucee ignores type defintions with function arguments and return values",
+		"header": "<span class=\"variable-language\">this</span>.typeChecking",
+		"body": "If disabled, Lucee ignores type defintions with function arguments and return values",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.webcharset": {
-		"header": "this.webCharSet",
-		"description": "character set used for output streams, form-, url-, and cgi scope variables and reading/writing the header",
+		"header": "<span class=\"variable-language\">this</span>.webCharSet",
+		"body": "character set used for output streams, form-, url-, and cgi scope variables and reading/writing the header",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
 		]
 	},
 	"this.welcomefilelist": {
-		"header": "this.welcomeFileList",
-		"description": "A comma-delimited list of names of files. Tells ColdFusion not to call the onMissingTemplate method if the files are not found. Use this variable to prevent ColdFusion from invoking the onMissingTemplate handler if all of the following items are true:Your web server (for example, web.xml file) has a welcome file list with CFML pages such as index.cfm that it tries to run if a URL specifies a path ending in a directory.The web server sends a request for CFML pages the welcome list to ColdFusion without first determining if the page exists.You want to support directory browsing in directories that do not have any of the files on the welcome file list. You specify this variable only if the Application.cfc file also specifies an onMissingTemplate handler. It must have the same list of files as your web.xml welcome file list.Note: You do not need to use the welcomeFileList variable with most \"pure\" web servers, such as Apache. The welcomeFileList variable has to be used with most integrated web and application servers.",
+		"header": "<span class=\"variable-language\">this</span>.welcomeFileList",
+		"body": "A comma-delimited list of names of files. Tells ColdFusion not to call the onMissingTemplate method if the files are not found. Use this variable to prevent ColdFusion from invoking the onMissingTemplate handler if all of the following items are true:Your web server (for example, web.xml file) has a welcome file list with CFML pages such as index.cfm that it tries to run if a URL specifies a path ending in a directory.The web server sends a request for CFML pages the welcome list to ColdFusion without first determining if the page exists.You want to support directory browsing in directories that do not have any of the files on the welcome file list. You specify this variable only if the Application.cfc file also specifies an onMissingTemplate handler. It must have the same list of files as your web.xml welcome file list.Note: You do not need to use the welcomeFileList variable with most \"pure\" web servers, such as Apache. The welcomeFileList variable has to be used with most integrated web and application servers.",
 		"engines": ["ColdFusion"],
 		"links": [
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/application-variables.html", "text": "adobe.com application-cfc-reference"}
 		]
 	},
 	"this.wstype": {
-		"header": "this.wsType",
-		"description": "webservice type used, this can be one of the following values - Axis1 (default): The Apache Axis 1 implementation is used - CXF: The CXF implementation is used",
+		"header": "<span class=\"variable-language\">this</span>.wsType",
+		"body": "webservice type used, this can be one of the following values - Axis1 (default): The Apache Axis 1 implementation is used - CXF: The CXF implementation is used",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}

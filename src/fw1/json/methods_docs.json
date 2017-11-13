@@ -1,783 +1,802 @@
 {
-    "abortcontroller": {
-        "header": "framework.one.abortController():void",
-        "description": "",
-        "body": "<p>Attempts to immediately abort execution of the current controller by throwing an exception (which is caught by the framework). If your controller catches this exception, even by accident (such as <span class=\"code\">catch ( any e )</span>), execution will continue inside your controller until it returns. No further controller methods will be called. Execution will continue with the <span class=\"code\">setupView()</span> lifecycle method and views and layouts will then be rendered.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-abortcontroller",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "actionspecifiessubsystem": {
-        "header": "framework.one.actionSpecifiesSubsystem():boolean",
-        "description": "<ul><li><em>string</em> <strong>action</strong></li></ul>",
-        "body": "<p>Returns <span class=\"code\">true</span> if the action contains a colon <span class=\"code\">:</span> (default - <span class=\"code\">framework.subsystemDelimiter</span>). Returns <span class=\"code\">false</span> if the action does not contain a colon <span class=\"code\">:</span> (default - <span class=\"code\">framework.subsystemDelimiter</span>).</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-actionspecifiessubsystem-string-action-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "addroute": {
-        "header": "framework.one.addRoute():void",
-        "description": "<ul><li><em>any</em> <strong>routes</strong></li><li><em>string</em> <strong>target</strong></li><li><em>any</em> <strong>methods</strong> = [ ]</li><li><em>string</em> <strong>statusCode</strong> = ''</li></ul>",
-        "body": "<p>Allows you to programmatically add a new route to FW/1's known route mappings. <span class=\"code\">routes</span> can be either an array of route patterns or a single route pattern. <span class=\"code\">target</span> is the URL to map those routes to. <span class=\"code\">methods</span> is optional and can be either an array of HTTP methods or a single HTTP method for which those routes should be mapped. <span class=\"code\">statusCode</span> is optional and if present is prefixed to the target URL (and represents the HTTP status returned when the routes are processed.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-addroute-any-routes-string-target-any-methods----string-statuscode---",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "buildcustomurl": {
-        "header": "framework.one.buildCustomURL():string",
-        "description": "<ul><li><em>string</em> <strong>uri</strong></li></ul>",
-        "body": "<p>Used in views and layouts to generate route-based links. Generates a URL prefix, the same way <span class=\"code\">buildURL()</span> does, and appends <span class=\"code\">uri</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-buildcustomurl-string-uri-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "buildurl": {
-        "header": "framework.one.buildURL():string",
-        "description": "<ul><li><em>string</em> <strong>action</strong> = '.'</li><li><em>string</em> <strong>path</strong> = <em>see below</em></li><li><em>any</em> <strong>queryString</strong> = ''</li></ul>",
-        "body": "<p>Used in views and layouts to generate links to FW/1 actions. Produces \"traditional\" links if <span class=\"code\">variables.framework.generateSES</span> is <span class=\"code\">false</span> and the current request used a \"traditional\" URL. Produces \"SES\" links if <span class=\"code\">variables.framework.generateSES</span> is <span class=\"code\">true</span> or the current request used an \"SES\" URL. The optional <span class=\"code\">path</span> argument allows you to override the default base URL used for links in the same way that <span class=\"code\">redirect()</span> allows below. Note that specifying <span class=\"code\">path</span> will disable generation of \"SES\" links! <span class=\"code\">path</span> will default to the result of calling <span class=\"code\">getBaseURL()</span> which in turn defaults to <span class=\"code\">variables.framework.baseURL</span>, unless overridden by a subsystem-specific configuration.</p><p>The optional <span class=\"code\">queryString</span> argument allows you to specify URL variables (and values) that should be added to the generated URL. In general, variable / value pairs should be specified with an equals <span class=\"code\">=</span> and separated with an ampersand <span class=\"code\">&amp;</span> and they will be appended either as-is, for \"traditional\" link generation, or converted to \"SES\" format as appropriate. The \"SES\" conversion can be overridden by preceding a sequence of variable / value pairs with <span class=\"code\">?</span> in which case such arguments will be appended as-is for both forms of generated link. Finally, an HTML anchor may be specified, preceded by <span class=\"code\">#</span> and that will be appended to the final URL. <span class=\"code\">queryString</span> also accepts a structure, which is converted to an HTML escaped query string.</p><p>As a shortcut, the <span class=\"code\">action</span> may include the <span class=\"code\">queryString</span> value, separated by <span class=\"code\">?</span> like this: <span class=\"code\">'section.item?arg=val'</span> (with all the same considerations for embedded <span class=\"code\">&amp;</span> and <span class=\"code\">?</span> and <span class=\"code\">#</span> characters). <span class=\"code\">action</span> can be <span class=\"code\">'.'</span>, in which case a link to the current section and item is returned.</p><p>Here are some examples:</p><div class=\"pre\">buildURL( 'product.list' )<br></div><p>Will generate:</p><ul>  <li><span class=\"code\">/index.cfm?action=product.list</span> - in \"traditional\" mode</li>  <li><span class=\"code\">/index.cfm/product/list</span> - in \"SES\" mode</li>  <li>    <p><span class=\"code\">/product/list</span> - in \"SES\" mode with <span class=\"code\">SESOmitIndex</span> set to <span class=\"code\">true</span></p>    <p>buildURL( action = 'product.detail', queryString = 'id=42?img=large##overview' )</p>  </li></ul><p>Will generate:</p><ul>  <li><span class=\"code\">/index.cfm?action=product.detail&amp;id=42&amp;img=large#overview</span> - in \"traditional\" mode</li>  <li><span class=\"code\">/index.cfm/product/detail/id/42?img=large#overview</span> - in \"SES\" mode</li>  <li>    <p><span class=\"code\">/product/detail/id/42?img=large#overview</span> - in \"SES\" mode with <span class=\"code\">SESOmitIndex</span> set to <span class=\"code\">true</span></p>    <p>buildURL( 'product.detail?id=42?img=large##overview' )</p>  </li></ul><p>Will also generate:</p><ul>  <li><span class=\"code\">/index.cfm?action=product.detail&amp;id=42&amp;img=large#overview</span> - in \"traditional\" mode</li>  <li><span class=\"code\">/index.cfm/product/detail/id/42?img=large#overview</span> - in \"SES\" mode</li>  <li>    <p><span class=\"code\">/product/detail/id/42?img=large#overview</span> - in \"SES\" mode with <span class=\"code\">SESOmitIndex</span> set to <span class=\"code\">true</span></p>    <p>buildURL( '.list' )</p>  </li></ul><p>Will generate a URL based on the current section - a section-relative link to the current section's <span class=\"code\">list</span> item.</p><div class=\"pre\">buildURL( action = 'product.detail', queryString = { id = 76, img = 'small' } )<br></div><p>Will generate:</p><ul>  <li><span class=\"code\">/index.cfm?action=product.detail&amp;id=76&amp;img=small</span> - in \"traditional\" mode</li>  <li><span class=\"code\">/index.cfm/product/detail/id/76/img/small</span> - in \"SES\" mode</li>  <li><span class=\"code\">/product/detail/id/76/img/small</span> - in \"SES\" mode with <span class=\"code\">SESOmitIndex</span> set to <span class=\"code\">true</span></li></ul>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-buildurl-string-action---string-path--see-below-any-querystring---",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "controller": {
-        "header": "framework.one.controller():void",
-        "description": "<ul><li><em>string</em> <strong>action</strong></li></ul>",
-        "body": "<p>Call this from your <span class=\"code\">Application.cfc</span> methods to add to the queue of controllers that will be called by the framework. The <span class=\"code\">action</span> is used to identify the controller that should be called, e.g., <span class=\"code\">\"app1:section.item\"</span>, <span class=\"code\">\"section.item\"</span> or <span class=\"code\">\"section\"</span> (which will call the default item with that section).</p><p>A typical example is to trigger a security controller method invoked from setupRequest()`, e.g.,</p><div class=\"pre\">function setupRequest() {<br>&nbsp;&nbsp;&nbsp;&nbsp;controller( 'security.checkAuthorization' );<br>}<br></div><p>You may only queue up additional controllers prior to the start of controller execution (in <span class=\"code\">onRequest()</span>). If you attempt to queue up additional controllers in controller methods (or later in the request), you will get an exception because at that point all controllers have been queued up and/or executed.</p><p>Just like the implicit controller invocation, <span class=\"code\">before()</span>, <span class=\"code\">item()</span>, and <span class=\"code\">after()</span> are all invoked appropriately if present. If multiple methods are queued up from a single controller, <span class=\"code\">before()</span> and <span class=\"code\">after()</span> are executed just once (for each controller).</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-controller-string-action-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "customizevieworlayoutpath": {
-        "header": "framework.one.customizeViewOrLayoutPath():string",
-        "description": "<ul><li><em>struct</em> <strong>pathInfo</strong></li><li><em>string</em> <strong>type</strong></li><li><em>string</em> <strong>fullPath</strong></li></ul>",
-        "body": "<p>By default, this simply returns <span class=\"code\">fullPath</span>.</p><p>It can be overridden to provide customized handling of view and layout locations. Everywhere that FW/1 needs to figure out the location of a view or layout based on conventions, it calls this method. See the <span class=\"code\">skinning</span> example in the FW/1 distribution that shows how this method can be used to provide automatic overrides of the default conventions.</p><p>The arguments are as follows:</p><ul>  <li><span class=\"code\">pathInfo</span> - This struct contains two keys: <span class=\"code\">base</span> which is the application-relative path to the location of the (default) <span class=\"code\">views</span> and <span class=\"code\">layouts</span> folders; <span class=\"code\">path</span> which is the relative path below those folders. For example, for a request of <span class=\"code\">\"sub:section.item\"</span>, this structure will contain: <span class=\"code\">base = \"sub/\"</span>, <span class=\"code\">path = \"section/item\"</span>. The <span class=\"code\">base</span> will have already been adjusted to wherever the views / layouts are supposed to be if you have <span class=\"code\">framework.base</span> set.</li>  <li><span class=\"code\">type</span> - Either <span class=\"code\">\"view\"</span> or <span class=\"code\">\"layout\"</span>.</li>  <li><span class=\"code\">fullPath</span> - The default location of the view or layout: <span class=\"code\">\"#pathInfo.base##type#s/#pathInfo.path#.cfm\"</span>. For the example above, this would be <span class=\"code\">\"sub/views/section/item.cfm\"</span> for a view.</li></ul><p>Additional documentation will be provided for this feature in due course. Probably an entire section on skinning applications with FW/1.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-customizevieworlayoutpath-struct-pathinfo-string-type-string-fullpath-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "disableframeworktrace": {
-        "header": "framework.one.disableFrameworkTrace():void",
-        "description": "",
-        "body": "<p>Disable framework tracing for this request.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-disableframeworktrace",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "disablelayout": {
-        "header": "framework.one.disableLayout():void",
-        "description": "",
-        "body": "<p>Disable layouts for this request. Equivalent to <span class=\"code\">request.layout = false;</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-disablelayout",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "enableframeworktrace": {
-        "header": "framework.one.enableFrameworkTrace():void",
-        "description": "",
-        "body": "<p>Enable framework tracing for this request.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-enableframeworktrace",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "enablelayout": {
-        "header": "framework.one.enableLayout():void",
-        "description": "",
-        "body": "<p>Enable layouts for this request. Equivalent to <span class=\"code\">request.layout = true;</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-enablelayout",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "frameworktrace": {
-        "header": "framework.one.frameworkTrace():void",
-        "description": "<ul><li><em>string</em> <strong>message</strong> [</li><li><em>any</em> <strong>value</strong> ]</li></ul>",
-        "body": "<p>Adds the <span class=\"code\">message</span> and optional <span class=\"code\">value</span> to the framework trace data, for rendering at the end of the request.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-frameworktrace-string-message--any-value--",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getaction": {
-        "header": "framework.one.getAction():string",
-        "description": "",
-        "body": "<p>Returns the name of the action variable in the URL or form post (<span class=\"code\">variables.framework.action</span>).</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getaction",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getbaseurl": {
-        "header": "framework.one.getBaseURL():string",
-        "description": "",
-        "body": "<p>Returns the configured <span class=\"code\">variables.framework.baseURL</span> value. Can be overridden in <span class=\"code\">Application.cfc</span> to provide a customized value, e.g., per request.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getbaseurl",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getbeanfactory": {
-        "header": "framework.one.getBeanFactory():any",
-        "description": "<ul><li><em>string</em> <strong>subsystem</strong> = \"\"</li></ul>",
-        "body": "<p>Returns whatever the framework has been told is a bean factory (which will be an instance of DI/1 by default). This will return a subsystem-specific bean factory if one exists for the specified subsystem, or for the subsystem of the current request if no subsystem is specified in the call. Otherwise it will return the default bean factory.</p><p>If no application bean factory can be found, this will throw an exception. Use <span class=\"code\">hasBeanFactory()</span> and/or <span class=\"code\">hasSubsystemBeanFactory( subsystem )</span> to determine whether this call will successfully return a bean factory.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-getbeanfactory-string-subsystem---",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getcgirequestmethod": {
-        "header": "framework.one.getCGIRequestMethod():string",
-        "description": "",
-        "body": "<p>Returns the method (GET, POST, etc) used for the current request. This is a convenience method for controllers to access CGI.REQUEST_METHOD in a clean way via the framework.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getcgirequestmethod",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getconfig": {
-        "header": "framework.one.getConfig():struct",
-        "description": "",
-        "body": "<p>Returns a copy of the <span class=\"code\">framework</span> structure containing the configuration settings specified in <span class=\"code\">Application.cfc</span>. This allows controllers to inspect the FW/1 configuration settings if necessary.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-struct-function-getconfig",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getdefaultbeanfactory": {
-        "header": "framework.one.getDefaultBeanFactory():any",
-        "description": "",
-        "body": "<p>Returns whatever the framework has been told is a bean factory. This will return the default, top-level bean factory for the application. If no such bean factory exists, this will throw an exception. Use <span class=\"code\">hasDefaultBeanFactory()</span> to determine whether the default, top-level bean factory exists for the application.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-getdefaultbeanfactory",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getdefaultsubsystem": {
-        "header": "framework.one.getDefaultSubsystem():string",
-        "description": "",
-        "body": "<p>If the application is using legacy subsystems, then if the current request's action specifies a subsystem return that else return the default subsystem configured for the application.</p><p>If the application is not using legacy subsystems, return an empty string (since there is no concept of a default subsystem in new style subsystems).</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getdefaultsubsystem",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getenvironment": {
-        "header": "framework.one.getEnvironment():string",
-        "description": "",
-        "body": "<p>Returns an empty string by default. If you want to use the <strong>Environment Control</strong> feature, you should override this in <span class=\"code\">Application.cfc</span> and have it return the appropriate <em>\"tier\"</em> or <em>\"tier-server\"</em> string. See <strong>Environment Control</strong> in the <a href=\"developing-applications.html#environment-control\">Developing Applications Manual</a> for more detail.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getenvironment",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getenvvar": {
-        "header": "framework.one.getEnvVar():string",
-        "description": "<ul><li><em>string</em> <strong>name</strong></li></ul>",
-        "body": "<p>Returns the value of the specified environment variable name (i.e., from the shell environment in which your CFML server was started).</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getenvvar-string-name-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getframeworktrace": {
-        "header": "framework.one.getFrameworkTrace():array",
-        "description": "",
-        "body": "<p>Returns an array of the current request's framework trace data. See <span class=\"code\">setupTraceRender()</span> for one reasonable use.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-array-function-getframeworktrace",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getfullyqualifiedaction": {
-        "header": "framework.one.getFullyQualifiedAction():string",
-        "description": "<ul><li><em>string</em> <strong>action</strong> = request.action</li></ul>",
-        "body": "<p>Returns the specified action formatted as <em>module:section.item</em>. If the <em>module</em> name is empty, the subsystem delimiter is also omitted (so then it behaves the same as <span class=\"code\">getSectionAndItem( action )</span>.). See also <strong>getSubsystemSectionAndItem()</strong> below.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getfullyqualifiedaction-string-action--requestaction-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "gethostname": {
-        "header": "framework.one.getHostname():string",
-        "description": "",
-        "body": "<p>Returns the server's local hostname (via Java's InetAddress class). Intended to be used with <strong>Environment Control</strong>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-gethostname",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getitem": {
-        "header": "framework.one.getItem():string",
-        "description": "<ul><li><em>string</em> <strong>action</strong> = request.action</li></ul>",
-        "body": "<p>Returns the item portion of the specified action - or of the current request's action if no action is specified. Returns the default item if no item is present in the specified action.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getitem-string-action--requestaction-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getresourceroutetemplates": {
-        "header": "framework.one.getResourceRouteTemplates():array",
-        "description": "",
-        "body": "<p>Returns (a copy of) <span class=\"code\">variables.framework.resourceRouteTemplates</span>. This can be overridden in <span class=\"code\">Application.cfc</span> if you want to generate resource templates for routes dynamically.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-array-function-getresourceroutetemplates",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getroute": {
-        "header": "framework.one.getRoute():string",
-        "description": "",
-        "body": "<p>Returns the route that was used to initiate the current request (if any). Returns an empty string if the current request was not initiated via a matched route.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getroute",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getroutepath": {
-        "header": "framework.one.getRoutePath():string",
-        "description": "",
-        "body": "<p>Returns the path info (SES URL) portion that either matched the current route (if any) or was used as the action for the current request. It is returned in the same format as <span class=\"code\">getRoute()</span>, i.e., <span class=\"code\">$POST/section/item/</span> or <span class=\"code\">$GET/users/123/</span> (where <span class=\"code\">getRoute()</span> might return <span class=\"code\">$GET/users/:id</span>).</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getroutepath",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getroutes": {
-        "header": "framework.one.getRoutes():array",
-        "description": "",
-        "body": "<p>Returns (a copy of) <span class=\"code\">variables.framework.routes</span>. This can be overridden in <span class=\"code\">Application.cfc</span> if you want to generate routes dynamically.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-array-function-getroutes",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getsection": {
-        "header": "framework.one.getSection():string",
-        "description": "<ul><li><em>string</em> <strong>action</strong> = request.action</li></ul>",
-        "body": "<p>Returns the section portion of the specified <span class=\"code\">action</span> - or of the current request's action if no action is specified. Returns the default section if no section is present in the specified action.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getsection-string-action--requestaction-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getsectionanditem": {
-        "header": "framework.one.getSectionAndItem():string",
-        "description": "<ul><li><em>string</em> <strong>action</strong> = request.action</li></ul>",
-        "body": "<p>Returns the specified <span class=\"code\">action</span> - or the current request's action if no action is specified - formatted as <em>section.item</em>. Automatically strips the subsystem from the <span class=\"code\">action</span>, if present. Automatically adds the default section if not present. Automatically adds the default item if not present.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getsectionanditem-string-action--requestaction-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getsubsystem": {
-        "header": "framework.one.getSubsystem():string",
-        "description": "<ul><li><em>string</em> <strong>action</strong> = request.action</li></ul>",
-        "body": "<p>Returns the subsystem portion of the specified <span class=\"code\">action</span> - or of the current request's action if no action is specified. If no subsystem is present in the specified action, then if the application is using legacy subsystems returns the default subsystem name else return an empty string.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getsubsystem-string-action--requestaction-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getsubsystembase": {
-        "header": "framework.one.getSubsystemBase():string",
-        "description": "",
-        "body": "<p>Returns the path to the folder where the current request's subsystem <span class=\"code\">views/</span> and <span class=\"code\">layouts/</span> subfolders can be found. This can be useful for customer versions of <span class=\"code\">buildURL()</span> etc.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getsubsystembase",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getsubsystembeanfactory": {
-        "header": "framework.one.getSubsystemBeanFactory():any",
-        "description": "<ul><li><em>string</em> <strong>subsystem</strong></li></ul>",
-        "body": "<p>Returns whatever the framework has been told is a bean factory. This will return the bean factory for the named subsystem. If no such bean factory exists, this will throw an exception. Use <span class=\"code\">hasSubsystemBeanFactory( subsystem )</span> to determine whether a bean factory exists for the named subsystem. If this is the first reference to this subsystem, the subsystem will be initialized.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-getsubsystembeanfactory-string-subsystem-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getsubsystemconfig": {
-        "header": "framework.one.getSubsystemConfig():struct",
-        "description": "<ul><li><em>string</em> <strong>subsystem</strong></li></ul>",
-        "body": "<p>Returns the configuration for the named subsystem, as a copy of <span class=\"code\">variables.framework.subsystems[subsystem]</span>. If no configuration exists for the named subsystem, an empty struct is returned. FW/1 uses this to retrieve the per-subsystem <span class=\"code\">baseURL</span> value, if any, as part of <span class=\"code\">buildURL()</span> and <span class=\"code\">redirect()</span>, as well as <span class=\"code\">diConfig</span> if you are using DI/1 to manage subsystem bean factories automatically. <em>Including <span class=\"code\">diConfig</span> is new in 3.1.</em></p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-struct-function-getsubsystemconfig-string-subsystem-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "getsubsystemsectionanditem": {
-        "header": "framework.one.getSubsystemSectionAndItem():string",
-        "description": "<ul><li><em>string</em> <strong>action</strong> = request.action</li></ul>",
-        "body": "<p>This returns the specified action formatted as <em>module:section.item</em>. Unlike <span class=\"code\">getFullyQualifiedAction()</span> above, this always includes the subsystem delimiter even when the <em>module</em> name is empty.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getsubsystemsectionanditem-string-action--requestaction-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "hasbeanfactory": {
-        "header": "framework.one.hasBeanFactory():boolean",
-        "description": "",
-        "body": "<p>Returns <span class=\"code\">true</span> if a default, top-level bean factory exists. Otherwise returns <span class=\"code\">true</span> if a bean factory exists for the subsystem of the current request, if appropriate. Otherwise returns <span class=\"code\">false</span>. If <span class=\"code\">hasBeanFactory()</span> returns <span class=\"code\">true</span>, calling <span class=\"code\">getBeanFactory()</span> will return a bean factory.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-hasbeanfactory",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "hasdefaultbeanfactory": {
-        "header": "framework.one.hasDefaultBeanFactory():boolean",
-        "description": "",
-        "body": "<p>Returns <span class=\"code\">true</span> if a default, top-level bean factory exists. Otherwise returns <span class=\"code\">false</span>. If <span class=\"code\">hasDefaultBeanFactory()</span> returns <span class=\"code\">true</span>, calling <span class=\"code\">getDefaultBeanFactory()</span> will return a bean factory.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-hasdefaultbeanfactory",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "hassubsystembeanfactory": {
-        "header": "framework.one.hasSubsystemBeanFactory():boolean",
-        "description": "<ul><li><em>string</em> <strong>subsystem</strong></li></ul>",
-        "body": "<p>Returns <span class=\"code\">true</span> if a bean factory exists for the named subsystem. Otherwise returns <span class=\"code\">false</span>. If <span class=\"code\">hasSubsystemBeanFactory( subsystem )</span> returns <span class=\"code\">true</span>, calling <span class=\"code\">getBeanFactory( subsystem )</span> and <span class=\"code\">getSubsystemBeanFactory( subsystem )</span> will both return a bean factory (for the named subsystem).</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-hassubsystembeanfactory-string-subsystem-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "iscurrentaction": {
-        "header": "framework.one.isCurrentAction():boolean",
-        "description": "<ul><li><em>string</em> <strong>action</strong></li></ul>",
-        "body": "<p>Returns <span class=\"code\">true</span> if the <span class=\"code\">action</span> passed in matches the currently executing action. This can be useful to figure out which tab to highlight in navigation or make other choices based on actions.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-iscurrentaction-string-action-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "isframeworkreloadrequest": {
-        "header": "framework.one.isFrameworkReloadRequest():boolean",
-        "description": "",
-        "body": "<p>Returns <span class=\"code\">true</span> if the current request has a valid URL parameter to trigger an application reload or <span class=\"code\">reloadApplicationOnEveryRequest</span> is <span class=\"code\">true</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-isframeworkreloadrequest",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "isunhandledrequest": {
-        "header": "framework.one.isUnhandledRequest():boolean",
-        "description": "<ul><li><em>string</em> <strong>targetPath</strong></li></ul>",
-        "body": "<p>By default, returns <span class=\"code\">true</span> if the specified <span class=\"code\">targetPath</span> (as in <span class=\"code\">onRequest()</span>) has an unhandled extension (from <span class=\"code\">variables.framework.unhandledExtensions</span>) or matches an unhandled path (from <span class=\"code\">variables.framework.unhandledPaths</span>). You can override this to dynamically tell FW/1 not to handle specific requests. If you want to still apply the default checks as well as your own custom checks, don't forget to call <span class=\"code\">super.isUnhandledRequest(targetPath)</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-isunhandledrequest-string-targetpath-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "layout": {
-        "header": "framework.one.layout():string",
-        "description": "<ul><li><em>string</em> <strong>path</strong></li><li><em>string</em> <strong>body</strong></li></ul>",
-        "body": "<p>This function renders a layout and could be called inside a view or a layout, although it is recommended to rely on the conventions for layouts where possible. If you decide you need to render a layout directly, you can invoke it like this:</p><div class=\"pre\">writeOutput( layout( 'main/nav-template', nav_menu ) );<br></div><p>Rendering views, using the <span class=\"code\">view()</span> method, is supported, documented and the recommended way to build composite pages. Layouts should simply wrap views, in a cascade from item to section to site.</p><p>As of release 4.0, <span class=\"code\">layout()</span> may be called from a controller to wrap HTML (such as produced by a call to <span class=\"code\">view()</span>). See the <span class=\"code\">view()</span> below for such use cases.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-layout-string-path-string-body-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "onapplicationstart": {
-        "header": "framework.one.onApplicationStart():",
-        "description": "",
-        "body": "<p>Part of the standard CFML lifecycle, this method is called automatically by the CFML engine at application startup. You should not override this nor call it (even tho' it is <span class=\"code\">public</span>). Use <span class=\"code\">setupApplication()</span> to perform application-specific initialization.</p><p>If you override this method, you <strong>must</strong> call <span class=\"code\">super.onApplicationStart()</span> or FW/1 will fail to work correctly.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-function-onapplicationstart",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "onerror": {
-        "header": "framework.one.onError():",
-        "description": "<ul><li><em>any</em> <strong>exception</strong></li><li><em>string</em> <strong>event</strong></li></ul>",
-        "body": "<p>The standard CFML error handler, this method is called automatically by the CFML engine in the event of an uncaught exception. By default, FW/1 will try to execute the action specified by <span class=\"code\">variables.framework.error</span>. The action that caused the exception, if known, will be available in <span class=\"code\">request.failedAction</span>. The exception and event are available as <span class=\"code\">request.exception</span> and <span class=\"code\">request.event</span> respectively. If the error action fails, FW/1 tries to display the original exception and event in a simple error view (using the private <span class=\"code\">failure()</span> method).</p><p>You may override this method in <span class=\"code\">Application.cfc</span> if you wish to provide different error handling behavior. You may call <span class=\"code\">super.onError( exception, event )</span> if appropriate. You may also consider overriding the <span class=\"code\">failure()</span> method, but that is not documented and not supported.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-function-onerror-any-exception-string-event-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "onmissingview": {
-        "header": "framework.one.onMissingView():string",
-        "description": "<ul><li><em>struct</em> <strong>rc</strong></li></ul>",
-        "body": "<p>Called when a view is not found for a request. The default behavior is to call <span class=\"code\">viewNotFound()</span> which throws an exception.</p><p>You may override this method to provide alternative behavior when a view is not found. You should either throw an exception or return a string that represents the view that should be rendered instead. For example:</p><div class=\"pre\">function onMissingView( rc ) {<br>&nbsp;&nbsp; return view( 'page/notFound' );<br>}<br></div><p>As of 4.1, you can specify that the <span class=\"code\">FW1.viewNotFound</span> exception be handled via the <span class=\"code\">missingview</span> action in the configuration, as opposed to the <span class=\"code\">error</span> action.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-onmissingview-struct-rc-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "onpopulateerror": {
-        "header": "framework.one.onPopulateError():void",
-        "description": "<ul><li><em>any</em> <strong>cfc</strong></li><li><em>string</em> <strong>property</strong></li><li><em>struct</em> <strong>rc</strong></li></ul>",
-        "body": "<p>Called when an exception occurs during an attempt to populate the named <span class=\"code\">property</span> of the specified <span class=\"code\">cfc</span> if no keys were specified for <span class=\"code\">populate()</span> and <span class=\"code\">trustKeys</span> was <span class=\"code\">true</span>. This method does nothing, effectively causing the exception to be ignored.</p><p>If you intend to call <span class=\"code\">populate()</span> with no keys specified and you tell it to trust what it finds in the request context, you may wish to override <span class=\"code\">onPopulateError()</span> and do something like log such failed attempts. See <span class=\"code\">populate()</span> below.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-onpopulateerror-any-cfc-string-property-struct-rc-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "onrequest": {
-        "header": "framework.one.onRequest():",
-        "description": "<ul><li><em>string</em> <strong>targetPage</strong></li></ul>",
-        "body": "<p>Part of the standard CFML lifecycle, this method is called automatically by the CFML engine to handle each request. You should not override this nor call it (even tho' it is <span class=\"code\">public</span>).</p><p>If you override this method, you <strong>must</strong> call <span class=\"code\">super.onRequest( targetPage )</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-function-onrequest-string-targetpage-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "onrequestend": {
-        "header": "framework.one.onRequestEnd():",
-        "description": "<ul><li><em>string</em> <strong>targetPage</strong></li></ul>",
-        "body": "<p>Part of the standard CFML lifecycle, this method is called automatically by the CFML engine at the end of each request. You should not override this not call it (even tho' it is <span class=\"code\">public</span>). Use <span class=\"code\">setupResponse()</span> to perform request-specific finalization.</p><p>If you override this method, you <strong>must</strong> call <span class=\"code\">super.onRequestEnd( targetPage )</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-function-onrequestend-string-targetpage-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "onrequeststart": {
-        "header": "framework.one.onRequestStart():",
-        "description": "<ul><li><em>string</em> <strong>targetPage</strong></li></ul>",
-        "body": "<p>Part of the standard CFML lifecycle, this method is called automatically by the CFML engine at the beginning of each request. You should not override this nor call it (even tho' it is <span class=\"code\">public</span>). Use <span class=\"code\">setupRequest()</span> to perform request-specific initialization.</p><p>If you override this method, you <strong>must</strong> call <span class=\"code\">super.onRequestStart( targetPage )</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-function-onrequeststart-string-targetpage-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "onsessionstart": {
-        "header": "framework.one.onSessionStart():",
-        "description": "",
-        "body": "<p>Part of the standard CFML lifecycle, this method is called automatically by the CFML engine when each new session is created. You should not override this nor call it (even tho' it is <span class=\"code\">public</span>). Use <span class=\"code\">setupSession()</span> to perform session-specific initialization.</p><p>If you override this method, you <strong>must</strong> call <span class=\"code\">super.onSessionStart()</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-function-onsessionstart",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "populate": {
-        "header": "framework.one.populate():any",
-        "description": "<ul><li><em>any</em> <strong>cfc</strong></li><li><em>string</em> <strong>keys</strong> = \"\"</li><li><em>boolean</em> <strong>trustKeys</strong> = false</li><li><em>boolean</em> <strong>trim</strong> = false</li><li><em>boolean</em> <strong>deep</strong> = false</li><li><em>any</em> <strong>properties</strong> = ''</li></ul>",
-        "body": "<p>Automatically populates an object with data from the request context, or from the <span class=\"code\">properties</span> struct if provided. For any public method <span class=\"code\">setKey()</span> on the object or any declared <span class=\"code\">property key;</span>, if that <span class=\"code\">key</span> exists in the source data structure, call the setter with that value. If the optional list of <span class=\"code\">keys</span> is provided, only attempt to call setters for the specified keys in the request context. Mainly useful for populating beans from form posts. Whitespace is permitted in the list of keys for clarity, e.g., <span class=\"code\">\"firstname, lastname, email\"</span>. This approach relies on setter methods and properties in the object. It won't detect and use <span class=\"code\">onMissingMethod()</span>.</p><p>You can also specify <span class=\"code\">trim = true</span> and FW/1 will call <span class=\"code\">trim()</span> on each item before calling the setter. Setting <span class=\"code\">deep = true</span> will allow FW/1 to populate nested properties on objects (in child objects).</p><p>For <span class=\"code\">populate()</span> to work with <span class=\"code\">onMissingMethod()</span> you need to specify <span class=\"code\">trustKeys = true</span>. If you specify the list of <span class=\"code\">keys</span>, <span class=\"code\">populate()</span> will not test whether the setter exists, it will just call it - which means that <span class=\"code\">onMissingMethod()</span> and property-based setters will be invoked automatically. If you omit the <span class=\"code\">keys</span>, be careful because <span class=\"code\">populate()</span> will cycle through the entire request context and attempt to set properties on the object for everything! A <span class=\"code\">try/catch</span> is used to suppress any exceptions in this case but you need to be aware that this may be a little dangerous if you have a lot of data in your request context that does not match the properties of the object! If an exception is caught, <span class=\"code\">onPopulateError()</span> is called with the object, property name and the request context structure as its three arguments. The default behavior is to simply ignore the exception but you can override that if you want - see <span class=\"code\">onPopulateError()</span> above.</p><p><span class=\"code\">populate()</span> returns the <span class=\"code\">cfc</span> passed in.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-populate-any-cfc-string-keys---boolean-trustkeys--false-boolean-trim--false-boolean-deep--false-any-properties---",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "processroutes": {
-        "header": "framework.one.processRoutes():struct",
-        "description": "<ul><li><em>string</em> <strong>path</strong></li><li><em>array</em> <strong>routes</strong></li><li><em>string</em> <strong>httpMethod</strong> = request._fw1.cgiRequestMethod</li></ul>",
-        "body": "<p>Given a <span class=\"code\">path</span>, and an array of <span class=\"code\">routes</span>, and an optional <span class=\"code\">httpMethod</span>, process the routes to see if any matched and return a struct with a <span class=\"code\">matched</span> flag and if that's <span class=\"code\">true</span> also <span class=\"code\">route</span> and <span class=\"code\">path</span> values. Route matching is case-sensitive by default but this can be overridden by setting <span class=\"code\">routesCaseSensitive</span> to <span class=\"code\">false</span> in FW/1's configuration.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-struct-function-processroutes-string-path-array-routes-string-httpmethod--requestfw1cgirequestmethod-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "redirect": {
-        "header": "framework.one.redirect():void",
-        "description": "<ul><li><em>string</em> <strong>action</strong></li><li><em>string</em> <strong>preserve</strong> = \"none\"</li><li><em>string</em> <strong>append</strong> = \"none\"</li><li><em>string</em> <strong>path</strong> = <em>see below</em></li><li><em>any</em> <strong>queryString</strong> = ''</li><li><em>string</em> <strong>statusCode</strong> = '302'</li><li><em>string</em> <strong>header</strong> = ''</li></ul>",
-        "body": "<p>This constructs a URL based on the <span class=\"code\">action</span> and optional <span class=\"code\">path</span> and redirects to it. If <span class=\"code\">preserve</span> is <span class=\"code\">\"all\"</span>, the entire contents of the request context are saved to <span class=\"code\">session</span> scope across the redirect (and restored back to the request context automatically after the redirect). If <span class=\"code\">preserve</span> is a list of keys, just those elements of the request context are preserved. If <span class=\"code\">append</span> is <span class=\"code\">\"all\"</span>, all simple values in the request context are appended to the constructed URL as a query string before the redirect. If <span class=\"code\">append</span> is a list of keys, just those elements of the request context are appended (if they are simple values). The <span class=\"code\">statusCode</span> argument lets you specify the HTTP status code for the redirect so you can override the default value of <span class=\"code\">302</span>. As of release 3.5 <span class=\"code\">queryString</span> also accepts a structure, which is converted to an HTML escaped query string.</p><p>If <span class=\"code\">path</span> is specified, that base URL is used instead of the default, as per <span class=\"code\">buildURL()</span> above.</p><p>The <span class=\"code\">queryString</span> argument may be used to append additional URL variables / values to the constructed URL, as explained in <span class=\"code\">buildURL()</span> above. Or the query string value may be combined with the <span class=\"code\">action</span> also as explained in <span class=\"code\">buildURL()</span> above.</p><p>For example:</p><div class=\"pre\">variables.fw.redirect( action = 'blog.entry', append = 'id', queryString = '##comment' )<br></div><p>Will generate:</p><ul>  <li><span class=\"code\">/index.cfm?action=blog.entry&amp;id={rc.id}#comment</span> - in \"traditional\" mode</li>  <li><span class=\"code\">/index.cfm/blog/entry/id/{rc.id}#comment</span> - in \"SES\" mode</li>  <li><span class=\"code\">/blog/entry/id/{rc.id}#comment</span> - in \"SES\" mode with <span class=\"code\">SESOmitIndex</span> set to <span class=\"code\">true</span></li></ul><p>If <span class=\"code\">header</span> is provided (as a non-empty string), instead of performing an actual redirect, FW/1 will set the named HTTP header to the target URL and then abort the controller lifecycle. This allows custom handling of \"redirects\" in AJAX-based applications.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-redirect-string-action-string-preserve--none-string-append--none-string-path--see-below-any-querystring---string-statuscode--302-string-header---",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "redirectcustomurl": {
-        "header": "framework.one.redirectCustomURL():void",
-        "description": "<ul><li><em>string</em> <strong>uri</strong></li><li><em>string</em> <strong>preserve</strong> = 'none'</li><li><em>string</em> <strong>statusCode</strong> = '302'</li><li><em>string</em> <strong>header</strong> = ''</li></ul>",
-        "body": "<p>This is to <span class=\"code\">redirect()</span> as <span class=\"code\">buildCustomURL()</span> is to <span class=\"code\">buildURL()</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-redirectcustomurl-string-uri-string-preserve--none-string-statuscode--302-string-header---",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "renderdata": {
-        "header": "framework.one.renderData():any",
-        "description": "",
-        "body": "<p>Call this from your controller to tell FW/1 to skip views and layoutsand instead render <span class=\"code\">data</span> in the specified content <span class=\"code\">type</span> format.</p><p>This function returns a \"builder\" expression (<em>new in 4.0</em>) that supports the following methods:</p><ul>  <li><span class=\"code\">data( payload )</span> - set the data payload to be rendered: see below for restrictions on the payload, based on the render type.</li>  <li><span class=\"code\">type( contentType )</span> - set the type of rendering to be performed: the argument may be <span class=\"code\">\"html\"</span>, <span class=\"code\">\"json\"</span>, <span class=\"code\">\"jsonp\"</span>, <span class=\"code\">\"rawjson\"</span>, <span class=\"code\">\"xml\"</span>, or <span class=\"code\">\"text\"</span>; it may also be a custom rendering function (or closure).</li>  <li><span class=\"code\">header( name, value )</span> - add an HTTP header to be sent with the response (<em>new in 4.0</em>).</li>  <li><span class=\"code\">statusCode( code )</span> - set the HTTP status code: default is 200.</li>  <li><span class=\"code\">statusText( message )</span> - set the HTTP status message (<em>new in 4.0</em>).</li>  <li><span class=\"code\">jsonpCallback( callback )</span> - set the JSONP callback: required when <span class=\"code\">type</span> is <span class=\"code\">\"jsonp\"</span>, otherwise ignored.</li></ul><p>This \"builder\" expression can be retrieved at any time in a controller by calling <span class=\"code\">renderer()</span> (below). <em>New in 4.0.</em></p><p>The following restrictions apply to the data payload, for each type as shown:</p><ul>  <li><span class=\"code\">\"html\"</span> - the payload must be a string and that is the result of the HTTP request. FW/1 sets the <span class=\"code\">Content-Type</span> header to <span class=\"code\">text/html; charset=utf-8</span>.</li>  <li><span class=\"code\">\"json\"</span>, <span class=\"code\">\"jsonp\"</span> - FW/1 calls <span class=\"code\">serializeJSON( payload )</span> to generate the result of the HTTP request and sets the <span class=\"code\">Content-Type</span> header to <span class=\"code\">application/javascript; charset=utf-8</span>. In addition, for <span class=\"code\">\"jsonp\"</span>, you must provide a non-empty value for the <span class=\"code\">jsonpCallback</span> argument. <em>New in 3.1.</em></li>  <li><span class=\"code\">\"rawjson\"</span> - the payload must be a string (and is assumed to be valid JSON already) and that is the result of the HTTP request. FW/1 sets the <span class=\"code\">Content-Type</span> header to <span class=\"code\">application/javascript; charset=utf-8</span>. <em>New in 3.1.</em></li>  <li><span class=\"code\">\"xml\"</span> - the payload must be either a valid XML string or an XML object (constructed via CFML's various <span class=\"code\">xml...()</span> functions). If the payload is an XML object, FW/1 calls <span class=\"code\">toString( payload )</span> to generate the result of the HTTP request, otherwise the XML string is used as the result of the request. In both cases, FW/1 sets the <span class=\"code\">Content-Type</span> header to <span class=\"code\">text/xml; charset=utf-8</span>.</li>  <li><span class=\"code\">\"text\"</span> - the payload must be a string and that is the result of the HTTP request. FW/1 sets the <span class=\"code\">Content-Type</span> header to <span class=\"code\">text/plain; charset=utf-8</span>.</li></ul><p>If a function or closure is passed as the type, you can perform pretty much any custom rendering you can imagine. See <a href=\"developing-applications.html#custom-data-rendering\">Custom Data Rendering</a> in the Developing Applications Guide for more detail on how to use this.</p><p>When you call <span class=\"code\">renderData()</span>, processing continues in your controller (so use <span class=\"code\">return;</span> if you want processing to stop at that point), and subsequent calls to <span class=\"code\">setView()</span> or <span class=\"code\">setLayout()</span> will have no effect (since FW/1 will ignore views and layouts for this request).</p><p>For legacy application support, the following form of <span class=\"code\">renderData()</span> is still supported in 4.0:</p><div class=\"pre\">public any function renderData( string type = \"\", any data = \"\", numeric statusCode = 200, string jsonpCallback = \"\" )<br></div><p>Although this form is deprecated, FW/1 will only issue a deprecation warning (written to the console log) for <span class=\"code\">statusCode</span> and <span class=\"code\">jsonpCallback</span> in 4.0. In a future release, these will require a framework setting in order to be used and the <span class=\"code\">type</span> and <span class=\"code\">data</span> arguments will cause deprecation warnings.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-renderdata",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "renderer": {
-        "header": "framework.one.renderer():any",
-        "description": "",
-        "body": "<p>This returns the same \"builder\" expression that <span class=\"code\">renderData()</span> returns so that you can add settings and headers piecemeal in your controllers. <em>New in 4.0.</em></p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-renderer",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "setbeanfactory": {
-        "header": "framework.one.setBeanFactory():void",
-        "description": "<ul><li><em>any</em> <strong>factory</strong></li></ul>",
-        "body": "<p>If you are manually creating a bean factory, call this from your <span class=\"code\">setupApplication()</span> method to tell the framework about your primary (default) bean factory. By default FW/1 will use DI/1 as the bean factory and you won't have to worry about this.</p><p>As of release 3.5, if you call this without telling FW/1 <span class=\"code\">diEngine = \"none\"</span> to disable automatic bean factory management, you will get an exception. If, for some reason, you want to do this anyway, you can set <span class=\"code\">diOverrideAllowed = true</span> in the framework configuration but it would almost certainly be better to set <span class=\"code\">diEngine = true</span>!</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setbeanfactory-any-factory-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "setlayout": {
-        "header": "framework.one.setLayout():void",
-        "description": "<ul><li><em>string</em> <strong>action</strong></li><li><em>boolean</em> <strong>suppressOtherLayouts</strong> = false</li></ul>",
-        "body": "<p>Call this to tell the framework to use a new action <em>module:section.item</em> as the basis of the lookup process for the layouts for the current request. This allows you to override the default convention for choosing the layouts. If you specify <span class=\"code\">suppressOtherLayouts</span> as <span class=\"code\">true</span>, then only the most specific layout will be used and the usual cascade of layouts will be turned off for this request.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setlayout-string-action-boolean-suppressotherlayouts--false-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "setsubsystembeanfactory": {
-        "header": "framework.one.setSubsystemBeanFactory():void",
-        "description": "<ul><li><em>string</em> <strong>subsystem</strong></li><li><em>any</em> <strong>factory</strong></li></ul>",
-        "body": "<p>Call this to tell the framework about a subsystem-specific bean factory. The bean factory must support <span class=\"code\">containsBean( name )</span> and <span class=\"code\">getBean( name )</span>. You would typically call this method from your <span class=\"code\">setupSubsystem()</span> method unless you are using DI/1 and allowing FW/1 to manage all your bean factories for you (the default behavior).</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setsubsystembeanfactory-string-subsystem-any-factory-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "setupapplication": {
-        "header": "framework.one.setupApplication():void",
-        "description": "",
-        "body": "<p>Override this in your <span class=\"code\">Application.cfc</span> to provide application-specific initialization. If you want the framework to use a non-default bean factory, this is where you should call <span class=\"code\">setBeanFactory( factory )</span>. You do not need to call <span class=\"code\">super.setupApplication()</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setupapplication",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "setupenvironment": {
-        "header": "framework.one.setupEnvironment():void",
-        "description": "<ul><li><em>string</em> <strong>env</strong></li></ul>",
-        "body": "<p>Override this in your <span class=\"code\">Application.cfc</span> to provide environment-specific initialization. See <strong>Environment Control</strong> in the <a href=\"developing-applications.html#environment-control\">Developing Applications Manual</a> for more detail.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setupenvironment-string-env-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "setuprequest": {
-        "header": "framework.one.setupRequest():void",
-        "description": "",
-        "body": "<p>Override this in your <span class=\"code\">Application.cfc</span> to provide request-specific initialization. You do not need to call <span class=\"code\">super.setupRequest()</span>. Since you do not have access to <span class=\"code\">rc</span> here, you may also want to define <span class=\"code\">before()</span> in <span class=\"code\">Application.cfc</span> to act as an initialization controller, to populate the request context prior to other controllers being executed.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setuprequest",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "setupresponse": {
-        "header": "framework.one.setupResponse():void",
-        "description": "<ul><li><em>struct</em> <strong>rc</strong></li></ul>",
-        "body": "<p>Override this in your <span class=\"code\">Application.cfc</span> to provide request-specific finalization. This is called after all views and layouts have been rendered or immediately before a redirect. You do not need to call <span class=\"code\">super.setupResponse()</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setupresponse-struct-rc-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "setupsession": {
-        "header": "framework.one.setupSession():void",
-        "description": "",
-        "body": "<p>Override this in your <span class=\"code\">Application.cfc</span> to provide session-specific initialization. You do not need to call <span class=\"code\">super.setupSession()</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setupsession",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "setupsubsystem": {
-        "header": "framework.one.setupSubsystem():void",
-        "description": "<ul><li><em>string</em> <strong>subsystem</strong></li></ul>",
-        "body": "<p>Override this in your <span class=\"code\">Application.cfc</span> to provide subsystem-specific initialization. If you want the framework to use non-default subsystem-specific bean factories for any subsystems, this is where you should call <span class=\"code\">setSubsystemBeanFactory( subsystem, factory )</span>. See the example in <a href=\"using-subsystems.html#setting-bean-factories-with-setupsubsystem\">Using Subsystems</a> for more details. You do not need to call <span class=\"code\">super.setupSubsystem()</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setupsubsystem-string-subsystem-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "setuptracerender": {
-        "header": "framework.one.setupTraceRender():void",
-        "description": "<ul><li><em>string</em> <strong>output</strong> = 'html'</li></ul>",
-        "body": "<p>This is called when the framework trace is about to be rendered at the end of a request. <span class=\"code\">output</span> will be either <span class=\"code\">'html'</span> or <span class=\"code\">'data'</span> depending on whether FW/1 has output HTML using views and layouts or rendered data in the current request. You can override it to take control of the rendering process yourself (for whatever reason such as saving the trace data to a database perhaps or providing a fancier rendering?). You can call <span class=\"code\">getFrameworkTrace()</span> to obtain the framework's trace data (note that this will be a copy on Adobe ColdFusion but just a reference on Lucee and Railo), and do whatever you want with it. It's probably a good idea to call <span class=\"code\">disableFrameworkTrace()</span> to prevent any further additions to the framework trace data. Note: this method used to be called only when FW/1 was outputting HTML and not rendering data, however, it is now called whenever tracing is enabled. If you were using this method to render trace data in a custom format at the end of HTML requests, you will find your rendered trace data appended to your request data when <span class=\"code\">renderData()</span> is used. In order to maintain your current functionality, you can easily fix this by checking that the <span class=\"code\">output</span> argument is equal to <span class=\"code\">'html'</span> before rendering the trace data.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setuptracerender-string-output--html-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "setupview": {
-        "header": "framework.one.setupView():void",
-        "description": "<ul><li><em>struct</em> <strong>rc</strong></li></ul>",
-        "body": "<p>Override this in your <span class=\"code\">Application.cfc</span> to provide pre-rendering logic, e.g., putting globally available data into the request context so it is available to all views. You do not need to call <span class=\"code\">super.setupView()</span>.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setupview-struct-rc-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "setview": {
-        "header": "framework.one.setView():void",
-        "description": "<ul><li><em>string</em> <strong>action</strong></li></ul>",
-        "body": "<p>Call this to tell the framework to use a new action <em>module:section.item</em> as the basis of the lookup process for the view and layouts for the current request. This allows you to override the default convention for choosing the view and layouts. A possible use for this is when redisplaying a form view when errors are present (i.e., from the form processing controller method, without using a redirect).</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setview-string-action-",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "usingsubsystems": {
-        "header": "framework.one.usingSubsystems():boolean",
-        "description": "",
-        "body": "<p>Returns <span class=\"code\">true</span> if the application is using legacy subsystems, i.e., <span class=\"code\">variables.framework.usingSubsystems</span> is <span class=\"code\">true</span>. Otherwise returns <span class=\"code\">false</span>. Not relevant to new style subsystems.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-usingsubsystems",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    },
-    "view": {
-        "header": "framework.one.view():string",
-        "description": "<ul><li><em>string</em> <strong>path</strong></li><li><em>struct</em> <strong>args</strong> = { }</li><li><em>any</em> <strong>missingView</strong> = { }</li></ul>",
-        "body": "<p>This renders a view and returns the output of that view as a string. It is intended to be used primarily inside layouts to render fragments of a page such as menus and other common elements. Elements of the <em>args</em> structure are appended to the local scope accessible inside the view file. For example:</p><div class=\"pre\">&lt;cfoutput&gt;<br>&nbsp;&nbsp;&lt;div&gt;#view( 'common:site/header' )#&lt;/div&gt;<br>&nbsp;&nbsp;&lt;div&gt;#view( 'nav/fragment/menu', { selected = 'home' } )#&lt;/div&gt;<br>&nbsp;&nbsp;&lt;div&gt;#body#&lt;/div&gt;<br>&nbsp;&nbsp;&lt;div&gt;#view( 'common:site/footer' )#&lt;/div&gt;<br>&lt;/cfoutput&gt;<br></div><p>This renders the <span class=\"code\">header</span> and <span class=\"code\">footer</span> items (views) from the <span class=\"code\">common</span> subsystem's <span class=\"code\">site</span> section (i.e., <span class=\"code\">subsystems/common/views/site/header.cfm</span> and <span class=\"code\">footer.cfm</span>) and the <span class=\"code\">fragment/menu</span> item (view) from the current subsystem's <span class=\"code\">nav</span> section (i.e., <span class=\"code\">views/nav/fragment/menu.cfm</span>). Inside <span class=\"code\">menu.cfm</span>, <span class=\"code\">local.selected</span> would be available containing the string <span class=\"code\">\"home\"</span>.</p><p>A controller may call <span class=\"code\">view()</span> which can be useful if you have email templates that need to be rendered and sent as part of a request: those email templates can be treated as views and have all the associated <span class=\"code\">rc</span>, <span class=\"code\">local</span>, etc machinery applied. As of release 4.0, a controller may also call <span class=\"code\">layout()</span> to wrap a view for such purposes.</p><p>If the argument <span class=\"code\">missingView</span> is not specified, and the specified view <span class=\"code\">path</span> does not exist, then <span class=\"code\">onMissingView()</span> will be called. If a string is passed as <span class=\"code\">missingView</span> and the specified view does not exist, then the value of the <span class=\"code\">missingView</span> argument will be returned. This allows for programmatically calculated views to be silently rendered as empty strings if they are not present. This can be useful for programmatic skins with optional elements.</p>",
-        "links": [
-            {
-                "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-view-string-path-struct-args----any-missingview----",
-                "text": "Framework One Reference Manual"
-            }
-        ]
-    }
+  "abortcontroller": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">abortController</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Attempts to immediately abort execution of the current controller by throwing an exception (which is caught by the framework). If your controller catches this exception, even by accident (such as <span class=\"code\">catch ( any e )</span>), execution will continue inside your controller until it returns. No further controller methods will be called. Execution will continue with the <span class=\"code\">setupView()</span> lifecycle method and views and layouts will then be rendered.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-abortcontroller",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "actionspecifiessubsystem": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">actionSpecifiesSubsystem</span>(): <span class=\"storage-type\">boolean</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns <span class=\"code\">true</span> if the action contains a colon <span class=\"code\">:</span> (default - <span class=\"code\">framework.subsystemDelimiter</span>). Returns <span class=\"code\">false</span> if the action does not contain a colon <span class=\"code\">:</span> (default - <span class=\"code\">framework.subsystemDelimiter</span>).</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-actionspecifiessubsystem-string-action-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "addroute": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">addRoute</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Allows you to programmatically add a new route to FW/1's known route mappings. <span class=\"code\">routes</span> can be either an array of route patterns or a single route pattern. <span class=\"code\">target</span> is the URL to map those routes to. <span class=\"code\">methods</span> is optional and can be either an array of HTTP methods or a single HTTP method for which those routes should be mapped. <span class=\"code\">statusCode</span> is optional and if present is prefixed to the target URL (and represents the HTTP status returned when the routes are processed.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>routes: <span class=\"storage-type\">any</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>target: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>methods: <span class=\"storage-type\">any</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>statusCode: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-addroute-any-routes-string-target-any-methods----string-statuscode---",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "buildcustomurl": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">buildCustomURL</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Used in views and layouts to generate route-based links. Generates a URL prefix, the same way <span class=\"code\">buildURL()</span> does, and appends <span class=\"code\">uri</span>.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>uri: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-buildcustomurl-string-uri-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "buildurl": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">buildURL</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Used in views and layouts to generate links to FW/1 actions. Produces \"traditional\" links if <span class=\"code\">variables.framework.generateSES</span> is <span class=\"code\">false</span> and the current request used a \"traditional\" URL. Produces \"SES\" links if <span class=\"code\">variables.framework.generateSES</span> is <span class=\"code\">true</span> or the current request used an \"SES\" URL. The optional <span class=\"code\">path</span> argument allows you to override the default base URL used for links in the same way that <span class=\"code\">redirect()</span> allows below. Note that specifying <span class=\"code\">path</span> will disable generation of \"SES\" links! <span class=\"code\">path</span> will default to the result of calling <span class=\"code\">getBaseURL()</span> which in turn defaults to <span class=\"code\">variables.framework.baseURL</span>, unless overridden by a subsystem-specific configuration.</p><p>The optional <span class=\"code\">queryString</span> argument allows you to specify URL variables (and values) that should be added to the generated URL. In general, variable / value pairs should be specified with an equals <span class=\"code\">=</span> and separated with an ampersand <span class=\"code\">&amp;</span> and they will be appended either as-is, for \"traditional\" link generation, or converted to \"SES\" format as appropriate. The \"SES\" conversion can be overridden by preceding a sequence of variable / value pairs with <span class=\"code\">?</span> in which case such arguments will be appended as-is for both forms of generated link. Finally, an HTML anchor may be specified, preceded by <span class=\"code\">#</span> and that will be appended to the final URL. <span class=\"code\">queryString</span> also accepts a structure, which is converted to an HTML escaped query string.</p><p>As a shortcut, the <span class=\"code\">action</span> may include the <span class=\"code\">queryString</span> value, separated by <span class=\"code\">?</span> like this: <span class=\"code\">'section.item?arg=val'</span> (with all the same considerations for embedded <span class=\"code\">&amp;</span> and <span class=\"code\">?</span> and <span class=\"code\">#</span> characters). <span class=\"code\">action</span> can be <span class=\"code\">'.'</span>, in which case a link to the current section and item is returned.</p><p>Here are some examples:</p><div class=\"pre\">buildURL( 'product.list' )<br></div><p>Will generate:</p><ul>  <li><span class=\"code\">/index.cfm?action=product.list</span> - in \"traditional\" mode</li>  <li><span class=\"code\">/index.cfm/product/list</span> - in \"SES\" mode</li>  <li>    <p><span class=\"code\">/product/list</span> - in \"SES\" mode with <span class=\"code\">SESOmitIndex</span> set to <span class=\"code\">true</span></p>    <p>buildURL( action = 'product.detail', queryString = 'id=42?img=large##overview' )</p>  </li></ul><p>Will generate:</p><ul>  <li><span class=\"code\">/index.cfm?action=product.detail&amp;id=42&amp;img=large#overview</span> - in \"traditional\" mode</li>  <li><span class=\"code\">/index.cfm/product/detail/id/42?img=large#overview</span> - in \"SES\" mode</li>  <li>    <p><span class=\"code\">/product/detail/id/42?img=large#overview</span> - in \"SES\" mode with <span class=\"code\">SESOmitIndex</span> set to <span class=\"code\">true</span></p>    <p>buildURL( 'product.detail?id=42?img=large##overview' )</p>  </li></ul><p>Will also generate:</p><ul>  <li><span class=\"code\">/index.cfm?action=product.detail&amp;id=42&amp;img=large#overview</span> - in \"traditional\" mode</li>  <li><span class=\"code\">/index.cfm/product/detail/id/42?img=large#overview</span> - in \"SES\" mode</li>  <li>    <p><span class=\"code\">/product/detail/id/42?img=large#overview</span> - in \"SES\" mode with <span class=\"code\">SESOmitIndex</span> set to <span class=\"code\">true</span></p>    <p>buildURL( '.list' )</p>  </li></ul><p>Will generate a URL based on the current section - a section-relative link to the current section's <span class=\"code\">list</span> item.</p><div class=\"pre\">buildURL( action = 'product.detail', queryString = { id = 76, img = 'small' } )<br></div><p>Will generate:</p><ul>  <li><span class=\"code\">/index.cfm?action=product.detail&amp;id=76&amp;img=small</span> - in \"traditional\" mode</li>  <li><span class=\"code\">/index.cfm/product/detail/id/76/img/small</span> - in \"SES\" mode</li>  <li><span class=\"code\">/product/detail/id/76/img/small</span> - in \"SES\" mode with <span class=\"code\">SESOmitIndex</span> set to <span class=\"code\">true</span></li></ul></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>path: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>queryString: <span class=\"storage-type\">any</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-buildurl-string-action---string-path--see-below-any-querystring---",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "controller": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">controller</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Call this from your <span class=\"code\">Application.cfc</span> methods to add to the queue of controllers that will be called by the framework. The <span class=\"code\">action</span> is used to identify the controller that should be called, e.g., <span class=\"code\">\"app1:section.item\"</span>, <span class=\"code\">\"section.item\"</span> or <span class=\"code\">\"section\"</span> (which will call the default item with that section).</p><p>A typical example is to trigger a security controller method invoked from <span class=\"code\">setupRequest()</span>, e.g.,</p><div class=\"pre\">function setupRequest() {<br>&nbsp;&nbsp;&nbsp;&nbsp;controller( 'security.checkAuthorization' );<br>}<br></div><p>You may only queue up additional controllers prior to the start of controller execution (in <span class=\"code\">onRequest()</span>). If you attempt to queue up additional controllers in controller methods (or later in the request), you will get an exception because at that point all controllers have been queued up and/or executed.</p><p>Just like the implicit controller invocation, <span class=\"code\">before()</span>, <span class=\"code\">item()</span>, and <span class=\"code\">after()</span> are all invoked appropriately if present. If multiple methods are queued up from a single controller, <span class=\"code\">before()</span> and <span class=\"code\">after()</span> are executed just once (for each controller).</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-controller-string-action-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "customizevieworlayoutpath": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">customizeViewOrLayoutPath</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>By default, this simply returns <span class=\"code\">fullPath</span>.</p><p>It can be overridden to provide customized handling of view and layout locations. Everywhere that FW/1 needs to figure out the location of a view or layout based on conventions, it calls this method. See the <span class=\"code\">skinning</span> example in the FW/1 distribution that shows how this method can be used to provide automatic overrides of the default conventions.</p><p>The arguments are as follows:</p><ul>  <li><span class=\"code\">pathInfo</span> - This struct contains two keys: <span class=\"code\">base</span> which is the application-relative path to the location of the (default) <span class=\"code\">views</span> and <span class=\"code\">layouts</span> folders; <span class=\"code\">path</span> which is the relative path below those folders. For example, for a request of <span class=\"code\">\"sub:section.item\"</span>, this structure will contain: <span class=\"code\">base = \"sub/\"</span>, <span class=\"code\">path = \"section/item\"</span>. The <span class=\"code\">base</span> will have already been adjusted to wherever the views / layouts are supposed to be if you have <span class=\"code\">framework.base</span> set.</li>  <li><span class=\"code\">type</span> - Either <span class=\"code\">\"view\"</span> or <span class=\"code\">\"layout\"</span>.</li>  <li><span class=\"code\">fullPath</span> - The default location of the view or layout: <span class=\"code\">\"#pathInfo.base##type#s/#pathInfo.path#.cfm\"</span>. For the example above, this would be <span class=\"code\">\"sub/views/section/item.cfm\"</span> for a view.</li></ul><p>Additional documentation will be provided for this feature in due course. Probably an entire section on skinning applications with FW/1.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>pathInfo: <span class=\"storage-type\">struct</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>type: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>fullPath: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-customizevieworlayoutpath-struct-pathinfo-string-type-string-fullpath-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "customtemplateengine": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">customTemplateEngine</span>(): <span class=\"storage-type\">any</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>By default, this simply returns no value (null).</p><p>It can be overridden to provide a custom rendering engine (non-CFML). If it returns a string, the <span class=\"code\">internalView()</span> and <span class=\"code\">internalLayout()</span> functions will skip including the CFML template that the view (or layout) would normally be used. See the <span class=\"code\">mustache</span> example.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>type: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>path: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>scope: <span class=\"storage-type\">struct</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-customtemplateengine-string-type-string-path-struct-scope-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "disableframeworktrace": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">disableFrameworkTrace</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Disable framework tracing for this request.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-disableframeworktrace",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "disablelayout": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">disableLayout</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Disable layouts for this request. Equivalent to <span class=\"code\">request.layout = false;</span>.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-disablelayout",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "enableframeworktrace": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">enableFrameworkTrace</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Enable framework tracing for this request.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-enableframeworktrace",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "enablelayout": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">enableLayout</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Enable layouts for this request. Equivalent to <span class=\"code\">request.layout = true;</span>.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-enablelayout",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "frameworktrace": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">frameworkTrace</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Adds the <span class=\"code\">message</span> and optional <span class=\"code\">value</span> to the framework trace data, for rendering at the end of the request.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>message: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>value: <span class=\"storage-type\">any</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-frameworktrace-string-message--any-value--",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getaction": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getAction</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the name of the action variable in the URL or form post (<span class=\"code\">variables.framework.action</span>).</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getaction",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getbaseurl": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getBaseURL</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the configured <span class=\"code\">variables.framework.baseURL</span> value. Can be overridden in <span class=\"code\">Application.cfc</span> to provide a customized value, e.g., per request.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getbaseurl",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getbeanfactory": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getBeanFactory</span>(): <span class=\"storage-type\">any</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns whatever the framework has been told is a bean factory (which will be an instance of DI/1 by default). This will return a subsystem-specific bean factory if one exists for the specified subsystem, or for the subsystem of the current request if no subsystem is specified in the call. Otherwise it will return the default bean factory.</p><p>If no application bean factory can be found, this will throw an exception. Use <span class=\"code\">hasBeanFactory()</span> and/or <span class=\"code\">hasSubsystemBeanFactory( subsystem )</span> to determine whether this call will successfully return a bean factory.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>subsystem: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-getbeanfactory-string-subsystem---",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getcgirequestmethod": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getCGIRequestMethod</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the method (GET, POST, etc) used for the current request. This is a convenience method for controllers to access CGI.REQUEST_METHOD in a clean way via the framework.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getcgirequestmethod",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getconfig": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getConfig</span>(): <span class=\"storage-type\">struct</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns a copy of the <span class=\"code\">framework</span> structure containing the configuration settings specified in <span class=\"code\">Application.cfc</span>. This allows controllers to inspect the FW/1 configuration settings if necessary.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-struct-function-getconfig",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getdefaultbeanfactory": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getDefaultBeanFactory</span>(): <span class=\"storage-type\">any</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns whatever the framework has been told is a bean factory. This will return the default, top-level bean factory for the application. If no such bean factory exists, this will throw an exception. Use <span class=\"code\">hasDefaultBeanFactory()</span> to determine whether the default, top-level bean factory exists for the application.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-getdefaultbeanfactory",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getdefaultsubsystem": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getDefaultSubsystem</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>If the application is using legacy subsystems, then if the current request's action specifies a subsystem return that else return the default subsystem configured for the application.</p><p>If the application is not using legacy subsystems, return an empty string (since there is no concept of a default subsystem in new style subsystems).</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getdefaultsubsystem",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getenvironment": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getEnvironment</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns an empty string by default. If you want to use the <strong>Environment Control</strong> feature, you should override this in <span class=\"code\">Application.cfc</span> and have it return the appropriate <em>\"tier\"</em> or <em>\"tier-server\"</em> string. See <strong>Environment Control</strong> in the <a href=\"developing-applications.html#environment-control\">Developing Applications Manual</a> for more detail.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getenvironment",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getenvvar": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getEnvVar</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the value of the specified environment variable name (i.e., from the shell environment in which your CFML server was started).</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>name: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getenvvar-string-name-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getframeworktrace": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getFrameworkTrace</span>(): <span class=\"storage-type\">array</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns an array of the current request's framework trace data. See <span class=\"code\">setupTraceRender()</span> for one reasonable use.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-array-function-getframeworktrace",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getfullyqualifiedaction": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getFullyQualifiedAction</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the specified action formatted as <em>module:section.item</em>. If the <em>module</em> name is empty, the subsystem delimiter is also omitted (so then it behaves the same as <span class=\"code\">getSectionAndItem( action )</span>.). See also <strong>getSubsystemSectionAndItem()</strong> below.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getfullyqualifiedaction-string-action--requestaction-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "gethostname": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getHostname</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the server's local hostname (via Java's InetAddress class). Intended to be used with <strong>Environment Control</strong>.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-gethostname",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getitem": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getItem</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the item portion of the specified action - or of the current request's action if no action is specified. Returns the default item if no item is present in the specified action.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getitem-string-action--requestaction-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getresourceroutetemplates": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getResourceRouteTemplates</span>(): <span class=\"storage-type\">array</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns (a copy of) <span class=\"code\">variables.framework.resourceRouteTemplates</span>. This can be overridden in <span class=\"code\">Application.cfc</span> if you want to generate resource templates for routes dynamically.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-array-function-getresourceroutetemplates",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getroute": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getRoute</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the route that was used to initiate the current request (if any). Returns an empty string if the current request was not initiated via a matched route.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getroute",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getroutepath": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getRoutePath</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the path info (SES URL) portion that either matched the current route (if any) or was used as the action for the current request. It is returned in the same format as <span class=\"code\">getRoute()</span>, i.e., <span class=\"code\">$POST/section/item/</span> or <span class=\"code\">$GET/users/123/</span> (where <span class=\"code\">getRoute()</span> might return <span class=\"code\">$GET/users/:id</span>).</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getroutepath",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getroutes": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getRoutes</span>(): <span class=\"storage-type\">array</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns (a copy of) <span class=\"code\">variables.framework.routes</span>. This can be overridden in <span class=\"code\">Application.cfc</span> if you want to generate routes dynamically.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-array-function-getroutes",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getsection": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getSection</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the section portion of the specified <span class=\"code\">action</span> - or of the current request's action if no action is specified. Returns the default section if no section is present in the specified action.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getsection-string-action--requestaction-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getsectionanditem": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getSectionAndItem</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the specified <span class=\"code\">action</span> - or the current request's action if no action is specified - formatted as <em>section.item</em>. Automatically strips the subsystem from the <span class=\"code\">action</span>, if present. Automatically adds the default section if not present. Automatically adds the default item if not present.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getsectionanditem-string-action--requestaction-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getsubsystem": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getSubsystem</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the subsystem portion of the specified <span class=\"code\">action</span> - or of the current request's action if no action is specified. If no subsystem is present in the specified action, then if the application is using legacy subsystems returns the default subsystem name else return an empty string.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getsubsystem-string-action--requestaction-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getsubsystembase": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getSubsystemBase</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the path to the folder where the current request's subsystem <span class=\"code\">views/</span> and <span class=\"code\">layouts/</span> subfolders can be found. This can be useful for customer versions of <span class=\"code\">buildURL()</span> etc.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getsubsystembase",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getsubsystembeanfactory": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getSubsystemBeanFactory</span>(): <span class=\"storage-type\">any</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns whatever the framework has been told is a bean factory. This will return the bean factory for the named subsystem. If no such bean factory exists, this will throw an exception. Use <span class=\"code\">hasSubsystemBeanFactory( subsystem )</span> to determine whether a bean factory exists for the named subsystem. If this is the first reference to this subsystem, the subsystem will be initialized.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>subsystem: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-getsubsystembeanfactory-string-subsystem-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getsubsystemconfig": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getSubsystemConfig</span>(): <span class=\"storage-type\">struct</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns the configuration for the named subsystem, as a copy of <span class=\"code\">variables.framework.subsystems[subsystem]</span>. If no configuration exists for the named subsystem, an empty struct is returned. FW/1 uses this to retrieve the per-subsystem <span class=\"code\">baseURL</span> value, if any, as part of <span class=\"code\">buildURL()</span> and <span class=\"code\">redirect()</span>, as well as <span class=\"code\">diConfig</span> if you are using DI/1 to manage subsystem bean factories automatically. <em>Including <span class=\"code\">diConfig</span> is new in 3.1.</em></p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>subsystem: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-struct-function-getsubsystemconfig-string-subsystem-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "getsubsystemsectionanditem": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">getSubsystemSectionAndItem</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>This returns the specified action formatted as <em>module:section.item</em>. Unlike <span class=\"code\">getFullyQualifiedAction()</span> above, this always includes the subsystem delimiter even when the <em>module</em> name is empty.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-getsubsystemsectionanditem-string-action--requestaction-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "hasbeanfactory": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">hasBeanFactory</span>(): <span class=\"storage-type\">boolean</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns <span class=\"code\">true</span> if a default, top-level bean factory exists. Otherwise returns <span class=\"code\">true</span> if a bean factory exists for the subsystem of the current request, if appropriate. Otherwise returns <span class=\"code\">false</span>. If <span class=\"code\">hasBeanFactory()</span> returns <span class=\"code\">true</span>, calling <span class=\"code\">getBeanFactory()</span> will return a bean factory.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-hasbeanfactory",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "hasdefaultbeanfactory": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">hasDefaultBeanFactory</span>(): <span class=\"storage-type\">boolean</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns <span class=\"code\">true</span> if a default, top-level bean factory exists. Otherwise returns <span class=\"code\">false</span>. If <span class=\"code\">hasDefaultBeanFactory()</span> returns <span class=\"code\">true</span>, calling <span class=\"code\">getDefaultBeanFactory()</span> will return a bean factory.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-hasdefaultbeanfactory",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "hassubsystembeanfactory": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">hasSubsystemBeanFactory</span>(): <span class=\"storage-type\">boolean</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns <span class=\"code\">true</span> if a bean factory exists for the named subsystem. Otherwise returns <span class=\"code\">false</span>. If <span class=\"code\">hasSubsystemBeanFactory( subsystem )</span> returns <span class=\"code\">true</span>, calling <span class=\"code\">getBeanFactory( subsystem )</span> and <span class=\"code\">getSubsystemBeanFactory( subsystem )</span> will both return a bean factory (for the named subsystem).</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>subsystem: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-hassubsystembeanfactory-string-subsystem-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "iscurrentaction": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">isCurrentAction</span>(): <span class=\"storage-type\">boolean</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns <span class=\"code\">true</span> if the <span class=\"code\">action</span> passed in matches the currently executing action. This can be useful to figure out which tab to highlight in navigation or make other choices based on actions.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-iscurrentaction-string-action-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "isframeworkreloadrequest": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">isFrameworkReloadRequest</span>(): <span class=\"storage-type\">boolean</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns <span class=\"code\">true</span> if the current request has a valid URL parameter to trigger an application reload or <span class=\"code\">reloadApplicationOnEveryRequest</span> is <span class=\"code\">true</span>.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-isframeworkreloadrequest",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "isunhandledrequest": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">isUnhandledRequest</span>(): <span class=\"storage-type\">boolean</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>By default, returns <span class=\"code\">true</span> if the specified <span class=\"code\">targetPath</span> (as in <span class=\"code\">onRequest()</span>) has an unhandled extension (from <span class=\"code\">variables.framework.unhandledExtensions</span>) or matches an unhandled path (from <span class=\"code\">variables.framework.unhandledPaths</span>). You can override this to dynamically tell FW/1 not to handle specific requests. If you want to still apply the default checks as well as your own custom checks, don't forget to call <span class=\"code\">super.isUnhandledRequest(targetPath)</span>.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>targetPath: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-isunhandledrequest-string-targetpath-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "layout": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">layout</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>This function renders a layout and could be called inside a view or a layout, although it is recommended to rely on the conventions for layouts where possible. If you decide you need to render a layout directly, you can invoke it like this:</p><div class=\"pre\">writeOutput( layout( 'main/nav-template', nav_menu ) );<br></div><p>Rendering views, using the <span class=\"code\">view()</span> method, is supported, documented and the recommended way to build composite pages. Layouts should simply wrap views, in a cascade from item to section to site.</p><p>As of release 4.0, <span class=\"code\">layout()</span> may be called from a controller to wrap HTML (such as produced by a call to <span class=\"code\">view()</span>). See the <span class=\"code\">view()</span> below for such use cases.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>path: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>body: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-layout-string-path-string-body-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "makemethodproxies": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">makeMethodProxies</span>(): <span class=\"storage-type\">struct</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>If you are running on Java 8, this function will return a struct containing Java-callable proxies for the named methods in FW/1. They will implement the <span class=\"code\">java.util.function.Function</span> interface. See the <span class=\"code\">mustache</span> example.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>methodNames: <span class=\"storage-type\">array</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-struct-function-makemethodproxies-array-methodnames-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "onapplicationstart": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">onApplicationStart</span>(): <span class=\"storage-type\"></span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Part of the standard CFML lifecycle, this method is called automatically by the CFML engine at application startup. You should not override this nor call it (even tho' it is <span class=\"code\">public</span>). Use <span class=\"code\">setupApplication()</span> to perform application-specific initialization.</p><p>If you override this method, you <strong>must</strong> call <span class=\"code\">super.onApplicationStart()</span> or FW/1 will fail to work correctly.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-function-onapplicationstart",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "onerror": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">onError</span>(): <span class=\"storage-type\"></span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>The standard CFML error handler, this method is called automatically by the CFML engine in the event of an uncaught exception. By default, FW/1 will try to execute the action specified by <span class=\"code\">variables.framework.error</span>. The action that caused the exception, if known, will be available in <span class=\"code\">request.failedAction</span>. The exception and event are available as <span class=\"code\">request.exception</span> and <span class=\"code\">request.event</span> respectively. If the error action fails, FW/1 tries to display the original exception and event in a simple error view (using the private <span class=\"code\">failure()</span> method).</p><p>You may override this method in <span class=\"code\">Application.cfc</span> if you wish to provide different error handling behavior. You may call <span class=\"code\">super.onError( exception, event )</span> if appropriate. You may also consider overriding the <span class=\"code\">failure()</span> method, but that is not documented and not supported.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>exception: <span class=\"storage-type\">any</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>event: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-function-onerror-any-exception-string-event-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "onmissingview": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">onMissingView</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Called when a view is not found for a request. The default behavior is to call <span class=\"code\">viewNotFound()</span> which throws an exception.</p><p>You may override this method to provide alternative behavior when a view is not found. You should either throw an exception or return a string that represents the view that should be rendered instead. For example:</p><div class=\"pre\">function onMissingView( rc ) {<br>&nbsp;&nbsp; return view( 'page/notFound' );<br>}<br></div><p>As of 4.1, you can specify that the <span class=\"code\">FW1.viewNotFound</span> exception be handled via the <span class=\"code\">missingview</span> action in the configuration, as opposed to the <span class=\"code\">error</span> action.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>rc: <span class=\"storage-type\">struct</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-onmissingview-struct-rc-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "onpopulateerror": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">onPopulateError</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Called when an exception occurs during an attempt to populate the named <span class=\"code\">property</span> of the specified <span class=\"code\">cfc</span> if no keys were specified for <span class=\"code\">populate()</span> and <span class=\"code\">trustKeys</span> was <span class=\"code\">true</span>. This method does nothing, effectively causing the exception to be ignored.</p><p>If you intend to call <span class=\"code\">populate()</span> with no keys specified and you tell it to trust what it finds in the request context, you may wish to override <span class=\"code\">onPopulateError()</span> and do something like log such failed attempts. See <span class=\"code\">populate()</span> below.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>cfc: <span class=\"storage-type\">any</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>property: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>rc: <span class=\"storage-type\">struct</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-onpopulateerror-any-cfc-string-property-struct-rc-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "onreload": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">onReload</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>An extension point so that you can perform operations that may be necessary when FW/1 is about to reload itself. This was originally added so that any resources allocated by beans created by the bean factory could be deallocated prior to the bean factory being recreated.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-onreload",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "onrequest": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">onRequest</span>(): <span class=\"storage-type\"></span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Part of the standard CFML lifecycle, this method is called automatically by the CFML engine to handle each request. You should not override this nor call it (even tho' it is <span class=\"code\">public</span>).</p><p>If you override this method, you <strong>must</strong> call <span class=\"code\">super.onRequest( targetPage )</span>.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>targetPage: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-function-onrequest-string-targetpage-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "onrequestend": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">onRequestEnd</span>(): <span class=\"storage-type\"></span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Part of the standard CFML lifecycle, this method is called automatically by the CFML engine at the end of each request. You should not override this not call it (even tho' it is <span class=\"code\">public</span>). Use <span class=\"code\">setupResponse()</span> to perform request-specific finalization.</p><p>If you override this method, you <strong>must</strong> call <span class=\"code\">super.onRequestEnd( targetPage )</span>.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>targetPage: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-function-onrequestend-string-targetpage-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "onrequeststart": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">onRequestStart</span>(): <span class=\"storage-type\"></span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Part of the standard CFML lifecycle, this method is called automatically by the CFML engine at the beginning of each request. You should not override this nor call it (even tho' it is <span class=\"code\">public</span>). Use <span class=\"code\">setupRequest()</span> to perform request-specific initialization.</p><p>If you override this method, you <strong>must</strong> call <span class=\"code\">super.onRequestStart( targetPage )</span>.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>targetPage: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-function-onrequeststart-string-targetpage-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "onsessionstart": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">onSessionStart</span>(): <span class=\"storage-type\"></span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Part of the standard CFML lifecycle, this method is called automatically by the CFML engine when each new session is created. You should not override this nor call it (even tho' it is <span class=\"code\">public</span>). Use <span class=\"code\">setupSession()</span> to perform session-specific initialization.</p><p>If you override this method, you <strong>must</strong> call <span class=\"code\">super.onSessionStart()</span>.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-function-onsessionstart",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "populate": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">populate</span>(): <span class=\"storage-type\">any</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Automatically populates an object with data from the request context, or from the <span class=\"code\">properties</span> struct if provided. For any public method <span class=\"code\">setKey()</span> on the object or any declared <span class=\"code\">property key;</span>, if that <span class=\"code\">key</span> exists in the source data structure, call the setter with that value. If the optional list of <span class=\"code\">keys</span> is provided, only attempt to call setters for the specified keys in the request context. Mainly useful for populating beans from form posts. Whitespace is permitted in the list of keys for clarity, e.g., <span class=\"code\">\"firstname, lastname, email\"</span>. This approach relies on setter methods and properties in the object. It won't detect and use <span class=\"code\">onMissingMethod()</span>.</p><p>You can also specify <span class=\"code\">trim = true</span> and FW/1 will call <span class=\"code\">trim()</span> on each item before calling the setter. Setting <span class=\"code\">deep = true</span> will allow FW/1 to populate nested properties on objects (in child objects).</p><p>For <span class=\"code\">populate()</span> to work with <span class=\"code\">onMissingMethod()</span> you need to specify <span class=\"code\">trustKeys = true</span>. If you specify the list of <span class=\"code\">keys</span>, <span class=\"code\">populate()</span> will not test whether the setter exists, it will just call it - which means that <span class=\"code\">onMissingMethod()</span> and property-based setters will be invoked automatically. If you omit the <span class=\"code\">keys</span>, be careful because <span class=\"code\">populate()</span> will cycle through the entire request context and attempt to set properties on the object for everything! A <span class=\"code\">try/catch</span> is used to suppress any exceptions in this case but you need to be aware that this may be a little dangerous if you have a lot of data in your request context that does not match the properties of the object! If an exception is caught, <span class=\"code\">onPopulateError()</span> is called with the object, property name and the request context structure as its three arguments. The default behavior is to simply ignore the exception but you can override that if you want - see <span class=\"code\">onPopulateError()</span> above.</p><p><span class=\"code\">populate()</span> returns the <span class=\"code\">cfc</span> passed in.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>cfc: <span class=\"storage-type\">any</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>keys: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>trustKeys: <span class=\"storage-type\">boolean</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>trim: <span class=\"storage-type\">boolean</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>deep: <span class=\"storage-type\">boolean</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>properties: <span class=\"storage-type\">any</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-populate-any-cfc-string-keys---boolean-trustkeys--false-boolean-trim--false-boolean-deep--false-any-properties---",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "processroutes": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">processRoutes</span>(): <span class=\"storage-type\">struct</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Given a <span class=\"code\">path</span>, and an array of <span class=\"code\">routes</span>, and an optional <span class=\"code\">httpMethod</span>, process the routes to see if any matched and return a struct with a <span class=\"code\">matched</span> flag and if that's <span class=\"code\">true</span> also <span class=\"code\">route</span> and <span class=\"code\">path</span> values. Route matching is case-sensitive by default but this can be overridden by setting <span class=\"code\">routesCaseSensitive</span> to <span class=\"code\">false</span> in FW/1's configuration.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>path: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>routes: <span class=\"storage-type\">array</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>httpMethod: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-struct-function-processroutes-string-path-array-routes-string-httpmethod--requestfw1cgirequestmethod-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "redirect": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">redirect</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>This constructs a URL based on the <span class=\"code\">action</span> and optional <span class=\"code\">path</span> and redirects to it. If <span class=\"code\">preserve</span> is <span class=\"code\">\"all\"</span>, the entire contents of the request context are saved to <span class=\"code\">session</span> scope across the redirect (and restored back to the request context automatically after the redirect). If <span class=\"code\">preserve</span> is a list of keys, just those elements of the request context are preserved. If <span class=\"code\">append</span> is <span class=\"code\">\"all\"</span>, all simple values in the request context are appended to the constructed URL as a query string before the redirect. If <span class=\"code\">append</span> is a list of keys, just those elements of the request context are appended (if they are simple values). The <span class=\"code\">statusCode</span> argument lets you specify the HTTP status code for the redirect so you can override the default value of <span class=\"code\">302</span>. As of release 3.5 <span class=\"code\">queryString</span> also accepts a structure, which is converted to an HTML escaped query string.</p><p>If <span class=\"code\">path</span> is specified, that base URL is used instead of the default, as per <span class=\"code\">buildURL()</span> above.</p><p>The <span class=\"code\">queryString</span> argument may be used to append additional URL variables / values to the constructed URL, as explained in <span class=\"code\">buildURL()</span> above. Or the query string value may be combined with the <span class=\"code\">action</span> also as explained in <span class=\"code\">buildURL()</span> above.</p><p>For example:</p><div class=\"pre\">variables.fw.redirect( action = 'blog.entry', append = 'id', queryString = '##comment' )<br></div><p>Will generate:</p><ul>  <li><span class=\"code\">/index.cfm?action=blog.entry&amp;id={rc.id}#comment</span> - in \"traditional\" mode</li>  <li><span class=\"code\">/index.cfm/blog/entry/id/{rc.id}#comment</span> - in \"SES\" mode</li>  <li><span class=\"code\">/blog/entry/id/{rc.id}#comment</span> - in \"SES\" mode with <span class=\"code\">SESOmitIndex</span> set to <span class=\"code\">true</span></li></ul><p>If <span class=\"code\">header</span> is provided (as a non-empty string), instead of performing an actual redirect, FW/1 will set the named HTTP header to the target URL and then abort the controller lifecycle. This allows custom handling of \"redirects\" in AJAX-based applications.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>preserve: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>append: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>path: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>queryString: <span class=\"storage-type\">any</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>statusCode: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>header: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-redirect-string-action-string-preserve--none-string-append--none-string-path--see-below-any-querystring---string-statuscode--302-string-header---",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "redirectcustomurl": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">redirectCustomURL</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>This is to <span class=\"code\">redirect()</span> as <span class=\"code\">buildCustomURL()</span> is to <span class=\"code\">buildURL()</span>.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>uri: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>preserve: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>statusCode: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>header: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-redirectcustomurl-string-uri-string-preserve--none-string-statuscode--302-string-header---",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "renderdata": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">renderData</span>(): <span class=\"storage-type\">any</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Call this from your controller to tell FW/1 to skip views and layoutsand instead render <span class=\"code\">data</span> in the specified content <span class=\"code\">type</span> format.</p><p>This function returns a \"builder\" expression (<em>new in 4.0</em>) that supports the following methods:</p><ul>  <li><span class=\"code\">data( payload )</span> - set the data payload to be rendered: see below for restrictions on the payload, based on the render type.</li>  <li><span class=\"code\">type( contentType )</span> - set the type of rendering to be performed: the argument may be <span class=\"code\">\"html\"</span>, <span class=\"code\">\"json\"</span>, <span class=\"code\">\"jsonp\"</span>, <span class=\"code\">\"rawjson\"</span>, <span class=\"code\">\"xml\"</span>, or <span class=\"code\">\"text\"</span>; it may also be a custom rendering function (or closure).</li>  <li><span class=\"code\">header( name, value )</span> - add an HTTP header to be sent with the response (<em>new in 4.0</em>).</li>  <li><span class=\"code\">statusCode( code )</span> - set the HTTP status code: default is 200.</li>  <li><span class=\"code\">statusText( message )</span> - set the HTTP status message (<em>new in 4.0</em>).</li>  <li><span class=\"code\">jsonpCallback( callback )</span> - set the JSONP callback: required when <span class=\"code\">type</span> is <span class=\"code\">\"jsonp\"</span>, otherwise ignored.</li></ul><p>This \"builder\" expression can be retrieved at any time in a controller by calling <span class=\"code\">renderer()</span> (below). <em>New in 4.0.</em></p><p>The following restrictions apply to the data payload, for each type as shown:</p><ul>  <li><span class=\"code\">\"html\"</span> - the payload must be a string and that is the result of the HTTP request. FW/1 sets the <span class=\"code\">Content-Type</span> header to <span class=\"code\">text/html; charset=utf-8</span>.</li>  <li><span class=\"code\">\"json\"</span>, <span class=\"code\">\"jsonp\"</span> - FW/1 calls <span class=\"code\">serializeJSON( payload )</span> to generate the result of the HTTP request and sets the <span class=\"code\">Content-Type</span> header to <span class=\"code\">application/javascript; charset=utf-8</span>. In addition, for <span class=\"code\">\"jsonp\"</span>, you must provide a non-empty value for the <span class=\"code\">jsonpCallback</span> argument. <em>New in 3.1.</em></li>  <li><span class=\"code\">\"rawjson\"</span> - the payload must be a string (and is assumed to be valid JSON already) and that is the result of the HTTP request. FW/1 sets the <span class=\"code\">Content-Type</span> header to <span class=\"code\">application/javascript; charset=utf-8</span>. <em>New in 3.1.</em></li>  <li><span class=\"code\">\"xml\"</span> - the payload must be either a valid XML string or an XML object (constructed via CFML's various <span class=\"code\">xml...()</span> functions). If the payload is an XML object, FW/1 calls <span class=\"code\">toString( payload )</span> to generate the result of the HTTP request, otherwise the XML string is used as the result of the request. In both cases, FW/1 sets the <span class=\"code\">Content-Type</span> header to <span class=\"code\">text/xml; charset=utf-8</span>.</li>  <li><span class=\"code\">\"text\"</span> - the payload must be a string and that is the result of the HTTP request. FW/1 sets the <span class=\"code\">Content-Type</span> header to <span class=\"code\">text/plain; charset=utf-8</span>.</li></ul><p>If a function or closure is passed as the type, you can perform pretty much any custom rendering you can imagine. See <a href=\"developing-applications.html#custom-data-rendering\">Custom Data Rendering</a> in the Developing Applications Guide for more detail on how to use this.</p><p>When you call <span class=\"code\">renderData()</span>, processing continues in your controller (so use <span class=\"code\">return;</span> if you want processing to stop at that point), and subsequent calls to <span class=\"code\">setView()</span> or <span class=\"code\">setLayout()</span> will have no effect (since FW/1 will ignore views and layouts for this request).</p><p>For legacy application support, the following form of <span class=\"code\">renderData()</span> is still supported in 4.0:</p><div class=\"pre\">public any function renderData( string type = \"\", any data = \"\", numeric statusCode = 200, string jsonpCallback = \"\" )<br></div><p>Although this form is deprecated, FW/1 will only issue a deprecation warning (written to the console log) for <span class=\"code\">statusCode</span> and <span class=\"code\">jsonpCallback</span> in 4.0. In a future release, these will require a framework setting in order to be used and the <span class=\"code\">type</span> and <span class=\"code\">data</span> arguments will cause deprecation warnings.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-renderdata",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "renderer": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">renderer</span>(): <span class=\"storage-type\">any</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>This returns the same \"builder\" expression that <span class=\"code\">renderData()</span> returns so that you can add settings and headers piecemeal in your controllers. <em>New in 4.0.</em></p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-renderer",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "sessiondefault": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">sessionDefault</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Extension point that is used to set a default value for a session variable. Use <span class=\"code\">sessionWrite()</span> to set a non-string value. <em>New in 4.1.</em></p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>keyname: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>defaultValue: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-sessiondefault-string-keyname-string-defaultvalue-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "sessiondelete": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">sessionDelete</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Extension point that is used to delete a session variable. <em>New in 4.1.</em></p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>keyname: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-sessiondelete-string-keyname-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "sessionhas": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">sessionHas</span>(): <span class=\"storage-type\">boolean</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Extension point that is used to check whether a session variable exists. <em>New in 4.1.</em></p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>keyname: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-sessionhas-string-keyname-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "sessionlock": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">sessionLock</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Extension point that is used execute code inside a \"session lock\" (however that works for your pluggable session handling). <em>New in 4.1.</em></p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>function: <span class=\"storage-type\">required</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-sessionlock-required-function-callback-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "sessionread": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">sessionRead</span>(): <span class=\"storage-type\">any</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Extension point that is used to read a session variable. <em>New in 4.1.</em></p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>keyname: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-any-function-sessionread-string-keyname-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "sessionwrite": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">sessionWrite</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Extension point that is used to write to a session variable. <em>New in 4.1.</em></p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>keyname: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>keyvalue: <span class=\"storage-type\">any</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-sessionwrite-string-keyname-any-keyvalue-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "setbeanfactory": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">setBeanFactory</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>If you are manually creating a bean factory, call this from your <span class=\"code\">setupApplication()</span> method to tell the framework about your primary (default) bean factory. By default FW/1 will use DI/1 as the bean factory and you won't have to worry about this.</p><p>As of release 3.5, if you call this without telling FW/1 <span class=\"code\">diEngine = \"none\"</span> to disable automatic bean factory management, you will get an exception. If, for some reason, you want to do this anyway, you can set <span class=\"code\">diOverrideAllowed = true</span> in the framework configuration but it would almost certainly be better to set <span class=\"code\">diEngine = true</span>!</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>factory: <span class=\"storage-type\">any</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setbeanfactory-any-factory-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "setlayout": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">setLayout</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Call this to tell the framework to use a new action <em>module:section.item</em> as the basis of the lookup process for the layouts for the current request. This allows you to override the default convention for choosing the layouts. If you specify <span class=\"code\">suppressOtherLayouts</span> as <span class=\"code\">true</span>, then only the most specific layout will be used and the usual cascade of layouts will be turned off for this request.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>suppressOtherLayouts: <span class=\"storage-type\">boolean</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setlayout-string-action-boolean-suppressotherlayouts--false-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "setsubsystembeanfactory": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">setSubsystemBeanFactory</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Call this to tell the framework about a subsystem-specific bean factory. The bean factory must support <span class=\"code\">containsBean( name )</span> and <span class=\"code\">getBean( name )</span>. You would typically call this method from your <span class=\"code\">setupSubsystem()</span> method unless you are using DI/1 and allowing FW/1 to manage all your bean factories for you (the default behavior).</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>subsystem: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>factory: <span class=\"storage-type\">any</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setsubsystembeanfactory-string-subsystem-any-factory-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "setupapplication": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">setupApplication</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Override this in your <span class=\"code\">Application.cfc</span> to provide application-specific initialization. If you want the framework to use a non-default bean factory, this is where you should call <span class=\"code\">setBeanFactory( factory )</span>. You do not need to call <span class=\"code\">super.setupApplication()</span>.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setupapplication",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "setupenvironment": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">setupEnvironment</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Override this in your <span class=\"code\">Application.cfc</span> to provide environment-specific initialization. See <strong>Environment Control</strong> in the <a href=\"developing-applications.html#environment-control\">Developing Applications Manual</a> for more detail.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>env: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setupenvironment-string-env-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "setuprequest": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">setupRequest</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Override this in your <span class=\"code\">Application.cfc</span> to provide request-specific initialization. You do not need to call <span class=\"code\">super.setupRequest()</span>. Since you do not have access to <span class=\"code\">rc</span> here, you may also want to define <span class=\"code\">before()</span> in <span class=\"code\">Application.cfc</span> to act as an initialization controller, to populate the request context prior to other controllers being executed.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setuprequest",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "setupresponse": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">setupResponse</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Override this in your <span class=\"code\">Application.cfc</span> to provide request-specific finalization. This is called after all views and layouts have been rendered or immediately before a redirect. You do not need to call <span class=\"code\">super.setupResponse()</span>.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>rc: <span class=\"storage-type\">struct</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setupresponse-struct-rc-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "setupsession": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">setupSession</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Override this in your <span class=\"code\">Application.cfc</span> to provide session-specific initialization. You do not need to call <span class=\"code\">super.setupSession()</span>.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setupsession",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "setupsubsystem": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">setupSubsystem</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Override this in your <span class=\"code\">Application.cfc</span> to provide subsystem-specific initialization. If you want the framework to use non-default subsystem-specific bean factories for any subsystems, this is where you should call <span class=\"code\">setSubsystemBeanFactory( subsystem, factory )</span>. See the example in <a href=\"using-subsystems.html#setting-bean-factories-with-setupsubsystem\">Using Subsystems</a> for more details. You do not need to call <span class=\"code\">super.setupSubsystem()</span>.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>subsystem: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setupsubsystem-string-subsystem-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "setuptracerender": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">setupTraceRender</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>This is called when the framework trace is about to be rendered at the end of a request. <span class=\"code\">output</span> will be either <span class=\"code\">'html'</span> or <span class=\"code\">'data'</span> depending on whether FW/1 has output HTML using views and layouts or rendered data in the current request. You can override it to take control of the rendering process yourself (for whatever reason such as saving the trace data to a database perhaps or providing a fancier rendering?). You can call <span class=\"code\">getFrameworkTrace()</span> to obtain the framework's trace data (note that this will be a copy on Adobe ColdFusion but just a reference on Lucee and Railo), and do whatever you want with it. It's probably a good idea to call <span class=\"code\">disableFrameworkTrace()</span> to prevent any further additions to the framework trace data. Note: this method used to be called only when FW/1 was outputting HTML and not rendering data, however, it is now called whenever tracing is enabled. If you were using this method to render trace data in a custom format at the end of HTML requests, you will find your rendered trace data appended to your request data when <span class=\"code\">renderData()</span> is used. In order to maintain your current functionality, you can easily fix this by checking that the <span class=\"code\">output</span> argument is equal to <span class=\"code\">'html'</span> before rendering the trace data.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>output: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setuptracerender-string-output--html-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "setupview": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">setupView</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Override this in your <span class=\"code\">Application.cfc</span> to provide pre-rendering logic, e.g., putting globally available data into the request context so it is available to all views. You do not need to call <span class=\"code\">super.setupView()</span>.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>rc: <span class=\"storage-type\">struct</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setupview-struct-rc-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "setview": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">setView</span>(): <span class=\"storage-type\">void</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Call this to tell the framework to use a new action <em>module:section.item</em> as the basis of the lookup process for the view and layouts for the current request. This allows you to override the default convention for choosing the view and layouts. A possible use for this is when redisplaying a form view when errors are present (i.e., from the form processing controller method, without using a redirect).</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>action: <span class=\"storage-type\">string</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-void-function-setview-string-action-",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "usingsubsystems": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">usingSubsystems</span>(): <span class=\"storage-type\">boolean</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>Returns <span class=\"code\">true</span> if the application is using legacy subsystems, i.e., <span class=\"code\">variables.framework.usingSubsystems</span> is <span class=\"code\">true</span>. Otherwise returns <span class=\"code\">false</span>. Not relevant to new style subsystems.</p></div></div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-boolean-function-usingsubsystems",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  },
+  "view": {
+    "header": "<span class=\"entity-name-class\">framework.one</span>.<span class=\"entity-name-function\">view</span>(): <span class=\"storage-type\">string</span>",
+    "body": "<div class=\"card\"><div class=\"card-body\"><p>This renders a view and returns the output of that view as a string. It is intended to be used primarily inside layouts to render fragments of a page such as menus and other common elements. Elements of the <em>args</em> structure are appended to the local scope accessible inside the view file. For example:</p><div class=\"pre\">&lt;cfoutput&gt;<br>&nbsp;&nbsp;&lt;div&gt;#view( 'common:site/header' )#&lt;/div&gt;<br>&nbsp;&nbsp;&lt;div&gt;#view( 'nav/fragment/menu', { selected = 'home' } )#&lt;/div&gt;<br>&nbsp;&nbsp;&lt;div&gt;#body#&lt;/div&gt;<br>&nbsp;&nbsp;&lt;div&gt;#view( 'common:site/footer' )#&lt;/div&gt;<br>&lt;/cfoutput&gt;<br></div><p>This renders the <span class=\"code\">header</span> and <span class=\"code\">footer</span> items (views) from the <span class=\"code\">common</span> subsystem's <span class=\"code\">site</span> section (i.e., <span class=\"code\">subsystems/common/views/site/header.cfm</span> and <span class=\"code\">footer.cfm</span>) and the <span class=\"code\">fragment/menu</span> item (view) from the current subsystem's <span class=\"code\">nav</span> section (i.e., <span class=\"code\">views/nav/fragment/menu.cfm</span>). Inside <span class=\"code\">menu.cfm</span>, <span class=\"code\">local.selected</span> would be available containing the string <span class=\"code\">\"home\"</span>.</p><p>A controller may call <span class=\"code\">view()</span> which can be useful if you have email templates that need to be rendered and sent as part of a request: those email templates can be treated as views and have all the associated <span class=\"code\">rc</span>, <span class=\"code\">local</span>, etc machinery applied. As of release 4.0, a controller may also call <span class=\"code\">layout()</span> to wrap a view for such purposes.</p><p>If the argument <span class=\"code\">missingView</span> is not specified, and the specified view <span class=\"code\">path</span> does not exist, then <span class=\"code\">onMissingView()</span> will be called. If a string is passed as <span class=\"code\">missingView</span> and the specified view does not exist, then the value of the <span class=\"code\">missingView</span> argument will be returned. This allows for programmatically calculated views to be silently rendered as empty strings if they are not present. This can be useful for programmatic skins with optional elements.</p></div></div><h2>ARGUMENT REFERENCE</h2><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>path: <span class=\"storage-type\">string</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>args: <span class=\"storage-type\">struct</span></strong></div>    </div><div class=\"card\">    <div class=\"card-header card-header-empty\"><strong>missingView: <span class=\"storage-type\">any</span></strong></div>    </div>",
+    "links": [
+      {
+        "href": "http://framework-one.github.io/documentation/4.1/reference-manual.html#public-string-function-view-string-path-struct-args----any-missingview----",
+        "text": "Framework One Reference Manual"
+      }
+    ]
+  }
 }

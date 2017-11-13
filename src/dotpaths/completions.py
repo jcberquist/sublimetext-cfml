@@ -1,5 +1,5 @@
 import sublime
-from .. import model_index
+from ..component_index import component_index
 from .. import utils
 from . import cfc_utils
 
@@ -17,7 +17,7 @@ def build_project_map(project_name):
 
 
 def make_completions(project_name):
-    dot_paths = model_index.get_dot_paths(project_name)
+    dot_paths = component_index.get_dot_paths(project_name)
     path_map = map_paths(dot_paths)
     path_completions = {}
     constructor_completions = {}
@@ -34,7 +34,7 @@ def make_completion(path_part_dict, key, dot_paths, project_name, constructor):
     completion = path_part_dict["path_part"]
     if path_part_dict["is_cfc"] and constructor:
         full_key = key + ("." if len(key) > 0 else "") + completion
-        constructor_completion = model_index.get_completions_by_file_path(project_name, dot_paths[full_key.lower()]["file_path"])["constructor"]
+        constructor_completion = component_index.get_completions_by_file_path(project_name, dot_paths[full_key.lower()]["file_path"])["constructor"]
         if constructor_completion:
             completion = completion + constructor_completion.content[4:]
         else:
@@ -157,12 +157,12 @@ def get_completions(project_name, cfc_path, completion_type):
 
 
 def get_completions_by_component_name(cfml_view, component_name):
-    comp = model_index.get_completions_by_dot_path(cfml_view.project_name, component_name.lower())
+    comp = component_index.get_completions_by_dot_path(cfml_view.project_name, component_name.lower())
 
     if not comp:
         folder_cfc_path = cfc_utils.get_folder_cfc_path(cfml_view, component_name)
         if folder_cfc_path:
-            comp = model_index.get_completions_by_dot_path(cfml_view.project_name, folder_cfc_path)
+            comp = component_index.get_completions_by_dot_path(cfml_view.project_name, folder_cfc_path)
 
     if comp:
         filtered_completions = []

@@ -2,19 +2,8 @@ import sublime
 import json
 from .. import utils
 
-STYLES = {
-    "side_color": "#4C9BB0",
-    "link_color": "#4C9BB0",
-    "header_bg_color": "#E4EEF1",
-    "header_color": "#306B7B"
-}
+SIDE_COLOR = "color(#4C9BB0 blend(var(--background) 60%))"
 
-ADAPTIVE_STYLES = {
-    "side_color": "color(#4C9BB0 blend(var(--background) 60%))",
-    "link_color": "color(#4C9BB0 blend(var(--foreground) 45%))",
-    "header_bg_color": "color(#4C9BB0 blend(var(--background) 60%))",
-    "header_color": "color(var(--foreground) blend(#306B7B 95%))"
-}
 
 appcfc = {"settings": {}, "settings_docs": {}, "methods": {}, "methods_docs": {}}
 
@@ -103,9 +92,9 @@ def get_inline_documentation(cfml_view, doc_type):
 
 
 def get_documentation(key, metadata):
-    appcfc_doc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
+    appcfc_doc = {"side_color": SIDE_COLOR, "html": {}}
     appcfc_doc["html"]["header"] = metadata["header"]
-    appcfc_doc["html"]["description"] = metadata["description"]
+    appcfc_doc["html"]["body"] = metadata["body"]
     appcfc_doc["html"]["links"] = [{"href": "http://cfdocs.org/application-cfc", "text": "cfdocs.org/application-cfc"}]
     appcfc_doc["html"]["links"].extend(metadata["links"])
     return appcfc_doc

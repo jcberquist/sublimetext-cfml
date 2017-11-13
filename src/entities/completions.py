@@ -1,4 +1,4 @@
-from .. import model_index
+from ..component_index import component_index
 from . import entity_utils
 
 
@@ -7,7 +7,7 @@ projects = {}
 
 def build_project_entities(project_name):
     global projects
-    entities = model_index.get_entities(project_name)
+    entities = component_index.get_entities(project_name)
     completions = []
     for key in entities:
         completions.append((entities[key]["entity_name"] + "\tentity", entities[key]["entity_name"]))
@@ -63,7 +63,7 @@ def is_entityname_param(function_call_params):
 
 
 def get_completions_by_entity_name(project_name, entity_name):
-    comp = model_index.get_completions_by_entity_name(project_name, entity_name)
+    comp = component_index.get_completions_by_entity_name(project_name, entity_name)
 
     if comp:
         filtered_completions = []

@@ -1,7 +1,7 @@
 import re
 import sublime
 from os.path import dirname
-from .. import model_index
+from ..component_index import component_index
 from .. import utils
 
 
@@ -60,7 +60,7 @@ def get_folder_mapping(cfml_view):
     """
     if not cfml_view.file_path:
         return None
-    mappings = model_index.get_project_data(cfml_view.project_name).get("mappings", [])
+    mappings = component_index.get_project_data(cfml_view.project_name).get("mappings", [])
     for mapping in mappings:
         normalized_mapping = utils.normalize_mapping(mapping, dirname(cfml_view.project_name))
         if not cfml_view.file_path.startswith(normalized_mapping["path"]):
@@ -178,7 +178,7 @@ def find_cfc_by_var_assignment(cfml_view, position, var_name):
     if not function_name:
         return empty_tuple
 
-    metadata = model_index.get_extended_metadata_by_file_path(cfml_view.project_name, file_path)
+    metadata = component_index.get_extended_metadata_by_file_path(cfml_view.project_name, file_path)
 
     if metadata["initmethod"] is None:
         if function_name != 'init':
@@ -199,11 +199,11 @@ def get_cfc_file_info(cfml_view, cfc_path):
     if not cfc_path:
         return None, None
 
-    cfc_dot_path = model_index.get_file_path_by_dot_path(cfml_view.project_name, cfc_path.lower())
+    cfc_dot_path = component_index.get_file_path_by_dot_path(cfml_view.project_name, cfc_path.lower())
     if not cfc_dot_path:
         folder_cfc_path = get_folder_cfc_path(cfml_view, cfc_path)
         if folder_cfc_path:
-            cfc_dot_path = model_index.get_file_path_by_dot_path(cfml_view.project_name, folder_cfc_path.lower())
+            cfc_dot_path = component_index.get_file_path_by_dot_path(cfml_view.project_name, folder_cfc_path.lower())
 
     if cfc_dot_path:
         return cfc_dot_path["file_path"], cfc_dot_path["dot_path"]

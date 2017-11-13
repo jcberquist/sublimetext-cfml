@@ -3,21 +3,12 @@ import json
 from .. import utils
 from .. import cfdocs
 
+
 COMPLETION_FILES = ["cfml_tags", "cfml_functions", "cfml_member_functions", "cfml_function_params"]
 
-STYLES = {
-    "side_color": "#4C9BB0",
-    "link_color": "#4C9BB0",
-    "header_bg_color": "#E4EEF1",
-    "header_color": "#306B7B"
-}
 
-ADAPTIVE_STYLES = {
-    "side_color": "color(#4C9BB0 blend(var(--background) 60%))",
-    "link_color": "color(#4C9BB0 blend(var(--foreground) 45%))",
-    "header_bg_color": "color(#4C9BB0 blend(var(--background) 60%))",
-    "header_color": "color(var(--foreground) blend(#306B7B 95%))"
-}
+SIDE_COLOR = "color(#4C9BB0 blend(var(--background) 60%))"
+
 
 completions = {}
 function_names = []
@@ -89,7 +80,7 @@ def get_inline_documentation(cfml_view, doc_type):
         if len(dot_context) == 1 and dot_context[0].name == "cgi":
             key = "cgi." + cfml_view.view.substr(word).lower()
             if key in cgi:
-                doc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
+                doc = {"side_color": SIDE_COLOR, "html": {}}
                 doc["html"].update(cgi[key])
                 return cfml_view.Documentation([word], doc, None, 1)
 

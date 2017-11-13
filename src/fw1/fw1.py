@@ -2,21 +2,9 @@ import sublime
 import json
 from .. import utils
 
-STYLES = {
-    "side_color": "#2BA361",
-    "link_color": "#3C9959",
-    "header_bg_color": "#CFECD8",
-    "header_color": "#3C9959",
-    "paragraph_color": "#585B31",
-    "color_alt": "#585B31"
-}
 
-ADAPTIVE_STYLES = {
-    "side_color": "color(var(--greenish) blend(var(--background) 60%))",
-    "link_color": "color(var(--greenish) blend(var(--foreground) 45%))",
-    "header_bg_color": "color(var(--greenish) blend(var(--background) 60%))",
-    "header_color": "color(var(--foreground) blend(var(--greenish) 95%))"
-}
+SIDE_COLOR = "color(var(--greenish) blend(var(--background) 60%))"
+
 
 fw1 = {"settings": {}, "settings_docs": {}, "methods": {}, "methods_docs": {}}
 
@@ -166,9 +154,8 @@ def get_inline_documentation(cfml_view, doc_type):
 
 
 def get_documentation(key, metadata):
-    fw1_doc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
+    fw1_doc = {"side_color": SIDE_COLOR, "html": {}}
     fw1_doc["html"]["header"] = metadata["header"]
-    fw1_doc["html"]["description"] = metadata["description"]
     fw1_doc["html"]["body"] = metadata["body"]
     fw1_doc["html"]["links"] = metadata["links"]
     return fw1_doc

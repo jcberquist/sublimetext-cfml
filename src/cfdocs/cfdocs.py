@@ -4,12 +4,14 @@ import time
 import urllib.request
 import urllib.error
 from collections import deque
+from .. import inline_documentation
+from .. import documentation_helpers
+from .. import minihtml
 from .. import utils
 
 CFDOCS_CACHE = {}
 CFDOCS_FAILED_REQUESTS = deque()
 
-CFDOCS_PARAM_TEMPLATE = '<div class="property-box"><strong>${name}</strong></div><p>${description}</p><p>${values}</p>'
 CFDOCS_BASE_URL = "https://raw.githubusercontent.com/foundeo/cfdocs/master/data/en/"
 CFDOCS_HTTP_ERROR_MESSAGE = """
 <p>HTTP requests to GitHub seem to be failing at the moment. This means that
@@ -21,21 +23,8 @@ downloading the cfdocs.org repo (https://github.com/foundeo/cfdocs) and using th
 package setting to point to the data folder of the repository.</p>
 """
 
-STYLES = {
-    "side_color": "#158CBA",
-    "link_color": "#158CBA",
-    "header_color": "#158CBA",
-    "header_bg_color": "#EEEEEE"
-}
 
-ADAPTIVE_STYLES = {
-    "side_color": "#158CBA",
-    "link_color": "#158CBA",
-    "header_color_light": "#158CBA",
-    "header_bg_color_light": "#F8F8F8",
-    "header_color_dark": "#EEEEEE",
-    "header_bg_color_dark": "color(#158CBA blend(var(--background) 85%))"
-}
+SIDE_COLOR = "#158CBA"
 
 CFDOCS_ENGINES = {
     "coldfusion": "ColdFusion",
@@ -166,37 +155,71 @@ def build_engine_span(engine, minimum_version):
 
 
 def build_cfdoc(function_or_tag, data):
-    cfdoc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
+    cfdoc = {"side_color": SIDE_COLOR, "html": {}}
     cfdoc["html"]["links"] = [{"href": "https://cfdocs.org" + "/" + function_or_tag, "text": "cfdocs.org" + "/" + function_or_tag}]
-    cfdoc["html"]["header"] = data["syntax"].replace("<", "&lt;").replace(">", "&gt;")
-    if "returns" in data and len(data["returns"]) > 0:
-        cfdoc["html"]["header"] += ": " + data["returns"]
+    cfdoc["html"]["header"] = build_cfdoc_header(data)
 
-    cfdoc["html"]["description"] = "<div class=\"engines\">"
+    cfdoc["html"]["body"] = "<div class=\"engines\">"
     for engine in sorted(CFDOCS_ENGINES):
         if engine not in data["engines"]:
             continue
-        cfdoc["html"]["description"] += build_engine_span(engine, data["engines"][engine]["minimum_version"])
-    cfdoc["html"]["description"] += "</div>"
+        cfdoc["html"]["body"] += build_engine_span(engine, data["engines"][engine]["minimum_version"])
+    cfdoc["html"]["body"] += "</div>"
 
-    cfdoc["html"]["description"] += data["description"].replace("<", "&lt;").replace(">", "&gt;").replace("\n ", "<br>").replace("\n", "<br>")
+    cfdoc["html"]["body"] += documentation_helpers.card(body=documentation_helpers.clean_html(data["description"]))
 
-    cfdoc["html"]["body"] = ""
     if len(data["params"]) > 0:
-        cfdoc["html"]["body"] = "<h4>ARGUMENT REFERENCE</h4>" if data["type"] == "function" else "<h4>ATTRIBUTE REFERENCE</h4>"
+        cfdoc["html"]["body"] += "<h2>ARGUMENT REFERENCE</h2>" if data["type"] == "function" else "<h2>ATTRIBUTE REFERENCE</h2>"
         for param in data["params"]:
-            param_variables = {"name": param["name"], "description": param["description"].replace("\n ", "<br>").replace("\n", "<br>"), "values": ""}
-            if "type" in param and len(param["type"]):
-                param_variables["name"] += ": " + param["type"]
+            header = documentation_helpers.param_header(param)
+            body = ""
+            if "default" in param and len(str(param["default"])):
+                body += "<p><em>Default:</em> <span class=\"code\">" + str(param["default"]) + "</span></p>"
+            description = param["description"].replace("\n ","<br>").replace("\n","<br>").strip()
+            if len(description) > 0:
+                body += "<p>" + description + "</p>"
             if "values" in param and len(param["values"]):
-                param_variables["values"] = "<em>values:</em> " + ", ".join([str(value) for value in param["values"]])
-            if "required" in param and param["required"]:
-                param_variables["description"] = "<span class=\"required\">&nbsp;Required&nbsp;</span><br>" + param_variables["description"]
-            elif "default" in param and len(str(param["default"])):
-                param_variables["description"] = "<em>Default:</em> <span class=\"code\">" + str(param["default"]) + "</span><br>" + param_variables["description"]
-            cfdoc["html"]["body"] += sublime.expand_variables(CFDOCS_PARAM_TEMPLATE, param_variables) + "\n"
+                body += "<p><em>values:</em> " + ", ".join([str(value) for value in param["values"]]) + "</p>"
+
+            cfdoc["html"]["body"] += documentation_helpers.card(header, body)
+            cfdoc["html"]["body"] += "\n"
 
     return cfdoc
+
+
+def build_cfdoc_header(data, include_params=True):
+    if data["type"] != "function":
+        header = "&lt;" + documentation_helpers.span_wrap(data["name"], "entity.name.tag.cfml")
+        for param in data["params"]:
+            if "required" not in param or not param["required"]:
+                continue
+            header += " " + documentation_helpers.span_wrap(param["name"], "entity.other.attribute-name") + "=\"\""
+
+        header += "&gt;"
+        return header
+
+    header = documentation_helpers.span_wrap(data["name"], "entity.name.function")
+    header += "("
+
+    param_base = ""
+    if include_params:
+        for param in data["params"]:
+            span_html = param_base + documentation_helpers.span_wrap(param["name"], "variable.parameter.function")
+
+            if "required" not in param or not param["required"]:
+                span_html = "[" + span_html + "]"
+
+            param_base = ", "
+            header += span_html
+    else:
+        header += "..." if len(data["params"]) > 0 else ""
+
+    header += ")"
+
+    if len(data["returns"]) > 0:
+        header += ": " + documentation_helpers.span_wrap(data["returns"], "storage.type")
+
+    return header
 
 
 def build_cfdoc_error(function_or_tag, data):
@@ -204,20 +227,18 @@ def build_cfdoc_error(function_or_tag, data):
     cfdoc["html"]["side_color"] = "#F2777A"
     cfdoc["html"]["header_bg_color"] = "#FFFFFF"
     cfdoc["html"]["header"] = "Uh oh!"
-    cfdoc["html"]["description"] = "I tried to load that doc for you but got this instead:"
-    cfdoc["html"]["body"] = data["error_message"]
+    cfdoc["html"]["body"] = "I tried to load that doc for you but got this instead:<br>"
+    cfdoc["html"]["body"] += data["error_message"]
 
     return cfdoc
 
 
 def build_completion_doc(function_call_params, data):
-    cfdoc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
-    cfdoc["html"]["header"] = data["syntax"].split('(')[0] + "(...)"
-    if "returns" in data and len(data["returns"]) > 0:
-        cfdoc["html"]["header"] += ": " + data["returns"]
+    cfdoc = {"side_color": SIDE_COLOR, "html": {}}
+    cfdoc["html"]["header"] = build_cfdoc_header(data, False)
 
-    cfdoc["html"]["description"] = ""
     cfdoc["html"]["body"] = ""
+
     description_params = []
     if len(data["params"]) > 0:
         for index, param in enumerate(data["params"]):
@@ -242,6 +263,6 @@ def build_completion_doc(function_call_params, data):
             else:
                 description_params.append("<span class=\"optional\">" + param["name"] + "</span>")
 
-        cfdoc["html"]["description"] = "(" + ", ".join(description_params) + ")"
+        cfdoc["html"]["arguments"] =  "(" + ", ".join(description_params) + ")"
 
     return cfdoc

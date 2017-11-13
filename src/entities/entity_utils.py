@@ -1,6 +1,6 @@
 import re
 import sublime
-from .. import model_index
+from ..component_index import component_index
 from .. import utils
 
 
@@ -106,8 +106,8 @@ def find_entity_by_var_assignment(cfml_view, position, var_name):
     if not function_name:
         return empty_tuple
 
-    file_path = model_index.get_file_path_by_entity_name(cfml_view.project_name, entity_name)
-    metadata = model_index.get_extended_metadata_by_file_path(cfml_view.project_name, file_path["file_path"])
+    file_path = component_index.get_file_path_by_entity_name(cfml_view.project_name, entity_name)
+    metadata = component_index.get_extended_metadata_by_file_path(cfml_view.project_name, file_path["file_path"])
 
     if metadata["initmethod"] is None:
         if function_name != 'init':

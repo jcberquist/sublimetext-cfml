@@ -1,9 +1,8 @@
-from .. import utils, model_index
-from ..model_index.completions import build_file_completions
+from .. import utils, component_index
 
 
 def get_script_completions(cfml_view):
-    completions = build_file_completions(cfml_view.view_metadata)[utils.get_setting("cfml_cfc_completions")]
+    completions = component_index.build_file_completions(cfml_view.view_metadata)[utils.get_setting("cfml_cfc_completions")]
     completions = [make_completion(completion, cfml_view.file_path) for completion in completions["functions"]]
     if len(completions) > 0:
         return cfml_view.CompletionList(completions, 2, False)
@@ -17,7 +16,7 @@ def get_dot_completions(cfml_view):
     for symbol in cfml_view.dot_context:
         if not symbol.is_function:
             if symbol.name == "this":
-                completions = build_file_completions(cfml_view.view_metadata)[utils.get_setting("cfml_cfc_completions")]
+                completions = component_index.build_file_completions(cfml_view.view_metadata)[utils.get_setting("cfml_cfc_completions")]
                 completions = [make_completion(completion, cfml_view.file_path) for completion in completions["functions"]]
                 return cfml_view.CompletionList(completions, 1, True)
 
@@ -27,16 +26,16 @@ def get_dot_completions(cfml_view):
                     function = cfml_view.get_function(current_function_body.begin() - 1)
                     meta = cfml_view.get_string_metadata(cfml_view.view.substr(function[2]) + "{}")
                     if "functions" in meta and function[0] in meta["functions"]:
-                        args = meta["functions"][function[0]].meta["arguments"]
+                        args = meta["functions"][function[0]].meta["parameters"]
                         completions = [(arg["name"] + "\targuments", arg["name"]) for arg in args]
                         return cfml_view.CompletionList(completions, 1, True)
 
             if symbol.name == "super" and cfml_view.project_name and cfml_view.view_metadata["extends"]:
-                    comp = model_index.get_completions_by_dot_path(cfml_view.project_name, cfml_view.view_metadata["extends"])
+                    comp = component_index.component_index.get_completions_by_dot_path(cfml_view.project_name, cfml_view.view_metadata["extends"])
 
                     if not comp and cfml_view.file_path:
-                        extends_file_path = model_index.resolve_path(cfml_view.project_name, cfml_view.file_path, cfml_view.view_metadata["extends"])
-                        comp = model_index.get_completions_by_file_path(cfml_view.project_name, extends_file_path)
+                        extends_file_path = component_index.component_index.resolve_path(cfml_view.project_name, cfml_view.file_path, cfml_view.view_metadata["extends"])
+                        comp = component_index.component_index.get_completions_by_file_path(cfml_view.project_name, extends_file_path)
 
                     if comp:
                         completions = [(completion.key + "\t" + completion.hint, completion.content) for completion in comp["functions"]]
