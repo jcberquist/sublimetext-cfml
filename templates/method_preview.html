@@ -1,0 +1,54 @@
+<body>
+<style>
+html {
+    margin: 0;
+    padding: 0;
+}
+body {
+    margin: 0;
+    padding: 0;
+    background-color: color(var(--background) blend(var(--foreground) 90%))
+}
+.container {
+    margin: 3px;
+}
+.link {
+    padding: 3px 0 7px 0;
+}
+.link .close {
+    text-decoration: inherit;
+    padding: 0.35rem 0.7rem 0.45rem 0.8rem;
+    position: relative;
+    bottom: 0.05rem;
+    border-radius: 0 0.2rem 0.2rem 0;
+    font-weight: bold;
+}
+html.dark .link .close {
+    background-color: #00000018;
+}
+html.light .link .close {
+    background-color: #ffffff18;
+}
+.pagination {
+    color: #000000;
+    background-color: #DDDDDD;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.pagination a {
+    color: #0000EE;
+}
+
+${styles}
+</style>
+<div class="container">
+<div class="link">
+    <a class="close" href="__close__">×</a>
+    ${link}
+</div>
+<div>${body}</div>
+</div>
+${pagination}
+</body>

@@ -1,59 +1,78 @@
 <body>
 <style>
-html {
-    color: ${color};
-}
 body {
     margin: 0;
     padding: 2px;
-    background-color: ${background_color};
+    background-color: color(var(--background) blend(var(--foreground) 98%));
 }
 h1 {
-    margin: 0;
     font-size: 1rem;
-    padding: 3px;
-    background-color: ${header_bg_color};
-    color: ${header_color};
+    margin: 1px 0;
+    padding: 4px;
+    background-color: color(var(--background) blend(var(--foreground) 95%));
 }
-html.dark h1 {
-    background-color: ${header_bg_color_dark};
-    color: ${header_color_dark};
-}
-html.light h1 {
-    background-color: ${header_bg_color_light};
-    color: ${header_color_light};
-}
-p {
-    padding: 2px 0 0;
-    margin: 2px 0 0;
-}
-.params {
+
+.arguments {
     font-size: 0.9rem;
-    margin: 2px 0 0;
+    margin: 1px 0 0;
     padding: 2px;
-    background-color: ${box_bg_color};
+    background-color: color(var(--background) blend(var(--foreground) 85%));
 }
+.body {
+    font-size: 0.9rem;
+    margin: 1px 0 0;
+    padding: 3px;
+    background-color: color(var(--background) blend(var(--foreground) 90%));
+}
+
 .active {
     font-size: 1rem;
     font-weight: bold;
     color: var(--greenish);
 }
 .required {
-    color: ${color};
+
 }
 .optional {
     font-style: italic;
-    color: ${paragraph_color};
 }
-.body {
-    font-size: 0.9rem;
-    margin: 1px 0 0;
-    padding: 3px;
-    background-color: ${pre_bg_color};
+
+.entity-name-class {
+    ${entity_name_class}
+}
+.entity-name-function {
+    ${entity_name_function}
+}
+.variable-parameter-function {
+    ${variable_parameter_function}
+}
+.variable-language {
+    ${variable_language}
+}
+.constant-language {
+    ${constant_language}
+}
+.storage-modifier {
+    ${storage_modifier}
+}
+.storage-type {
+    ${storage_type}
+}
+.string-quoted {
+    ${string_quoted}
+}
+.entity-name-tag-cfml {
+    ${entity_name_tag_cfml}
+}
+.entity-other-attribute-name {
+    ${entity_other_attribute-name}
+}
+.entity-other-inherited-class {
+    ${entity_other_inherited-class}
 }
 </style>
 <h1>${header}</h1>
-<div class="params">${description}</div>
+<div class="arguments">${arguments}</div>
 <div class="body">${body}</div>
 <div>${links}</div>
 ${pagination}

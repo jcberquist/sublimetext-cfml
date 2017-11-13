@@ -1,8 +1,5 @@
 <body>
 <style>
-html {
-    color: ${color};
-}
 body {
     margin: 0;
     padding: 0;
@@ -10,74 +7,67 @@ body {
 }
 .container {
     margin-left: 3px;
-    padding: 5px;
+    padding: 4px;
     padding-right: 10px;
-    background-color: ${background_color};
+    background-color: color(var(--background) blend(var(--foreground) 98%));
 }
 h1 {
     font-size: 1rem;
-    margin: 1px;
-    padding: 2px;
-    background-color: ${header_bg_color};
-    color: ${header_color};
-}
-html.dark h1 {
-    background-color: ${header_bg_color_dark};
-    color: ${header_color_dark};
-}
-html.light h1 {
-    background-color: ${header_bg_color_light};
-    color: ${header_color_light};
+    margin: 4px 0;
+    padding: 4px;
+    background-color: color(var(--background) blend(var(--foreground) 95%));
 }
 h2 {
     font-size: 1rem;
-    margin: 1px;
-    padding: 2px;
-    color: ${header_color};
+    margin: 4px 0;
+    padding: 4px;
 }
-a {
-    margin: 1px;
-    padding: 2px;
-    color: ${link_color};
-}
+
 a.plain-link {
+    color: var(--foreground);
     text-decoration: none;
 }
-p {
-    margin: 1px;
-    padding: 2px;
-    color: ${paragraph_color};
+
+.path {
+    margin: 4px 0;
+    padding: 4px;
 }
-.doc-box {
-    color: ${color_alt};
+.path a {
+    text-decoration: none;
 }
-.property-box {
-    margin: 3px 2px;
-    padding: 5px 3px;
-    background-color: ${box_bg_color};
+
+.card {
+    margin: 6px 0;
+    padding: 0;
+    background-color: color(var(--background) blend(var(--foreground) 90%));
     border-radius: 3px;
 }
-.method-box {
-    margin: 5px 2px;
-    padding: 6px 4px;
-    background-color: ${box_bg_color};
+.card-header {
+    margin: 0;
+    padding: 4px;
+    background-color: color(var(--background) blend(var(--foreground) 85%));
+    border-radius: 3px 3px 0 0;
+}
+.card-header-empty {
     border-radius: 3px;
 }
-.method-args {
-    margin: 5px;
-    padding-left: 15px;
-    font-size: 1rem;
-    color: ${paragraph_color};
+.card-body {
+    margin: 0;
+    padding: 4px;
+    border-radius: 0 0 3px 3px;
 }
+
 .pre {
-    padding: 5px;
-    background-color: ${pre_bg_color};
-    color: ${paragraph_color};
+    margin: 4px 0;
+    padding: 4px;
+    background-color: color(var(--background) blend(var(--foreground) 80%));
+    color: color(var(--foreground) blend(var(--background) 95%));
 }
 .code {
-    background-color: ${code_bg_color};
-    color: ${paragraph_color};
+    background-color: color(var(--background) blend(var(--foreground) 80%));
+    color: color(var(--foreground) blend(var(--background) 95%));
 }
+
 .pagination {
     color: #000000;
     background-color: #DDDDDD;
@@ -89,6 +79,7 @@ p {
 .pagination a {
     color: #0000EE;
 }
+
 .engines {
     padding-top: 2px;
     padding-bottom: 2px;
@@ -108,19 +99,53 @@ p {
     color: #FFFFFF;
     border-radius: 3px;
 }
+
 .required {
     background-color: #FF4136;
     color: #FFFFFF;
     border-radius: 3px;
     margin-bottom: 3px;
 }
+
+.entity-name-class {
+    ${entity_name_class}
+}
+.entity-name-function {
+    ${entity_name_function}
+}
+.variable-parameter-function {
+    ${variable_parameter_function}
+}
+.variable-language {
+    ${variable_language}
+}
+.constant-language {
+    ${constant_language}
+}
+.storage-modifier {
+    ${storage_modifier}
+}
+.storage-type {
+    ${storage_type}
+}
+.string-quoted {
+    ${string_quoted}
+}
+.entity-name-tag-cfml {
+    ${entity_name_tag_cfml}
+}
+.entity-other-attribute-name {
+    ${entity_other_attribute-name}
+}
+.entity-other-inherited-class {
+    ${entity_other_inherited-class}
+}
 ${styles}
 </style>
 <div class="container">
-<h1>${header}</h1>
-<p>${description}</p>
-<div>${body}</div>
-<div>${links}</div>
+    <h1>${header}</h1>
+    <div>${body}</div>
+    <div>${links}</div>
 </div>
 ${pagination}
 </body>
