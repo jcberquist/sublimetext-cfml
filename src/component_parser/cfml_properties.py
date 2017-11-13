@@ -13,13 +13,28 @@
 # }
 
 import re
-from . import cfml_functions
-from . import regex
+from . import cfml_functions, regex, ranges
 
 
-def index(file_string):
+
+def index(file_string, cfscript_range=None):
+    if cfscript_range is None:
+        cfscript_range = ranges.RangeWalker(file_string, 0, 'cfscript').walk()
+
     properties = {}
-    for property_string in re.findall(regex.cfml_property, file_string):
+    for property_match in re.finditer(regex.cfml_property, file_string):
+
+        if cfscript_range.is_in_range(property_match.start(), ranges.NON_SCRIPT_RANGES):
+            continue
+
+        property_string = property_match.group()
+
+        if not property_string.startswith('<cf'):
+            dr = cfscript_range.deepest_range(property_match.start())
+            if dr.depth() != 2:
+                continue
+
+        property_string = property_match.group(1)
 
         # search for 'property type name;' syntax
         type_name_search = re.search(regex.property_type_name, property_string)

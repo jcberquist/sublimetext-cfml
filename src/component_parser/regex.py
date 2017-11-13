@@ -19,26 +19,25 @@ script_function = r"""
 (?:\b([A-Za-z0-9_\.$]+)\s+)?
 function\s+
 ([_$a-zA-Z][$\w]*)\s*
-(\((?:=\s*\{|[^{])*)\{
+(?=\()
 """
 script_function = re.compile(script_function, re.I | re.X | re.S)
 ScriptFunction = namedtuple(
     'ScriptFunction',
-    'docblock storage_slot_1 storage_slot_2 returntype name arguments'
+    'docblock storage_slot_1 storage_slot_2 returntype name parameters attributes'
 )
 
 
-script_argument = r"""
-(?:^\(|,)\s*
+script_parameter = r"""
 (?:(required)\s+)?
 (?:\b([\w.]+)\b\s+)?
 (\b\w+\b)
-(?:\s*=\s*(\{[^\}]*\}|\[[^\]]*\]|\([^\)]*\)|(?:[^,\)](?!\b\w+\s*=))+))?
-([^,\)]*)?
+(?:\s*=\s*(\{[^\}]*\}|\[[^\]]*\]|\([^\)]*\)|(?:(?!\b\w+\s*=).)+))?
+(.*)?
 """
-script_argument = re.compile(script_argument, re.I | re.X)
-ScriptArgument = namedtuple(
-    'ScriptArgument',
+script_parameter = re.compile(script_parameter, re.I | re.S | re.X)
+ScriptParameter = namedtuple(
+    'ScriptParameter',
     'required type name default attributes'
 )
 
@@ -78,6 +77,11 @@ function_start_tag = r"""
 """
 function_start_tag = re.compile(function_start_tag, re.X | re.I)
 
+function_end_tag = r"""
+</cffunction>
+"""
+function_end_tag = re.compile(function_end_tag, re.X | re.I)
+
 argument_tag = r"""
 <cfargument([^>]*)>
 """
@@ -98,3 +102,28 @@ property_type_name = r"""
 \b(\w+)\b
 """
 property_type_name = re.compile(property_type_name, re.X)
+
+string_quoted_single = r"""
+'[^']*'
+"""
+string_quoted_single = re.compile(string_quoted_single, re.X)
+
+string_quoted_double = r"""
+"[^"]*"
+"""
+string_quoted_double = re.compile(string_quoted_double, re.X)
+
+line_comment = r"""
+//[^\r\n]\r?\n
+"""
+line_comment = re.compile(line_comment, re.X)
+
+multiline_comment = r"""
+/\*.*?\*\/
+"""
+multiline_comment = re.compile(multiline_comment, re.X | re.S)
+
+tag_comment = r"""
+<!---.*?--->
+"""
+tag_comment = re.compile(tag_comment, re.X | re.S)
