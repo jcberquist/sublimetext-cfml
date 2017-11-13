@@ -17,7 +17,7 @@ def from_view(view, region=None):
 
     region = view.line(region)
 
-    color_scheme = get_color_scheme()
+    color_scheme = get_color_scheme(view)
 
     start_point = region.begin()
     scope_name = view.scope_name(start_point)
@@ -90,9 +90,11 @@ def render_span(span, styles, style_map):
                 span_classes.append(css_class_name)
         start_span += " ".join(span_classes) + "\">"
 
-        if "fontStyle" in span["style"]:
-            if "italic" in span["style"]["fontStyle"].lower():
-                span_html = "<em>" + span_html + "</em>"
+        if span["style"]["italic"]:
+            span_html = "<em>" + span_html + "</em>"
+
+        if span["style"]["bold"]:
+            span_html = "<stron>" + span_html + "</strong>"
 
         span_html = start_span + span_html + "</span>"
 
@@ -110,6 +112,10 @@ def get_classname(key, color, styles, style_map):
 
 
 def get_style_for_point(view, pt, color_scheme):
+    if int(sublime.version()) > 3153:
+        # use new api
+        return view.style_for_scope(view.scope_name(pt))
+
     top_score = 0
     style = None
     for scope in color_scheme["scopes"]:
@@ -134,16 +140,40 @@ def match_style_dicts(a, b):
     return True
 
 
-def get_color_scheme():
+def get_selector_style_map(view, selectors):    
+    styles = {}
+
+    if int(sublime.version()) > 3153:
+        for s in selectors:
+            styles[s] = view.style_for_scope(s)
+    else:
+        color_scheme = get_color_scheme()
+        top_scores = {}
+        for s in selectors:
+            for scope in color_scheme["scopes"]:
+                score = sublime.score_selector(s, scope["scope"])
+                top_score = top_scores.get(s, 0)
+                if score > 0 and score >= top_score:
+                    top_scores[s] = score
+                    styles[s] = scope["style"]
+    return styles
+
+
+def get_color_scheme(view=None):
+    if int(sublime.version()) > 3153:
+        return view.style()
+
     setting = sublime.load_settings("Preferences.sublime-settings").get("color_scheme")
     color_scheme_bytes = sublime.load_binary_resource(setting)
     color_scheme = {"scopes": []}
     for setting in plistlib.readPlistFromBytes(color_scheme_bytes)["settings"]:
         if "scope" in setting:
             this_scope = {"scope": setting["scope"], "style": {}}
-            for key in ["foreground", "background", "fontStyle"]:
+            for key in ["foreground", "background"]:
                 if key in setting["settings"]:
                     this_scope["style"][key] = setting["settings"][key]
+            for key in ["italic", "bold"]:
+                this_scope["style"][key] = "fontStyle" in setting["settings"] and key in setting["settings"]["fontStyle"].lower()
             color_scheme["scopes"].append(this_scope)
         else:
             color_scheme["foreground"] = setting["settings"]["foreground"]

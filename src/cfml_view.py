@@ -3,11 +3,12 @@ import sublime
 from collections import defaultdict
 from collections import namedtuple
 from . import utils
-from .cfc_indexer import parse_cfc_file_string
-from .model_index import get_extended_metadata_by_file_path, resolve_path
+from .component_parser import parse_cfc_file_string
+from .component_index import component_index
 
 CompletionList = namedtuple("CompletionList", "completions priority exclude_lower_priority")
 Documentation = namedtuple('Documentation', 'doc_regions doc_html_variables on_navigate priority')
+MethodPreview = namedtuple('MethodPreview', 'preview_regions preview_html_variables on_navigate priority')
 CompletionDoc = namedtuple('CompletionDoc', 'doc_regions doc_html_variables on_navigate')
 GotoCfmlFile = namedtuple('GotoCfmlFile', 'file_path symbol')
 
@@ -22,8 +23,8 @@ def get_view_metadata(view):
     file_path = utils.normalize_path(view.file_name()) if view.file_name() else ""
     project_name = utils.get_project_name(view)
     if project_name and base_meta["extends"]:
-        extends_file_path = resolve_path(project_name, file_path, base_meta["extends"])
-        root_meta = get_extended_metadata_by_file_path(project_name, extends_file_path)
+        extends_file_path = component_index.resolve_path(project_name, file_path, base_meta["extends"])
+        root_meta = component_index.get_extended_metadata_by_file_path(project_name, extends_file_path)
         if root_meta:
             for key in ["functions", "function_file_map", "properties", "property_file_map"]:
                 extended_meta[key].update(root_meta[key])
@@ -64,7 +65,9 @@ def get_minimal_file_string(view):
         funct_regions = "meta.class.body.cfml comment.block.documentation.cfml, meta.function.declaration.cfml -meta.function.body.cfml"
         for r in view.find_by_selector(funct_regions):
             string = view.substr(r)
-            min_string += string + ("\n" if string.endswith("*/") else "\{ \}\n")
+            min_string += string + ("\n" if string.endswith("*/") else "{ }\n")
+
+        min_string += '}'
 
     return min_string
 
@@ -131,6 +134,7 @@ class CfmlView():
         self.CompletionList = CompletionList
         self.Documentation = Documentation
         self.CompletionDoc = CompletionDoc
+        self.MethodPreview = MethodPreview
         self.GotoCfmlFile = GotoCfmlFile
 
         self.prefix_start = self.position - len(self.prefix)
