@@ -1,0 +1,28 @@
+CFML v0.26.0 Changelog:
+
+- The format in which inline document popups are displayed has been simplified
+  and standardized. With this change, the setting `adaptive_doc_styles` no
+  longer has any effect and has been removed. Also, when viewing the popup for a
+  method of a component, the code preview is no longer displayed by default, but
+  it can be added back by setting `cfml_doc_method_preview` to true in your CFML
+  package settings.
+
+- A new method preview command has been added that is bound to SHIFT+F1 by
+  default. When the cursor is on a method that can be previewed (one where you
+  can get method documentation) and the command is run, it will display the
+  preview right below the method call. The preview can be closed by pressing
+  SHIFT+F1 again or by clicking on the `x`.
+
+- A basic indent settings file has been added for CFScript. At the moment it is
+  a clone of the one included in the default packages for JavaScript. This
+  should provide a better experience when the cursor is between curly braces
+  `{}` and enter is pressed.
+
+- In an effort to reduce false positives when indexing components, the indexer
+  now tries to identify comment and string ranges in component files, so that
+  commented out functions and the like are no longer identified as valid
+  functions. This does add some overhead to the time it takes to index files, so
+  a cache has been added. The cache is stored in a sqlite3 database that is
+  stored in your User package folder at `./CFML/cfc_index_cache.sqlite`.
+
+PLEASE RESTART SUBLIME TEXT TO ENSURE THESE CHANGES ARE LOADED CORRECTLY, THANKS!
