@@ -36,25 +36,25 @@ def make_completions(funct_meta, funct_cfcs, completion_type):
 
 
 def make_completion(funct, cfc_file_path, completion_type):
-    key = funct.name
+    key = funct["name"]
     hint = "method"
     if utils.get_setting("cfc_completion_names") == "full":
         key += "()"
-        if funct.meta["returntype"]:
-            key += ":" + funct.meta["returntype"]
+        if funct["meta"]["returntype"]:
+            key += ":" + funct["meta"]["returntype"]
         hint = cfc_file_path.split("/").pop().split(".")[0]
 
     return CfcCompletion(
         key,
         hint,
-        funct.name + "(" + make_arguments_string(funct.meta["arguments"], completion_type) + ")",
+        funct["name"] + "(" + make_arguments_string(funct["meta"]["parameters"], completion_type) + ")",
         cfc_file_path,
-        funct.implicit,
-        funct.meta["access"] == "private"
+        funct["implicit"],
+        funct["meta"]["access"] == "private"
     )
 
 
-def make_arguments_string(arguments, completion_type):
+def make_arguments_string(parameters, completion_type):
     index = 1
     delim = ""
     arguments_string = ""
@@ -62,7 +62,7 @@ def make_arguments_string(arguments, completion_type):
     if completion_type == "basic":
         return arguments_string
 
-    for argument_params in arguments:
+    for argument_params in parameters:
         if not argument_params:
             continue
         if argument_params["required"] or index == 1:

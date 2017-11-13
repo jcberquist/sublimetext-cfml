@@ -49,11 +49,11 @@
 	// highlight cfml_inline_documentation region
 	"inline_doc_regions_highlight": true,
 
-	// use doc styles that adapt to current color scheme
-	"adaptive_doc_styles": true,
-
 	// run cfml_inline_documentation command on hover
 	"cfml_hover_docs": true,
+
+	// show method preview in popup docs (when available)
+	"cfml_doc_method_preview": false,
 
 	// completion docs for BIFs and indexed components
 	"cfml_completion_docs": true,

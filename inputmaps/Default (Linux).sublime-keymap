@@ -75,6 +75,14 @@
       {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
     ]
   },
+  // method preview
+  {
+    "keys": ["shift+f1"],
+    "command": "cfml_preview_method",
+    "context": [
+      {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
+    ]
+  },
   // close tags
   {
     "keys": ["/"],

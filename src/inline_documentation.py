@@ -4,31 +4,30 @@ import time
 import uuid
 import webbrowser
 from . import utils
+from . import method_preview
+from . import minihtml
 from .cfml_view import CfmlView
+
 
 DOC_TEMPLATE = ""
 COMPLETION_DOC_TEMPLATE = ""
 PAGINATION_TEMPLATE = ""
 
-BASE_STYLES = {
-    "color": "#000000",
-    "background_color": "#FFFFFF",
-    "paragraph_color": "#272B33",
-    "color_alt": "#5E5E5E",
-    "box_bg_color": "#F4F4F4",
-    "pre_bg_color": "#F8F8F8",
-    "code_bg_color": "#F8F8F8"
-}
 
-BASE_ADAPTIVE_STYLES = {
-    "color": "var(--foreground)",
-    "background_color": "color(var(--background) blend(var(--foreground) 95%))",
-    "paragraph_color": "color(var(--foreground) blend(var(--background) 95%))",
-    "color_alt": "color(var(--foreground) blend(var(--background) 80%))",
-    "box_bg_color": "color(var(--background) blend(var(--foreground) 85%))",
-    "pre_bg_color": "color(var(--background) blend(var(--foreground) 80%))",
-    "code_bg_color": "color(var(--background) blend(var(--foreground) 80%))"
-}
+SELECTORS = [
+    "constant.language",
+    "entity.name.class",
+    "entity.name.function",
+    "entity.name.tag.cfml",
+    "entity.other.attribute-name",
+    "entity.other.inherited-class",
+    "storage.modifier",
+    "storage.type",
+    "string.quoted",
+    "variable.language",
+    "variable.parameter.function"
+]
+
 
 doc_window = None
 documentation_sources = []
@@ -100,22 +99,22 @@ def on_hide(view, doc_region_id):
     view.erase_regions(doc_region_id)
 
 
-def generate_documentation(docs, current_index, doc_type):
+def generate_documentation(view, docs, current_index, doc_type):
     doc_html_variables = dict(docs[current_index].doc_html_variables["html"])
+    doc_html_variables["side_color"] = docs[current_index].doc_html_variables["side_color"]
 
-    if utils.get_setting("adaptive_doc_styles"):
-        doc_html_variables.update(BASE_ADAPTIVE_STYLES)
-        doc_html_variables.update(docs[current_index].doc_html_variables["adaptive_styles"])
-    else:
-        doc_html_variables.update(BASE_STYLES)
+    if "styles" in docs[current_index].doc_html_variables:
         doc_html_variables.update(docs[current_index].doc_html_variables["styles"])
-
-    for key in ['header_color', 'header_bg_color']:
-        for mod in ['light', 'dark']:
-            mod_key = key + '_' + mod
-            if mod_key not in doc_html_variables:
-                doc_html_variables[mod_key] = doc_html_variables[key]
-
+    
+    styles_by_selector = minihtml.get_selector_style_map(view, SELECTORS)
+    for key in styles_by_selector:
+        style = styles_by_selector[key]
+        css = ""
+        if "foreground" in style:
+            css += "color: " + style["foreground"] + ";\n"
+        if style["italic"]:
+            css += "font-style: italic;\n"
+        doc_html_variables[key.replace(".", "_")] = css
 
     doc_html_variables["pagination"] = build_pagination(current_index, len(docs)) if len(docs) > 1 else ""
     doc_html_variables["links"] = build_links(doc_html_variables["links"]) if "links" in doc_html_variables else ""
@@ -138,7 +137,7 @@ def merge_regions(regions):
 def display_documentation(view, docs, doc_type, pt=-1, current_index=0):
     global doc_window
     doc_region_id = str(uuid.uuid4())
-    doc_html, doc_regions = generate_documentation(docs, current_index, doc_type)
+    doc_html, doc_regions = generate_documentation(view, docs, current_index, doc_type)
     on_navigate = get_on_navigate(view, docs, doc_type, current_index, pt)
 
     if doc_type == "completion_doc":
@@ -159,8 +158,11 @@ def display_documentation(view, docs, doc_type, pt=-1, current_index=0):
 class CfmlInlineDocumentationCommand(sublime_plugin.TextCommand):
 
     def run(self, edit, doc_type="inline_doc", pt=None):
-        if doc_type == "hover_doc" and not utils.get_setting("cfml_hover_docs"):
-            return
+        if doc_type == "hover_doc":
+            if not utils.get_setting("cfml_hover_docs"):
+                return
+            if self.view.buffer_id() in method_preview.phantom_sets_by_buffer:
+                return
 
         tick = time.time()
         position = pt if pt else self.view.sel()[0].begin()
