@@ -1,5 +1,5 @@
 from functools import partial
-from .. import minihtml
+from .. import documentation_helpers
 from ..component_index import component_index
 from . import cfc_utils
 
@@ -36,7 +36,7 @@ def get_inline_documentation(cfml_view, doc_type):
             )
             return cfml_view.Documentation(regions, doc, callback, 2)
 
-        doc, callback = get_documentation(cfml_view.view, file_path, minihtml.span_wrap(cfc_path, "entity.name.class"))
+        doc, callback = get_documentation(cfml_view.view, file_path, documentation_helpers.span_wrap(cfc_path, "entity.name.class"))
         return cfml_view.Documentation(regions, doc, callback, 2)
 
     return None
@@ -112,7 +112,7 @@ def get_documentation(view, file_path, header):
     cfc_doc["html"]["links"] = []
 
     cfc_doc["html"]["header"] = header
-    cfc_doc["html"]["body"] += """
+    cfc_doc["html"]["body"] = """
     <div class="path">
         <strong>path</strong>: <a href="__go_to_component">{}</a>
     </div>
