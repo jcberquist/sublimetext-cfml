@@ -4,7 +4,6 @@ from collections import defaultdict
 from collections import namedtuple
 from . import utils
 from . import buffer_metadata
-from .component_index import component_index
 
 CompletionList = namedtuple("CompletionList", "completions priority exclude_lower_priority")
 Documentation = namedtuple('Documentation', 'doc_regions doc_html_variables on_navigate priority')

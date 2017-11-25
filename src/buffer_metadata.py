@@ -2,6 +2,7 @@ import timeit
 from . import utils
 from . import events
 from .component_parser import parse_cfc_file_string
+from .component_index import component_index
 
 
 buffer_metadata_cache = {}
