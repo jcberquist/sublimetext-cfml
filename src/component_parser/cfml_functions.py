@@ -59,7 +59,6 @@ def find_script_functions(file_string, cfscript_range):
         parameters.append(file_string[r_start:params_range.end - 1])
         l.append(parameters)
 
-        # attr_range = ranges.RangeMapper(file_string, params_range.end, 'attributes').range
         attributes = ''
         func_body_range = params_range.parent.next_child_range(params_range.end, ['curly_brackets', 'semicolon'])
         attributes = file_string[params_range.end:func_body_range.start]

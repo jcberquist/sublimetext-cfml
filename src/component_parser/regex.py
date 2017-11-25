@@ -4,12 +4,14 @@ from collections import namedtuple
 
 component = r"""
 (?:/\*\*((?:\*(?!/)|[^*])*)\*/\s+)?
-(?:<cf)?
-component\b
+(
+    (?:<cf)?
+    component\b
+)
 ([^>{]*)
 """
 component = re.compile(component, re.I | re.X | re.S)
-Component = namedtuple('Component', 'docblock attributes')
+Component = namedtuple('Component', 'script docblock attributes')
 
 
 script_function = r"""

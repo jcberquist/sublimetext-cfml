@@ -32,7 +32,11 @@ def parse_cfc_file_string(file_string):
     component_search = re.search(regex.component, file_string)
 
     if component_search:
-        component = regex.Component._make(component_search.groups())
+        component = regex.Component(
+            component_search.group(2).startswith('component'), 
+            component_search.group(1), 
+            component_search.group(3)
+        )
 
         if component.docblock:
             docblock = cfml_functions.parse_docblock(component.docblock)

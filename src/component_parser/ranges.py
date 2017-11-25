@@ -92,10 +92,27 @@ class Range():
         if names is None:
             names = RangeDefinitions[self.name].child_ranges
 
-        if self.name in names and self.start <= pt and self.end > pt:
+        if self.start > pt or self.end <= pt:
+            return False
+
+        if self.name in names:
             return True
 
-        for child_range in self.children:
+        start_index = 0
+        end_index = len(self.children) - 1
+
+        while end_index - start_index > 20:
+            mid_index = start_index + ((end_index - start_index) // 2)
+            if self.children[mid_index].start > pt:
+                end_index = mid_index
+            else:
+                start_index = mid_index
+
+        for child_range in self.children[start_index:]:
+            if child_range.start > pt:
+                break
+            if child_range.end <= pt:
+                continue
             if child_range.is_in_range(pt, names):
                 return True
 
