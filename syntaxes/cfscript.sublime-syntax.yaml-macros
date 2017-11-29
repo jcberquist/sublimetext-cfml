@@ -990,7 +990,7 @@ contexts:
     - match: \b{{attribute_name}}\b
       scope: entity.other.attribute-name.cfml
       push:
-        - match: '='
+        - match: '[=:]'
           scope: punctuation.separator.key-value.cfml
           set: expression-no-comma
         - include: else-pop

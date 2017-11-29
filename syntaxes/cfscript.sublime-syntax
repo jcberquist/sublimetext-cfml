@@ -16,7 +16,6 @@
 name: CFML Script
 scope: source.cfml.script
 hidden: true
-
 variables:
   identifier: '[_$[:alpha:]][_$[:alnum:]]*'
   dot_path_identifier: '[_$[:alpha:]][_$[:alnum:].]*'
@@ -30,7 +29,6 @@ variables:
   func_assignment_lookahead: \s*\bfunction\b
   func_lookahead: ({{storage_modifier}}\s+)?({{storage_modifier}}\s+)?({{dot_path_identifier}}(\[\])?\s+)?\bfunction\b
   line_continuation_lookahead: (?x) (?!\+\+|--) (?=!=|[-+*/% ><=&|^\[(;,.:?])
-
 contexts:
   prototype:
   - include: comments
@@ -380,8 +378,8 @@ contexts:
     set: expression-statement
 
   fallthrough:
-    - match: =>
-      scope: storage.type.function.arrow.cfml
+  - match: =>
+    scope: storage.type.function.arrow.cfml
 
   string:
   - match: "'"
@@ -470,10 +468,11 @@ contexts:
           pop: true
         - match: ','
           scope: punctuation.separator.function-call.method.cfml
-        - match: \b({{identifier}})\s*(=)(?!=)
+        - match: \b({{identifier}})\s*(?:(=)(?!=)|(:))
           captures:
             '1': entity.other.method-parameter.cfml
             '2': keyword.operator.assignment.binary.cfml
+            '3': punctuation.separator.key-value.cfml
           push: expression-no-comma
         - include: expression-no-comma-push
       - include: else-pop
@@ -586,6 +585,8 @@ contexts:
     push: restricted-production
   - match: \b(break|continue)\b
     scope: keyword.control.loop.cfml
+
+
   - match: \b(return)\b
     scope: keyword.control.flow.cfml
     push: restricted-production
@@ -693,6 +694,7 @@ contexts:
       - include: else-pop
     - - include: function-declaration-parameters
       - include: else-pop
+
   function-return-types:
   - match: (?i)(?=\bfunction\b(?!{{func_assignment_lookahead}}))
     pop: true
@@ -891,10 +893,11 @@ contexts:
             pop: true
           - match: ','
             scope: punctuation.separator.function-call.cfml
-          - match: \b({{identifier}})\s*(=)(?!=)
+          - match: \b({{identifier}})\s*(?:(=)(?!=)|(:))
             captures:
               '1': entity.other.function-parameter.cfml
               '2': keyword.operator.assignment.binary.cfml
+              '3': punctuation.separator.key-value.cfml
             push: expression-no-comma
           - include: expression-no-comma-push
         - include: else-pop
@@ -941,10 +944,11 @@ contexts:
           pop: true
         - match: ','
           scope: punctuation.separator.function-call.method.cfml
-        - match: \b({{identifier}})\s*(=)(?!=)
+        - match: \b({{identifier}})\s*(?:(=)(?!=)|(:))
           captures:
             '1': entity.other.method-parameter.cfml
             '2': keyword.operator.assignment.binary.cfml
+            '3': punctuation.separator.key-value.cfml
           push: expression-no-comma
         - include: expression-no-comma-push
       - include: else-pop
@@ -965,10 +969,11 @@ contexts:
           pop: true
         - match: ','
           scope: punctuation.separator.function-call.method.cfml
-        - match: \b({{identifier}})\s*(=)(?!=)
+        - match: \b({{identifier}})\s*(?:(=)(?!=)|(:))
           captures:
             '1': entity.other.method-parameter.cfml
             '2': keyword.operator.assignment.binary.cfml
+            '3': punctuation.separator.key-value.cfml
           push: expression-no-comma
         - include: expression-no-comma-push
       - include: else-pop
@@ -1141,7 +1146,7 @@ contexts:
   - match: \b{{attribute_name}}\b
     scope: entity.other.attribute-name.cfml
     push:
-    - match: '='
+    - match: '[=:]'
       scope: punctuation.separator.key-value.cfml
       set: expression-no-comma
     - include: else-pop
@@ -1280,10 +1285,11 @@ contexts:
       pop: true
     - match: ','
       scope: punctuation.separator.function-call.support.cfml
-    - match: \b({{identifier}})\s*(=)(?!=)
+    - match: \b({{identifier}})\s*(?:(=)(?!=)|(:))
       captures:
         '1': entity.other.function-parameter.cfml
         '2': keyword.operator.assignment.binary.cfml
+        '3': punctuation.separator.key-value.cfml
       push: expression-no-comma
     - include: expression-no-comma-push
   - include: else-pop
@@ -1331,10 +1337,11 @@ contexts:
           pop: true
         - match: ','
           scope: punctuation.separator.function-call.method.support.cfml
-        - match: \b({{identifier}})\s*(=)(?!=)
+        - match: \b({{identifier}})\s*(?:(=)(?!=)|(:))
           captures:
             '1': entity.other.method-parameter.cfml
             '2': keyword.operator.assignment.binary.cfml
+            '3': punctuation.separator.key-value.cfml
           push: expression-no-comma
         - include: expression-no-comma-push
       - include: else-pop
