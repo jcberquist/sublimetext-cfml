@@ -16,6 +16,7 @@
 name: CFML Script
 scope: source.cfml.script
 hidden: true
+
 variables:
   identifier: '[_$[:alpha:]][_$[:alnum:]]*'
   dot_path_identifier: '[_$[:alpha:]][_$[:alnum:].]*'
@@ -29,6 +30,7 @@ variables:
   func_assignment_lookahead: \s*\bfunction\b
   func_lookahead: ({{storage_modifier}}\s+)?({{storage_modifier}}\s+)?({{dot_path_identifier}}(\[\])?\s+)?\bfunction\b
   line_continuation_lookahead: (?x) (?!\+\+|--) (?=!=|[-+*/% ><=&|^\[(;,.:?])
+
 contexts:
   prototype:
   - include: comments
@@ -378,8 +380,8 @@ contexts:
     set: expression-statement
 
   fallthrough:
-  - match: =>
-    scope: storage.type.function.arrow.cfml
+    - match: =>
+      scope: storage.type.function.arrow.cfml
 
   string:
   - match: "'"
@@ -585,8 +587,6 @@ contexts:
     push: restricted-production
   - match: \b(break|continue)\b
     scope: keyword.control.loop.cfml
-
-
   - match: \b(return)\b
     scope: keyword.control.flow.cfml
     push: restricted-production
@@ -662,7 +662,7 @@ contexts:
       - include: scope:embedding.cfml#tag-generic-attribute
     - - include: function-declaration-parameters
       - include: else-pop
-    - - match: \b(?:{{identifier}})\b
+    - - match: (?:{{identifier}})
         scope: entity.name.function.cfml
         pop: true
       - include: else-pop
@@ -1190,84 +1190,85 @@ contexts:
       |clientvariableslist|componentmetadata|contextroot|cpuusage|currentcontext|currenttemplatepath
       |directoryfrompath|encoding|exception|filefrompath|fileinfo|freespace|functioncalledname
       |functiondata|functionkeywords|functionlist|gatewayhelper|httprequestdata|httptimestring
-      |k2serverdoccount|k2serverdoccountlimit|locale|localedisplayname|localhostip|luceeid
-      |memoryusage|metadata|metricdata|numericdate|pagecontext|printerinfo|printerlist
-      |profilesections|profilestring|readableimageformats|safehtml|soaprequest|soaprequestheader
-      |soapresponse|soapresponseheader|systemfreememory|systemtotalmemory|tagdata|taglist
-      |tempdirectory|tempfile|templatepath|tickcount|timezone|timezoneinfo|token|totalspace
-      |userroles|variable|vfsmetadata|writeableimageformats)|image(?:addborder|blur|clearrect
-      |copy|createcaptcha|crop|drawarc|drawbeveledrect|drawcubiccurve|drawimage|drawline
-      |drawlines|drawoval|drawpoint|drawquadraticcurve|drawrect|drawroundrect|drawtext
-      |filter|filtercolormap|filtercurves|filterkernel|filterwarpgrid|flip|fonts|formats
-      |getblob|getbufferedimage|getexifmetadata|getexiftag|getheight|getiptcmetadata|getiptctag
-      |getmetadata|getwidth|grayscale|info|makecolortransparent|maketranslucent|negative
-      |new|overlay|paste|read|readbase64|resize|rotate|rotatedrawingaxis|scaletofit|setantialiasing
-      |setbackgroundcolor|setdrawingalpha|setdrawingcolor|setdrawingstroke|setdrawingtransparency
-      |sharpen|shear|sheardrawingaxis|translate|translatedrawingaxis|write|writebase64
-      |xordrawingmode)|is(?:array|binary|boolean|closure|customfunction|date|ddx|debugmode
-      |defined|empty|fileobject|image|imagefile|instanceof|ipinrange|ipv6|json|leapyear
-      |localhost|notmap|null|numeric|numericdate|object|pdfarchive|pdffile|pdfobject|query
-      |safehtml|simplevalue|soaprequest|spreadsheetfile|spreadsheetobject|struct|userinanyrole
-      |userinrole|userloggedin|valid|validoauthaccesstoken|videofile|wddx|xml|xmlattribute
-      |xmldoc|xmlelem|xmlnode|xmlroot|zipfile)|list(?:append|avg|changedelims|compact|contains
-      |containsnocase|deleteat|each|every|filter|find|findnocase|first|getat|indexexists
-      |insertat|itemtrim|last|len|map|prepend|qualify|reduce|removeduplicates|rest|setat
-      |some|sort|toarray|trim|valuecount|valuecountnocase)|object(?:equals|load|save)|orm(?:clearsession
-      |closeallsessions|closesession|evictcollection|evictentity|evictqueries|executequery
-      |flush|flushall|getsession|getsessionfactory|index|indexpurge|reload|search|searchoffline)
-      |query(?:addcolumn|addrow|columnarray|columncount|columndata|columnexists|columnlist
-      |convertforgrid|currentrow|deletecolumn|deleterow|each|every|execute|filter|getcell
-      |getresult|getrow|keyexists|map|new|recordcount|reduce|rowdata|setcell|slice|some
-      |sort)|replace(?:list|listnocase|nocase)|spreadsheet(?:addautofilter|addcolumn|addfreezepane
-      |addimage|addinfo|addpagebreaks|addrow|addrows|addsplitpane|createsheet|deletecolumn
-      |deletecolumns|deleterow|deleterows|formatcell|formatcellrange|formatcolumn|formatcolumns
-      |formatrow|formatrows|getcellcomment|getcellformula|getcellvalue|info|mergecells
-      |new|read|readbinary|removesheet|setactivesheet|setactivesheetnumber|setcellcomment
-      |setcellformula|setcellvalue|setcolumnwidth|setfooter|setheader|setrowheight|shiftcolumns
-      |shiftrows|write)|store(?:addacl|getacl|getmetadata|setacl|setmetadata)|struct(?:append
-      |clear|copy|count|delete|each|every|filter|find|findkey|findvalue|get|insert|isempty
-      |keyarray|keyexists|keylist|keytranslate|map|new|reduce|some|sort|update)|to(?:base64
-      |binary|numeric|script|string)|transaction(?:commit|rollback|setsavepoint)|url(?:decode
-      |encode|encodedformat|sessionformat)|xml(?:childpos|elemnew|format|getnodetype|new
-      |parse|search|transform|validate)|abs|acos|addsoaprequestheader|addsoapresponseheader
-      |ajaxlink|ajaxonload|applicationstarttime|applicationstop|array|asc|asin|atn|beat
-      |binarydecode|binaryencode|bitand|bitmaskclear|bitmaskread|bitmaskset|bitnot|bitor
-      |bitshln|bitshrn|bitxor|booleanformat|callstackdump|callstackget|canonicalize|ceiling
-      |cfusion_decrypt|cfusion_encrypt|charsetdecode|charsetencode|chr|cjustify|collectioneach
-      |collectionevery|collectionfilter|collectionmap|collectionreduce|collectionsome|compare
-      |comparenocase|compress|contractpath|cos|csrfgeneratetoken|csrfverifytoken|ctcacheclear
-      |ctcachelist|datasourceflushmetacache|day|dayofweek|dayofweekasstring|dayofweekshortasstring
-      |dayofyear|daysinmonth|daysinyear|de|decimalformat|decodeforhtml|decodefromurl|decrementvalue
-      |decrypt|decryptbinary|deleteclientvariable|deserialize|deserializejson|deserializexml
-      |directorycopy|directorycreate|directorydelete|directoryexists|directorylist|directoryrename
-      |directorysize|dollarformat|dotnettocftype|duplicate|each|echo|empty|encodeforcss
-      |encodefordn|encodeforhtml|encodeforhtmlattribute|encodeforjavascript|encodeforldap
-      |encodeforurl|encodeforxml|encodeforxmlattribute|encodeforxpath|encrypt|encryptbinary
-      |esapidecode|esapiencode|evaluate|exp|expandpath|extract|fileappend|fileclose|filecopy
-      |filedelete|fileexists|filegetmimetype|fileiseof|filemove|fileopen|fileread|filereadbinary
-      |filereadline|fileseek|filesetaccessmode|filesetattribute|filesetlastmodified|fileskipbytes
-      |fileupload|fileuploadall|filewrite|filewriteline|find|findnocase|findoneof|firstdayofmonth
-      |fix|floor|formatbasen|generatepbkdfkey|generatesecretkey|hash|hash40|hmac|hour|htmlcodeformat
-      |htmleditformat|htmlparse|iif|incrementvalue|inputbasen|insert|int|invalidateoauthaccesstoken
-      |invoke|javacast|jsstringformat|lcase|left|len|ljustify|location|log|log10|lscurrencyformat
-      |lsdateformat|lsdatetimeformat|lsdayofweek|lseurocurrencyformat|lsiscurrency|lsisdate
-      |lsisnumeric|lsnumberformat|lsparsecurrency|lsparsedatetime|lsparseeurocurrency|lsparsenumber
-      |lstimeformat|lsweek|ltrim|max|metaphone|mid|millisecond|min|minute|month|monthasstring
-      |monthshortasstring|newline|now|nowserver|nullvalue|numberformat|onapplicationend
-      |onapplicationstart|onerror|onmissingmethod|onmissingtemplate|onrequest|onrequestend
-      |onrequeststart|onserverstart|onsessionend|onsessionstart|pagepoolclear|pagepoollist
-      |paragraphformat|parameterexists|parsedatetime|parsenumber|pi|precisionevaluate|preservesinglequotes
-      |quarter|query|quotedvaluelist|rand|randomize|randrange|reescape|refind|refindnocase
-      |releasecomobject|rematch|rematchnocase|removecachedquery|removechars|repeatstring
-      |replace|rereplace|rereplacenocase|restdeleteapplication|restinitapplication|restsetresponse
-      |reverse|right|rjustify|round|rtrim|second|sendgatewaymessage|serialize|serializejson
-      |serializexml|sessiongetmetadata|sessioninvalidate|sessionrotate|sessionstarttime
+      |k2serverdoccount|k2serverdoccountlimit|locale|localecountry|localedisplayname|localeinfo
+      |localelanguage|localhostip|luceeid|memoryusage|metadata|metricdata|numericdate|pagecontext
+      |printerinfo|printerlist|profilesections|profilestring|readableimageformats|safehtml
+      |soaprequest|soaprequestheader|soapresponse|soapresponseheader|systemfreememory|systemtotalmemory
+      |tagdata|taglist|tempdirectory|tempfile|templatepath|tickcount|timezone|timezoneinfo
+      |token|totalspace|userroles|variable|vfsmetadata|writeableimageformats)|image(?:addborder
+      |blur|clearrect|copy|createcaptcha|crop|drawarc|drawbeveledrect|drawcubiccurve|drawimage
+      |drawline|drawlines|drawoval|drawpoint|drawquadraticcurve|drawrect|drawroundrect
+      |drawtext|filter|filtercolormap|filtercurves|filterkernel|filterwarpgrid|flip|fonts
+      |formats|getblob|getbufferedimage|getexifmetadata|getexiftag|getheight|getiptcmetadata
+      |getiptctag|getmetadata|getwidth|grayscale|info|makecolortransparent|maketranslucent
+      |negative|new|overlay|paste|read|readbase64|resize|rotate|rotatedrawingaxis|scaletofit
+      |setantialiasing|setbackgroundcolor|setdrawingalpha|setdrawingcolor|setdrawingstroke
+      |setdrawingtransparency|sharpen|shear|sheardrawingaxis|translate|translatedrawingaxis
+      |write|writebase64|xordrawingmode)|is(?:array|binary|boolean|closure|customfunction
+      |date|ddx|debugmode|defined|empty|fileobject|image|imagefile|instanceof|ipinrange
+      |ipv6|json|leapyear|localhost|notmap|null|numeric|numericdate|object|pdfarchive|pdffile
+      |pdfobject|query|safehtml|simplevalue|soaprequest|spreadsheetfile|spreadsheetobject
+      |struct|userinanyrole|userinrole|userloggedin|valid|validoauthaccesstoken|videofile
+      |wddx|xml|xmlattribute|xmldoc|xmlelem|xmlnode|xmlroot|zipfile)|list(?:append|avg
+      |changedelims|compact|contains|containsnocase|deleteat|each|every|filter|find|findnocase
+      |first|getat|indexexists|insertat|itemtrim|last|len|map|prepend|qualify|reduce|removeduplicates
+      |rest|setat|some|sort|toarray|trim|valuecount|valuecountnocase)|object(?:equals|load
+      |save)|orm(?:clearsession|closeallsessions|closesession|evictcollection|evictentity
+      |evictqueries|executequery|flush|flushall|getsession|getsessionfactory|index|indexpurge
+      |reload|search|searchoffline)|query(?:addcolumn|addrow|columnarray|columncount|columndata
+      |columnexists|columnlist|convertforgrid|currentrow|deletecolumn|deleterow|each|every
+      |execute|filter|getcell|getresult|getrow|keyexists|map|new|recordcount|reduce|rowdata
+      |setcell|slice|some|sort)|replace(?:list|listnocase|nocase)|spreadsheet(?:addautofilter
+      |addcolumn|addfreezepane|addimage|addinfo|addpagebreaks|addrow|addrows|addsplitpane
+      |createsheet|deletecolumn|deletecolumns|deleterow|deleterows|formatcell|formatcellrange
+      |formatcolumn|formatcolumns|formatrow|formatrows|getcellcomment|getcellformula|getcellvalue
+      |getcolumncount|info|mergecells|new|read|readbinary|removesheet|setactivesheet|setactivesheetnumber
+      |setcellcomment|setcellformula|setcellvalue|setcolumnwidth|setfooter|setheader|setrowheight
+      |shiftcolumns|shiftrows|write)|store(?:addacl|getacl|getmetadata|setacl|setmetadata)
+      |struct(?:append|clear|copy|count|delete|each|every|filter|find|findkey|findvalue
+      |get|insert|isempty|keyarray|keyexists|keylist|keytranslate|map|new|reduce|some|sort
+      |update)|to(?:base64|binary|numeric|script|string)|transaction(?:commit|rollback
+      |setsavepoint)|url(?:decode|encode|encodedformat|sessionformat)|xml(?:childpos|elemnew
+      |format|getnodetype|new|parse|search|transform|validate)|abs|acos|addsoaprequestheader
+      |addsoapresponseheader|ajaxlink|ajaxonload|applicationstarttime|applicationstop|array
+      |asc|asin|atn|beat|binarydecode|binaryencode|bitand|bitmaskclear|bitmaskread|bitmaskset
+      |bitnot|bitor|bitshln|bitshrn|bitxor|booleanformat|bundleinfo|callstackdump|callstackget
+      |canonicalize|ceiling|cfusion_decrypt|cfusion_encrypt|charsetdecode|charsetencode
+      |chr|cjustify|collectioneach|collectionevery|collectionfilter|collectionmap|collectionreduce
+      |collectionsome|compare|comparenocase|compress|contractpath|cos|csrfgeneratetoken
+      |csrfverifytoken|ctcacheclear|ctcachelist|datasourceflushmetacache|day|dayofweek
+      |dayofweekasstring|dayofweekshortasstring|dayofyear|daysinmonth|daysinyear|de|decimalformat
+      |decodeforhtml|decodefromurl|decrementvalue|decrypt|decryptbinary|deleteclientvariable
+      |deserialize|deserializejson|deserializexml|directorycopy|directorycreate|directorydelete
+      |directoryexists|directorylist|directoryrename|directorysize|dollarformat|dotnettocftype
+      |duplicate|each|echo|empty|encodeforcss|encodefordn|encodeforhtml|encodeforhtmlattribute
+      |encodeforjavascript|encodeforldap|encodeforurl|encodeforxml|encodeforxmlattribute
+      |encodeforxpath|encrypt|encryptbinary|esapidecode|esapiencode|evaluate|exp|expandpath
+      |extract|fileappend|fileclose|filecopy|filedelete|fileexists|filegetmimetype|fileiseof
+      |filemove|fileopen|fileread|filereadbinary|filereadline|fileseek|filesetaccessmode
+      |filesetattribute|filesetlastmodified|fileskipbytes|fileupload|fileuploadall|filewrite
+      |filewriteline|find|findnocase|findoneof|firstdayofmonth|fix|floor|formatbasen|generatepbkdfkey
+      |generatesecretkey|hash|hash40|hmac|hour|htmlcodeformat|htmleditformat|htmlparse
+      |iif|incrementvalue|inputbasen|insert|int|invalidateoauthaccesstoken|invoke|javacast
+      |jsstringformat|lcase|left|len|ljustify|location|log|log10|lscurrencyformat|lsdateformat
+      |lsdatetimeformat|lsdayofweek|lseurocurrencyformat|lsiscurrency|lsisdate|lsisnumeric
+      |lsnumberformat|lsparsecurrency|lsparsedatetime|lsparseeurocurrency|lsparsenumber
+      |lstimeformat|lsweek|ltrim|manifestread|max|metaphone|mid|millisecond|min|minute
+      |month|monthasstring|monthshortasstring|newline|now|nowserver|nullvalue|numberformat
+      |onapplicationend|onapplicationstart|onerror|onmissingmethod|onmissingtemplate|onrequest
+      |onrequestend|onrequeststart|onserverstart|onsessionend|onsessionstart|pagepoolclear
+      |pagepoollist|paragraphformat|parameterexists|parsedatetime|parsenumber|pi|precisionevaluate
+      |preservesinglequotes|quarter|query|quotedvaluelist|rand|randomize|randrange|reescape
+      |refind|refindnocase|releasecomobject|rematch|rematchnocase|removecachedquery|removechars
+      |render|repeatstring|replace|rereplace|rereplacenocase|restdeleteapplication|restinitapplication
+      |restsetresponse|reverse|right|rjustify|round|rtrim|second|sendgatewaymessage|serialize
+      |serializejson|serializexml|sessiongetmetadata|sessioninvalidate|sessionrotate|sessionstarttime
       |setencoding|setlocale|setprofilestring|settimezone|setvariable|sgn|sin|sizeof|sleep
       |soundex|spanexcluding|spanincluding|sqr|sslcertificateinstall|sslcertificatelist
       |stringlen|stripcr|systemcacheclear|systemoutput|tan|threadjoin|threadterminate|throw
       |timeformat|trace|trim|truefalseformat|ucase|ucfirst|unserializejava|val|valuearray
-      |valuelist|verifyclient|week|wrap|writebody|writedump|writelog|writeoutput|wsgetallchannels
-      |wsgetsubscribers|wspublish|wssendmessage|year|yesnoformat)(?=\()
+      |valuelist|verifyclient|webservicenew|week|wrap|writebody|writedump|writelog|writeoutput
+      |wsgetallchannels|wsgetsubscribers|wspublish|wssendmessage|year|yesnoformat)(?=\()
     captures:
       1: support.function.cfml
     set:
@@ -1308,22 +1309,23 @@ contexts:
       |encodeforxmlattribute|encodeforxpath|encrypt|filter|find|findall|findallnocase|findkey
       |findnocase|findoneof|findvalue|firstdayofmonth|flip|formatcell|formatcellrange|formatcolumn
       |formatcolumns|formatrow|formatrows|getblob|getbufferedimage|getcellcomment|getcellformula
-      |getcellvalue|getexifmetadata|getexiftag|getheight|getiptcmetadata|getiptctag|getnodetype
-      |getresult|getrow|getsafehtml|gettoken|getwidth|grayscale|hour|info|insert|insertat
-      |isdefined|isempty|issafehtml|keyarray|keyexists|keylist|lcase|left|len|listappend
-      |listchangedelims|listcontains|listcontainsnocase|listdeleteat|listeach|listfind
-      |listfindnocase|listfirst|listgetat|listinsertat|listlast|listlen|listmap|listprepend
-      |listqualify|listreduce|listrest|listsetat|listsort|listtoarray|listvaluecount|listvaluecountnocase
-      |ljustify|lsdateformat|lstimeformat|map|max|mergecells|mid|min|minute|month|negative
-      |overlay|paragraphformat|paste|prepend|quarter|readbinary|reduce|removechars|removesheet
-      |repeatstring|replace|replacelist|replacelistnocase|replacenocase|resize|reverse
-      |right|rjustify|rotate|rotatedrawingaxis|scaletofit|search|second|set|setactivesheet
-      |setactivesheetnumber|setantialiasing|setbackgroundcolor|setcell|setcellcomment|setcellformula
-      |setcellvalue|setcolumnwidth|setdrawingcolor|setdrawingstroke|setdrawingtransparency
-      |setfooter|setheader|setrowheight|sharpen|shear|sheardrawingaxis|shiftcolumns|shiftrows
-      |slice|sort|spanexcluding|spanincluding|stripcr|sum|swap|timeformat|transform|translate
-      |translatedrawingaxis|trim|ucase|update|urldecode|urlencodedformat|valuearray|week
-      |wrap|write|writebase64|xordrawingmode|year|yesnoformat)(?=\()
+      |getcellvalue|getcolumncount|getexifmetadata|getexiftag|getheight|getiptcmetadata
+      |getiptctag|getnodetype|getresult|getrow|getsafehtml|gettoken|getwidth|grayscale
+      |hour|info|insert|insertat|isdefined|isempty|issafehtml|keyarray|keyexists|keylist
+      |lcase|left|len|listappend|listchangedelims|listcontains|listcontainsnocase|listdeleteat
+      |listeach|listfind|listfindnocase|listfirst|listgetat|listinsertat|listlast|listlen
+      |listmap|listprepend|listqualify|listreduce|listrest|listsetat|listsort|listtoarray
+      |listvaluecount|listvaluecountnocase|ljustify|lsdateformat|lstimeformat|map|max|mergecells
+      |mid|min|minute|month|negative|overlay|paragraphformat|paste|prepend|quarter|readbinary
+      |reduce|removechars|removesheet|repeatstring|replace|replacelist|replacelistnocase
+      |replacenocase|resize|reverse|right|rjustify|rotate|rotatedrawingaxis|scaletofit
+      |search|second|set|setactivesheet|setactivesheetnumber|setantialiasing|setbackgroundcolor
+      |setcell|setcellcomment|setcellformula|setcellvalue|setcolumnwidth|setdrawingcolor
+      |setdrawingstroke|setdrawingtransparency|setfooter|setheader|setrowheight|sharpen
+      |shear|sheardrawingaxis|shiftcolumns|shiftrows|slice|sort|spanexcluding|spanincluding
+      |stripcr|sum|swap|timeformat|transform|translate|translatedrawingaxis|trim|ucase
+      |update|urldecode|urlencodedformat|valuearray|week|wrap|write|writebase64|xordrawingmode
+      |year|yesnoformat)(?=\()
     scope: support.function.member.cfml
     set:
     - - meta_scope: meta.function-call.method.support.cfml

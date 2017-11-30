@@ -157,6 +157,9 @@ default="string";
 public void function setup( required root.model.cava.connection connection ) {}
 //                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.function.cfml
 
+private numeric function $fixNumber(required any value) {}
+//                       ^^^^^^^^^^ entity.name.function.cfml
+
   void function testme() hint="testme" {}
 //^ meta.function.declaration.cfml storage.type.return-type.void.cfml
 //                       ^ meta.function.declaration.cfml

@@ -13,11 +13,13 @@ def contexts(*contexts):
     return cfml_syntax.order_output([c for c in contexts])
 
 
-def expect(name, scope):
+def expect(name, scope, exclude_boundaries=None):
     syntax = [
-        { 'match': r'\b(?:%s)\b' % name, 'scope': scope, 'pop': True },
+        { 'match': r'(?:%s)' % name, 'scope': scope, 'pop': True },
         {'include': 'else-pop'}
     ]
+    if exclude_boundaries is None:
+        syntax[0]['match'] = r'\b' + syntax[0]['match'] + r'\b'
     return cfml_syntax.order_output(syntax)
 
 

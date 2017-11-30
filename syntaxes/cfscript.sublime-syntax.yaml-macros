@@ -584,7 +584,7 @@ contexts:
         - !meta meta.function.declaration.cfml
         - !expect_context [ 'scope:embedding.cfml#tag-generic-attribute', '[;{]' ]
         - !expect_context function-declaration-parameters
-        - !expect [ '{{identifier}}', 'entity.name.function.cfml' ]
+        - !expect [ '{{identifier}}', 'entity.name.function.cfml', 'exclude_boundaries' ]
         # waiting on the fix for https://github.com/SublimeTextIssues/Core/issues/1190 to make it out of dev
         # - !expect [ 'function', 'storage.type.function.cfml' ]
         # - !expect_context function-return-types
