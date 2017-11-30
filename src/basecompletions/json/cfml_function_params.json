@@ -49,11 +49,24 @@
     "cachedelete": {
         "throwonerror": ["true", "false"]
     },
+    "cacheget": {
+        "throwwhennotexist": ["true", "false"]
+    },
+    "cachegetdefaultcachename": {
+        "type": ["object", "resource", "template", "query"]
+    },
+    "cachegetproperties": {
+        "type": ["object", "template", "resource", "query"]
+    },
     "cachegetsession": {
         "iskey": ["true", "false"]
     },
     "cacheremove": {
+        "exact": ["true", "false"],
         "throwonerror": ["true", "false"]
+    },
+    "callstackdump": {
+        "destination": ["console", "browser", "file"]
     },
     "canonicalize": {
         "restrictmixed": ["true", "false"],
@@ -79,6 +92,7 @@
         "parallel": ["true", "false"]
     },
     "compress": {
+        "format": ["bzip", "bzip2", "tbz", "tbz2", "tar", "tar.bz", "tar.gz", "gzip", "tgz", "zip"],
         "includebasefolder": ["true", "false"]
     },
     "contractpath": {
@@ -90,8 +104,14 @@
     "csrfgeneratetoken": {
         "forcenew": ["true", "false"]
     },
+    "dateadd": {
+        "datepart": ["yyyy", "q", "m", "y", "d", "w", "ww", "h", "n", "s", "l"]
+    },
     "datecompare": {
         "datepart": ["yyyy", "m", "y", "d", "h", "n", "s"]
+    },
+    "dateconvert": {
+        "type": ["local2Utc", "utc2Local"]
     },
     "datediff": {
         "datepart": ["yyyy", "q", "m", "y", "d", "w", "ww", "h", "n", "s"]
@@ -104,6 +124,12 @@
     },
     "datetimeformat": {
         "timezone": ["UTC", "GMT", "America/Chicago"]
+    },
+    "dayofweekasstring": {
+        "day_of_week": ["1", "2", "3", "4", "5", "6", "7"]
+    },
+    "dayofweekshortasstring": {
+        "day_of_week": ["1", "2", "3", "4", "5", "6", "7"]
     },
     "decrypt": {
         "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"],
@@ -131,6 +157,9 @@
     "each": {
         "parallel": ["true", "false"]
     },
+    "empty": {
+        "variable": ["\"\"", "{}", "[]"]
+    },
     "encodeforhtml": {
         "canonicalize": ["true", "false"]
     },
@@ -138,6 +167,15 @@
         "canonicalize": ["true", "false"]
     },
     "encodeforjavascript": {
+        "canonicalize": ["true", "false"]
+    },
+    "encodeforxml": {
+        "canonicalize": ["true", "false"]
+    },
+    "encodeforxmlattribute": {
+        "canonicalize": ["true", "false"]
+    },
+    "encodeforxpath": {
         "canonicalize": ["true", "false"]
     },
     "encrypt": {
@@ -153,8 +191,18 @@
     "entityloadbyexample": {
         "unique": ["true", "false"]
     },
+    "entityloadbypk": {
+        "unique": ["true", "false"]
+    },
     "entitysave": {
         "forceinsert": ["true", "false"]
+    },
+    "extract": {
+        "format": ["bzip", "bzip2", "tbz", "tbz2", "tar", "tar.bz", "tar.gz", "gzip", "tgz", "zip"]
+    },
+    "fileopen": {
+        "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"],
+        "mode": ["read", "readBinary", "write", "append"]
     },
     "fileread": {
         "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii"]
@@ -174,17 +222,24 @@
     },
     "generatepbkdfkey": {
         "algorithm": ["PBKDF2WithHmacSHA1", "PBKDF2WithSHA1", "PBKDF2WithSHA224", "PBKDF2WithSHA256", "PBKDF2WithSHA384", "PBKDF2WithSHA512"],
-        "iterations": ["1000"]
+        "keysize": ["true", "false"]
     },
     "generatesecretkey": {
         "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"],
-        "keysize": ["128", "256"]
+        "keysize": ["128", "192", "256", "512"]
     },
     "getapplicationsettings": {
         "suppressfunction": ["true", "false"]
     },
     "getencoding": {
         "scope_name": ["form", "url"]
+    },
+    "getfunctiondata": {
+        "dialect": ["CFML", "Lucee"]
+    },
+    "getlocaleinfo": {
+        "displaylocale": ["English", "German", "French", "..."],
+        "locale": ["en", "de_DE", "de_ch", "..."]
     },
     "getmetricdata": {
         "mode": ["perf_monitor", "simple_load", "prev_req_time", "avg_req_time"]
@@ -197,6 +252,9 @@
     },
     "getsoapresponseheader": {
         "asxml": ["true", "false"]
+    },
+    "gettagdata": {
+        "dialect": ["CFML", "Lucee"]
     },
     "gettoken": {
         "delimiters": [", ", "|", "_", ";", ":"]
@@ -317,7 +375,8 @@
         "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
     },
     "listgetat": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
+        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
+        "includeemptyvalues": ["true", "false"]
     },
     "listindexexists": {
         "includeemptyfields": ["true", "false"]
@@ -398,6 +457,9 @@
     "parsedatetime": {
         "pop_conversion": ["standard", "pop"]
     },
+    "parsenumber": {
+        "radix": ["bin", "oct", "dec", "hex"]
+    },
     "queryaddcolumn": {
         "datatype": ["Integer", "Bigint", "Double", "Decimal", "Varchar", "Binary", "Bit", "Time", "Date"]
     },
@@ -437,10 +499,15 @@
     },
     "refind": {
         "returnsubexpressions": ["true", "false"],
-        "start": ["1"]
+        "scope": ["one", "all"]
     },
     "refindnocase": {
-        "returnsubexpressions": ["true", "false"]
+        "returnsubexpressions": ["true", "false"],
+        "scope": ["one", "all"]
+    },
+    "render": {
+        "cfml": [""],
+        "dialect": ["CFML", "Lucee"]
     },
     "replace": {
         "scope": ["one", "all"]
@@ -536,6 +603,9 @@
     "tobase64": {
         "encoding": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
     },
+    "tonumeric": {
+        "radix": ["2", "...", "36", "bin", "oct", "dec", "hex"]
+    },
     "toscript": {
         "asformat": ["true", "false"],
         "outputformat": ["true", "false"]
@@ -555,6 +625,7 @@
         "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
     },
     "urlencode": {
+        "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"],
         "force": ["true", "false"]
     },
     "urlencodedformat": {
@@ -586,7 +657,7 @@
         "encodefor": ["html", "htmlattribute", "javascript", "css", "xml", "xmlattribute", "url", "xpath", "ldap", "dn"]
     },
     "xmlformat": {
-        "escapenewset": ["true", "false"]
+        "escapechars": ["true", "false"]
     },
     "xmlnew": {
         "casesensitive": ["true", "false"]

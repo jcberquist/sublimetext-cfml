@@ -151,24 +151,32 @@
         }
     },
     "cfcomponent": {
-        "attributes": [[], ["accessors", "attribute", "batchsize", "bindingname", "cacheName", "cacheUse", "catalog", "discriminatorColumn", "discriminatorValue", "displayname", "dynamicinsert", "dynamicupdate", "embedded", "entityname", "extends", "hint", "implements", "initmethod", "joinColumn", "lazy", "mappedSuperClass", "namespace", "optimisticlock", "output", "persistent", "porttypename", "readonly", "rowid", "saveMapping", "schema", "selectbeforeupdate", "serializable", "serviceaddress", "serviceportname", "style", "table", "wsdlfile"]],
+        "attributes": [[], ["accessors", "attribute", "autoIndex", "batchsize", "bindingname", "cacheName", "cacheUse", "catalog", "consumes", "discriminatorColumn", "discriminatorValue", "displayname", "dynamicinsert", "dynamicupdate", "embedded", "entityname", "extends", "hint", "httpMethod", "implements", "indexLanguage", "indexable", "initmethod", "joinColumn", "lazy", "mappedSuperClass", "namespace", "optimisticlock", "output", "persistent", "porttypename", "produces", "readonly", "rest", "restPath", "rowid", "saveMapping", "schema", "selectbeforeupdate", "serializable", "serviceaddress", "serviceportname", "style", "table", "wsVersion", "wsdlfile"]],
         "attribute_values": {
             "accessors": ["true", "false"],
             "attribute": ["true", "false"],
+            "autoIndex": ["true", "false"],
             "cacheUse": ["read-only", "nonstrict-read-write", "read-write", "transactional"],
+            "consumes": ["text/plain,text/html", "..."],
             "dynamicinsert": ["true", "false"],
             "dynamicupdate": ["true", "false"],
             "embedded": ["true", "false"],
+            "httpMethod": ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
+            "indexable": ["true", "false"],
             "lazy": ["true", "false"],
             "mappedSuperClass": ["true", "false"],
             "optimisticlock": ["none", "dirty", "all", "version"],
             "output": ["true", "false"],
             "persistent": ["true", "false"],
+            "produces": ["text/plain,text/html", "..."],
             "readonly": ["true", "false"],
+            "rest": ["true", "false"],
+            "restPath": ["true", "false"],
             "saveMapping": ["true", "false"],
             "selectbeforeupdate": ["true", "false"],
             "serializable": ["true", "false"],
-            "style": ["rpc", "document"]
+            "style": ["rpc", "document"],
+            "wsVersion": ["1", "2"]
         }
     },
     "cfcontent": {
@@ -184,8 +192,9 @@
         "attribute_values": {}
     },
     "cfcookie": {
-        "attributes": [["name"], ["domain", "expires", "httpOnly", "path", "secure", "value"]],
+        "attributes": [["name"], ["domain", "encodevalue", "expires", "httpOnly", "path", "secure", "value"]],
         "attribute_values": {
+            "encodevalue": ["true", "false"],
             "httpOnly": ["true", "false"],
             "secure": ["true", "false"]
         }
@@ -342,7 +351,7 @@
         }
     },
     "cffile": {
-        "attributes": [["action"], ["accept", "addnewline", "attributes", "charset", "destination", "file", "filefield", "fixnewline", "mode", "nameconflict", "output", "result", "source", "variable"]],
+        "attributes": [["action"], ["accept", "addnewline", "attributes", "cachedwithin", "charset", "destination", "file", "filefield", "fixnewline", "mode", "nameconflict", "output", "result", "source", "variable"]],
         "attribute_values": {
             "action": ["append", "copy", "delete", "move", "read", "readbinary", "rename", "upload", "uploadall", "write"],
             "addnewline": ["true", "false"],
@@ -519,7 +528,7 @@
         }
     },
     "cfhttp": {
-        "attributes": [["url"], ["authType", "charset", "clientcert", "clientcertpassword", "columns", "compression", "delimiter", "domain", "file", "firstrowasheaders", "getasbinary", "method", "multipart", "multipartType", "name", "password", "path", "port", "proxypassword", "proxyport", "proxyserver", "proxyuser", "redirect", "resolveurl", "result", "textqualifier", "throwonerror", "timeout", "useragent", "username", "workstation"]],
+        "attributes": [["url"], ["authType", "cachedwithin", "charset", "clientcert", "clientcertpassword", "columns", "compression", "delimiter", "domain", "file", "firstrowasheaders", "getasbinary", "method", "multipart", "multipartType", "name", "password", "path", "port", "proxypassword", "proxyport", "proxyserver", "proxyuser", "redirect", "resolveurl", "result", "textqualifier", "throwonerror", "timeout", "useragent", "username", "workstation"]],
         "attribute_values": {
             "authType": ["BASIC", "NTLM"],
             "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"],
@@ -708,7 +717,7 @@
         "attribute_values": {}
     },
     "cfloop": {
-        "attributes": [[], ["array", "characters", "collection", "condition", "delimiters", "endrow", "file", "from", "group", "groupcasesensitive", "index", "item", "list", "query", "startrow", "step", "to"]],
+        "attributes": [[], ["array", "characters", "collection", "condition", "delimiters", "endrow", "file", "from", "group", "groupcasesensitive", "index", "item", "list", "query", "startrow", "step", "times", "to"]],
         "attribute_values": {
             "delimiters": [",", ";", "|", ":"]
         }
@@ -850,7 +859,7 @@
         }
     },
     "cfpdf": {
-        "attributes": [[], ["action", "addQuads", "algo", "align", "ascending", "bottomMargin", "compressTIFFs", "copyfrom", "ddxfile", "destination", "directory", "encodeAll", "encrypt", "flatten", "foreground", "format", "hScale", "hires", "honourspaces", "image", "imageprefix", "info", "inputfiles", "isBase64", "jpgdpi", "keepbookmark", "leftMargin", "maxBreadth", "maxLength", "maxScale", "name", "newOwnerPassword", "newUserPassword", "noAttachments", "noBookMarks", "noComments", "noFonts", "noJavaScripts", "noLinks", "noMetadata", "noThumbnails", "numberFormat", "opacity", "order", "outputfiles", "overridepage", "overwrite", "package", "pages", "password", "permissions", "position", "resolution", "rightMargin", "rotation", "saveoption", "scale", "showonprint", "source", "stoponerror", "text", "topMargin", "transparent", "type", "useStructure", "vScale", "version"]],
+        "attributes": [["action", "info", "order", "source"], ["addQuads", "algo", "align", "ascending", "bottomMargin", "compressTIFFs", "copyfrom", "ddxfile", "destination", "directory", "encodeAll", "encrypt", "flatten", "foreground", "format", "hScale", "hires", "honourspaces", "image", "imageprefix", "inputfiles", "isBase64", "jpgdpi", "keepbookmark", "leftMargin", "maxBreadth", "maxLength", "maxScale", "name", "newOwnerPassword", "newUserPassword", "noAttachments", "noBookMarks", "noComments", "noFonts", "noJavaScripts", "noLinks", "noMetadata", "noThumbnails", "numberFormat", "opacity", "outputfiles", "overridepage", "overwrite", "package", "pages", "password", "permissions", "position", "resolution", "rightMargin", "rotation", "saveoption", "scale", "showonprint", "stoponerror", "text", "topMargin", "transparent", "type", "useStructure", "vScale", "version"]],
         "attribute_values": {
             "action": ["addwatermark", "deletepages", "getinfo", "merge", "protect", "processddx", "read", "removewatermark", "setinfo", "thumbnail", "write", "extracttext", "extractimage", "addheader", "addfooter", "removeheaderfooter", "optimize", "transform"],
             "addQuads": ["true", "false"],
@@ -881,6 +890,7 @@
             "overwrite": ["true", "false"],
             "package": ["true", "false"],
             "permissions": ["all", "allowassembly", "allowcopy", "AllowDegradedPrinting", "AllowFillIn", "AllowModifyAnnotations", "AllowModifyContents", "AllowPrinting", "AllowScreenReaders", "AllowSecure", "none"],
+            "resolution": ["high", "low"],
             "rotation": ["0", "90", "180", "270"],
             "saveoption": ["full", "incremental", "linear"],
             "showonprint": ["true", "false"],
@@ -943,13 +953,13 @@
         }
     },
     "cfpresentationslide": {
-        "attributes": [[], ["advance", "audio", "authpassword", "authuser", "bottomMargin", "duration", "marginbottom", "marginleft", "marginright", "margintop", "notes", "presenter", "rightMargin", "scale", "slides", "src", "title", "topMargin", "useragent", "video"]],
+        "attributes": [["title"], ["advance", "audio", "authpassword", "authuser", "bottomMargin", "duration", "marginbottom", "marginleft", "marginright", "margintop", "notes", "presenter", "rightMargin", "scale", "slides", "src", "topMargin", "useragent", "video"]],
         "attribute_values": {
             "advance": ["auto", "never", "click"]
         }
     },
     "cfpresenter": {
-        "attributes": [["name"], ["biography", "email", "image", "logo", "title"]],
+        "attributes": [["biography", "name"], ["email", "image", "logo", "title"]],
         "attribute_values": {}
     },
     "cfprint": {
@@ -1025,8 +1035,9 @@
         }
     },
     "cfquery": {
-        "attributes": [[], ["blockfactor", "cacheID", "cacheRegion", "cachedafter", "cachedwithin", "clientInfo", "datasource", "dbtype", "debug", "fetchClientInfo", "maxrows", "name", "ormoptions", "password", "result", "timeout", "username"]],
+        "attributes": [[], ["blockfactor", "cacheID", "cacheRegion", "cachedafter", "cachedwithin", "clientInfo", "columnkey", "datasource", "dbtype", "debug", "fetchClientInfo", "lazy", "maxrows", "name", "ormoptions", "password", "psq", "result", "returntype", "timeout", "timezone", "username"]],
         "attribute_values": {
+            "dbtype": ["query", "hql"],
             "debug": ["true", "false"]
         }
     },
@@ -1097,7 +1108,7 @@
             "contextHighlightBegin": ["<b>", "<strong>", "<span class=\"highlight\">"],
             "contextHighlightEnd": ["</b>", "</strong>", "</span>"],
             "suggestions": ["always", "never", "5", "10"],
-            "type": ["simple", "explicit", "internet", "internet_basic", "natural", "standard", "dismax"]
+            "type": ["simple", "explicit", "internet", "internet_basic", "natural", "standard", "dismax", "Standard", "DisMax"]
         }
     },
     "cfselect": {
@@ -1221,7 +1232,7 @@
         }
     },
     "cfthread": {
-        "attributes": [[], ["action", "duration", "name", "priority", "timeout"]],
+        "attributes": [["name"], ["action", "duration", "priority", "timeout"]],
         "attribute_values": {
             "action": ["join", "run", "sleep", "terminate"],
             "priority": ["HIGH", "LOW", "NORMAL"]
