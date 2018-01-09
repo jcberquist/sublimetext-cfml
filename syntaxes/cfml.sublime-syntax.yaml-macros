@@ -45,6 +45,7 @@ contexts:
     - include: cfproperty
     - include: cfargument
     - include: custom-tags
+    - include: extension-tags
     - include: generic-tag
 
   html:
@@ -371,6 +372,24 @@ contexts:
         0: meta.tag.custom.cfml
         1: punctuation.definition.tag.begin.cfml
         2: entity.name.tag.custom.cfml
+        3: punctuation.definition.tag.end.cfml
+
+  extension-tags:
+    - match: (?i)(<)(cfx_[a-z\-_]*)
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.extension.cfml
+      push:
+        - meta_scope: meta.tag.extension.cfml
+        - match: '/?>'
+          scope: punctuation.definition.tag.end.cfml
+          pop: true
+        - include: tag-generic-attribute
+    - match: (?i)(</)(cfx_[a-z\-_]*)(>)
+      captures:
+        0: meta.tag.extension.cfml
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.extension.cfml
         3: punctuation.definition.tag.end.cfml
 
   string:

@@ -57,6 +57,9 @@
 </cf_custom_tag-test>
 <!---      ^^^^^^^^^ meta.tag.custom.cfml entity.name.tag.custom.cfml --->
 
+<cfx_MyHelloColdFusion NAME="Les">
+<!---^^^^^^^^^^^^^^^^^ meta.tag.extension.cfml entity.name.tag.extension.cfml --->
+
 <cfif col eq 1>
 <!--- ^ meta.tag.cfml source.cfml.script variable.other.readwrite.cfml --->
 
