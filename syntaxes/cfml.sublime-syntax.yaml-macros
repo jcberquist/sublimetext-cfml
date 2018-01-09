@@ -39,6 +39,7 @@ contexts:
     - include: comments
     - include: cffunction
     - include: cfoutput
+    - include: cfmail
     - include: cfquery
     - include: tags-with-script
     - include: cfscript
@@ -164,28 +165,43 @@ contexts:
           scope: punctuation.definition.tag.end.cfml
           set:
             - meta_content_scope: meta.scope.cfoutput.cfml text.html.cfml
-            - include: cfoutput-end-pop
-            - include: cfoutput-html
+            - include: cftag-end-pop
+            - include: template-expression-html
         - include: tag-generic-attribute
 
-  cfoutput-html:
-    - match: (?=\S)
+  cfmail:
+    - match: (?i)(<)(cfmail)
+      captures:
+        1: punctuation.definition.tag.begin.cfml
+        2: entity.name.tag.cfml
       push:
-        - include: scope:text.html.basic
-      with_prototype:
-        - match: (?i)(?=</cfoutput>)
-          pop: true
-        - include: template-expression
-        - include: cfmltags
+        - meta_scope: meta.tag.cfml
+        - match: '>'
+          scope: punctuation.definition.tag.end.cfml
+          set:
+            - meta_content_scope: meta.scope.cfmail.cfml text.html.cfml
+            - include: cftag-end-pop
+            - include: template-expression-html
+        - include: tag-generic-attribute
 
-  cfoutput-end-pop:
-    - match: (?i)(</)(cfoutput)(>)
+  cftag-end-pop:
+    - match: (?i)(</)(cf[a-z]+)(>)
       captures:
         0: meta.tag.cfml
         1: punctuation.definition.tag.begin.cfml
         2: entity.name.tag.cfml
         3: punctuation.definition.tag.end.cfml
       pop: true
+
+  template-expression-html:
+    - match: (?=\S)
+      push:
+        - include: scope:text.html.basic
+      with_prototype:
+        - match: (?i)(?=</cf(output|mail)>)
+          pop: true
+        - include: template-expression
+        - include: cfmltags
 
   cfproperty:
     - match: (?i)(<)(cfproperty)\b

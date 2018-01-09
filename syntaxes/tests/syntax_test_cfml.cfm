@@ -74,6 +74,11 @@
 <cfquery>BULK INSERT VAR1 FROM 'C:\#path#'</cfquery>
 <!---                             ^ source.sql string.quoted.single.sql constant.character.escape.sql  --->
 <!---                              ^ source.sql string.quoted.single.sql punctuation.definition.template-expression.begin.cfml --->
+
+<cfmail>
+#variable#
+<!--- ^ meta.scope.cfmail.cfml text.html.cfml source.cfml.script variable.other.readwrite.cfml  --->
+</cfmail>
 <cfscript>
 foo = 'hello world';
 <!--- <- embedding.cfml text.html.cfml source.cfml.script variable.other.readwrite.cfml --->
