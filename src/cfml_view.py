@@ -170,7 +170,7 @@ class CfmlView():
         return None
 
     def get_string_metadata(self, file_string):
-        return parse_cfc_file_string(file_string)
+        return buffer_metadata.parse_cfc_file_string(file_string)
 
     def find_variable_assignment(self, position, variable_name, cachable=True):
         cache_key = (position, variable_name)

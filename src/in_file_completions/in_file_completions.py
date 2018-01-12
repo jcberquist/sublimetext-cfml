@@ -26,7 +26,7 @@ def get_dot_completions(cfml_view):
                     function = cfml_view.get_function(current_function_body.begin() - 1)
                     meta = cfml_view.get_string_metadata(cfml_view.view.substr(function[2]) + "{}")
                     if "functions" in meta and function[0] in meta["functions"]:
-                        args = meta["functions"][function[0]].meta["parameters"]
+                        args = meta["functions"][function[0]]["meta"]["parameters"]
                         completions = [(arg["name"] + "\targuments", arg["name"]) for arg in args]
                         return cfml_view.CompletionList(completions, 1, True)
 
