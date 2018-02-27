@@ -306,7 +306,7 @@ contexts:
         - include: tag-generic-attribute
 
   cfmail:
-    - match: (?i)(<)(cfmail)
+    - match: (?i)(<)(cfmail)\b
       captures:
         1: punctuation.definition.tag.begin.cfml
         2: entity.name.tag.cfml
