@@ -23,6 +23,17 @@
 #now()#
 <!--- <- embedding.cfml text.html.cfml meta.scope.cfoutput.cfml text.html.cfml punctuation.definition.template-expression.begin.cfml --->
   <!--- <- embedding.cfml text.html.cfml meta.scope.cfoutput.cfml text.html.cfml source.cfml.script support.function.cfml --->
+
+      &##123;
+<!--- ^^^^^^^ constant.character.entity.decimal --->
+<!--- ^^^ punctuation.definition.entity --->
+<!---  ^^ constant.character.escape.hash.cfml --->
+<!---       ^ punctuation.definition.entity --->
+      &##x7f;
+<!--- ^^^^^^^ constant.character.entity.hexadecimal --->
+<!--- ^^^ punctuation.definition.entity --->
+<!---  ^^ constant.character.escape.hash.cfml --->
+<!---       ^ punctuation.definition.entity --->
 </cfoutput>
 
 <cfquery name="test">

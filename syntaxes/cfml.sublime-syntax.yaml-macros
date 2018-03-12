@@ -332,6 +332,7 @@ contexts:
   template-expression:
     !template_expression
     meta_content_scope: source.cfml.script
+    html_entities: true
 
   sql-template-expression:
     !template_expression

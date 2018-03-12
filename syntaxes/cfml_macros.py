@@ -147,7 +147,7 @@ def keyword_control(name, scope, meta_scope, contexts='block'):
     return cfml_syntax.order_output(syntax)
 
 
-def template_expression(meta_content_scope, clear_scopes=None):
+def template_expression(meta_content_scope, clear_scopes=None, html_entities=False):
     push_context = [
         {
             'meta_content_scope': meta_content_scope
@@ -164,23 +164,47 @@ def template_expression(meta_content_scope, clear_scopes=None):
         {
             'match': '##',
             'scope': 'constant.character.escape.hash.cfml'
-        },
-        {
-            'match': '#',
-            'scope': 'punctuation.definition.template-expression.begin.cfml',
-            'push': [
-                {
-                    'match': '#',
-                    'scope': 'punctuation.definition.template-expression.begin.cfml',
-                    'pop': True
-                },
-                {
-                    'match': r'(?=.|\n)',
-                    'push': push_context
-                }
-            ]
         }
     ]
+
+    # contexts courtesy of https://github.com/Thom1729 in the default HTML syntax
+    if html_entities:
+        syntax.extend([
+            {
+                'match': r'(&(##)[xX])(\h+)(;)',
+                'scope': 'constant.character.entity.hexadecimal.html',
+                'captures': {
+                    '1': 'punctuation.definition.entity.html',
+                    '2': 'constant.character.escape.hash.cfml',
+                    '4': 'punctuation.definition.entity.html'
+                }
+            },
+            {
+                'match': r'(&(##))([0-9]+)(;)',
+                'scope': 'constant.character.entity.decimal.html',
+                'captures': {
+                    '1': 'punctuation.definition.entity.html',
+                    '2': 'constant.character.escape.hash.cfml',
+                    '4': 'punctuation.definition.entity.html'
+                }
+            }
+        ])
+
+    syntax.append({
+        'match': '#',
+        'scope': 'punctuation.definition.template-expression.begin.cfml',
+        'push': [
+            {
+                'match': '#',
+                'scope': 'punctuation.definition.template-expression.begin.cfml',
+                'pop': True
+            },
+            {
+                'match': r'(?=.|\n)',
+                'push': push_context
+            }
+        ]
+    })
 
     return cfml_syntax.order_output(syntax)
 
