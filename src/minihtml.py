@@ -140,7 +140,7 @@ def match_style_dicts(a, b):
     return True
 
 
-def get_selector_style_map(view, selectors):    
+def get_selector_style_map(view, selectors):
     styles = {}
 
     if int(sublime.version()) > 3153:
@@ -175,7 +175,8 @@ def get_color_scheme(view=None):
             for key in ["italic", "bold"]:
                 this_scope["style"][key] = "fontStyle" in setting["settings"] and key in setting["settings"]["fontStyle"].lower()
             color_scheme["scopes"].append(this_scope)
-        else:
-            color_scheme["foreground"] = setting["settings"]["foreground"]
-            color_scheme["background"] = setting["settings"]["background"]
+        elif "settings" in setting:
+            for key in ["foreground", "background"]:
+                if key in setting["settings"]:
+                    color_scheme[key] = setting["settings"][key]
     return color_scheme
