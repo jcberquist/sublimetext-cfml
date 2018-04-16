@@ -105,7 +105,7 @@ def generate_documentation(view, docs, current_index, doc_type):
 
     if "styles" in docs[current_index].doc_html_variables:
         doc_html_variables.update(docs[current_index].doc_html_variables["styles"])
-    
+
     styles_by_selector = minihtml.get_selector_style_map(view, SELECTORS)
     for key in styles_by_selector:
         style = styles_by_selector[key]
@@ -145,7 +145,7 @@ def display_documentation(view, docs, doc_type, pt=-1, current_index=0):
             view.update_popup(doc_html)
         else:
             doc_window = "completion_doc"
-            view.show_popup(doc_html, flags=sublime.COOPERATE_WITH_AUTO_COMPLETE, on_navigate=on_navigate, on_hide=lambda: on_hide(view, doc_region_id))
+            view.show_popup(doc_html, flags=sublime.COOPERATE_WITH_AUTO_COMPLETE, max_width=768, on_navigate=on_navigate, on_hide=lambda: on_hide(view, doc_region_id))
     else:
         if doc_regions and utils.get_setting("inline_doc_regions_highlight"):
             view.add_regions(doc_region_id, merge_regions(doc_regions), "source", flags=sublime.DRAW_NO_FILL)

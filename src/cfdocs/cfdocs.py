@@ -1,5 +1,6 @@
 import sublime
 import json
+import re
 import time
 import urllib.request
 import urllib.error
@@ -38,6 +39,9 @@ def get_inline_documentation(cfml_view, doc_type):
     doc_regions = None
     doc_priority = 0
 
+    if not utils.get_setting("cfdocs_enabled"):
+        return None
+
     # functions
     if cfml_view.view.match_selector(cfml_view.position, "meta.function-call.support.cfml"):
         doc_name, function_name_region, function_args_region = cfml_view.get_function_call(cfml_view.position, True)
@@ -71,6 +75,9 @@ def get_inline_documentation(cfml_view, doc_type):
 
 
 def get_completion_docs(cfml_view):
+    if not utils.get_setting("cfdocs_enabled"):
+        return None
+
     if cfml_view.function_call_params is None:
         return None
 
@@ -91,7 +98,6 @@ def get_cfdoc(function_or_tag):
     if utils.get_setting("cfdocs_path"):
         return load_cfdoc(function_or_tag)
     return fetch_cfdoc(function_or_tag)
-
 
 def load_cfdoc(function_or_tag):
     global CFDOCS_CACHE
@@ -184,6 +190,8 @@ def build_cfdoc(function_or_tag, data):
             cfdoc["html"]["body"] += documentation_helpers.card(header, body)
             cfdoc["html"]["body"] += "\n"
 
+    cfdoc["html"]["body"] = re.sub(r'`([^`\n<>]+)`', r'<span class="code">\1</span>', cfdoc["html"]["body"])
+
     return cfdoc
 
 
@@ -223,7 +231,7 @@ def build_cfdoc_header(data, include_params=True):
 
 
 def build_cfdoc_error(function_or_tag, data):
-    cfdoc = {"styles": STYLES, "adaptive_styles": ADAPTIVE_STYLES, "html": {}}
+    cfdoc = {"side_color": SIDE_COLOR, "html": {}}
     cfdoc["html"]["side_color"] = "#F2777A"
     cfdoc["html"]["header_bg_color"] = "#FFFFFF"
     cfdoc["html"]["header"] = "Uh oh!"
