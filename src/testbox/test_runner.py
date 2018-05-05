@@ -198,7 +198,8 @@ class TestboxCommand(sublime_plugin.WindowCommand):
 
 def render_result(result_data, test_bundle, reporter):
     # lowercase all the keys since we can't guarantee the casing coming from CFML
-    result_data = lcase_keys(result_data)
+    # also convert floats to ints, since CFML might serialize ints to floats
+    result_data = preprocess(result_data)
     padToLen = 7 if reporter == "compacttext" else 0
     result_string = sublime.expand_variables(RESULT_TEMPLATES[reporter]["results"], filter_stats_dict(result_data, padToLen))
 
@@ -218,11 +219,13 @@ def render_result(result_data, test_bundle, reporter):
     return result_string
 
 
-def lcase_keys(source):
+def preprocess(source):
     if isinstance(source, dict):
-        return {k.lower(): lcase_keys(source[k]) for k in source}
+        return {k.lower(): preprocess(source[k]) for k in source}
     if isinstance(source, list):
-        return [lcase_keys(item) for item in source]
+        return [preprocess(item) for item in source]
+    if isinstance(source, float):
+        return int(source)
     return source
 
 
