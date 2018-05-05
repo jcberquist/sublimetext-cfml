@@ -1,0 +1,27 @@
+CFML v0.27.0 Changelog:
+
+- Using `CTRL+ALT+Left Click` on builtin functions and tags will now open the
+  cfdocs.org page for that function or tag in your default browser.
+
+BREAKING CHANGE
+
+- The CFScript formatting feature has been substantially overhauled.
+
+  The format settings file structure has been flattened so that it no longer
+  contains any nested objects. Instead those settings are now contained in top
+  level keys that use periods to denote namespaces. (So, for example, you will
+  see keys such as "array.padding_inside".) This change allows for more
+  granular overriding of the default settings.
+
+  In addition, this change will make the format settings compatible with
+  "PackageDev" (https://packagecontrol.io/packages/PackageDev). PackageDev
+  provides completions and popup docs for settings files, as well as more
+  targeted syntax highlighting. (For this reason I highly recommend it, even if
+  you don't intend to develop any ST packages.)
+
+  However, this means that if you are currently formatting CFScript with
+  this package, your current user defined settings WILL NOT WORK until you
+  update them to this new structure.
+
+  Please read through the default settings file to see the updated formatting
+  options.
