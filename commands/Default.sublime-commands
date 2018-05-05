@@ -24,11 +24,18 @@
         }
     },
     {
-        "caption": "CFML: Format Settings",
+        "caption": "CFML: Format CFScript - Settings",
         "command": "cfml_edit_settings",
         "args": {
             "file": "${packages}/{cfml_package_name}/settings/cfml_format.sublime-settings",
             "default": "{\n\t$0\n}\n"
+        }
+    },
+    {
+        "caption": "CFML: Format CFScript",
+        "command": "cfml_format",
+        "args": {
+            "current_method": false
         }
     },
     {

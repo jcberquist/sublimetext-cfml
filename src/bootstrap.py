@@ -22,7 +22,7 @@ from .inline_documentation import CfmlInlineDocumentationCommand
 from .method_preview import CfmlPreviewMethodCommand
 from .testbox import TestboxCommand, TestboxSpecOutlineCommand
 from .component_index import CfmlNavigateToMethodCommand
-from .formatting.cfml_format import CfmlFormatCommand, CfmlFormatMenuCommand
+from .formatting.cfml_format import CfmlFormatCommand
 
 
 def _plugin_loaded():

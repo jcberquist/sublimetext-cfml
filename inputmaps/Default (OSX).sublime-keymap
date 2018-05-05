@@ -128,17 +128,10 @@
       {"key": "selector", "operator": "equal", "operand": "source.cfml meta.class", "match_all":true}
     ]
   },
-  // formatting
   {
     "keys": ["shift+alt+f"],
     "command": "cfml_format",
-    "context": [
-      {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
-    ]
-  },
-  {
-    "keys": ["super+shift+alt+f"],
-    "command": "cfml_format_menu",
+    // "args": {"current_method": false},
     "context": [
       {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
     ]
