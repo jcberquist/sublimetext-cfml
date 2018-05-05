@@ -5,9 +5,7 @@ import time
 import urllib.request
 import urllib.error
 from collections import deque
-from .. import inline_documentation
 from .. import documentation_helpers
-from .. import minihtml
 from .. import utils
 
 CFDOCS_CACHE = {}
@@ -87,6 +85,27 @@ def get_completion_docs(cfml_view):
     return None
 
 
+def get_goto_cfml_file(cfml_view):
+    # functions
+    if cfml_view.view.match_selector(cfml_view.position, "meta.function-call.support.cfml"):
+        doc_name, function_name_region, function_args_region = cfml_view.get_function_call(cfml_view.position, True)
+
+    # tags
+    elif cfml_view.view.match_selector(cfml_view.position, "meta.tag.cfml,meta.tag.script.cfml,meta.tag.script.cf.cfml"):
+        doc_name = utils.get_tag_name(cfml_view.view, cfml_view.position)
+        if doc_name and doc_name[:2] != "cf":
+            # tag in script
+            doc_name = "cf" + doc_name
+
+    else:
+        return None
+
+    if doc_name:
+        return cfml_view.GotoCfmlFile("https://cfdocs.org/" + doc_name, None)
+
+    return None
+
+
 def get_completion_doc(cfml_view):
     data, success = get_cfdoc(cfml_view.function_call_params.function_name)
     if success:
@@ -98,6 +117,7 @@ def get_cfdoc(function_or_tag):
     if utils.get_setting("cfdocs_path"):
         return load_cfdoc(function_or_tag)
     return fetch_cfdoc(function_or_tag)
+
 
 def load_cfdoc(function_or_tag):
     global CFDOCS_CACHE
@@ -271,6 +291,6 @@ def build_completion_doc(function_call_params, data):
             else:
                 description_params.append("<span class=\"optional\">" + param["name"] + "</span>")
 
-        cfdoc["html"]["arguments"] =  "(" + ", ".join(description_params) + ")"
+        cfdoc["html"]["arguments"] = "(" + ", ".join(description_params) + ")"
 
     return cfdoc
