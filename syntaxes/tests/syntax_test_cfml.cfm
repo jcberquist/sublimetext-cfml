@@ -92,30 +92,30 @@
 </cfmail>
 <cfscript>
 foo = 'hello world';
-<!--- <- embedding.cfml text.html.cfml source.cfml.script variable.other.readwrite.cfml --->
-<!---  ^ embedding.cfml text.html.cfml source.cfml.script string.quoted.single.cfml --->
-<!---              ^ embedding.cfml text.html.cfml source.cfml.script punctuation.terminator.statement.cfml --->
+<!--- <- embedding.cfml source.cfml.script variable.other.readwrite.cfml --->
+<!---  ^ embedding.cfml source.cfml.script string.quoted.single.cfml --->
+<!---              ^ embedding.cfml source.cfml.script punctuation.terminator.statement.cfml --->
 
 arrayAppend(foo, 10);
-<!--- <- embedding.cfml text.html.cfml source.cfml.script meta.function-call.support.cfml support.function.cfml --->
-<!---      ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.section.group.begin.cfml --->
-<!---              ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.section.group.end.cfml --->
+<!--- <- embedding.cfml source.cfml.script meta.function-call.support.cfml support.function.cfml --->
+<!---      ^ embedding.cfml source.cfml.script meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.section.group.begin.cfml --->
+<!---              ^ embedding.cfml source.cfml.script meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.section.group.end.cfml --->
 myArray.append(10);
-<!---   ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.method.support.cfml support.function.member.cfml --->
-<!---         ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.method.support.cfml meta.function-call.parameters.method.support.cfml punctuation.section.group.begin.cfml --->
+<!---   ^ embedding.cfml source.cfml.script meta.function-call.method.support.cfml support.function.member.cfml --->
+<!---         ^ embedding.cfml source.cfml.script meta.function-call.method.support.cfml meta.function-call.parameters.method.support.cfml punctuation.section.group.begin.cfml --->
 myFunc();
-<!--- <- embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml variable.function.cfml --->
-<!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml meta.function-call.parameters.cfml punctuation.section.group.begin.cfml --->
+<!--- <- embedding.cfml source.cfml.script meta.function-call.cfml variable.function.cfml --->
+<!--- ^ embedding.cfml source.cfml.script meta.function-call.cfml meta.function-call.parameters.cfml punctuation.section.group.begin.cfml --->
 myFunc(10);
-<!--- <- embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml variable.function.cfml --->
-<!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml meta.function-call.parameters.cfml punctuation.section.group.begin.cfml --->
+<!--- <- embedding.cfml source.cfml.script meta.function-call.cfml variable.function.cfml --->
+<!--- ^ embedding.cfml source.cfml.script meta.function-call.cfml meta.function-call.parameters.cfml punctuation.section.group.begin.cfml --->
 myObj.addVal(10);
-<!--- <- embedding.cfml text.html.cfml source.cfml.script variable.other.object.cfml --->
-<!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.method.cfml --->
-<!---       ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.method.cfml meta.function-call.parameters.method.cfml punctuation.section.group.begin.cfml --->
+<!--- <- embedding.cfml source.cfml.script variable.other.object.cfml --->
+<!--- ^ embedding.cfml source.cfml.script meta.function-call.method.cfml --->
+<!---       ^ embedding.cfml source.cfml.script meta.function-call.method.cfml meta.function-call.parameters.method.cfml punctuation.section.group.begin.cfml --->
 myFunc().addVal(10);
-<!--- <- embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml variable.function.cfml --->
-<!--- ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.cfml meta.function-call.parameters.cfml punctuation.section.group.begin.cfml --->
-<!---    ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.method.cfml --->
-<!---          ^ embedding.cfml text.html.cfml source.cfml.script meta.function-call.method.cfml meta.function-call.parameters.method.cfml punctuation.section.group.begin.cfml --->
+<!--- <- embedding.cfml source.cfml.script meta.function-call.cfml variable.function.cfml --->
+<!--- ^ embedding.cfml source.cfml.script meta.function-call.cfml meta.function-call.parameters.cfml punctuation.section.group.begin.cfml --->
+<!---    ^ embedding.cfml source.cfml.script meta.function-call.method.cfml --->
+<!---          ^ embedding.cfml source.cfml.script meta.function-call.method.cfml meta.function-call.parameters.method.cfml punctuation.section.group.begin.cfml --->
 </cfscript>

@@ -1,5 +1,5 @@
 import re
-from CFML.syntaxes import cfml_syntax
+from . import cfml_syntax
 
 def meta(scope):
     syntax = [

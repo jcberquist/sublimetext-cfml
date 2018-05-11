@@ -1,6 +1,5 @@
 %YAML 1.2
-%TAG ! tag:yaml-macros:cfml_macros:
-
+%TAG ! tag:yaml-macros:CFML.syntaxes.macros.cfml_macros:
 ---
 # Acknowledgments
 #
@@ -10,10 +9,8 @@
 #   https://github.com/Benvie/JavaScriptNext.tmLanguage
 # Default JavaScript syntax:
 #   https://github.com/sublimehq/Packages/blob/master/JavaScript/JavaScript.sublime-syntax
-#   (thanks to Will Bond (@wbond) for his *awesome* JavaScript syntax rewrite
-#
-#   https://github.com/sublimehq/Packages/pull/1009
-#   (thanks to Thomas Smith (@Thom1729) and his work on the JavaScript syntax)
+#   Thank you Will Bond (@wbond) and Thomas Smith (@Thom1729)
+#   for an awesome syntax to base this on.
 
 name: CFML Script
 scope: source.cfml.script
