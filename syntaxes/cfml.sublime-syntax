@@ -158,7 +158,7 @@ contexts:
         - match: '>'
           scope: punctuation.definition.tag.end.cfml
           set:
-            - meta_content_scope: meta.function.body.tag.cfml text.html.cfml
+            - meta_content_scope: meta.function.body.tag.cfml
             - include: cffunction-end-pop
             - include: html
         - match: (?i:\b(?:name)\b)
@@ -443,11 +443,10 @@ contexts:
         - match: '>'
           scope: punctuation.definition.tag.end.cfml
           set:
-            - clear_scopes: 1
             - meta_content_scope: source.cfml.script
             - match: (?i)(</)(cfscript)(>)
               captures:
-                0: text.html.cfml meta.tag.cfml
+                0: meta.tag.cfml
                 1: punctuation.definition.tag.begin.cfml
                 2: entity.name.tag.cfml
                 3: punctuation.definition.tag.end.cfml
@@ -459,14 +458,13 @@ contexts:
   tags-with-script:
     - match: (?i)(<)(cfset|cfreturn|cfif|cfelseif)\b
       captures:
-        0: text.html.cfml meta.tag.cfml
+        0: meta.tag.cfml
         1: punctuation.definition.tag.begin.cfml
         2: entity.name.tag.cfml
       push:
-        - clear_scopes: 1
         - meta_content_scope: meta.tag.cfml source.cfml.script
         - match: (/?>)
-          scope: text.html.cfml meta.tag.cfml punctuation.definition.tag.end.cfml
+          scope: meta.tag.cfml punctuation.definition.tag.end.cfml
           pop: true
         - match: \bvar\b
           scope: storage.type.cfml

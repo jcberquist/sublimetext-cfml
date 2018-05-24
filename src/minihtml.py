@@ -94,7 +94,7 @@ def render_span(span, styles, style_map):
             span_html = "<em>" + span_html + "</em>"
 
         if span["style"]["bold"]:
-            span_html = "<stron>" + span_html + "</strong>"
+            span_html = "<strong>" + span_html + "</strong>"
 
         span_html = start_span + span_html + "</span>"
 

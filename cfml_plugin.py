@@ -1,5 +1,6 @@
 import sublime
 import sublime_plugin
+from HTML.html_completions import HtmlTagCompletions
 from .src.bootstrap import *
 from .src.bootstrap import _plugin_loaded
 from .src import completions, events, utils
@@ -119,3 +120,24 @@ class CfmlEditSettingsCommand(sublime_plugin.WindowCommand):
     def run(self, file, default):
         package_file = file.replace("{cfml_package_name}", utils.get_plugin_name())
         self.window.run_command("edit_settings", {"base_file": package_file, "default": default})
+
+
+class CustomHtmlTagCompletions(HtmlTagCompletions):
+    '''
+    There is no text.html scope in <cffunction> bodies, so this
+    allows the HTML completions to still function there
+    '''
+
+    def on_query_completions(self, view, prefix, locations):
+        if not utils.get_setting("html_completions_in_tag_components"):
+            return None
+
+        # Only trigger within CFML tag component functions
+        selector = 'meta.class.body.tag.cfml meta.function.body.tag.cfml -source.cfml.script -source.sql'
+        if not view.match_selector(locations[0], selector):
+            return None
+
+        # check if we are inside a tag
+        is_inside_tag = view.match_selector(locations[0], 'meta.tag - punctuation.definition.tag.begin')
+
+        return self.get_completions(view, prefix, locations, is_inside_tag)

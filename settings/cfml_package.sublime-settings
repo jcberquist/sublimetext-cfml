@@ -27,6 +27,9 @@
 	// e.g. myvar = new path.to.cfc();
 	"instantiated_component_completions": true,
 
+	// provide HTML completions in tag component functions
+	"html_completions_in_tag_components": true,
+
 	// if true, when a ">" is typed to end a tag the corresponding closing tag will be inserted	after the cursor position,
 	// except for the cfml tags listed in the "cfml_non_closing_tags" setting below
 	"cfml_auto_insert_closing_tag": false,
