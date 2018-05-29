@@ -99,10 +99,10 @@ def format_keywords(cfml_format):
 
         if not next_char_is_block:
             next_char = cfml_format.view.substr(next_char_pt)
-            if to_next_char.size() == 0 and next_char != ';':
+            if to_next_char.size() != 1 and next_char not in [';', ':']:
                 replacement_str = ' '
                 substitutions.append((to_next_char, replacement_str))
-            elif to_next_char.size() > 0 and next_char == ';':
+            elif to_next_char.size() > 0 and next_char in [';', ':']:
                 replacement_str = ''
                 substitutions.append((to_next_char, replacement_str))
             continue

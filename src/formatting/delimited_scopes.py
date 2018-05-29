@@ -286,7 +286,6 @@ def render_delimited_scope(cfml_format, ds, indent_column, ds_start_column, anon
 
     el_indent_col = indent_column + cfml_format.tab_size
     rendered_elements = [render_ds_element(cfml_format, e, el_indent_col, el_indent_col, anon_functs) for e in ds.elements]
-
     leading_comma = cfml_format.get_setting(ds.scope_type + '.multiline.leading_comma')
     after_comma_spacing = cfml_format.get_setting(ds.scope_type + '.after_comma_spacing')
 

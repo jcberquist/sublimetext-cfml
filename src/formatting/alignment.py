@@ -15,13 +15,21 @@ end_indent_selectors = [
     'punctuation.section.group.end.cfml'
 ]
 
+non_indent_regions = [
+    'embedding.cfml -source.cfml.script',
+    'comment.block.cfml -punctuation.definition.comment.cfml',
+    'meta.string -punctuation.definition.string.begin'
+]
+
+switch_block_end = 'meta.switch.cfml meta.block.cfml punctuation.section.block.end.cfml'
+
 
 def indent_region(cfml_format):
     start_indent_selector = ','.join(start_indent_selectors)
     end_indent_selector = ','.join(end_indent_selectors)
     accessor_selector = 'punctuation.accessor.cfml'
 
-    non_cfscript_regions = cfml_format.view.find_by_selector('embedding.cfml -source.cfml.script')
+    non_cfscript_regions = cfml_format.view.find_by_selector(','.join(non_indent_regions))
     non_cfscript_lines = []
     for r in non_cfscript_regions:
         non_cfscript_lines.extend(cfml_format.view.split_by_newlines(r))
@@ -32,13 +40,14 @@ def indent_region(cfml_format):
 
     indent_level = 0
     leading_comma_flag = False
+    switch_case_flag = None
     replacements = []
 
     if lines[0].begin() < cfml_format.region_to_format.begin():
         first_line_str = cfml_format.view.substr(lines[0])
         first_line_stripped = first_line_str.rstrip()
         if first_line_stripped[-1] in ['{', '(', '[']:
-            last_char_pt = lines[0].begin() + len(first_line_stripped.rstrip()) - 1
+            last_char_pt = lines[0].begin() + len(first_line_stripped) - 1
             if cfml_format.view.match_selector(last_char_pt, start_indent_selector):
                 indent_level += 1
         lines = lines[1:]
@@ -57,10 +66,24 @@ def indent_region(cfml_format):
         first_line_char = stripped_line_str[0]
 
         if first_line_char in ['}', ')', ']', ',', '.']:
-            first_char_pt = l.begin() + full_line_str.index(stripped_line_str[0])
+            first_char_pt = l.begin() + full_line_str.index(first_line_char)
 
         if first_line_char in ['}', ')', ']'] and cfml_format.view.match_selector(first_char_pt, end_indent_selector):
             indent_level -= 1
+
+        if first_line_char == '}' and switch_case_flag == 'case_block':
+            scope_name = cfml_format.view.scope_name(first_char_pt)
+            if scope_name.strip().endswith(switch_block_end):
+                switch_case_flag = None
+                indent_level -= 1
+
+        if stripped_line_str[-1] == ':':
+            last_char_pt = l.begin() + len(full_line_str.rstrip()) - 1
+            scope_name = cfml_format.view.scope_name(last_char_pt)
+            if scope_name.strip().endswith('meta.switch.cfml meta.block.cfml punctuation.separator.cfml'):
+                if switch_case_flag == 'case_block':
+                    indent_level -= 1
+                switch_case_flag = 'case_start'
 
         indent_columns = base_indent_column + (cfml_format.tab_size * indent_level)
 
@@ -89,6 +112,10 @@ def indent_region(cfml_format):
             last_char_pt = l.begin() + len(full_line_str.rstrip()) - 1
             if cfml_format.view.match_selector(last_char_pt, start_indent_selector):
                 indent_level += 1
+
+        if switch_case_flag == 'case_start':
+            indent_level += 1
+            switch_case_flag = 'case_block'
 
     replacement_str = '\n'.join(replacements)
 
