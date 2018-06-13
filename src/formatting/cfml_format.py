@@ -92,27 +92,15 @@ class CfmlFormatCommand(sublime_plugin.TextCommand):
             return self.view.sel()[0], True
         if current_method:
             pt = self.view.sel()[0].begin()
-            cfc_selector = 'source.cfml.script meta.class'
-            decl_selector = 'source.cfml.script meta.class.body.cfml meta.function.declaration.cfml'
-            body_selector = 'source.cfml.script meta.class.body.cfml meta.function.body.cfml'
+            cfc_selector = 'source.cfml meta.class'
+            funct_selector = 'source.cfml meta.class meta.function'
 
-            in_cfc = self.view.match_selector(pt, cfc_selector)
-            in_funct_decl = self.view.match_selector(pt, decl_selector)
-            in_funct_body = self.view.match_selector(pt, body_selector)
+            if self.view.match_selector(pt, funct_selector):
+                for function_region in self.view.find_by_selector(funct_selector):
+                    if function_region.contains(pt):
+                        return function_region, False
 
-            if in_funct_decl or in_funct_body:
-                if in_funct_body:
-                    funct_body_region = utils.get_scope_region_containing_point(self.view, pt, body_selector)
-                    funct_decl_pt = funct_body_region.begin() - 1
-                    funct_decl_region = utils.get_scope_region_containing_point(self.view, funct_decl_pt, decl_selector)
-                else:
-                    funct_decl_region = utils.get_scope_region_containing_point(self.view, pt, decl_selector)
-                    funct_body_pt = funct_decl_region.end()
-                    funct_body_region = utils.get_scope_region_containing_point(self.view, funct_body_pt, body_selector)
-
-                function_region = sublime.Region(funct_decl_region.begin(), funct_body_region.end())
-                return function_region, False
-            if in_cfc:
+            if self.view.match_selector(pt, cfc_selector):
                 return None, False
 
         return sublime.Region(0, self.view.size()), False

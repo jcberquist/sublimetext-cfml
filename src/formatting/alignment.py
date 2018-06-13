@@ -15,8 +15,9 @@ end_indent_selectors = [
     'punctuation.section.group.end.cfml'
 ]
 
-non_indent_regions = [
-    'embedding.cfml -source.cfml.script',
+non_script_selector = 'embedding.cfml -source.cfml.script'
+
+non_indent_selector = [
     'comment.block.cfml -punctuation.definition.comment.cfml',
     'meta.string -punctuation.definition.string.begin'
 ]
@@ -29,11 +30,18 @@ def indent_region(cfml_format):
     end_indent_selector = ','.join(end_indent_selectors)
     accessor_selector = 'punctuation.accessor.cfml'
 
-    non_cfscript_regions = cfml_format.view.find_by_selector(','.join(non_indent_regions))
-    non_cfscript_lines = []
+    non_cfscript_regions = cfml_format.view.find_by_selector(non_script_selector)
+    non_indent_regions = cfml_format.view.find_by_selector(','.join(non_indent_selector))
+    non_cfscript_line_starts = set()
+    non_indent_line_starts = set()
+
     for r in non_cfscript_regions:
-        non_cfscript_lines.extend(cfml_format.view.split_by_newlines(r))
-    non_cfscript_line_starts = [r.begin() for r in non_cfscript_lines]
+        for l in cfml_format.view.split_by_newlines(r):
+            non_cfscript_line_starts.add(l.begin())
+
+    for r in non_indent_regions:
+        for l in cfml_format.view.split_by_newlines(r):
+            non_indent_line_starts.add(l.begin())
 
     lines = cfml_format.view.lines(cfml_format.region_to_format)
     base_indent_column = cfml_format.line_indent_column(lines[0].begin())
@@ -52,12 +60,18 @@ def indent_region(cfml_format):
                 indent_level += 1
         lines = lines[1:]
 
-    if lines[-1].end() > cfml_format.region_to_format.end():
+    if len(lines) > 0 and lines[-1].end() > cfml_format.region_to_format.end():
         lines = lines[:-1]
+
+    if len(lines) == 0:
+        return []
 
     for l in lines:
         full_line_str = cfml_format.view.substr(l)
         stripped_line_str = full_line_str.strip()
+
+        if l.begin() in non_cfscript_line_starts:
+            base_indent_column = cfml_format.line_indent_column(l.begin())
 
         if len(stripped_line_str) == 0:
             replacements.append(stripped_line_str)
@@ -103,7 +117,7 @@ def indent_region(cfml_format):
 
         indented_line = cfml_format.indent_to_column(indent_columns) + stripped_line_str
 
-        if l.begin() in non_cfscript_line_starts:
+        if l.begin() in non_cfscript_line_starts or l.begin() in non_indent_line_starts:
             replacements.append(full_line_str)
         else:
             replacements.append(indented_line)

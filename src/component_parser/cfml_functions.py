@@ -61,8 +61,11 @@ def find_script_functions(file_string, cfscript_range):
 
         attributes = ''
         func_body_range = params_range.parent.next_child_range(params_range.end, ['curly_brackets', 'semicolon'])
-        attributes = file_string[params_range.end:func_body_range.start]
-        l.append(attributes)
+        if func_body_range:
+            attributes = file_string[params_range.end:func_body_range.start]
+            l.append(attributes)
+        else:
+            l.append('')
 
         functions.append(parse_script_function(regex.ScriptFunction._make(l)))
     return functions

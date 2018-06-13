@@ -40,7 +40,7 @@ def format_method_chains(cfml_format):
 
 def find_method_chains(cfml_format):
     method_chains = []
-    regions = cfml_format.find_by_selector('meta.function-call.method -meta.function-call.method.static')
+    regions = cfml_format.find_by_selector('source.cfml.script meta.function-call.method -meta.function-call.method.static')
 
     if len(regions) == 0:
         return method_chains
