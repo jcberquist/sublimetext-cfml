@@ -1,7 +1,17 @@
 import sublime
 from ruamel.yaml.comments import CommentedMap
 
-ORDERED_KEYS = ['meta_scope', 'meta_content_scope', 'match', 'scope', 'captures', 'push', 'set', 'pop']
+ORDERED_KEYS = [
+    'meta_scope',
+    'meta_content_scope',
+    'match',
+    'scope',
+    'captures',
+    'push',
+    'set',
+    'pop',
+]
+
 
 def order_output(syntax):
     def keysort(i):
@@ -22,6 +32,7 @@ def order_output(syntax):
         return [order_output(item) for item in syntax]
     return syntax
 
+
 def attribute_value_string(char, scope, value_scope):
     syntax = {
         'match': char,
@@ -29,69 +40,57 @@ def attribute_value_string(char, scope, value_scope):
         'set': [
             [
                 {
-                    'meta_scope': 'meta.string.quoted.{scope}.cfml string.quoted.{scope}.cfml'.format(scope = scope)
+                    'meta_scope': 'meta.string.quoted.{scope}.cfml string.quoted.{scope}.cfml'.format(
+                        scope=scope
+                    )
                 },
                 {
                     'match': char,
                     'scope': 'punctuation.definition.string.end.cfml',
-                    'pop': True
-                }
+                    'pop': True,
+                },
             ]
-        ]
+        ],
     }
 
     if '.' in value_scope and 'scope:' not in value_scope:
         # we have a scope name
-        syntax['set'].append([
-            {
-                'meta_content_scope': value_scope
-            },
-            {
-                'match': char * 2,
-                'scope': 'constant.character.escape.quote.cfml',
-            },
-            {
-                'match': r'(?=%s)' % char,
-                'pop': True
-            }
-        ])
+        syntax['set'].append(
+            [
+                {'meta_content_scope': value_scope},
+                {'match': char * 2, 'scope': 'constant.character.escape.quote.cfml'},
+                {'match': r'(?=%s)' % char, 'pop': True},
+            ]
+        )
     else:
         # this is a context
-        syntax['set'].append([
-            {'include': value_scope},
-            {'include': 'else-pop'}
-        ])
+        syntax['set'].append([{'include': value_scope}, {'include': 'else-pop'}])
 
     return syntax
+
 
 def attribute_value_unquoted(value_scope):
     syntax = {
         'match': r'(?=[A-Za-z0-9\-_.$])',
         'set': [
             [
-                { 'meta_scope': 'meta.string.unquoted.cfml string.unquoted.cfml' },
-                { 'include': 'immediately-pop' }
+                {'meta_scope': 'meta.string.unquoted.cfml string.unquoted.cfml'},
+                {'include': 'immediately-pop'},
             ]
-        ]
+        ],
     }
 
     if '.' in value_scope and 'scope:' not in value_scope:
         # we have a scope name
-        syntax['set'].append([
-            {
-                'meta_scope': value_scope
-            },
-            {
-                'match': r'(?=[^A-Za-z0-9\-_.$])',
-                'pop': True
-            }
-        ])
+        syntax['set'].append(
+            [
+                {'meta_scope': value_scope},
+                {'match': r'(?=[^A-Za-z0-9\-_.$])', 'pop': True},
+            ]
+        )
     else:
         # this is a context
-        syntax['set'].append([
-            {'include': value_scope},
-            {'include': 'else-pop'}
-        ])
+        syntax['set'].append([{'include': value_scope}, {'include': 'else-pop'}])
 
     return syntax
 
@@ -122,15 +121,20 @@ def load_tag_list():
         'sleep',
         'switch',
         'try',
-        'while'
+        'while',
     ]
-    tags = sublime.load_resource("Packages/CFML/src/basecompletions/json/cfml_tags.json")
+    tags = sublime.load_resource(
+        "Packages/CFML/src/basecompletions/json/cfml_tags.json"
+    )
     tags = sublime.decode_value(tags).keys()
     return [t.lower()[2:] for t in tags if t.lower()[2:] not in tags_to_filter]
 
+
 def load_functions():
 
-    functions = sublime.load_resource("Packages/CFML/src/basecompletions/json/cfml_functions.json")
+    functions = sublime.load_resource(
+        "Packages/CFML/src/basecompletions/json/cfml_functions.json"
+    )
     keys = [k.lower() for k in sublime.decode_value(functions)]
 
     prefixes = [
@@ -154,7 +158,7 @@ def load_functions():
         'is',
         'store',
         'to',
-        'replace'
+        'replace',
     ]
 
     prefixed = {}
@@ -163,7 +167,7 @@ def load_functions():
     for item in sorted(keys):
         for prefix in prefixes:
             if item.startswith(prefix) and len(item) > len(prefix):
-                prefixed.setdefault(prefix, []).append(item[len(prefix):])
+                prefixed.setdefault(prefix, []).append(item[len(prefix) :])
                 break
         else:
             non_prefixed.append(item)
@@ -174,7 +178,9 @@ def load_functions():
 def load_member_functions():
 
     member_functions = set()
-    data = sublime.load_resource("Packages/CFML/src/basecompletions/json/cfml_member_functions.json")
+    data = sublime.load_resource(
+        "Packages/CFML/src/basecompletions/json/cfml_member_functions.json"
+    )
     data = sublime.decode_value(data)
 
     for member_type in data:
@@ -182,4 +188,3 @@ def load_member_functions():
         member_functions.update(methods)
 
     return list(member_functions)
-
