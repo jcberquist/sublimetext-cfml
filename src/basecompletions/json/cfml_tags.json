@@ -42,7 +42,7 @@
         "attributes": [["name"], ["default", "displayname", "hint", "required", "type"]],
         "attribute_values": {
             "required": ["true", "false"],
-            "type": ["any", "array", "binary", "boolean", "date", "guid", "numeric", "query", "string", "struct", "uuid", "xml", "variablename", "(component name)"]
+            "type": ["any", "array", "binary", "boolean", "date", "guid", "numeric", "query", "string", "struct", "uuid", "xml", "variablename", "function", "(component name)"]
         }
     },
     "cfassociate": {
@@ -77,9 +77,7 @@
     },
     "cfcase": {
         "attributes": [["value"], ["delimiters"]],
-        "attribute_values": {
-            "delimiters": [",", ";", "|", ":"]
-        }
+        "attribute_values": {}
     },
     "cfcatch": {
         "attributes": [[], ["type"]],
@@ -129,11 +127,11 @@
         }
     },
     "cfclient": {
-        "attributes": [[""], []],
+        "attributes": [[], []],
         "attribute_values": {}
     },
     "cfclientsettings": {
-        "attributes": [["detectDevice", "deviceTimeout", "enableDeviceAPI"], []],
+        "attributes": [[], ["detectDevice", "deviceTimeout", "enableDeviceAPI"]],
         "attribute_values": {}
     },
     "cfcol": {
@@ -485,8 +483,7 @@
             "italic": ["true", "false"],
             "select": ["true", "false"],
             "textcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
-            "type": ["string_noCase", "Boolean", "numeric", "date", "combobox", "image"],
-            "valuesdelimiter": [",  ", ";", "|", ":"]
+            "type": ["string_noCase", "Boolean", "numeric", "date", "combobox", "image"]
         }
     },
     "cfgridrow": {
@@ -532,7 +529,6 @@
         "attribute_values": {
             "authType": ["BASIC", "NTLM"],
             "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"],
-            "delimiter": [",", ";", "|", ":"],
             "firstrowasheaders": ["true", "false"],
             "getasbinary": ["auto", "false", "true"],
             "method": ["get", "post", "put", "delete", "head", "trace", "options", "patch"],
@@ -673,12 +669,10 @@
         "attributes": [["server"], ["action", "attributes", "clientcert", "clientcertpassword", "delimiter", "dn", "filter", "maxrows", "modifytype", "name", "password", "port", "rebind", "referral", "returnasbinary", "scope", "secure", "separator", "sort", "sortcontrol", "start", "startrow", "timeout", "username", "usetls"]],
         "attribute_values": {
             "action": ["query", "add", "modify", "modifyDN", "delete"],
-            "delimiter": [",", ";", "|", ":"],
             "modifytype": ["add", "delete", "replace"],
             "rebind": ["true", "false"],
             "scope": ["onelevel", "base", "subtree"],
             "secure": ["CFSSL_BASIC"],
-            "separator": [",", ";", "|", ":"],
             "sortcontrol": ["nocase", "asc", "desc", "nocase, desc", "nocase, asc"]
         }
     },
@@ -718,9 +712,7 @@
     },
     "cfloop": {
         "attributes": [[], ["array", "characters", "collection", "condition", "delimiters", "endrow", "file", "from", "group", "groupcasesensitive", "index", "item", "list", "query", "startrow", "step", "times", "to"]],
-        "attribute_values": {
-            "delimiters": [",", ";", "|", ":"]
-        }
+        "attribute_values": {}
     },
     "cfmail": {
         "attributes": [["from", "subject", "to"], ["bcc", "cc", "charset", "debug", "encrypt", "encryptionalgorithm", "failto", "group", "groupcasesensitive", "keyalias", "keypassword", "keystore", "keystorepassword", "mailerid", "maxrows", "mimeattach", "password", "port", "priority", "query", "recipientcert", "remove", "replyto", "server", "sign", "spoolenable", "startrow", "timeout", "type", "username", "usessl", "usetls", "wraptext"]],
@@ -861,7 +853,7 @@
     "cfpdf": {
         "attributes": [["action", "info", "order", "source"], ["addQuads", "algo", "align", "ascending", "bottomMargin", "compressTIFFs", "copyfrom", "ddxfile", "destination", "directory", "encodeAll", "encrypt", "flatten", "foreground", "format", "hScale", "hires", "honourspaces", "image", "imageprefix", "inputfiles", "isBase64", "jpgdpi", "keepbookmark", "leftMargin", "maxBreadth", "maxLength", "maxScale", "name", "newOwnerPassword", "newUserPassword", "noAttachments", "noBookMarks", "noComments", "noFonts", "noJavaScripts", "noLinks", "noMetadata", "noThumbnails", "numberFormat", "opacity", "outputfiles", "overridepage", "overwrite", "package", "pages", "password", "permissions", "position", "resolution", "rightMargin", "rotation", "saveoption", "scale", "showonprint", "stoponerror", "text", "topMargin", "transparent", "type", "useStructure", "vScale", "version"]],
         "attribute_values": {
-            "action": ["addwatermark", "deletepages", "getinfo", "merge", "protect", "processddx", "read", "removewatermark", "setinfo", "thumbnail", "write", "extracttext", "extractimage", "addheader", "addfooter", "removeheaderfooter", "optimize", "transform"],
+            "action": ["archive", "addAttachments", "addStamp", "addWatermark", "deletePages", "export", "getInfo", "import", "merge", "processddx", "protect", "read", "removeWatermark", "sanitize", "setInfo", "sign", "thumbnail", "write", "optimize", "extracttext", "extractimage", "addheader", "addfooter", "removeheaderfooter", "transform", "unsign", "validatesignature", "readsignaturefields"],
             "addQuads": ["true", "false"],
             "algo": ["Bicubic", "Bilinear", "Nearest_Neighbour"],
             "align": ["right", "left", "center"],
@@ -931,9 +923,9 @@
         }
     },
     "cfpop": {
-        "attributes": [["server"], ["action", "attachmentpath", "generateUniqueFileNames", "maxrows", "messagenumber", "name", "password", "port", "startrow", "timeout", "uid", "username"]],
+        "attributes": [["server"], ["action", "attachmentpath", "delimiter", "generateUniqueFileNames", "maxrows", "messagenumber", "name", "password", "port", "secure", "startrow", "timeout", "uid", "username"]],
         "attribute_values": {
-            "action": ["getHeaderOnly", "getAll", "delete"],
+            "action": ["getHeaderOnly", "getAll", "delete", "markRead"],
             "generateUniqueFileNames": ["true", "false"]
         }
     },
@@ -1044,10 +1036,9 @@
     "cfqueryparam": {
         "attributes": [[], ["cfsqltype", "list", "maxlength", "null", "scale", "separator", "value"]],
         "attribute_values": {
-            "cfsqltype": ["cf_sql_bigint", "cf_sql_bit", "cf_sql_char", "cf_sql_blob", "cf_sql_clob", "cf_sql_date", "cf_sql_decimal", "cf_sql_double", "cf_sql_float", "cf_sql_idstamp", "cf_sql_integer", "cf_sql_longvarchar", "cf_sql_longnvarchar", "cf_sql_money", "cf_sql_money4", "cf_sql_numeric", "cf_sql_real", "cf_sql_refcursor", "cf_sql_smallint", "cf_sql_time", "cf_sql_timestamp", "cf_sql_tinyint", "cf_sql_varchar", "cf_sql_nvarchar", "integer", "varchar", "timestamp", "date"],
+            "cfsqltype": ["cf_sql_bigint", "cf_sql_bit", "cf_sql_char", "cf_sql_blob", "cf_sql_clob", "cf_sql_date", "cf_sql_decimal", "cf_sql_double", "cf_sql_float", "cf_sql_idstamp", "cf_sql_integer", "cf_sql_longvarchar", "cf_sql_longnvarchar", "cf_sql_money", "cf_sql_money4", "cf_sql_numeric", "cf_sql_real", "cf_sql_refcursor", "cf_sql_smallint", "cf_sql_time", "cf_sql_timestamp", "cf_sql_tinyint", "cf_sql_varchar", "cf_sql_nvarchar", "bigint", "bit", "char", "blob", "clob", "date", "decimal", "double", "float", "idstamp", "integer", "longvarchar", "longnvarchar", "money", "money4", "numeric", "real", "refcursor", "smallint", "time", "timestamp", "tinyint", "varchar", "nvarchar"],
             "list": ["true", "false"],
-            "null": ["true", "false"],
-            "separator": [",", ";", "|", ":"]
+            "null": ["true", "false"]
         }
     },
     "cfregistry": {
@@ -1105,9 +1096,7 @@
     "cfsearch": {
         "attributes": [["collection", "name"], ["category", "categorytree", "contextBytes", "contextHighlightBegin", "contextHighlightEnd", "contextPassages", "criteria", "language", "maxrows", "previousCriteria", "startrow", "status", "suggestions", "type"]],
         "attribute_values": {
-            "contextHighlightBegin": ["<b>", "<strong>", "<span class=\"highlight\">"],
-            "contextHighlightEnd": ["</b>", "</strong>", "</span>"],
-            "suggestions": ["always", "never", "5", "10"],
+            "suggestions": ["always", "never"],
             "type": ["simple", "explicit", "internet", "internet_basic", "natural", "standard", "dismax", "Standard", "DisMax"]
         }
     },
@@ -1281,7 +1270,6 @@
             "border": ["true", "false"],
             "cache": ["true", "false"],
             "completepath": ["true", "false"],
-            "delimiter": ["\\\\", ", ", ";", "|", ":"],
             "enabled": ["true", "false"],
             "font": ["arial", "times", "courier", "arialunicodeMS"],
             "format": ["applet", "flash", "html", "object", "xml"],

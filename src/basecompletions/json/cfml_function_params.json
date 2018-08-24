@@ -12,7 +12,6 @@
         "scope": ["one", "all"]
     },
     "arrayeach": {
-        "maxthreads": ["true", "false"],
         "parallel": ["true", "false"]
     },
     "arrayevery": {
@@ -20,7 +19,9 @@
         "parallel": ["true", "false"]
     },
     "arrayfilter": {
-        "maxthreads": ["true", "false"],
+        "parallel": ["true", "false"]
+    },
+    "arraymap": {
         "parallel": ["true", "false"]
     },
     "arraymerge": {
@@ -28,20 +29,20 @@
     },
     "arraynew": {
         "dimension": ["1", "2", "3"],
-        "unsynchronized": ["true", "false"]
+        "issynchronized": ["true", "false"]
     },
     "arraysome": {
         "parallel": ["true", "false"]
     },
     "arraysort": {
-        "sort_order": ["asc", "desc"],
-        "sort_type": ["numeric", "text", "textnocase"]
+        "sortorder": ["asc", "desc"],
+        "sorttype": ["numeric", "text", "textnocase"]
     },
-    "arraytolist": {
-        "delimiter": [", ", "|", "_", ";", ":"]
+    "arraysum": {
+        "ignoreempty": ["true", "false"]
     },
     "binarydecode": {
-        "binaryencoding": ["hex", "uu", "base64"]
+        "encoding": ["hex", "uu", "base64"]
     },
     "binaryencode": {
         "encoding": ["hex", "uu", "base64"]
@@ -116,9 +117,6 @@
     "datediff": {
         "datepart": ["yyyy", "q", "m", "y", "d", "w", "ww", "h", "n", "s"]
     },
-    "dateformat": {
-        "mask": ["short", "medium", "long", "full"]
-    },
     "datepart": {
         "datepart": ["yyyy", "q", "m", "y", "d", "w", "ww", "h", "n", "s", "l"]
     },
@@ -137,6 +135,9 @@
     },
     "decryptbinary": {
         "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"]
+    },
+    "deserialize": {
+        "usecustomserializer": ["true", "false"]
     },
     "deserializejson": {
         "strictmapping": ["true", "false"],
@@ -205,7 +206,10 @@
         "mode": ["read", "readBinary", "write", "append"]
     },
     "fileread": {
-        "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii"]
+        "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+    },
+    "filesetattribute": {
+        "attribute": ["readOnly", "hidden", "normal"]
     },
     "fileupload": {
         "nameconflict": ["error", "skip", "overwrite", "makeunique"],
@@ -213,9 +217,6 @@
     },
     "fileuploadall": {
         "nameconflict": ["Error", "Skip", "Overwrite", "MakeUnique"]
-    },
-    "find": {
-        "start": ["1"]
     },
     "findnocase": {
         "start": ["1"]
@@ -238,8 +239,8 @@
         "dialect": ["CFML", "Lucee"]
     },
     "getlocaleinfo": {
-        "displaylocale": ["English", "German", "French", "..."],
-        "locale": ["en", "de_DE", "de_ch", "..."]
+        "dsplocale": ["English", "German", "French", "..."],
+        "locale": ["en", "de-DE", "de-CH", "..."]
     },
     "getmetricdata": {
         "mode": ["perf_monitor", "simple_load", "prev_req_time", "avg_req_time"]
@@ -256,12 +257,12 @@
     "gettagdata": {
         "dialect": ["CFML", "Lucee"]
     },
-    "gettoken": {
-        "delimiters": [", ", "|", "_", ";", ":"]
-    },
     "hash": {
         "algorithm": ["CFMX_COMPAT", "MD5", "SHA", "SHA-256", "SHA-384", "SHA-512"],
         "encoding": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+    },
+    "hash40": {
+        "algorithm": ["CFMX_COMPAT", "MD5", "SHA", "SHA-1", "SHA-256", "SHA-384", "SHA-512"]
     },
     "hmac": {
         "algorithm": ["HMACMD5", "HMACSHA1", "HMACSHA256", "HMACSHA384", "HMACSHA512"],
@@ -302,6 +303,9 @@
     "imagedrawroundrect": {
         "filled": ["true", "false"]
     },
+    "imageflip": {
+        "transpose": ["vertical", "horizontal", "diagonal", "antidiagonal", "90", "180", "270"]
+    },
     "imagenew": {
         "imagetype": ["rgb", "argb", "grayscale"]
     },
@@ -310,6 +314,9 @@
     },
     "imageresize": {
         "blurfactor": ["true", "false"]
+    },
+    "imagerotate": {
+        "interpolation": ["nearest", "bilinear", "bicubic"]
     },
     "imagescaletofit": {
         "blurfactor": ["true", "false"]
@@ -336,27 +343,14 @@
     "javacast": {
         "type": ["boolean", "double", "float", "int", "long", "string", "null", "byte", "bigdecimal", "char", "short"]
     },
-    "listappend": {
-        "delimiters": [", ", "|", "_", ";", ":"]
-    },
     "listavg": {
         "multicharacterdelimiter": ["true", "false"]
     },
     "listchangedelims": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
-        "includeemptyvalues": ["true", "false"]
+        "includeemptyvalues": ["Yes", "No"]
     },
     "listcompact": {
         "multicharacterdelimiter": ["true", "false"]
-    },
-    "listcontains": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
-    },
-    "listcontainsnocase": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
-    },
-    "listdeleteat": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
     },
     "listevery": {
         "includeemptyfields": ["true", "false"],
@@ -364,44 +358,27 @@
         "parallel": ["true", "false"]
     },
     "listfind": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
         "includeemptyvalues": ["true", "false"]
     },
     "listfindnocase": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
         "includeemptyvalues": ["true", "false"]
     },
-    "listfirst": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
-    },
     "listgetat": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
         "includeemptyvalues": ["true", "false"]
     },
     "listindexexists": {
         "includeemptyfields": ["true", "false"]
     },
-    "listinsertat": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
-    },
     "listitemtrim": {
         "includeemptyfields": ["true", "false"]
     },
-    "listlast": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
-    },
     "listlen": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
-        "includeemptyvalues": ["true", "false"]
+        "includeemptyvalues": ["Yes", "No"]
     },
     "listmap": {
         "includeemptyfields": ["true", "false"]
     },
-    "listprepend": {
-        "delimiters": [", ", "|", ";", "-", "chr(9)", "chr(10)", "chr(13)"]
-    },
     "listqualify": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
         "elements": ["all", "char"],
         "includeemptyfields": ["true", "false"]
     },
@@ -411,30 +388,14 @@
     "listremoveduplicates": {
         "ignorecase": ["true", "false"]
     },
-    "listrest": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
-    },
-    "listsetat": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
-    },
     "listsome": {
         "includeemptyfields": ["true", "false"],
         "multicharacterdelimiter": ["true", "false"],
         "parallel": ["true", "false"]
     },
-    "listsort": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
-    },
     "listtoarray": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"],
         "includeemptyfields": ["true", "false"],
         "multicharacterdelimiter": ["true", "false"]
-    },
-    "listvaluecount": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
-    },
-    "listvaluecountnocase": {
-        "delimiters": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
     },
     "location": {
         "addtoken": ["true", "false"]
@@ -485,9 +446,6 @@
     "querysome": {
         "parallel": ["true", "false"]
     },
-    "quotedvaluelist": {
-        "delimiter": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
-    },
     "rand": {
         "algorithm": ["CFMX_COMPAT", "SHA1PRNG", "IBMSecureRandom"]
     },
@@ -527,9 +485,13 @@
     "rereplacenocase": {
         "scope": ["one", "all"]
     },
+    "serialize": {
+        "usecustomserializer": ["true", "false"]
+    },
     "serializejson": {
         "serializequerybycolumns": ["true", "false"],
-        "usecustomserializer": ["true", "false"]
+        "usecustomserializer": ["true", "false"],
+        "usesecurejsonprefix": ["true", "false"]
     },
     "setencoding": {
         "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
@@ -574,9 +536,6 @@
     "structinsert": {
         "allowoverwrite": ["true", "false"]
     },
-    "structkeylist": {
-        "delimiter": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
-    },
     "structkeytranslate": {
         "deeptranslation": ["true", "false"],
         "leaveoriginalkey": ["true", "false"]
@@ -588,7 +547,14 @@
         "parallel": ["true", "false"]
     },
     "structsort": {
+        "localesensitive": ["true", "false"],
+        "sortorder": ["asc", "desc"],
         "sorttype": ["numeric", "text", "textnocase"]
+    },
+    "structtosorted": {
+        "localesensitive": ["true", "false"],
+        "sortorder": ["asc", "desc"],
+        "sorttype": ["numeric", "text"]
     },
     "systemoutput": {
         "addnewline": ["true", "false"],
@@ -617,6 +583,9 @@
         "abort": ["true", "false"],
         "inline": ["true", "false"]
     },
+    "truefalseformat": {
+        "value": ["true", "false"]
+    },
     "ucfirst": {
         "doall": ["true", "false"],
         "dolowerifalluppercase": ["true", "false"]
@@ -633,9 +602,6 @@
     },
     "urlsessionformat": {
         "requesturl": ["cgi.script_name"]
-    },
-    "valuelist": {
-        "delimiter": [", ", "|", ";", "chr(9)", "chr(10)", "chr(13)"]
     },
     "wrap": {
         "strip": ["true", "false"]
