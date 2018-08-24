@@ -90,7 +90,7 @@
     "context": [
       {"key": "selector", "operator": "equal", "operand": "embedding.cfml - string.quoted - comment - source.cfml.script", "match_all":true},
       {"key": "preceding_text", "operator": "regex_match", "operand": ".*<$", "match_all":true},
-      {"key": "following_text", "operator": "not_regex_match", "operand": "^[A-Za-z\\-_]+>", "match_all":true},
+      {"key": "following_text", "operator": "not_regex_match", "operand": "^[A-Za-z\\-_]+>.*", "match_all":true},
       {"key": "setting.auto_close_tags"}
     ]
   },
