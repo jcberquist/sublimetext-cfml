@@ -21,12 +21,21 @@ variables:
   constant_identifier: '[[:upper:]][_$[:digit:][:upper:]]*\b'
   attribute_name: '[_[:alpha:]][[:alnum:]_\-:]*'
   arrow_func_lookahead: '\s*\([^()]*?\)\s*=>'
-  sql_lookahead: '\s*(?:SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|AND|ORDER BY|GROUP BY|INNER JOIN|OUTER JOIN|LEFT JOIN|TRUNCATE TABLE|BULK INSERT)\b'
   param_attributes: '\b(name|default|max|maxLength|min|pattern|type)\b'
   storage_modifier: '\b(private|package|public|remote|static|final|abstract)\b'
   storage_types: '\b(?:any|array|binary|boolean|component|date|guid|numeric|query|string|struct|xml|uuid)\b'
   func_assignment_lookahead: '\s*\bfunction\b'
   func_lookahead: '({{storage_modifier}}\s+)?({{storage_modifier}}\s+)?({{dot_path_identifier}}(\[\])?\s+)?\bfunction\b'
+
+  sql_lookahead: >-
+    (?x:
+      (?i:select\s+($|\*|{{dot_path_identifier}}\s*$))|
+      (?i:from\s+($|{{dot_path_identifier}}(?:\s*{{identifier}})?\s*$))|
+      (?i:where\s+($|{{dot_path_identifier}}\s*=))|
+      (?i:(?:left\s+)?(?:outer\s+|inner\s+)?join(\s+|\s*$))|
+      (?i:(?:order|group)\s+by\s+($|{{dot_path_identifier}}\s*$))|
+      (?:SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|AND|ORDER BY|GROUP BY|INNER JOIN|OUTER JOIN|LEFT JOIN|TRUNCATE TABLE|BULK INSERT)
+    )
 
   line_continuation_lookahead: >-
     (?x)
