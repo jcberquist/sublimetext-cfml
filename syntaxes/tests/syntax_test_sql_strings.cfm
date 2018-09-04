@@ -1,13 +1,13 @@
 <!--- SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax" --->
 <cfscript>
 thisQuery = queryExecute("SELECT * from myTable WHERE myColumn = 1", "SELECT * from myTable WHERE myColumn = 1");
-//                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml
-//                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml
+<!---                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
+<!---                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
 thisQuery = queryExecute(params = {}, sql = "SELECT * FROM myTable");
-//                                           ^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml
+<!---                                        ^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
 var test = "FROM myTable WHERE test = '#obj.property#'"
-//          ^^^^ meta.string.quoted.double.cfml source.sql keyword.other.DML.sql
-//                                          ^^^^^^^^ source.cfml.script source.sql source.cfml.script meta.property.cfml
+<!---       ^^^^ meta.string.quoted.double.cfml source.sql keyword.other.DML.sql --->
+<!---                                       ^^^^^^^^ source.cfml.script source.sql source.cfml.script meta.property.cfml --->
 
 sql = "select *";
 <!---  ^^^^^^^^ source.sql -string.quoted.double.cfml --->
