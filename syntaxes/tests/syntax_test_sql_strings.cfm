@@ -19,6 +19,8 @@ sql = "select a.b.c from";
 <!---  ^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
 sql = "select a.b.c,";
 <!---  ^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
+sql = "select a.b.c as columnAlias,";
+<!---  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
 sql = "from
 <!---  ^^^^ source.sql -string.quoted.double.cfml --->
 ";
