@@ -29,11 +29,11 @@ variables:
 
   sql_lookahead: >-
     (?x:
-      (?i:select\s+($|\*|{{dot_path_identifier}}\s*$))|
+      (?i:select\s+($|\*|{{dot_path_identifier}}\s*(?:,|$|\s+from)))|
       (?i:from\s+($|{{dot_path_identifier}}(?:\s*{{identifier}})?\s*$))|
       (?i:where\s+($|{{dot_path_identifier}}\s*=))|
       (?i:(?:left\s+)?(?:outer\s+|inner\s+)?join(\s+|\s*$))|
-      (?i:(?:order|group)\s+by\s+($|{{dot_path_identifier}}\s*$))|
+      (?i:(?:order|group)\s+by\s+($|{{dot_path_identifier}}\s*(?:,|$)))|
       (?:SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|AND|ORDER BY|GROUP BY|INNER JOIN|OUTER JOIN|LEFT JOIN|TRUNCATE TABLE|BULK INSERT)
     )
 

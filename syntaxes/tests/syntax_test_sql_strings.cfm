@@ -11,16 +11,14 @@ var test = "FROM myTable WHERE test = '#obj.property#'"
 
 sql = "select *";
 <!---  ^^^^^^^^ source.sql -string.quoted.double.cfml --->
-sql = "select
-<!---  ^^^^^^ source.sql -string.quoted.double.cfml --->
-";
 sql = "
       select
 <!--- ^^^^^^ source.sql -string.quoted.double.cfml --->
 ";
-sql = "select a.b.c
-<!---  ^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
-";
+sql = "select a.b.c from";
+<!---  ^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
+sql = "select a.b.c,";
+<!---  ^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
 sql = "from
 <!---  ^^^^ source.sql -string.quoted.double.cfml --->
 ";
@@ -31,10 +29,10 @@ sql = "where
 <!---  ^^^^^ source.sql -string.quoted.double.cfml --->
 ";
 sql = "where a.b = 'astring'";
-<!---  ^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
+<!---  ^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
 
-sql = "group by a.b
-<!---  ^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
+sql = "group by a.b,
+<!---  ^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
 ";
 sql = "inner join a.table";
 <!---  ^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
