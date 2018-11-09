@@ -163,7 +163,7 @@ def template_expression(meta_content_scope, clear_scopes=None, html_entities=Fal
             'push': [
                 {
                     'match': '#',
-                    'scope': 'punctuation.definition.template-expression.begin.cfml',
+                    'scope': 'punctuation.definition.template-expression.end.cfml',
                     'pop': True,
                 },
                 {'match': r'(?=.|\n)', 'push': push_context},

@@ -981,14 +981,19 @@ contexts:
 
   tag-in-script-cf:
     - match: !tags |-
-        (?x)(?i)(cf(?:{tags}))\(
-      captures:
-        1: entity.name.tag.script.cfml
+        (?x)(?i)cf(?:{tags})(?=\()
+      scope: entity.name.tag.script.cfml
       push:
-        - meta_scope: meta.tag.script.cf.cfml
-        - match: \)
-          pop: true
-        - include: tag-generic-attribute-cf-script
+        - !meta meta.tag.script.cf.cfml
+        - - match: '\('
+            scope: punctuation.section.group.begin.cfml
+            set:
+              - meta_scope: meta.tag.script.cf.attributes.cfml
+              - match: '\)'
+                scope: punctuation.section.group.end.cfml
+                pop: true
+              - include: tag-generic-attribute-cf-script
+          - include: else-pop
 
   tag-generic-attribute-cf-script:
     - match: ','

@@ -520,7 +520,7 @@ contexts:
       scope: punctuation.definition.template-expression.begin.cfml
       push:
         - match: '#'
-          scope: punctuation.definition.template-expression.begin.cfml
+          scope: punctuation.definition.template-expression.end.cfml
           pop: true
         - match: (?=.|\n)
           push:
@@ -533,7 +533,7 @@ contexts:
       scope: punctuation.definition.template-expression.begin.cfml
       push:
         - match: '#'
-          scope: punctuation.definition.template-expression.begin.cfml
+          scope: punctuation.definition.template-expression.end.cfml
           pop: true
         - match: (?=.|\n)
           push:
@@ -551,7 +551,7 @@ contexts:
       scope: punctuation.definition.template-expression.begin.cfml
       push:
         - match: '#'
-          scope: punctuation.definition.template-expression.begin.cfml
+          scope: punctuation.definition.template-expression.end.cfml
           pop: true
         - match: (?=.|\n)
           push:

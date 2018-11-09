@@ -253,12 +253,19 @@ private numeric function $fixNumber(required any value) {}
   this.test();
 //    ^ punctuation.accessor.cfml
 cflock(name:"name-of-lock") {}
+//    ^ meta.tag.script.cf.cfml  meta.tag.script.cf.attributes.cfml punctuation.section.group.begin.cfml
 //         ^ meta.tag.script.cf.cfml punctuation.separator.key-value.cfml
 //          ^ meta.string.quoted.double.cfml string.quoted.double.cfml punctuation.definition.string.begin.cfml
 //           ^^^^^^^^^^^^ meta.string.quoted.double.cfml string.quoted.double.cfml
+//                        ^ meta.tag.script.cf.cfml  meta.tag.script.cf.attributes.cfml punctuation.section.group.end.cfml
+//                          ^ meta.block.cfml punctuation.section.block.begin.cfml
   test(name:"arg");
 //     ^^^^ entity.other.function-parameter.cfml
 //         ^ punctuation.separator.key-value.cfml
 }
 // <- embedding.cfml source.cfml.script meta.class.body.cfml punctuation.section.block.end.cfml
  // <- embedding.cfml source.cfml.script -meta
+
+a = 'a #test# string';
+//     ^ punctuation.definition.template-expression.begin.cfml
+//          ^ punctuation.definition.template-expression.end.cfml
