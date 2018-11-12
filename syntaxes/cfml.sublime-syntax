@@ -491,13 +491,12 @@ contexts:
         3: punctuation.definition.tag.end.cfml
 
   comments:
-    - match: <!---.*?--->
-      scope: comment.line.cfml
     - match: <!---
       scope: punctuation.definition.comment.cfml
       push:
         - meta_scope: comment.block.cfml
         - match: '--->'
+          scope: punctuation.definition.comment.cfml
           pop: true
         - include: comments
 

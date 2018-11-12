@@ -38,7 +38,7 @@
 
 <cfquery name="test">
 <!--- this should be a comment <cfqueryparam value=""> --->
-<!---                           ^ embedding.cfml text.html.cfml meta.scope.cfquery.cfml source.sql comment.line.cfml --->
+<!---                           ^ embedding.cfml text.html.cfml meta.scope.cfquery.cfml source.sql comment.block.cfml --->
 'unclosed sql string
 </cfquery>
 <!--- <- -source.sql --->
