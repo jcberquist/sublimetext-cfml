@@ -74,6 +74,12 @@
 <cfif col eq 1>
 <!--- ^ meta.tag.cfml source.cfml.script variable.other.readwrite.cfml --->
 
+<cfif col is 1>
+<!---     ^^ meta.tag.cfml source.cfml.script keyword.operator.comparison.binary.cfml --->
+
+<cfif col is not 1>
+<!---     ^^^^^^ meta.tag.cfml source.cfml.script keyword.operator.comparison.binary.cfml --->
+
 <cfset f.result = componentCall(
     component="#f.componentName#",
     <!--- <- meta.function-call.cfml meta.function-call.parameters.cfml entity.other.function-parameter.cfml --->

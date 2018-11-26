@@ -536,9 +536,9 @@ contexts:
         ===  | # equality        left-to-right   both
         !==  | # equality        left-to-right   both
         ==   | # equality        left-to-right   both
-        \b(?i:eq)\b |
+        \b(?i:neq|is\s+not)\b |
         !=   |  # equality        left-to-right   both
-        \b(?i:neq)\b
+        \b(?i:eq|is)\b
       scope: keyword.operator.comparison.binary.cfml
       push: expression-begin
     - match: \b(?i:(contains|does\s+not\s+contain))\b
