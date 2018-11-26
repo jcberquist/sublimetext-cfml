@@ -506,15 +506,15 @@ contexts:
     - match: (&(##)[xX])(\h+)(;)
       scope: constant.character.entity.hexadecimal.html
       captures:
-        '1': punctuation.definition.entity.html
-        '2': constant.character.escape.hash.cfml
-        '4': punctuation.definition.entity.html
+        1: punctuation.definition.entity.html
+        2: constant.character.escape.hash.cfml
+        4: punctuation.definition.entity.html
     - match: (&(##))([0-9]+)(;)
       scope: constant.character.entity.decimal.html
       captures:
-        '1': punctuation.definition.entity.html
-        '2': constant.character.escape.hash.cfml
-        '4': punctuation.definition.entity.html
+        1: punctuation.definition.entity.html
+        2: constant.character.escape.hash.cfml
+        4: punctuation.definition.entity.html
     - match: '#'
       scope: punctuation.definition.template-expression.begin.cfml
       push:

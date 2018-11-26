@@ -14,17 +14,12 @@ ORDERED_KEYS = [
 
 
 def order_output(syntax):
-    def keysort(i):
-        if len(i) == 1:
-            return '0' + i
-        return i
-
     if isinstance(syntax, dict):
         ordered_syntax = CommentedMap()
         for key in ORDERED_KEYS:
             if key in syntax:
                 ordered_syntax[key] = order_output(syntax[key])
-        for key in sorted(syntax, key=keysort):
+        for key in sorted(syntax):
             if key not in ORDERED_KEYS:
                 ordered_syntax[key] = order_output(syntax[key])
         return ordered_syntax

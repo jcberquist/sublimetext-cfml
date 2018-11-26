@@ -74,9 +74,9 @@ def function_call_params(meta_scope, named_param_scope, delimiter_scope):
                 {
                     'match': r'\b({{identifier}})\s*(?:(=)(?!=)|(:))',
                     'captures': {
-                        '1': named_param_scope,
-                        '2': 'keyword.operator.assignment.binary.cfml',
-                        '3': 'punctuation.separator.key-value.cfml',
+                        1: named_param_scope,
+                        2: 'keyword.operator.assignment.binary.cfml',
+                        3: 'punctuation.separator.key-value.cfml',
                     },
                     'push': 'expression-no-comma',
                 },
@@ -139,18 +139,18 @@ def template_expression(meta_content_scope, clear_scopes=None, html_entities=Fal
                     'match': r'(&(##)[xX])(\h+)(;)',
                     'scope': 'constant.character.entity.hexadecimal.html',
                     'captures': {
-                        '1': 'punctuation.definition.entity.html',
-                        '2': 'constant.character.escape.hash.cfml',
-                        '4': 'punctuation.definition.entity.html',
+                        1: 'punctuation.definition.entity.html',
+                        2: 'constant.character.escape.hash.cfml',
+                        4: 'punctuation.definition.entity.html',
                     },
                 },
                 {
                     'match': r'(&(##))([0-9]+)(;)',
                     'scope': 'constant.character.entity.decimal.html',
                     'captures': {
-                        '1': 'punctuation.definition.entity.html',
-                        '2': 'constant.character.escape.hash.cfml',
-                        '4': 'punctuation.definition.entity.html',
+                        1: 'punctuation.definition.entity.html',
+                        2: 'constant.character.escape.hash.cfml',
+                        4: 'punctuation.definition.entity.html',
                     },
                 },
             ]
