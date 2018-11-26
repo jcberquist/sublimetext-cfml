@@ -116,6 +116,8 @@ def keyword_control(name, scope, meta_scope, contexts='block'):
 
     if contexts == 'parens-block':
         syntax['push'].append('parens-scope')
+    elif contexts == 'catch-block':
+        syntax['push'].append('catch-scope')
 
     return cfml_syntax.order_output(syntax)
 

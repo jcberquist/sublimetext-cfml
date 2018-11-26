@@ -242,7 +242,7 @@ contexts:
         -   - meta_scope: meta.catch.cfml
             - include: immediately-pop
         - block-scope
-        - parens-scope
+        - catch-scope
   expect-case-colon:
     - match: ':'
       scope: punctuation.separator.cfml
@@ -261,6 +261,23 @@ contexts:
           scope: punctuation.terminator.statement.cfml
         - include: variable-declaration
         - include: expression-push
+    - include: else-pop
+
+  catch-scope:
+    - match: \(
+      scope: punctuation.section.group.begin.cfml
+      set:
+        -   - meta_scope: meta.group.cfml
+            - match: \)
+              scope: punctuation.section.group.end.cfml
+              pop: true
+        -   - match: (?:({{dot_path_identifier}})\s+)?(?i:(var)\s+)?({{identifier}})
+              captures:
+                1: support.type.exception.cfml
+                2: storage.type.cfml
+                3: variable.other.readwrite.cfml
+              pop: true
+            - include: else-pop
     - include: else-pop
 
   parenthesized-expression:

@@ -269,3 +269,19 @@ cflock(name:"name-of-lock") {}
 a = 'a #test# string';
 //     ^ punctuation.definition.template-expression.begin.cfml
 //          ^ punctuation.definition.template-expression.end.cfml
+
+try {
+} catch (any e) {
+//       ^^^ support.type.exception.cfml
+//           ^ variable.other.readwrite.cfml
+} catch (var e) {
+//       ^^^ support.type.exception.cfml
+//           ^ variable.other.readwrite.cfml
+} catch (any var e) {
+//       ^^^ support.type.exception.cfml
+//           ^^^ storage.type.cfml
+//               ^ variable.other.readwrite.cfml
+} catch (java.lang.ThreadDeath e) {
+//       ^^^^^^^^^^^^^^^^^^^^^ support.type.exception.cfml
+//                             ^ variable.other.readwrite.cfml
+}

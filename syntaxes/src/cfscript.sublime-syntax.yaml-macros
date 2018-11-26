@@ -188,7 +188,7 @@ contexts:
     - !keyword_control [ 'else', 'conditional', 'conditional', 'block' ]
     - !keyword_control [ 'try', 'trycatch', 'try', 'block' ]
     - !keyword_control [ 'finally', 'trycatch', 'finally', 'block' ]
-    - !keyword_control [ 'catch', 'trycatch', 'catch', 'parens-block' ]
+    - !keyword_control [ 'catch', 'trycatch', 'catch', 'catch-block' ]
 
   expect-case-colon:
     - match: ':'
@@ -208,6 +208,23 @@ contexts:
           scope: punctuation.terminator.statement.cfml
         - include: variable-declaration
         - include: expression-push
+    - include: else-pop
+
+  catch-scope:
+    - match: '\('
+      scope: punctuation.section.group.begin.cfml
+      set:
+        - - meta_scope: meta.group.cfml
+          - match: '\)'
+            scope: punctuation.section.group.end.cfml
+            pop: true
+        - - match: '(?:({{dot_path_identifier}})\s+)?(?i:(var)\s+)?({{identifier}})'
+            captures:
+              1: support.type.exception.cfml
+              2: storage.type.cfml
+              3: variable.other.readwrite.cfml
+            pop: true
+          - include: else-pop
     - include: else-pop
 
   parenthesized-expression:
