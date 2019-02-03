@@ -3,7 +3,7 @@ from .. import completions, inline_documentation
 from . import basecompletions
 
 
-def plugin_loaded():
+def _plugin_loaded():
     sublime.set_timeout_async(load)
 
 

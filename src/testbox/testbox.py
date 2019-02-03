@@ -9,7 +9,7 @@ SIDE_COLOR = "color(#336B81 blend(var(--background) 60%))"
 testbox = {"completions": {}, "documentation": {}}
 
 
-def plugin_loaded():
+def _plugin_loaded():
     sublime.set_timeout_async(load)
 
 

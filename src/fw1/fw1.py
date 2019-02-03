@@ -9,10 +9,6 @@ SIDE_COLOR = "color(var(--greenish) blend(var(--background) 60%))"
 fw1 = {"settings": {}, "settings_docs": {}, "methods": {}, "methods_docs": {}}
 
 
-def plugin_loaded():
-    sublime.set_timeout_async(load)
-
-
 def load():
     global fw1
     for key in fw1:

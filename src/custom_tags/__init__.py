@@ -68,7 +68,7 @@ def get_goto_cfml_file(cfml_view):
     return None
 
 
-def plugin_loaded():
+def _plugin_loaded():
     custom_tags.sync_projects()
     completions.add_completion_source(get_completions)
     inline_documentation.add_documentation_source(get_inline_documentation)

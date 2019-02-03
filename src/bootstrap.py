@@ -1,6 +1,7 @@
 from . import applicationcfc
 from . import basecompletions
 from . import completions
+from . import component_index
 from . import dotpaths
 from . import cfdocs
 from . import cfcs
@@ -26,6 +27,11 @@ from .formatting.cfml_format import CfmlFormatCommand
 
 
 def _plugin_loaded():
+    applicationcfc._plugin_loaded()
+    basecompletions._plugin_loaded()
+    component_index._plugin_loaded()
+    custom_tags._plugin_loaded()
+    fw1._plugin_loaded()
     inline_documentation._plugin_loaded()
     method_preview._plugin_loaded()
     testbox._plugin_loaded()

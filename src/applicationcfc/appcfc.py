@@ -8,10 +8,6 @@ SIDE_COLOR = "color(#4C9BB0 blend(var(--background) 60%))"
 appcfc = {"settings": {}, "settings_docs": {}, "methods": {}, "methods_docs": {}}
 
 
-def plugin_loaded():
-    sublime.set_timeout_async(load)
-
-
 def load():
     global appcfc
     for key in appcfc:
