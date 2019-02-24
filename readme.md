@@ -219,9 +219,7 @@ The reason formatting is limited by default to the current method in components 
 
 ### Custom Coloring for CFML Tags
 
-Unless you are using a specialized color scheme, CFML and HTML tags will receive the same coloring. This can make it a bit harder to distinguish between the two types of tags when embedding CFML tags in HTML. This package has a command you can run from the command palette that will inject custom colors for CFML tags into your current color scheme (or remove them if they are already there). Press <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> to bring up the command palette (<kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac) and run `CFML: Toggle Color Scheme Styles`. You can edit the styles that will be injected via the user settings for this package.
-
-*Caveat:* This feature works by either overriding or modifying your active color scheme file. Because of this, it may not work well with other packages that also modify the active color scheme in some way. Also, if the package containing your active color scheme is updated, it is likely that you will need to toggle the custom tag coloring off and then on again to pick up any changes.
+Unless you are using a specialized color scheme, CFML and HTML tags will receive the same coloring. In the latest builds of Sublime Text a new color scheme format `.sublime-color-scheme` has been introduced, along with the very easy customization of your active color scheme: <https://www.sublimetext.com/docs/3/color_schemes.html#customization>. This package includes a command that will add such a customization in your `Packages/User/` directory for your active color scheme that applies custom colors for CFML tags. Press <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> to bring up the command palette (<kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac) and run `CFML: Toggle Color Scheme Styles`. You can edit the styles that will be injected via the user settings for this package.
 
 ### Controller/View Toggle
 

@@ -65,11 +65,11 @@
 	"cfml_completion_docs": true,
 
 	// color scheme styles to inject for Lucee/CFML tags
-	// valid keys are "foreground" and "fontStyle"
-	// "foreground": "#RRGGBB", "#RGB" or ""
-	// "fontStyle": "bold", "italic", "bold italic", or ""
-	"cfml_tag_style": { "foreground": "#4C9BB0", "fontStyle": "" },
-	"cfml_tag_attribute_style": { "foreground": "#D9995E", "fontStyle": "" },
+	// valid keys are "foreground" and "font_style"
+	// "foreground": see <https://www.sublimetext.com/docs/3/color_schemes.html#colors>
+	// "font_style": "bold", "italic", "bold italic", or ""
+	"cfml_tag_style": { "foreground": "#4C9BB0", "font_style": "" },
+	"cfml_tag_attribute_style": { "foreground": "#D9995E", "font_style": "" },
 
 	// default controller and view folder names that the
 	// toggle_controller_view command looks for when switching

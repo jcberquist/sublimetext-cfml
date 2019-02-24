@@ -1,12 +1,15 @@
+import sublime
 import sublime_plugin
-from os.path import dirname, realpath
-from .color_scheme_styles import toggle
+from . import color_scheme_styles
 
 __all__ = ["CfmlColorSchemeStylesCommand"]
-MODULE_PATH = dirname(realpath(__file__)).replace("\\", "/")
 
 
 class CfmlColorSchemeStylesCommand(sublime_plugin.ApplicationCommand):
-
     def run(self):
-        toggle()
+        if int(sublime.version()) < 3176:
+            sublime.error_message(
+                "Color scheme customization is only available in Sublime Text builds >= 3176"
+            )
+            return
+        color_scheme_styles.toggle()
