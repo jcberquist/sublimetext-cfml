@@ -5,14 +5,22 @@ from collections import namedtuple
 from . import utils
 from . import buffer_metadata
 
-CompletionList = namedtuple("CompletionList", "completions priority exclude_lower_priority")
-Documentation = namedtuple('Documentation', 'doc_regions doc_html_variables on_navigate priority')
-MethodPreview = namedtuple('MethodPreview', 'preview_regions preview_html_variables on_navigate priority')
-CompletionDoc = namedtuple('CompletionDoc', 'doc_regions doc_html_variables on_navigate')
-GotoCfmlFile = namedtuple('GotoCfmlFile', 'file_path symbol')
+CompletionList = namedtuple(
+    "CompletionList", "completions priority exclude_lower_priority"
+)
+Documentation = namedtuple(
+    "Documentation", "doc_regions doc_html_variables on_navigate priority"
+)
+MethodPreview = namedtuple(
+    "MethodPreview", "preview_regions preview_html_variables on_navigate priority"
+)
+CompletionDoc = namedtuple(
+    "CompletionDoc", "doc_regions doc_html_variables on_navigate"
+)
+GotoCfmlFile = namedtuple("GotoCfmlFile", "file_path symbol")
 
 
-class CfmlFunctionCallParams():
+class CfmlFunctionCallParams:
 
     param_regex = re.compile(r"^(?:([\w]+)\s*=\s*)?(.*)$", re.M | re.S)
 
@@ -24,17 +32,32 @@ class CfmlFunctionCallParams():
         self.current_index = None
         self.params = []
 
-        self.function_name, self.function_region, self.params_region = cfml_view.get_function_call(position)
+        self.function_name, self.function_region, self.params_region = cfml_view.get_function_call(
+            position
+        )
 
-        if "support" in cfml_view.view.scope_name(self.function_region.begin()).strip().split(" ")[-1]:
+        if (
+            "support"
+            in cfml_view.view.scope_name(self.function_region.begin())
+            .strip()
+            .split(" ")[-1]
+        ):
             self.support = True
 
         prev_pt = self.function_region.begin() - 1
-        if cfml_view.view.match_selector(prev_pt, "embedding.cfml source.cfml.script punctuation.accessor.cfml"):
+        if cfml_view.view.match_selector(
+            prev_pt, "embedding.cfml source.cfml.script punctuation.accessor.cfml"
+        ):
             self.method = True
-            self.dot_context = cfml_view.dot_context = cfml_view.get_dot_context(prev_pt)
+            self.dot_context = cfml_view.dot_context = cfml_view.get_dot_context(
+                prev_pt
+            )
 
-        start_scope_list = cfml_view.view.scope_name(self.params_region.begin()).strip().split(" ")[:-1]
+        start_scope_list = (
+            cfml_view.view.scope_name(self.params_region.begin())
+            .strip()
+            .split(" ")[:-1]
+        )
         separator_scope = " ".join(start_scope_list) + " "
         last_key = start_scope_list[-2].replace("meta.", "punctuation.separator.") + " "
         for scope_name in ["entity.", "createcomponent.", "createjavaobject."]:
@@ -46,7 +69,9 @@ class CfmlFunctionCallParams():
             if pt == position:
                 self.current_index = len(self.params)
             if cfml_view.view.scope_name(pt) == separator_scope:
-                current_element = cfml_view.view.substr(sublime.Region(start, pt)).strip()
+                current_element = cfml_view.view.substr(
+                    sublime.Region(start, pt)
+                ).strip()
                 param = re.match(CfmlFunctionCallParams.param_regex, current_element)
                 self.params.append(param.groups())
                 start = pt + 1
@@ -60,11 +85,22 @@ class CfmlFunctionCallParams():
             self.named_params = self.params[0][0] is not None
 
     def __repr__(self):
-        return repr((self.support, self.method, self.function_name, self.function_region, self.params_region, self.dot_context, self.named_params, self.current_index, self.params))
+        return repr(
+            (
+                self.support,
+                self.method,
+                self.function_name,
+                self.function_region,
+                self.params_region,
+                self.dot_context,
+                self.named_params,
+                self.current_index,
+                self.params,
+            )
+        )
 
 
-class CfmlView():
-
+class CfmlView:
     def __init__(self, view, position, prefix=""):
         self.view = view
         self.prefix = prefix
@@ -87,7 +123,9 @@ class CfmlView():
 
     def set_base_info(self):
         self.file_path = utils.normalize_path(self.view.file_name())
-        self.file_name = self.file_path.split("/").pop().lower() if self.file_path else None
+        self.file_name = (
+            self.file_path.split("/").pop().lower() if self.file_path else None
+        )
         self.project_name = utils.get_project_name(self.view)
         self.previous_char = self.view.substr(self.prefix_start - 1)
 
@@ -96,30 +134,47 @@ class CfmlView():
         self.type = None
 
         # tag completions
-        if self.view.match_selector(self.prefix_start, "embedding.cfml - source.cfml.script"):
-            self.type = 'tag'
+        if self.view.match_selector(
+            self.prefix_start, "embedding.cfml - source.cfml.script"
+        ):
+            self.type = "tag"
 
-            is_inside_tag = self.view.match_selector(self.prefix_start, "meta.tag - punctuation.definition.tag.begin")
-            is_tag_name = self.view.match_selector(self.prefix_start - 1, "punctuation.definition.tag.begin, entity.name.tag")
+            is_inside_tag = self.view.match_selector(
+                self.prefix_start, "meta.tag - punctuation.definition.tag.begin"
+            )
+            is_tag_name = self.view.match_selector(
+                self.prefix_start - 1,
+                "punctuation.definition.tag.begin, entity.name.tag",
+            )
 
             if is_inside_tag and not is_tag_name:
-                self.type = 'tag_attributes'
+                self.type = "tag_attributes"
                 self.set_tag_info()
 
         # dot completions (member and model function completions)
-        elif self.view.match_selector(self.prefix_start - 1, base_script_scope + " punctuation.accessor.cfml"):
-            self.type = 'dot'
+        elif self.view.match_selector(
+            self.prefix_start - 1, base_script_scope + " punctuation.accessor.cfml"
+        ):
+            self.type = "dot"
             self.set_dot_context()
             self.function_call_params = self.get_function_call_params(self.position)
 
         # tag in script attribute completions
-        elif self.view.match_selector(self.prefix_start, base_script_scope + " meta.tag, " + base_script_scope + " meta.class.declaration"):
-            self.type = 'tag_attributes'
+        elif self.view.match_selector(
+            self.prefix_start,
+            base_script_scope
+            + " meta.tag, "
+            + base_script_scope
+            + " meta.class.declaration",
+        ):
+            self.type = "tag_attributes"
             self.set_tag_info(True)
 
         # script completions
-        elif self.view.match_selector(self.prefix_start, "embedding.cfml source.cfml.script"):
-            self.type = 'script'
+        elif self.view.match_selector(
+            self.prefix_start, "embedding.cfml source.cfml.script"
+        ):
+            self.type = "script"
             self.function_call_params = self.get_function_call_params(self.position)
 
     def set_dot_context(self):
@@ -127,11 +182,15 @@ class CfmlView():
 
     def set_tag_info(self, tag_in_script=False):
         self.tag_in_script = tag_in_script
-        if self.view.match_selector(self.prefix_start, "source.cfml.script meta.class.declaration"):
+        if self.view.match_selector(
+            self.prefix_start, "source.cfml.script meta.class.declaration"
+        ):
             self.tag_name = "component"
         else:
             self.tag_name = utils.get_tag_name(self.view, self.prefix_start)
-        self.tag_attribute_name = utils.get_tag_attribute_name(self.view, self.prefix_start)
+        self.tag_attribute_name = utils.get_tag_attribute_name(
+            self.view, self.prefix_start
+        )
 
     def get_dot_context(self, pt, cachable=True):
         if not cachable or pt not in self._cache["get_dot_context"]:
@@ -141,7 +200,9 @@ class CfmlView():
 
     def get_struct_context(self, pt, cachable=True):
         if not cachable or pt not in self._cache["get_function"]:
-            self._cache["get_struct_context"][pt] = utils.get_struct_context(self.view, pt)
+            self._cache["get_struct_context"][pt] = utils.get_struct_context(
+                self.view, pt
+            )
 
         return self._cache["get_struct_context"][pt]
 
@@ -160,12 +221,16 @@ class CfmlView():
         cache_key = (pt, support)
 
         if not cachable or cache_key not in self._cache["get_function_call"]:
-            self._cache["get_function_call"][cache_key] = utils.get_function_call(self.view, pt, support)
+            self._cache["get_function_call"][cache_key] = utils.get_function_call(
+                self.view, pt, support
+            )
 
         return self._cache["get_function_call"][cache_key]
 
     def get_function_call_params(self, pt):
-        if self.view.match_selector(pt, "source.cfml.script meta.function-call.parameters"):
+        if self.view.match_selector(
+            pt, "source.cfml.script meta.function-call.parameters"
+        ):
             return CfmlFunctionCallParams(self, pt)
         return None
 
@@ -176,7 +241,9 @@ class CfmlView():
         cache_key = (position, variable_name)
 
         if not cachable or cache_key not in self._cache["find_variable_assignment"]:
-            var_assignment = utils.find_variable_assignment(self.view, position, variable_name)
+            var_assignment = utils.find_variable_assignment(
+                self.view, position, variable_name
+            )
             self._cache["find_variable_assignment"][cache_key] = var_assignment
 
         return self._cache["find_variable_assignment"][cache_key]

@@ -105,12 +105,14 @@ class RegExWorker(Thread):
             if full_file_path is None:
                 break
             try:
-                self.cfcs[full_file_path] = cfml_components.parse_cfc_file_string(file_string)
+                self.cfcs[full_file_path] = cfml_components.parse_cfc_file_string(
+                    file_string
+                )
                 if con:
                     metadata = json.dumps(self.cfcs[full_file_path])
                     con.execute(UPSERT_METADATA, (file_hash, metadata))
                     con.execute(UPSERT_FILE_PATH, (full_file_path, file_hash))
-            except Exception as e:
+            except Exception:
                 print("CFML: unable to parse file - " + full_file_path)
                 traceback.print_exc()
             self.parse_queue.task_done()
@@ -120,8 +122,8 @@ class RegExWorker(Thread):
             con.commit()
             con.close()
 
-class Parser():
 
+class Parser:
     def __init__(self, cache_path=None):
         self.cache_path = cache_path
         self.init_cache()
@@ -146,7 +148,7 @@ class Parser():
                 invalid_paths.append(file_path)
 
         if len(invalid_paths) > 0:
-            con.execute(CLEAR_PATHS, (','.join(invalid_paths),))
+            con.execute(CLEAR_PATHS, (",".join(invalid_paths),))
 
         con.execute(CLEAN_CACHE)
 
@@ -179,10 +181,10 @@ class Parser():
                     try:
                         with open(full_file_path, "r", encoding="utf-8") as f:
                             file_string = f.read()
-                    except:
+                    except Exception:
                         print("CFML: unable to read file - " + full_file_path)
                     else:
-                        file_hash = hashlib.md5(file_string.encode('utf-8')).hexdigest()
+                        file_hash = hashlib.md5(file_string.encode("utf-8")).hexdigest()
 
                         if file_hash in cache:
                             cfcs[full_file_path] = json.loads(cache[file_hash])
@@ -196,18 +198,17 @@ class Parser():
 
         return cfcs
 
-
     def parse_file(self, full_file_path):
         con = sqlite3.connect(self.cache_path) if self.cache_path else None
 
         try:
             with open(full_file_path, "r", encoding="utf-8") as f:
                 file_string = f.read()
-        except:
+        except Exception:
             print("CFML: unable to read file - " + full_file_path)
             return {}
 
-        file_hash = hashlib.md5(file_string.encode('utf-8')).hexdigest()
+        file_hash = hashlib.md5(file_string.encode("utf-8")).hexdigest()
 
         if con:
             s = con.execute(SEARCH_HASH_METADATA, (file_hash,)).fetchone()

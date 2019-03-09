@@ -48,7 +48,7 @@ def from_view(view, region=None):
         span_html = render_span(span, styles, style_map)
         minihtml += span_html
 
-    minihtml = "<div class=\"minihtml-container\">" + minihtml
+    minihtml = '<div class="minihtml-container">' + minihtml
     if truncated:
         minihtml += "<br><strong>truncated...</strong>"
     minihtml += "</div>"
@@ -82,13 +82,15 @@ def render_span(span, styles, style_map):
     span_html = text_to_html(span["text"])
 
     if span["style"]:
-        start_span = "<span class=\""
+        start_span = '<span class="'
         span_classes = []
         for key in ["foreground", "background"]:
             if key in span["style"]:
-                css_class_name = get_classname(key, span["style"][key], styles, style_map)
+                css_class_name = get_classname(
+                    key, span["style"][key], styles, style_map
+                )
                 span_classes.append(css_class_name)
-        start_span += " ".join(span_classes) + "\">"
+        start_span += " ".join(span_classes) + '">'
 
         if span["style"]["italic"]:
             span_html = "<em>" + span_html + "</em>"
@@ -173,7 +175,10 @@ def get_color_scheme(view=None):
                 if key in setting["settings"]:
                     this_scope["style"][key] = setting["settings"][key]
             for key in ["italic", "bold"]:
-                this_scope["style"][key] = "fontStyle" in setting["settings"] and key in setting["settings"]["fontStyle"].lower()
+                this_scope["style"][key] = (
+                    "fontStyle" in setting["settings"]
+                    and key in setting["settings"]["fontStyle"].lower()
+                )
             color_scheme["scopes"].append(this_scope)
         elif "settings" in setting:
             for key in ["foreground", "background"]:
