@@ -106,6 +106,11 @@ class CfmlView:
         self.prefix = prefix
         self.position = position
         self.function_call_params = None
+        self.tag_name = None
+        self.tag_attribute_name = None
+        self.tag_in_script = False
+        self.tag_location = None
+
         self._cache = defaultdict(dict)
         self.CompletionList = CompletionList
         self.Documentation = Documentation
@@ -114,7 +119,7 @@ class CfmlView:
         self.GotoCfmlFile = GotoCfmlFile
 
         self.prefix_start = self.position - len(self.prefix)
-        self.set_type()
+        self.determine_type()
 
         # continue processing only if we know the type
         if self.type:
@@ -129,7 +134,7 @@ class CfmlView:
         self.project_name = utils.get_project_name(self.view)
         self.previous_char = self.view.substr(self.prefix_start - 1)
 
-    def set_type(self):
+    def determine_type(self):
         base_script_scope = "embedding.cfml source.cfml.script"
         self.type = None
 
@@ -138,18 +143,7 @@ class CfmlView:
             self.prefix_start, "embedding.cfml - source.cfml.script"
         ):
             self.type = "tag"
-
-            is_inside_tag = self.view.match_selector(
-                self.prefix_start, "meta.tag - punctuation.definition.tag.begin"
-            )
-            is_tag_name = self.view.match_selector(
-                self.prefix_start - 1,
-                "punctuation.definition.tag.begin, entity.name.tag",
-            )
-
-            if is_inside_tag and not is_tag_name:
-                self.type = "tag_attributes"
-                self.set_tag_info()
+            self.set_tag_info()
 
         # dot completions (member and model function completions)
         elif self.view.match_selector(
@@ -182,15 +176,39 @@ class CfmlView:
 
     def set_tag_info(self, tag_in_script=False):
         self.tag_in_script = tag_in_script
+
         if self.view.match_selector(
-            self.prefix_start, "source.cfml.script meta.class.declaration"
+            self.prefix_start,
+            "meta.tag - punctuation.definition.tag.begin, meta.class.declaration.cfml",
         ):
-            self.tag_name = "component"
-        else:
-            self.tag_name = utils.get_tag_name(self.view, self.prefix_start)
-        self.tag_attribute_name = utils.get_tag_attribute_name(
-            self.view, self.prefix_start
-        )
+            if self.view.match_selector(
+                self.prefix_start - 1,
+                "punctuation.definition.tag.begin, entity.name.tag",
+            ):
+                self.tag_location = "tag_name"
+            elif self.view.match_selector(
+                self.prefix_start, "entity.other.attribute-name.cfml"
+            ):
+                self.tag_location = "tag_attribute_name"
+            else:
+                self.tag_location = "tag_attributes"
+
+            if self.view.match_selector(
+                self.prefix_start, "source.cfml.script meta.class.declaration"
+            ):
+                self.tag_name = "component"
+            else:
+                self.tag_name = utils.get_tag_name(self.view, self.prefix_start)
+
+            if self.tag_in_script and not self.tag_name.startswith("cf"):
+                self.tag_name = "cf" + self.tag_name
+
+            if self.tag_location != "tag_name":
+                self.tag_attribute_name = utils.get_tag_attribute_name(
+                    self.view, self.prefix_start
+                )
+
+                self.type = "tag_attributes"
 
     def get_dot_context(self, pt, cachable=True):
         if not cachable or pt not in self._cache["get_dot_context"]:

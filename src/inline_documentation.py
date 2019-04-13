@@ -166,7 +166,7 @@ def display_documentation(view, docs, doc_type, pt=-1, current_index=0):
             view.show_popup(
                 doc_html,
                 flags=sublime.COOPERATE_WITH_AUTO_COMPLETE,
-                max_width=768,
+                max_width=480,
                 on_navigate=on_navigate,
                 on_hide=lambda: on_hide(view, doc_region_id),
             )

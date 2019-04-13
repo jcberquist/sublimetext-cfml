@@ -277,6 +277,12 @@ def get_tag_name(view, pos):
 
 
 def get_tag_attribute_name(view, pos):
+    if view.match_selector(
+        pos,
+        "meta.tag entity.other.attribute-name.cfml, meta.class.declaration.cfml entity.other.attribute-name.cfml",
+    ):
+        return view.substr(view.word(pos)).lower()
+
     for scope in ["string.quoted", "string.unquoted"]:
         full_scope = (
             "meta.tag.cfml "
@@ -287,16 +293,23 @@ def get_tag_attribute_name(view, pos):
             + scope
             + ", meta.tag.script.cf.cfml "
             + scope
+            + ", meta.class.declaration.cfml "
+            + scope
         )
         if view.match_selector(pos, full_scope):
-            previous_char = get_char_point_before_scope(view, pos, scope)
+            pos = get_char_point_before_scope(view, pos, scope)
             break
-    else:
-        previous_char = get_previous_character(view, pos)
 
-    full_scope = "meta.tag.cfml punctuation.separator.key-value, meta.tag.custom.cfml punctuation.separator.key-value, meta.tag.script.cfml punctuation.separator.key-value, meta.tag.script.cf.cfml punctuation.separator.key-value"
-    if view.match_selector(previous_char, full_scope):
-        return get_previous_word(view, previous_char)
+    full_scope = [
+        "meta.tag.cfml punctuation.separator.key-value",
+        "meta.tag.custom.cfml punctuation.separator.key-value",
+        "meta.tag.script.cfml punctuation.separator.key-value",
+        "meta.tag.script.cf.cfml punctuation.separator.key-value",
+        "meta.class.declaration.cfml punctuation.separator.key-value",
+    ]
+    if view.match_selector(pos, ",".join(full_scope)):
+        return get_previous_word(view, pos)
+
     return None
 
 

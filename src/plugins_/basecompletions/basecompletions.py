@@ -28,29 +28,26 @@ def get_tag_attributes(cfml_view):
     if not cfml_view.tag_name:
         return None
 
-    if cfml_view.tag_in_script and not cfml_view.tag_name.startswith("cf"):
-        cfml_view.tag_name = "cf" + cfml_view.tag_name
-
-    # tag attribute value completions
-    if cfml_view.tag_attribute_name:
-        if (
-            cfml_view.tag_name in completions["cfml_tag_attribute_values"]
-            and cfml_view.tag_attribute_name
-            in completions["cfml_tag_attribute_values"][cfml_view.tag_name]
-        ):
-            completion_list = completions["cfml_tag_attribute_values"][
-                cfml_view.tag_name
-            ][cfml_view.tag_attribute_name]
-            return cfml_view.CompletionList(completion_list, 0, False)
-        return None
-
-    # tag attribute completions
-    if cfml_view.previous_char in [" ", "(", "\t", "\n"]:
+    if (
+        cfml_view.tag_attribute_name is None
+        or cfml_view.tag_location == "tag_attribute_name"
+    ):
+        # tag attribute completions
         completion_list = completions["cfml_tag_attributes"].get(
             cfml_view.tag_name, None
         )
         if completion_list:
             return cfml_view.CompletionList(completion_list, 0, False)
+    elif (
+        cfml_view.tag_name in completions["cfml_tag_attribute_values"]
+        and cfml_view.tag_attribute_name
+        in completions["cfml_tag_attribute_values"][cfml_view.tag_name]
+    ):
+        # tag attribute value completions
+        completion_list = completions["cfml_tag_attribute_values"][cfml_view.tag_name][
+            cfml_view.tag_attribute_name
+        ]
+        return cfml_view.CompletionList(completion_list, 0, False)
 
     return None
 

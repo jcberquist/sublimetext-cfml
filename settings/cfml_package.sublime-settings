@@ -1,111 +1,115 @@
 {
-	// you can override the following settings in your user package settings
-	// this is accessible in the menu via Package Settings -> CFML -> Package Settings - User
-	// or via the command palette - CFML: User Package Settings
+    // you can override the following settings in your user package settings
+    // this is accessible in the menu via Package Settings -> CFML -> Package Settings - User
+    // or via the command palette - CFML: User Package Settings
 
-	// BIF completions
-	// "basic" - only the function name
-	// "required" - only required params are included, and no types
-	// "full" - all params and types are included in the completion
-	"cfml_bif_completions": "required",
+    // BIF completions
+    // "basic" - only the function name
+    // "required" - only required params are included, and no types
+    // "full" - all params and types are included in the completion
+    "cfml_bif_completions": "required",
 
-	// component completions
-	// "basic" - only the function name
-	// "required" - only required params are included, and no types
-	// "full" - all params and types are included in the completion
-	"cfml_cfc_completions": "required",
+    // component completions
+    // "basic" - only the function name
+    // "required" - only required params are included, and no types
+    // "full" - all params and types are included in the completion
+    "cfml_cfc_completions": "required",
 
-	// component completion names - please note that "full" completions
-	// block Sublime Text from including local buffer completions in the
-	// completion list. You can use a plugin such as `All Autocomplete` to
-	// get around this.
-	// "basic" - only the function name
-	// "full" - includes `():returntype` - e.g. `getSomething():struct`
-	"cfc_completion_names": "basic",
+    // component completion names - please note that "full" completions
+    // block Sublime Text from including local buffer completions in the
+    // completion list. You can use a plugin such as `All Autocomplete` to
+    // get around this.
+    // "basic" - only the function name
+    // "full" - includes `():returntype` - e.g. `getSomething():struct`
+    "cfc_completion_names": "basic",
 
-	// provide method completions for variables referring to instantiated components
-	// e.g. myvar = new path.to.cfc();
-	"instantiated_component_completions": true,
+    // provide method completions for variables referring to instantiated components
+    // e.g. myvar = new path.to.cfc();
+    "instantiated_component_completions": true,
 
-	// provide HTML completions in tag component functions
-	"html_completions_in_tag_components": true,
+    // provide HTML completions in tag component functions
+    "html_completions_in_tag_components": true,
 
-	// if true, when a ">" is typed to end a tag the corresponding closing tag will be inserted	after the cursor position,
-	// except for the cfml tags listed in the "cfml_non_closing_tags" setting below
-	"cfml_auto_insert_closing_tag": false,
+    // if true, when a ">" is typed to end a tag the corresponding closing tag will be inserted after the cursor position,
+    // except for the cfml tags listed in the "cfml_non_closing_tags" setting below
+    "cfml_auto_insert_closing_tag": false,
 
-	// controls what happens when the cursor is between a tag pair (e.g. <cfoutput>|</cfoutput>) and "enter" is pressed
-	// possible settings are "default","newline","indent"
-	// "default" inserts a newline character
-	// "newline" adds an extra new line between the tag pair and places the cursor there
-	// "indent" adds an extra new line between the tag pair and indents the cursor position
-	"cfml_between_tag_pair": "default",
+    // controls what happens when the cursor is between a tag pair (e.g. <cfoutput>|</cfoutput>) and "enter" is pressed
+    // possible settings are "default","newline","indent"
+    // "default" inserts a newline character
+    // "newline" adds an extra new line between the tag pair and places the cursor there
+    // "indent" adds an extra new line between the tag pair and indents the cursor position
+    "cfml_between_tag_pair": "default",
 
-	// tags that shouldn't be closed when auto closing tags
-	"cfml_non_closing_tags": ["cfabort","cfargument","cfbreak","cfcontent","cfcontinue","cfcookie","cfdirectory","cfdump","cfelse","cfelseif","cfexecute","cfexit","cffile","cfflush","cfheader","cfhttpparam","cfimage","cfimport","cfinclude","cfindex","cfinput","cfinvokeargument","cflocation","cflog","cfloginuser","cflogout","cfmailparam","cfobject","cfobjectcache","cfparam","cfpop","cfprocessingdirective","cfprocparam","cfprocresult","cfproperty","cfqueryparam","cfrethrow","cfreturn","cfschedule","cfsearch","cfset","cfsetting","cfthrow"],
-	"html_non_closing_tags": ["area","base","br","col","command","embed","hr","img","input","link","meta","param","source","track","wbr"],
+    // tags that shouldn't be closed when auto closing tags
+    "cfml_non_closing_tags": ["cfabort","cfargument","cfbreak","cfcontent","cfcontinue","cfcookie","cfdirectory","cfdump","cfelse","cfelseif","cfexecute","cfexit","cffile","cfflush","cfheader","cfhttpparam","cfimage","cfimport","cfinclude","cfindex","cfinput","cfinvokeargument","cflocation","cflog","cfloginuser","cflogout","cfmailparam","cfobject","cfobjectcache","cfparam","cfpop","cfprocessingdirective","cfprocparam","cfprocresult","cfproperty","cfqueryparam","cfrethrow","cfreturn","cfschedule","cfsearch","cfset","cfsetting","cfthrow"],
+    "html_non_closing_tags": ["area","base","br","col","command","embed","hr","img","input","link","meta","param","source","track","wbr"],
 
-	// if this is set to false, cfdocs data will not be used
-	"cfdocs_enabled": true,
+    // if this is set to false, cfdocs data will not be used
+    "cfdocs_enabled": true,
 
-	// file path to local version of cfdocs json data folder
-	// should end with trailing "/" - e.g. 'C:/github/cfdocs/data/en/'
-	"cfdocs_path": null,
+    // file path to local version of cfdocs json data folder
+    // should end with trailing "/" - e.g. 'C:/github/cfdocs/data/en/'
+    "cfdocs_path": null,
 
-	// highlight cfml_inline_documentation region
-	"inline_doc_regions_highlight": true,
+    // highlight cfml_inline_documentation region
+    "inline_doc_regions_highlight": true,
 
-	// run cfml_inline_documentation command on hover
-	"cfml_hover_docs": true,
+    // run cfml_inline_documentation command on hover
+    "cfml_hover_docs": true,
 
-	// show method preview in popup docs (when available)
-	"cfml_doc_method_preview": false,
+    // show method preview in popup docs (when available)
+    "cfml_doc_method_preview": false,
 
-	// completion docs for BIFs and indexed components
-	"cfml_completion_docs": true,
+    // completion docs for BIFs and indexed components
+    "cfml_completion_docs": true,
 
-	// color scheme styles to inject for Lucee/CFML tags
-	// valid keys are "foreground" and "font_style"
-	// "foreground": see <https://www.sublimetext.com/docs/3/color_schemes.html#colors>
-	// "font_style": "bold", "italic", "bold italic", or ""
-	"cfml_tag_style": { "foreground": "#4C9BB0", "font_style": "" },
-	"cfml_tag_attribute_style": { "foreground": "#D9995E", "font_style": "" },
+    // show completion docs for tag attributes
+    // setting "cfml_completion_docs" to false will also disable this
+    "cfml_tag_completion_docs": true,
 
-	// default controller and view folder names that the
-	// toggle_controller_view command looks for when switching
-	// between controller method and corresponding view
-	"controller_folders": ["controllers", "handlers"],
-	"view_folders": ["views"],
+    // color scheme styles to inject for Lucee/CFML tags
+    // valid keys are "foreground" and "font_style"
+    // "foreground": see <https://www.sublimetext.com/docs/3/color_schemes.html#colors>
+    // "font_style": "bold", "italic", "bold italic", or ""
+    "cfml_tag_style": { "foreground": "#4C9BB0", "font_style": "" },
+    "cfml_tag_attribute_style": { "foreground": "#D9995E", "font_style": "" },
 
-	// testbox completion settings
-	// these can also be set on a per project basis
-	// settings contained in a project override the package settings
-	"testbox_enabled": true,
-	"testbox_folders": ["tests"],
+    // default controller and view folder names that the
+    // toggle_controller_view command looks for when switching
+    // between controller method and corresponding view
+    "controller_folders": ["controllers", "handlers"],
+    "view_folders": ["views"],
 
-	// testbox test runner settings
-	// these settings should be set per project
-	// if there is a `box.json` file in the root of a project
-	// these settings can be placed there as well
-	"testbox": {
-		"runner": "http://localhost:8888/testbox/system/Testbox.cfc?method=runremote",
-		"tests_root": "",
-		"reporter": "compacttext", // options are `compacttext` and `text`
-		"results": {"server_root": "", "sublime_root": ""}
-	},
+    // testbox completion settings
+    // these can also be set on a per project basis
+    // settings contained in a project override the package settings
+    "testbox_enabled": true,
+    "testbox_folders": ["tests"],
 
-	// framework one settings
-	// these can also be set on a per project basis
-	// settings contained in a project override the package settings
-	"fw1_enabled": false,
-	"fw1_controller_folders": ["controllers"],
-	"fw1_view_folders": ["views"],
-	"fw1_layout_folders": ["layouts"],
+    // testbox test runner settings
+    // these settings should be set per project
+    // if there is a `box.json` file in the root of a project
+    // these settings can be placed there as well
+    "testbox": {
+        "runner": "http://localhost:8888/testbox/system/Testbox.cfc?method=runremote",
+        "tests_root": "",
+        "reporter": "compacttext", // options are `compacttext` and `text`
+        "results": {"server_root": "", "sublime_root": ""}
+    },
 
-	// dependency inject property command
-	"di_property": {
-		"script_template": "property {name};",
-		"tag_template": "<cfproperty name=\"{name}\">",
-		"sort_properties": true
-	}
+    // framework one settings
+    // these can also be set on a per project basis
+    // settings contained in a project override the package settings
+    "fw1_enabled": false,
+    "fw1_controller_folders": ["controllers"],
+    "fw1_view_folders": ["views"],
+    "fw1_layout_folders": ["layouts"],
+
+    // dependency inject property command
+    "di_property": {
+        "script_template": "property {name};",
+        "tag_template": "<cfproperty name=\"{name}\">",
+        "sort_properties": true
+    }
 }
