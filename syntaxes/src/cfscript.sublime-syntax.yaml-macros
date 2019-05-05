@@ -952,14 +952,18 @@ contexts:
             set:
               - match: '='
                 scope: keyword.operator.assignment.binary.cfml
-                set: expression
+                set:
+                  - !meta source.cfml.script
+                  - expression
               - include: else-pop
           - match: \b{{dot_path_identifier}}\b
             scope: meta.string.unquoted.cfml string.unquoted.cfml
             set:
               - match: '='
                 scope: keyword.operator.assignment.binary.cfml
-                set: expression
+                set:
+                  - !meta source.cfml.script
+                  - expression
               - include: else-pop
           - include: else-pop
 
