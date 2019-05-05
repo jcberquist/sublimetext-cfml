@@ -119,7 +119,7 @@ def load_tag_list():
         'while',
     ]
     tags = sublime.load_resource(
-        "Packages/CFML/src/basecompletions/json/cfml_tags.json"
+        "Packages/CFML/src/plugins_/basecompletions/json/cfml_tags.json"
     )
     tags = sublime.decode_value(tags).keys()
     return [t.lower()[2:] for t in tags if t.lower()[2:] not in tags_to_filter]
@@ -128,7 +128,7 @@ def load_tag_list():
 def load_functions():
 
     functions = sublime.load_resource(
-        "Packages/CFML/src/basecompletions/json/cfml_functions.json"
+        "Packages/CFML/src/plugins_/basecompletions/json/cfml_functions.json"
     )
     keys = [k.lower() for k in sublime.decode_value(functions)]
 
@@ -174,7 +174,7 @@ def load_member_functions():
 
     member_functions = set()
     data = sublime.load_resource(
-        "Packages/CFML/src/basecompletions/json/cfml_member_functions.json"
+        "Packages/CFML/src/plugins_/basecompletions/json/cfml_member_functions.json"
     )
     data = sublime.decode_value(data)
 
