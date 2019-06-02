@@ -1,0 +1,20 @@
+CFML v0.28.0 Changelog:
+
+- Updated the "CFML: Toggle Color Scheme Styles" command to use of the new
+  `.sublime-color-scheme` format and customizations. See the readme for more
+  information as well as the official documentation:
+  https://www.sublimetext.com/docs/3/color_schemes.html#customization
+
+- Hovering over a CFML tag attribute or using F1 on it will now show specifically
+  the documentation for that tag attribute instead of for the tag in general.
+
+- When completion docs are enabled, tag attribute documentation will now be shown
+  while entering in tag attribute values.
+
+- Syntax highlighting support has been added for ordered structs and ACF2018
+  typed arrays.
+
+- Basic function completions have been updated to be based on a more recent version
+  of cfdocs.org function data.
+
+PLEASE RESTART SUBLIME TEXT TO ENSURE THESE CHANGES ARE LOADED CORRECTLY, THANKS!
