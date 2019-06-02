@@ -62,8 +62,7 @@ def get_completion_docs(cfml_view):
         return None
 
     if (
-        utils.get_setting("cfml_tag_completion_docs")
-        and cfml_view.tag_name
+        cfml_view.tag_name
         and cfml_view.tag_attribute_name
         and cfml_view.tag_location == "tag_attributes"
     ):

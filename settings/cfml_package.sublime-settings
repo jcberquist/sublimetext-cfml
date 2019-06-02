@@ -64,10 +64,6 @@
     // completion docs for BIFs and indexed components
     "cfml_completion_docs": true,
 
-    // show completion docs for tag attributes
-    // setting "cfml_completion_docs" to false will also disable this
-    "cfml_tag_completion_docs": true,
-
     // color scheme styles to inject for Lucee/CFML tags
     // valid keys are "foreground" and "font_style"
     // "foreground": see <https://www.sublimetext.com/docs/3/color_schemes.html#colors>
