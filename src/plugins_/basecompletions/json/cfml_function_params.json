@@ -57,17 +57,24 @@
         "type": ["object", "resource", "template", "query"]
     },
     "cachegetproperties": {
-        "type": ["object", "template", "resource", "query"]
+        "region": ["object", "template", "resource", "query"]
     },
     "cachegetsession": {
-        "iskey": ["true", "false"]
+        "iskey": ["true", "false"],
+        "objecttype": ["object", "template"]
+    },
+    "cacheput": {
+        "throwonerror": ["true", "false"]
+    },
+    "cacheregionnew": {
+        "throwonerror": ["true", "false"]
     },
     "cacheremove": {
         "exact": ["true", "false"],
         "throwonerror": ["true", "false"]
     },
     "callstackdump": {
-        "destination": ["console", "browser", "file"]
+        "output": ["console", "browser", "file"]
     },
     "canonicalize": {
         "restrictmixed": ["true", "false"],
@@ -112,7 +119,7 @@
         "datepart": ["yyyy", "m", "y", "d", "h", "n", "s"]
     },
     "dateconvert": {
-        "type": ["local2Utc", "utc2Local"]
+        "conversiontype": ["local2Utc", "utc2Local"]
     },
     "datediff": {
         "datepart": ["yyyy", "q", "m", "y", "d", "w", "ww", "h", "n", "s"]
@@ -124,7 +131,7 @@
         "timezone": ["UTC", "GMT", "America/Chicago"]
     },
     "dayofweekasstring": {
-        "day_of_week": ["1", "2", "3", "4", "5", "6", "7"]
+        "dayofweek": ["1", "2", "3", "4", "5", "6", "7"]
     },
     "dayofweekshortasstring": {
         "day_of_week": ["1", "2", "3", "4", "5", "6", "7"]
@@ -134,7 +141,8 @@
         "encoding": ["UU", "Base64", "Hex"]
     },
     "decryptbinary": {
-        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"]
+        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"],
+        "encoding": ["UU", "Base64", "Hex"]
     },
     "deserialize": {
         "usecustomserializer": ["true", "false"]
@@ -143,23 +151,42 @@
         "strictmapping": ["true", "false"],
         "usecustomserializer": ["true", "false"]
     },
+    "deserializexml": {
+        "usecustomserializer": ["true", "false"]
+    },
     "directorycopy": {
         "createpath": ["true", "false"],
         "recurse": ["true", "false"]
     },
+    "directorycreate": {
+        "createpath": ["true", "false"],
+        "ignoreexists": ["true", "false"]
+    },
     "directorydelete": {
         "recurse": ["true", "false"]
+    },
+    "directoryexists": {
+        "allowrealpath ": ["true", "false"]
     },
     "directorylist": {
         "listinfo": ["name", "path", "query"],
         "recurse": ["true", "false"],
         "type": ["file", "dir", "all"]
     },
+    "directoryrename": {
+        "createpath": ["true", "false"]
+    },
+    "duplicate": {
+        "deepcopy": ["true", "false"]
+    },
     "each": {
         "parallel": ["true", "false"]
     },
     "empty": {
         "variable": ["\"\"", "{}", "[]"]
+    },
+    "encodefor": {
+        "type": ["css", "dn", "html", "htmlattribute", "javascript", "ldap", "url", "xml", "xmlattribute", "xpath"]
     },
     "encodeforhtml": {
         "canonicalize": ["true", "false"]
@@ -201,25 +228,25 @@
     "extract": {
         "format": ["bzip", "bzip2", "tbz", "tbz2", "tar", "tar.bz", "tar.gz", "gzip", "tgz", "zip"]
     },
+    "filegetmimetype": {
+        "strict": ["true", "false"]
+    },
     "fileopen": {
         "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"],
-        "mode": ["read", "readBinary", "write", "append"]
-    },
-    "fileread": {
-        "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+        "mode": ["read", "readBinary", "write", "append"],
+        "seekable": ["true", "false"]
     },
     "filesetattribute": {
         "attribute": ["readOnly", "hidden", "normal"]
     },
     "fileupload": {
-        "nameconflict": ["error", "skip", "overwrite", "makeunique"],
+        "onconflict": ["error", "skip", "overwrite", "makeunique"],
         "strict": ["true", "false"]
     },
     "fileuploadall": {
-        "nameconflict": ["Error", "Skip", "Overwrite", "MakeUnique"]
-    },
-    "findnocase": {
-        "start": ["1"]
+        "continueonerror": ["true", "false"],
+        "onconflict": ["error", "skip", "overwrite", "makeUnique"],
+        "strict": ["true", "false"]
     },
     "generatepbkdfkey": {
         "algorithm": ["PBKDF2WithHmacSHA1", "PBKDF2WithSHA1", "PBKDF2WithSHA224", "PBKDF2WithSHA256", "PBKDF2WithSHA384", "PBKDF2WithSHA512"],
@@ -238,9 +265,15 @@
     "getfunctiondata": {
         "dialect": ["CFML", "Lucee"]
     },
+    "gethttprequestdata": {
+        "includebody": ["true", "false"]
+    },
     "getlocaleinfo": {
         "dsplocale": ["English", "German", "French", "..."],
         "locale": ["en", "de-DE", "de-CH", "..."]
+    },
+    "getmemoryusage": {
+        "type": ["heap", "non_heap"]
     },
     "getmetricdata": {
         "mode": ["perf_monitor", "simple_load", "prev_req_time", "avg_req_time"]
@@ -372,6 +405,9 @@
     "listitemtrim": {
         "includeemptyfields": ["true", "false"]
     },
+    "listlast": {
+        "includeemptyvalues": ["true", "false"]
+    },
     "listlen": {
         "includeemptyvalues": ["Yes", "No"]
     },
@@ -430,10 +466,6 @@
     "queryevery": {
         "parallel": ["true", "false"]
     },
-    "queryexecute": {
-        "options": ["datasource", "cachename", "dbtype"],
-        "params": ["cfsqltype", "list"]
-    },
     "queryfilter": {
         "parallel": ["true", "false"]
     },
@@ -441,7 +473,7 @@
         "parallel": ["true", "false"]
     },
     "querynew": {
-        "columntypelist": ["Integer", "BigInt", "Double", "Decimal", "VarChar", "Binary", "Bit", "Time", "Data"]
+        "columntypelist": ["Integer", "BigInt", "Double", "Decimal", "VarChar", "Binary", "Bit", "Time", "Date", "Timestamp"]
     },
     "querysome": {
         "parallel": ["true", "false"]
@@ -555,6 +587,9 @@
         "localesensitive": ["true", "false"],
         "sortorder": ["asc", "desc"],
         "sorttype": ["numeric", "text"]
+    },
+    "systemcacheclear": {
+        "cachename": ["all", "template", "page", "component", "cfc", "class", "customtag", "ct", "query", "object", "tag", "function"]
     },
     "systemoutput": {
         "addnewline": ["true", "false"],
