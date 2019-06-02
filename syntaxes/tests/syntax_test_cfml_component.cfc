@@ -36,7 +36,7 @@ extends=base.test
   <cffunction name="testHtml" returntype="string" access="public">
 <!---              ^ embedding.cfml source.cfml meta.tag.cfml meta.function.cfml -entity.name.function.cfml --->
 <!---               ^ embedding.cfml source.cfml meta.tag.cfml meta.function.cfml entity.name.function.cfml --->
-<!---                                     ^ embedding.cfml source.cfml meta.tag.cfml meta.function.cfml string.quoted.double.cfml storage.type.return-type.primitive.cfml --->
+<!---                                     ^ embedding.cfml source.cfml meta.tag.cfml meta.function.cfml string.quoted.double.cfml storage.type.primitive.cfml --->
 <!---                                                     ^ embedding.cfml source.cfml meta.tag.cfml meta.function.cfml string.quoted.double.cfml storage.modifier.cfml --->
     <cfargument name="argName" type="any">
     <!--- <- meta.tag.argument.cfml --->

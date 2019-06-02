@@ -61,7 +61,7 @@ contexts:
       pop: true
 
   comments:
-    - match: (/\*\*)\s*\n
+    - match: (/\*\*)
       scope: punctuation.definition.comment.cfml
       push:
         - meta_include_prototype: false
@@ -678,22 +678,22 @@ contexts:
 
   storage-types:
     - match: '(?i){{storage_types}}'
-      scope: storage.type.return-type.primitive.cfml
+      scope: storage.type.primitive.cfml
       pop: true
     - match: '(?i:\b(function)\b)'
-      scope: storage.type.return-type.function.cfml
+      scope: storage.type.function.cfml
       pop: true
     - match: '(?i:\b(void)\b)'
-      scope: storage.type.return-type.void.cfml
+      scope: storage.type.void.cfml
       pop: true
     - match: '(?i:\b({{dot_path_identifier}})\b)(\[)(\])'
       captures:
-        1: storage.type.return-type.object.array.cfml
+        1: storage.type.object.array.cfml
         2: meta.brackets.cfml punctuation.section.brackets.begin.cfml
         3: meta.brackets.cfml punctuation.section.brackets.end.cfml
       pop: true
     - match: '(?i:\b{{dot_path_identifier}}\b)'
-      scope: storage.type.return-type.object.cfml
+      scope: storage.type.object.cfml
       pop: true
 
   struct-literal:
@@ -704,26 +704,30 @@ contexts:
         - match: '\}'
           scope: punctuation.section.block.end.cfml
           pop: true
-        - match: "(?=('[^']*'|\"[^\"]*\"|{{identifier}})\\s*(:|=)({{func_assignment_lookahead}}|{{arrow_func_lookahead}}))"
-          push:
-            - !expect_context either-function-declaration
-            - !meta meta.function.declaration.cfml
-            - - match: '[:=]'
-                scope: punctuation.separator.key-value.cfml
-              - include: else-pop
-            - !meta meta.struct-literal.key.cfml
-            - method-name
-        - match: "(?=\"|')"
-          push:
-            - !meta meta.struct-literal.key.cfml
-            - string
-        - match: '[_$[:alnum:]]+(?=\s*[:=])'
-          scope: meta.struct-literal.key.cfml
+        - include: struct-contents
         - match: ','
           scope: punctuation.separator.struct-literal.cfml
-        - match: '[:=]'
-          scope: punctuation.separator.key-value.cfml
-          push: expression-no-comma
+
+
+  struct-contents:
+    - match: "(?=('[^']*'|\"[^\"]*\"|{{identifier}})\\s*(:|=)({{func_assignment_lookahead}}|{{arrow_func_lookahead}}))"
+      push:
+        - !expect_context either-function-declaration
+        - !meta meta.function.declaration.cfml
+        - - match: '[:=]'
+            scope: punctuation.separator.key-value.cfml
+          - include: else-pop
+        - !meta meta.struct-literal.key.cfml
+        - method-name
+    - match: "(?=\"|')"
+      push:
+        - !meta meta.struct-literal.key.cfml
+        - string
+    - match: '[_$[:alnum:]]+(?=\s*[:=])'
+      scope: meta.struct-literal.key.cfml
+    - match: '[:=]'
+      scope: punctuation.separator.key-value.cfml
+      push: expression-no-comma
 
   method-name:
     - match: '{{identifier}}'
@@ -751,17 +755,44 @@ contexts:
         - include: scope:embedding.cfml#string-template-expression
 
   array-literal:
+    - match: (?=\[)
+      set:
+        - !meta meta.sequence.cfml
+        - - match: '\['
+            scope: punctuation.section.brackets.begin.cfml
+            set:
+              - match: (?=('[^']*'|\"[^\"]*\"|[_$[:alnum:]]+)?\s*[:=])
+                set:
+                  - match: '\]'
+                    scope: punctuation.section.brackets.end.cfml
+                    pop: true
+                  - include: struct-contents
+                  - match: ','
+                    scope: punctuation.separator.sequence.cfml
+              - match: (?=\S)
+                set:
+                  - match: '\]'
+                    scope: punctuation.section.brackets.end.cfml
+                    pop: true
+                  - include: expression-break
+                  - match: ','
+                    scope: punctuation.separator.sequence.cfml
+                  - include: expression-no-comma-push
+        - - match: (?=\[[^\[\]]*?\]\s*\[)
+            set: array-types
+          - include: else-pop
+
+  array-types:
     - match: '\['
       scope: punctuation.section.brackets.begin.cfml
       set:
-        - meta_scope: meta.array-literal.cfml
-        - match: '\]'
-          scope: punctuation.section.brackets.end.cfml
-          pop: true
-        - include: expression-break
-        - match: ','
-          scope: punctuation.separator.array-literal.cfml
-        - include: expression-no-comma-push
+        - - meta_scope: meta.brackets.cfml
+          - match: '\]'
+            scope: punctuation.section.brackets.end.cfml
+            pop: true
+          - include: expression-push
+        - !arraytypes
+    - include: else-pop
 
   property-access:
     - match: '\['
@@ -810,7 +841,7 @@ contexts:
       pop: true
 
   call:
-    - match: '(?=\b{{identifier}}\s*\()'
+    - match: '(?i)(?=\b{{identifier}}\s*\(|\barraynew\s*\[)'
       set:
         - include: support-call
         - match: '({{identifier}})(?=\s*\()'
@@ -1048,6 +1079,14 @@ contexts:
       set:
         - !meta meta.function-call.support.cfml meta.function-call.support.entity.cfml
         - support-call-params
+    - match: (?i)\b(arraynew)(?=\[)
+      captures:
+        1: support.function.cfml
+      set:
+        - !meta meta.function-call.support.cfml
+        - support-call-params
+        - array-types
+
     - match: !functions |-
         (?x)(?i)\b({functions})(?=\()
       captures:

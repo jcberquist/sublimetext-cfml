@@ -10,10 +10,10 @@ DELIMITED_SCOPES = {
         "separator": "punctuation.separator.struct-literal.cfml",
     },
     "array": {
-        "scope": "meta.array-literal.cfml",
+        "scope": "meta.sequence.cfml",
         "start": "punctuation.section.brackets.begin.cfml",
         "end": "punctuation.section.brackets.end.cfml",
-        "separator": "punctuation.separator.array-literal.cfml",
+        "separator": "punctuation.separator.sequence.cfml",
     },
     "function_declaration": {
         "scope": "meta.function.parameters.cfml",

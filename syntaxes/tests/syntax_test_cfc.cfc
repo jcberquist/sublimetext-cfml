@@ -140,7 +140,7 @@ default="string";
 
   public User[] function getUser(){}
 //^ meta.function.declaration.cfml storage.modifier.cfml
-//       ^ meta.function.declaration.cfml storage.type.return-type.object.array.cfml
+//       ^ meta.function.declaration.cfml storage.type.object.array.cfml
 //           ^ meta.function.declaration.cfml meta.brackets.cfml punctuation.section.brackets.begin.cfml
 
   function go( required string param = someVar & hint hint="go", param_2 ) {}
@@ -161,7 +161,7 @@ private numeric function $fixNumber(required any value) {}
 //                       ^^^^^^^^^^ entity.name.function.cfml
 
   void function testme() hint="testme" {}
-//^ meta.function.declaration.cfml storage.type.return-type.void.cfml
+//^ meta.function.declaration.cfml storage.type.void.cfml
 //                       ^ meta.function.declaration.cfml
 //                       ^ -meta.function.declaration.cfml meta.function.declaration.cfml
 
@@ -226,8 +226,8 @@ private numeric function $fixNumber(required any value) {}
 
   var test[key][0] = [ 1, 2, 3 ];
 //        ^^^^^^^^ meta.brackets.cfml
-//                   ^^^^^^^^^^^ meta.array-literal.cfml
-//                      ^ punctuation.separator.array-literal.cfml
+//                   ^^^^^^^^^^^ meta.sequence.cfml
+//                      ^ punctuation.separator.sequence.cfml
   obj.prop['key'] = true;
 //        ^^^^^^^ meta.brackets.cfml
 
@@ -266,9 +266,34 @@ cflock(name:"name-of-lock") {}
 // <- embedding.cfml source.cfml.script meta.class.body.cfml punctuation.section.block.end.cfml
  // <- embedding.cfml source.cfml.script -meta
 
+a = arrayNew["string"](1);
+//  ^^^^^^^^ source.cfml.script support.function.cfml
+//          ^ source.cfml.script meta.brackets.cfml punctuation.section.brackets.begin.cfml
+//            ^^^^^^ meta.brackets.cfml meta.string.quoted.double.cfml string.quoted.double.cfml storage.type.primitive.cfml
+
+a = ['string']["a", "b"];
+//    ^^^^^^ meta.brackets.cfml meta.string.quoted.single.cfml string.quoted.single.cfml storage.type.primitive.cfml
+//            ^^^^^^^^^^ source.cfml.script meta.sequence.cfml
+
+a = [
+    key: value,
+//  ^ meta.struct-literal.key.cfml
+//     ^ punctuation.separator.key-value.cfml
+//            ^ punctuation.separator.sequence.cfml
+    'key': value,
+//  ^ meta.struct-literal.key.cfml string.quoted.single.cfml
+//       ^ punctuation.separator.key-value.cfml -string
+    "key": value,
+//  ^ meta.struct-literal.key.cfml string.quoted.double.cfml
+//       ^ punctuation.separator.key-value.cfml -string
+];
+
 a = 'a #test# string';
 //     ^ punctuation.definition.template-expression.begin.cfml
 //          ^ punctuation.definition.template-expression.end.cfml
+
+a = [:];
+//   ^ punctuation.separator.key-value.cfml
 
 try {
 } catch (any e) {
