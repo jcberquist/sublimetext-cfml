@@ -310,3 +310,6 @@ try {
 //       ^^^^^^^^^^^^^^^^^^^^^ support.type.exception.cfml
 //                             ^ variable.other.readwrite.cfml
 }
+
+if (a <> b) {}
+//    ^^ source.cfml.script meta.conditional.cfml meta.group.cfml keyword.operator.comparison.binary.cfml
