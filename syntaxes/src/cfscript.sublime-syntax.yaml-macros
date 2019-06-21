@@ -38,9 +38,15 @@ variables:
     )
 
   line_continuation_lookahead: >-
-    (?x)
-    (?!\+\+|--)
-    (?=!=|[-+*/% ><=&|^\[(;,.:?])
+    (?x:(?=
+      \s*
+      (?! \+\+ | -- )
+      (?=
+        != |
+        [-+*/%><=&|^\[(;,.:?] |
+        (?i:in|mod|gt|gte|lt|lte|and|or|xor|eqv|imp)\b
+      )
+    ))
 
 contexts:
   prototype:
