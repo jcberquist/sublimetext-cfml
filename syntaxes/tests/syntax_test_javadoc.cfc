@@ -19,4 +19,7 @@ This is a description of the component
 */
 component {
 
+    /**/ a;
+//       ^ source.cfml.script variable.other.readwrite.cfml - comment
+
 }

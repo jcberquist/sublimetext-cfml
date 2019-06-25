@@ -67,7 +67,7 @@ contexts:
       pop: true
 
   comments:
-    - match: (/\*\*)
+    - match: /\*\*(?!/|\*)
       scope: punctuation.definition.comment.cfml
       push:
         - meta_include_prototype: false
