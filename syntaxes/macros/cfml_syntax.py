@@ -106,6 +106,7 @@ def load_tag_list():
         'function',
         'if',
         'interface',
+        'print',
         'rethrow',
         'retry',
         'return',

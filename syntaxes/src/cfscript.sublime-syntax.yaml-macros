@@ -543,8 +543,8 @@ contexts:
       push: restricted-production
     - match: \b(break|continue)\b
       scope: keyword.control.loop.cfml
-    # - match: \b(abort)\b
-    #   scope: keyword.control.flow.cfml
+    - match: \b(abort)\b
+      scope: keyword.control.flow.cfml
     - match: \b(return)\b
       scope: keyword.control.flow.cfml
       push: restricted-production

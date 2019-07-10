@@ -127,6 +127,13 @@ default="string";
 //       ^ meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.section.group.begin.cfml -support.function.cfml
 //         ^ meta.function-call.parameters.support.cfml entity.other.function-parameter.cfml -meta.brace
 
+    throw "test error message";
+//  ^^^^^ source.cfml.script meta.class.body.cfml meta.function.body.cfml keyword.control.trycatch.cfml
+
+    abort;
+//  ^^^^^ source.cfml.script meta.class.body.cfml meta.function.body.cfml keyword.control.flow.cfml
+
+
     myarray.append( value = 'test' );
 //  ^ variable.other.object.cfml
 //          ^ meta.function-call.method.support.cfml support.function.member.cfml

@@ -620,10 +620,8 @@ contexts:
       push: restricted-production
     - match: \b(break|continue)\b
       scope: keyword.control.loop.cfml
-    # - match: \b(abort)\b
-
-    #   scope: keyword.control.flow.cfml
-
+    - match: \b(abort)\b
+      scope: keyword.control.flow.cfml
     - match: \b(return)\b
       scope: keyword.control.flow.cfml
       push: restricted-production
@@ -1199,11 +1197,11 @@ contexts:
         |lock|log|login|loginuser|logout|loop|mail|mailparam|mailpart|map|mapitem|mediaplayer
         |menu|menuitem|messagebox|module|ntauthenticate|oauth|object|objectcache|output|param
         |pdf|pdfform|pdfformparam|pdfparam|pdfsubform|pod|pop|presentation|presentationslide
-        |presenter|print|processingdirective|procparam|procresult|progressbar|property|query
-        |queryparam|registry|report|reportparam|savecontent|schedule|search|select|setting
-        |sharepoint|silent|slider|spreadsheet|sprydataset|storedproc|table|textarea|textinput
-        |thread|throw|timer|tooltip|trace|transaction|tree|treeitem|update|wddx|websocket
-        |window|xml|zip|zipparam)
+        |presenter|processingdirective|procparam|procresult|progressbar|property|query|queryparam
+        |registry|report|reportparam|savecontent|schedule|search|select|setting|sharepoint
+        |silent|slider|spreadsheet|sprydataset|storedproc|table|textarea|textinput|thread
+        |throw|timer|tooltip|trace|transaction|tree|treeitem|update|wddx|websocket|window
+        |xml|zip|zipparam)
             (?=\s+{{attribute_name}}\s*[=;{\n]|\s*[{\n])
       captures:
         1: entity.name.tag.script.cfml
@@ -1238,11 +1236,11 @@ contexts:
         |lock|log|login|loginuser|logout|loop|mail|mailparam|mailpart|map|mapitem|mediaplayer
         |menu|menuitem|messagebox|module|ntauthenticate|oauth|object|objectcache|output|param
         |pdf|pdfform|pdfformparam|pdfparam|pdfsubform|pod|pop|presentation|presentationslide
-        |presenter|print|processingdirective|procparam|procresult|progressbar|property|query
-        |queryparam|registry|report|reportparam|savecontent|schedule|search|select|setting
-        |sharepoint|silent|slider|spreadsheet|sprydataset|storedproc|table|textarea|textinput
-        |thread|throw|timer|tooltip|trace|transaction|tree|treeitem|update|wddx|websocket
-        |window|xml|zip|zipparam)(?=\()
+        |presenter|processingdirective|procparam|procresult|progressbar|property|query|queryparam
+        |registry|report|reportparam|savecontent|schedule|search|select|setting|sharepoint
+        |silent|slider|spreadsheet|sprydataset|storedproc|table|textarea|textinput|thread
+        |throw|timer|tooltip|trace|transaction|tree|treeitem|update|wddx|websocket|window
+        |xml|zip|zipparam)(?=\()
       scope: entity.name.tag.script.cfml
       push:
         -   - meta_scope: meta.tag.script.cf.cfml
