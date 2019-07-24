@@ -128,11 +128,19 @@ default="string";
 //         ^ meta.function-call.parameters.support.cfml entity.other.function-parameter.cfml -meta.brace
 
     throw "test error message";
-//  ^^^^^ source.cfml.script meta.class.body.cfml meta.function.body.cfml keyword.control.trycatch.cfml
+//  ^^^^^ keyword.control.trycatch.cfml
 
     abort;
-//  ^^^^^ source.cfml.script meta.class.body.cfml meta.function.body.cfml keyword.control.flow.cfml
+//  ^^^^^ keyword.control.flow.cfml
 
+    include '#template#';
+//  ^^^^^^^ keyword.control.flow.cfml
+
+    include myvar;
+//  ^^^^^^^ keyword.control.flow.cfml
+
+    include template='';
+//  ^^^^^^^ meta.tag.script.cfml entity.name.tag.script.cfml
 
     myarray.append( value = 'test' );
 //  ^ variable.other.object.cfml

@@ -548,6 +548,9 @@ contexts:
     - match: \b(return)\b
       scope: keyword.control.flow.cfml
       push: restricted-production
+    - match: \b(include)\b(?!\s+(?:template|runeonce)=)
+      scope: keyword.control.flow.cfml
+      push: restricted-production
 
   constants:
     - match: \btrue\b
