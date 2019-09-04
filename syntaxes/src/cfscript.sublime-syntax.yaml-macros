@@ -851,7 +851,7 @@ contexts:
       pop: true
 
   call:
-    - match: '(?i)(?=\b{{identifier}}\s*\(|\barraynew\s*\[)'
+    - match: '(?i)(?={{identifier}}\s*\(|\barraynew\s*\[)'
       set:
         - include: support-call
         - match: '({{identifier}})(?=\s*\()'

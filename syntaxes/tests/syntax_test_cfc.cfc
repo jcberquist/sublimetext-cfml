@@ -62,6 +62,9 @@ default="string";
     doSomething( arr, item, true );
 //             ^ meta.function-call.cfml meta.function-call.parameters.cfml punctuation.section.group.begin.cfml
 //                  ^ punctuation.separator.function-call.cfml
+    $$badRequest();
+//              ^ meta.function-call.cfml meta.function-call.parameters.cfml punctuation.section.group.begin.cfml
+//
     obj.do( arr, item, true );
 //        ^ meta.function-call.method.cfml meta.function-call.parameters.method.cfml punctuation.section.group.begin.cfml
 //             ^ punctuation.separator.function-call.method.cfml

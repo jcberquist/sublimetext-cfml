@@ -914,24 +914,24 @@ contexts:
               scope: punctuation.section.brackets.end.cfml
               pop: true
             - include: expression-push
-        -   - match: "'"
+        -   - scope: punctuation.definition.string.begin.cfml
+              match: "'"
               set:
                 -   - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
-                    - match: "'"
+                    - scope: punctuation.definition.string.end.cfml
+                      match: "'"
                       pop: true
-                      scope: punctuation.definition.string.end.cfml
                 -   - include: storage-types
                     - include: else-pop
-              scope: punctuation.definition.string.begin.cfml
-            - match: '"'
+            - scope: punctuation.definition.string.begin.cfml
+              match: '"'
               set:
                 -   - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
-                    - match: '"'
+                    - scope: punctuation.definition.string.end.cfml
+                      match: '"'
                       pop: true
-                      scope: punctuation.definition.string.end.cfml
                 -   - include: storage-types
                     - include: else-pop
-              scope: punctuation.definition.string.begin.cfml
     - include: else-pop
 
   property-access:
@@ -981,7 +981,7 @@ contexts:
       pop: true
 
   call:
-    - match: (?i)(?=\b{{identifier}}\s*\(|\barraynew\s*\[)
+    - match: (?i)(?={{identifier}}\s*\(|\barraynew\s*\[)
       set:
         - include: support-call
         - match: ({{identifier}})(?=\s*\()
