@@ -19,7 +19,7 @@ variables:
   dot_path_identifier: '[_$[:alpha:]][_$[:alnum:].]*'
   constant_identifier: '[[:upper:]][_$[:digit:][:upper:]]*\b'
   attribute_name: '[_[:alpha:]][[:alnum:]_\-:]*'
-  arrow_func_lookahead: \s*\([^()]*?\)\s*=>
+  arrow_func_lookahead: \s*(?:{{identifier}}|\([^()]*?\))\s*=>
   param_attributes: \b(name|default|max|maxLength|min|pattern|type)\b
   storage_modifier: \b(private|package|public|remote|static|final|abstract)\b
   storage_types: \b(?:any|array|binary|boolean|component|date|guid|numeric|query|string|struct|xml|uuid)\b
@@ -750,8 +750,15 @@ contexts:
             - include: else-pop
         -
 
-            - include: function-declaration-parameters
+            - include: arrow-function-parameters
             - include: else-pop
+  arrow-function-parameters:
+    - match: '{{identifier}}'
+      scope: variable.parameter.function.cfml
+      pop: true
+    - include: function-declaration-parameters
+    - include: else-pop
+
   function-return-types:
     - match: (?i)(?=\bfunction\b(?!{{func_assignment_lookahead}}))
       pop: true

@@ -221,4 +221,46 @@ var test = (a) =>
 { }
 // <- source.cfml.script meta.class.body.cfml meta.function.body.cfml punctuation.section.block.begin.cfml -meta.struct-literal.cfml
 
+  var test = param => param * 2;
+  // <- storage.type.cfml
+//   ^ -storage.type.cfml
+//    ^ meta.function.declaration.cfml variable.other.readwrite.cfml entity.name.function.cfml
+//        ^ -variable.other.readwrite.cfml -entity.name.function.cfml
+//         ^ keyword.operator.assignment.binary.cfml
+//          ^ -keyword.operator.assignment.binary.cfml
+//           ^ variable.parameter.function.cfml
+//                ^ -variable.parameter.function.cfml
+//                 ^ storage.type.function.arrow.cfml
+//                   ^ -storage.type.function.arrow.cfml
+//                    ^ meta.function.body.cfml variable.other.readwrite.cfml -meta.function.declaration.cfml
+//                         ^ -variable.other.readwrite.cfml
+//                          ^ keyword.operator.arithmetic.binary.cfml
+//                           ^ -keyword.operator.arithmetic.binary.cfml
+//                            ^ constant.numeric.cfml
+//                             ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -constant.numeric.cfml
+//                              ^ -punctuation.terminator.statement.cfml
+
+  var test = param => { param * 2 };
+  // <- storage.type.cfml
+//   ^ -storage.type.cfml
+//    ^ meta.function.declaration.cfml variable.other.readwrite.cfml entity.name.function.cfml
+//        ^ -variable.other.readwrite.cfml -entity.name.function.cfml
+//         ^ keyword.operator.assignment.binary.cfml
+//          ^ -keyword.operator.assignment.binary.cfml//
+//           ^ variable.parameter.function.cfml
+//                ^ -variable.parameter.function.cfml
+//                 ^ storage.type.function.arrow.cfml
+//                   ^ -storage.type.function.arrow.cfml
+//                    ^ meta.function.body.cfml punctuation.section.block.begin.cfml -meta.function.declaration.cfml
+//                     ^ -punctuation.section.block.begin.cfml
+//                      ^ variable.other.readwrite.cfml
+//                           ^ -variable.other.readwrite.cfml
+//                            ^ keyword.operator.arithmetic.binary.cfml
+//                             ^ -keyword.operator.arithmetic.binary.cfml
+//                              ^ constant.numeric.cfml
+//                               ^ -constant.numeric.cfml
+//                                ^ punctuation.section.block.end.cfml
+//                                 ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -punctuation.section.block.end.cfml
+//                                  ^ -punctuation.terminator.statement.cfml
+
 }
