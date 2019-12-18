@@ -1,6 +1,7 @@
 %YAML 1.2
 ---
 # Started with https://github.com/SublimeText/ColdFusion
+
 name: CFML
 file_extensions:
   - cfml
@@ -10,7 +11,6 @@ scope: embedding.cfml
 
 variables:
   attribute_name: '[_[:alpha:]][[:alnum:]_\-:]*'
-
 contexts:
   else-pop:
     - match: (?=\S)
@@ -518,6 +518,19 @@ contexts:
     - match: '#'
       scope: punctuation.definition.template-expression.begin.cfml
       push:
+        - match: '#'
+          scope: punctuation.definition.template-expression.end.cfml
+          pop: true
+        - match: (?=.|\n)
+          push:
+            - meta_content_scope: source.cfml.script
+            - include: template-expression-contents
+  template-expression-set:
+    - match: '##'
+      scope: constant.character.escape.hash.cfml
+    - match: '#'
+      scope: punctuation.definition.template-expression.begin.cfml
+      set:
         - match: '#'
           scope: punctuation.definition.template-expression.end.cfml
           pop: true

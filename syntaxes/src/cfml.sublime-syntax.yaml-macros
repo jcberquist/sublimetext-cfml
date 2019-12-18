@@ -333,6 +333,11 @@ contexts:
     meta_content_scope: source.cfml.script
     html_entities: true
 
+  template-expression-set:
+    !template_expression
+    meta_content_scope: source.cfml.script
+    push_or_set: 'set'
+
   sql-template-expression:
     !template_expression
     meta_content_scope: source.sql source.cfml.script

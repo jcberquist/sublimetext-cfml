@@ -129,7 +129,7 @@ def keyword_control(name, scope, meta_scope, contexts="block"):
     return cfml_syntax.order_output(syntax)
 
 
-def template_expression(meta_content_scope, clear_scopes=None, html_entities=False):
+def template_expression(meta_content_scope, clear_scopes=None, html_entities=False, push_or_set="push"):
     push_context = [
         {"meta_content_scope": meta_content_scope},
         {"include": "template-expression-contents"},
@@ -169,7 +169,7 @@ def template_expression(meta_content_scope, clear_scopes=None, html_entities=Fal
         {
             "match": "#",
             "scope": "punctuation.definition.template-expression.begin.cfml",
-            "push": [
+            push_or_set: [
                 {
                     "match": "#",
                     "scope": "punctuation.definition.template-expression.end.cfml",

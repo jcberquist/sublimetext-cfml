@@ -72,4 +72,9 @@ cfhttp( url = "www.google.com" ) {
 cfcExists( someArg = 1 );
 <!--- <- embedding.cfml source.cfml.script meta.function-call.cfml variable.function.cfml  --->
 <!---      ^ embedding.cfml source.cfml.script meta.function-call.cfml meta.function-call.parameters.cfml entity.other.function-parameter.cfml  --->
+
+
+loop from=1 to=#params.quantity# index="local.i" {}
+<!---          ^ punctuation.definition.template-expression.begin.cfml - invalid.illegal.attribute-name.cfml  --->
+
 </cfscript>
