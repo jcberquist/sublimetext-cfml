@@ -1031,6 +1031,8 @@ contexts:
         1: entity.name.tag.script.cfml
       push:
         - meta_scope: meta.tag.script.cfml
+        - match: (?=\.)
+          pop: true
         - match: (?=;)
           pop: true
         - match: (?={)

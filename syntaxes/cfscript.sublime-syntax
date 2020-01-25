@@ -922,23 +922,23 @@ contexts:
               pop: true
             - include: expression-push
         -   - scope: punctuation.definition.string.begin.cfml
-              match: "'"
               set:
                 -   - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
-                    - pop: true
-                      scope: punctuation.definition.string.end.cfml
+                    - scope: punctuation.definition.string.end.cfml
+                      pop: true
                       match: "'"
                 -   - include: storage-types
                     - include: else-pop
+              match: "'"
             - scope: punctuation.definition.string.begin.cfml
-              match: '"'
               set:
                 -   - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
-                    - pop: true
-                      scope: punctuation.definition.string.end.cfml
+                    - scope: punctuation.definition.string.end.cfml
+                      pop: true
                       match: '"'
                 -   - include: storage-types
                     - include: else-pop
+              match: '"'
     - include: else-pop
 
   property-access:
@@ -1217,6 +1217,8 @@ contexts:
         1: entity.name.tag.script.cfml
       push:
         - meta_scope: meta.tag.script.cfml
+        - match: (?=\.)
+          pop: true
         - match: (?=;)
           pop: true
         - match: (?={)

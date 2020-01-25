@@ -77,4 +77,7 @@ cfcExists( someArg = 1 );
 loop from=1 to=#params.quantity# index="local.i" {}
 <!---          ^ punctuation.definition.template-expression.begin.cfml - invalid.illegal.attribute-name.cfml  --->
 
+query
+  .test();
+  <!--- <- punctuation.accessor.cfml --->
 </cfscript>
