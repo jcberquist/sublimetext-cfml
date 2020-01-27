@@ -680,7 +680,7 @@ contexts:
           scope: punctuation.separator.parameter.function.cfml
         - match: (?i)\brequired\b
           scope: keyword.other.required.parameter.cfml
-        - match: (?:({{identifier}})\s+)?({{dot_path_identifier}})
+        - match: (?:({{dot_path_identifier}})\s+)?({{identifier}})
           captures:
             1: storage.type.cfml
             2: variable.parameter.function.cfml

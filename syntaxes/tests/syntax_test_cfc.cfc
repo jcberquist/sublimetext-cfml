@@ -173,7 +173,8 @@ default="string";
 //                                     ^ meta.parameter.optional.cfml constant.language.boolean.true.cfml
 
 public void function setup( required root.model.cava.connection connection ) {}
-//                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.function.cfml
+//                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ storage.type.cfml
+//                                                              ^^^^^^^^^^ variable.parameter.function.cfml
 
 private numeric function $fixNumber(required any value) {}
 //                       ^^^^^^^^^^ entity.name.function.cfml

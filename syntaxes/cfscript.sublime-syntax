@@ -785,7 +785,7 @@ contexts:
           scope: punctuation.separator.parameter.function.cfml
         - match: (?i)\brequired\b
           scope: keyword.other.required.parameter.cfml
-        - match: (?:({{identifier}})\s+)?({{dot_path_identifier}})
+        - match: (?:({{dot_path_identifier}})\s+)?({{identifier}})
           captures:
             1: storage.type.cfml
             2: variable.parameter.function.cfml
@@ -925,8 +925,8 @@ contexts:
               set:
                 -   - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
                     - scope: punctuation.definition.string.end.cfml
-                      pop: true
                       match: "'"
+                      pop: true
                 -   - include: storage-types
                     - include: else-pop
               match: "'"
@@ -934,8 +934,8 @@ contexts:
               set:
                 -   - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
                     - scope: punctuation.definition.string.end.cfml
-                      pop: true
                       match: '"'
+                      pop: true
                 -   - include: storage-types
                     - include: else-pop
               match: '"'
