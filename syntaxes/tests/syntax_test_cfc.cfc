@@ -332,3 +332,11 @@ try {
 
 if (a <> b) {}
 //    ^^ source.cfml.script meta.conditional.cfml meta.group.cfml keyword.operator.comparison.binary.cfml
+
+
+variables?.foo?.bar;
+//       ^^ punctuation.accessor.safe.cfml
+//            ^^ punctuation.accessor.safe.cfml
+getFoo()?.getBar();
+//      ^^ punctuation.accessor.safe.cfml
+

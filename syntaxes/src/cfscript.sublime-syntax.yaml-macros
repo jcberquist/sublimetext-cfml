@@ -517,7 +517,7 @@ contexts:
       push: expression-begin
 
   ternary-operator:
-    - match: '\?'
+    - match: '\?(?!\.)'
       scope: keyword.operator.ternary.cfml
       set:
         - - match: ':'
@@ -564,7 +564,7 @@ contexts:
       pop: true
 
   function-assignment:
-    - match: '(?=(({{identifier}})\s*(\.)\s*)+({{identifier}})\s*(=)\s*({{func_assignment_lookahead}}|{{arrow_func_lookahead}}))'
+    - match: '(?=(({{identifier}})\s*(\??\.)\s*)+({{identifier}})\s*(=)\s*({{func_assignment_lookahead}}|{{arrow_func_lookahead}}))'
       set:
         - meta_scope: meta.function.declaration.cfml
         - include: either-function-declaration
@@ -581,9 +581,12 @@ contexts:
           scope: keyword.operator.assignment.binary.cfml
 
   function-declaration-identifiers:
-    - match: '(?={{identifier}}\s*\.)'
+    - match: '(?={{identifier}}\s*\??\.)'
       push:
-        - - match: '\.'
+        - - match: '\?\.'
+            scope: punctuation.accessor.safe.cfml
+            pop: true
+          - match: '\.'
             scope: punctuation.accessor.cfml
             pop: true
         - - include: cfml-scopes
@@ -820,6 +823,17 @@ contexts:
           scope: punctuation.section.brackets.end.cfml
           pop: true
         - include: expression-push
+    - match: \?\.
+      scope: punctuation.accessor.safe.cfml
+      push:
+        - match: '(?=({{identifier}})\s*(=)\s*({{func_assignment_lookahead}}|{{arrow_func_lookahead}}))'
+          set:
+            - meta_scope: meta.function.declaration.cfml
+            - include: either-function-declaration
+            - include: function-declaration-final-identifier
+        - match: '(?={{identifier}}\s*\()'
+          set: method-call
+        - include: struct-property
     - match: \.
       scope: punctuation.accessor.cfml
       push:
@@ -869,11 +883,14 @@ contexts:
               meta_scope: meta.function-call.parameters.cfml
               named_param_scope: entity.other.function-parameter.cfml
               delimiter_scope: punctuation.separator.function-call.cfml
-    - match: '(?={{identifier}}\s*\.\s*{{identifier}}\s*\()'
+    - match: '(?={{identifier}}\s*\??\.\s*{{identifier}}\s*\()'
       set:
         - match: '(?={{identifier}}\s*\.)'
           push:
-            - - match: \.
+            - - match: \?\.
+                scope: punctuation.accessor.safe.cfml
+                pop: true
+              - match: \.
                 scope: punctuation.accessor.cfml
                 pop: true
             - - include: cfml-scopes
