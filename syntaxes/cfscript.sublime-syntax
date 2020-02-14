@@ -10,7 +10,6 @@
 #   https://github.com/sublimehq/Packages/blob/master/JavaScript/JavaScript.sublime-syntax
 #   Thank you Will Bond (@wbond) and Thomas Smith (@Thom1729)
 #   for an awesome syntax to base this on.
-
 name: CFML Script
 scope: source.cfml.script
 hidden: true
@@ -192,9 +191,7 @@ contexts:
                     - expect-case-colon
                 - include: statements
             - include: else-pop
-        -
-
-            - include: parenthesized-expression
+        -   - include: parenthesized-expression
             - include: else-pop
     - match: \bdo\b
       scope: keyword.control.loop.cfml
@@ -207,9 +204,7 @@ contexts:
               scope: keyword.control.loop.cfml
               pop: true
             - include: else-pop
-        -
-
-            - include: block-scope
+        -   - include: block-scope
             - include: else-pop
     - match: \b(?:for)\b
       scope: keyword.control.loop.cfml
@@ -257,6 +252,7 @@ contexts:
             - include: immediately-pop
         - block-scope
         - catch-scope
+
   expect-case-colon:
     - match: ':'
       scope: punctuation.separator.cfml
@@ -338,21 +334,27 @@ contexts:
   expression:
     - match: (?=\S)
       set: [expression-end, expression-begin]
+
   expression-statement:
     - match: (?=\S)
       set: [expression-statement-end, expression-begin]
+
   expression-no-comma:
     - match: (?=\S)
       set: [expression-end-no-comma, expression-begin]
+
   expression-push:
     - match: (?=\S)
       push: [expression-end, expression-begin]
+
   expression-statement-push:
     - match: (?=\S)
       push: [expression-statement-end, expression-begin]
+
   expression-no-comma-push:
     - match: (?=\S)
       push: [expression-end-no-comma, expression-begin]
+
   expression-end:
     - include: expression-break
     - include: postfix-operators
@@ -411,7 +413,6 @@ contexts:
 
   fallthrough:
     # If an arrow function has the ( and ) on different lines, we won't have matched
-
     - match: =>
       scope: storage.type.function.arrow.cfml
 
@@ -705,23 +706,14 @@ contexts:
               pop: true
             - include: else-pop
         # waiting on the fix for https://github.com/SublimeTextIssues/Core/issues/1190 to make it out of dev
-
         # - !expect [ 'function', 'storage.type.function.cfml' ]
-
         # - !expect_context function-return-types
-
         # - - match: (?i)({{storage_modifier}})(\s+({{storage_modifier}}))?
-
         #     captures:
-
         #       1: storage.modifier.cfml
-
         #       4: storage.modifier.cfml # why is this group 4?
-
         #     pop: true
-
         #   - include: else-pop
-
         -   - match: (?i)\bfunction\b(?!{{func_assignment_lookahead}})
               scope: storage.type.function.cfml
               pop: true
@@ -748,10 +740,9 @@ contexts:
               scope: storage.type.function.arrow.cfml
               pop: true
             - include: else-pop
-        -
-
-            - include: arrow-function-parameters
+        -   - include: arrow-function-parameters
             - include: else-pop
+
   arrow-function-parameters:
     - match: '{{identifier}}'
       scope: variable.parameter.function.cfml
@@ -773,6 +764,7 @@ contexts:
           scope: punctuation.section.block.end.cfml
           pop: true
         - include: statements
+
   function-declaration-parameters:
     - match: \(
       scope: punctuation.section.parameters.begin.cfml
@@ -832,7 +824,6 @@ contexts:
         - include: struct-contents
         - match: ','
           scope: punctuation.separator.struct-literal.cfml
-
 
   struct-contents:
     - match: (?=('[^']*'|"[^"]*"|{{identifier}})\s*(:|=)({{func_assignment_lookahead}}|{{arrow_func_lookahead}}))
@@ -921,24 +912,24 @@ contexts:
               scope: punctuation.section.brackets.end.cfml
               pop: true
             - include: expression-push
-        -   - scope: punctuation.definition.string.begin.cfml
+        -   - match: "'"
+              scope: punctuation.definition.string.begin.cfml
               set:
                 -   - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
-                    - scope: punctuation.definition.string.end.cfml
-                      match: "'"
+                    - match: "'"
+                      scope: punctuation.definition.string.end.cfml
                       pop: true
                 -   - include: storage-types
                     - include: else-pop
-              match: "'"
-            - scope: punctuation.definition.string.begin.cfml
+            - match: '"'
+              scope: punctuation.definition.string.begin.cfml
               set:
                 -   - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
-                    - scope: punctuation.definition.string.end.cfml
-                      match: '"'
+                    - match: '"'
+                      scope: punctuation.definition.string.end.cfml
                       pop: true
                 -   - include: storage-types
                     - include: else-pop
-              match: '"'
     - include: else-pop
 
   property-access:
@@ -1064,6 +1055,7 @@ contexts:
                   push: expression-no-comma
                 - include: expression-no-comma-push
             - include: else-pop
+
   static-method-call:
     - match: ({{identifier}})\s*(?=\()
       captures:
@@ -1088,6 +1080,7 @@ contexts:
                   push: expression-no-comma
                 - include: expression-no-comma-push
             - include: else-pop
+
   cfml-scopes:
     - match: \b(?i:super)\b
       scope: variable.language.super.cfml
@@ -1198,20 +1191,20 @@ contexts:
     - match: |-
         (?x)(?i)
             \b(ajaximport|ajaxproxy|applet|application|argument|associate|break|cache|calendar|chart
-        |chartdata|chartseries|client|clientsettings|col|collection|content|cookie|dbinfo
-        |directory|div|document|documentitem|documentsection|dump|error|exchangecalendar
-        |exchangeconnection|exchangecontact|exchangefilter|exchangemail|exchangetask|execute
-        |feed|file|fileupload|flush|form|formgroup|formitem|forward|ftp|grid|gridcolumn|gridrow
-        |gridupdate|header|htmlbody|htmlhead|htmltopdf|htmltopdfitem|http|httpparam|image
-        |imap|imapfilter|import|include|index|input|insert|invoke|invokeargument|layout|layoutarea
-        |ldap|location|lock|log|login|loginuser|logout|loop|mail|mailparam|mailpart|map|mapitem
-        |mediaplayer|menu|menuitem|messagebox|module|ntauthenticate|oauth|object|objectcache
-        |output|pageencoding|param|pdf|pdfform|pdfformparam|pdfparam|pdfsubform|pod|pop|presentation
-        |presentationslide|presenter|processingdirective|procparam|procresult|progressbar
-        |property|query|queryparam|registry|report|reportparam|savecontent|schedule|search
-        |select|setting|sharepoint|silent|slider|spreadsheet|sprydataset|stopwatch|storedproc
-        |table|textarea|textinput|thread|throw|timer|tooltip|trace|transaction|tree|treeitem
-        |update|wddx|websocket|window|xml|zip|zipparam)
+            |chartdata|chartseries|client|clientsettings|col|collection|content|cookie|dbinfo
+            |directory|div|document|documentitem|documentsection|dump|error|exchangecalendar
+            |exchangeconnection|exchangecontact|exchangefilter|exchangemail|exchangetask|execute
+            |feed|file|fileupload|flush|form|formgroup|formitem|forward|ftp|grid|gridcolumn|gridrow
+            |gridupdate|header|htmlbody|htmlhead|htmltopdf|htmltopdfitem|http|httpparam|image
+            |imap|imapfilter|import|include|index|input|insert|invoke|invokeargument|layout|layoutarea
+            |ldap|location|lock|log|login|loginuser|logout|loop|mail|mailparam|mailpart|map|mapitem
+            |mediaplayer|menu|menuitem|messagebox|module|ntauthenticate|oauth|object|objectcache
+            |output|pageencoding|param|pdf|pdfform|pdfformparam|pdfparam|pdfsubform|pod|pop|presentation
+            |presentationslide|presenter|processingdirective|procparam|procresult|progressbar
+            |property|query|queryparam|registry|report|reportparam|savecontent|schedule|search
+            |select|setting|sharepoint|silent|slider|spreadsheet|sprydataset|stopwatch|storedproc
+            |table|textarea|textinput|thread|throw|timer|tooltip|trace|transaction|tree|treeitem
+            |update|wddx|websocket|window|xml|zip|zipparam)
             (?=\s+{{attribute_name}}\s*[=;{\n]|\s*[{\n])
       captures:
         1: entity.name.tag.script.cfml
@@ -1439,6 +1432,7 @@ contexts:
           push: expression-no-comma
         - include: expression-no-comma-push
     - include: else-pop
+
   support-method-call:
     - match: |-
         (?x)(?i)\b(add|addautofilter|addborder|addcolumn|addfreezepane|addimage|addinfo|addpagebreaks

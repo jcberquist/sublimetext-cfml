@@ -184,16 +184,16 @@ def template_expression(meta_content_scope, clear_scopes=None, html_entities=Fal
 
 
 def tags(match):
-    match_indent = len(re.search(r"^(.*)\{tags\}", match, flags=re.MULTILINE).group(1))
+    match_indent = len(re.search(r"^(\s*).*?\{tags\}", match, flags=re.MULTILINE).group(1))
     tags = cfml_syntax.load_tag_list()
     tags_regex = "|".join(sorted(tags))
-    tags_regex = re.sub(r"(.{80}[^|]*)", r"\1%s\n" % (" " * match_indent), tags_regex)
+    tags_regex = re.sub(r"(.{80}[^|]*)", r"\1\n%s" % (" " * match_indent), tags_regex)
     return match.replace("{tags}", tags_regex)
 
 
 def functions(match):
     match_indent = len(
-        re.search(r"^(.*)\{functions\}", match, flags=re.MULTILINE).group(1)
+        re.search(r"^(\s*).*?\{functions\}", match, flags=re.MULTILINE).group(1)
     )
     prefixed, non_prefixed = cfml_syntax.load_functions()
 
@@ -206,15 +206,15 @@ def functions(match):
     func_list.extend(non_prefixed)
 
     func_regex = "|".join(func_list)
-    func_regex = re.sub(r"(.{80}[^|]*)", r"\1%s\n" % (" " * match_indent), func_regex)
+    func_regex = re.sub(r"(.{80}[^|]*)", r"\1\n%s" % (" " * match_indent), func_regex)
     return match.replace("{functions}", func_regex)
 
 
 def member_functions(match):
     match_indent = len(
-        re.search(r"^(.*)\{functions\}", match, flags=re.MULTILINE).group(1)
+        re.search(r"^(\s*).*?\{functions\}", match, flags=re.MULTILINE).group(1)
     )
     functions = cfml_syntax.load_member_functions()
     func_regex = "|".join(sorted(functions))
-    func_regex = re.sub(r"(.{80}[^|]*)", r"\1%s\n" % (" " * match_indent), func_regex)
+    func_regex = re.sub(r"(.{80}[^|]*)", r"\1\n%s" % (" " * match_indent), func_regex)
     return match.replace("{functions}", func_regex)

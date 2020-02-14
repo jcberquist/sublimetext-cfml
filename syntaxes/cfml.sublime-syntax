@@ -1,7 +1,6 @@
 %YAML 1.2
 ---
 # Started with https://github.com/SublimeText/ColdFusion
-
 name: CFML
 file_extensions:
   - cfml
@@ -525,6 +524,7 @@ contexts:
           push:
             - meta_content_scope: source.cfml.script
             - include: template-expression-contents
+
   template-expression-set:
     - match: '##'
       scope: constant.character.escape.hash.cfml
@@ -538,6 +538,7 @@ contexts:
           push:
             - meta_content_scope: source.cfml.script
             - include: template-expression-contents
+
   sql-template-expression:
     - match: '##'
       scope: constant.character.escape.hash.cfml
@@ -552,6 +553,7 @@ contexts:
             - clear_scopes: 1
             - meta_content_scope: source.sql source.cfml.script
             - include: template-expression-contents
+
   sql-character-escape:
     - match: \\(?=#)
       scope: constant.character.escape.sql
@@ -570,6 +572,7 @@ contexts:
             - clear_scopes: 1
             - meta_content_scope: source.cfml.script
             - include: template-expression-contents
+
   template-expression-contents:
     - match: (?=#)
       pop: true
