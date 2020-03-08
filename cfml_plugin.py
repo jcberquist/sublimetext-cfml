@@ -1,6 +1,6 @@
 import sublime
 import sublime_plugin
-from HTML.html_completions import HtmlTagCompletions
+from HTML import html_completions
 from .src import command_list, completions, events, utils, _plugin_loaded
 
 for command in command_list:
@@ -76,7 +76,7 @@ class CfmlEventListener(sublime_plugin.EventListener):
         )
 
 
-class CustomHtmlTagCompletions(HtmlTagCompletions):
+class CustomHtmlTagCompletions(html_completions.HtmlTagCompletions):
     """
     There is no text.html scope in <cffunction> bodies, so this
     allows the HTML completions to still function there
