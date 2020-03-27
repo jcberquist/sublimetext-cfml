@@ -264,8 +264,8 @@ contexts:
     - match: \bstatic\b(?=\s*[\n\{])
       scope: keyword.control.static.cfml
       push:
-        - meta_scope: meta.block.static.cfml
-        - include: block-scope
+        - !meta meta.block.static.cfml
+        - - include: block-scope
 
   expression:
     - match: (?=\S)

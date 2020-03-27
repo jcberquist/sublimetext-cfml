@@ -318,8 +318,9 @@ contexts:
     - match: \bstatic\b(?=\s*[\n\{])
       scope: keyword.control.static.cfml
       push:
-        - meta_scope: meta.block.static.cfml
-        - include: block-scope
+        -   - meta_scope: meta.block.static.cfml
+            - include: immediately-pop
+        -   - include: block-scope
 
   expression:
     - match: (?=\S)
@@ -344,7 +345,6 @@ contexts:
 
     - match: (?=\S)
       push: [expression-statement-end, expression-begin]
-
   expression-no-comma-push:
     - include: angle-bracket-pop
     - match: (?=\S)
@@ -912,22 +912,22 @@ contexts:
               scope: punctuation.section.brackets.end.cfml
               pop: true
             - include: expression-push
-        -   - scope: punctuation.definition.string.begin.cfml
-              match: "'"
+        -   - match: "'"
+              scope: punctuation.definition.string.begin.cfml
               set:
                 -   - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
-                    - scope: punctuation.definition.string.end.cfml
-                      pop: true
+                    - pop: true
                       match: "'"
+                      scope: punctuation.definition.string.end.cfml
                 -   - include: storage-types
                     - include: else-pop
-            - scope: punctuation.definition.string.begin.cfml
-              match: '"'
+            - match: '"'
+              scope: punctuation.definition.string.begin.cfml
               set:
                 -   - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
-                    - scope: punctuation.definition.string.end.cfml
-                      pop: true
+                    - pop: true
                       match: '"'
+                      scope: punctuation.definition.string.end.cfml
                 -   - include: storage-types
                     - include: else-pop
     - include: else-pop
@@ -1503,3 +1503,4 @@ contexts:
   angle-bracket-pop:
     - match: (?=/?>)
       pop: true
+
