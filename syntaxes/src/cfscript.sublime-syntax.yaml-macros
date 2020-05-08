@@ -503,6 +503,9 @@ contexts:
     - match: \b(?i:(contains|does\s+not\s+contain))\b
       scope: keyword.operator.decision.binary.cfml
       push: expression-begin
+    - match: \b(?i:mod)\b
+      scope: keyword.operator.arithmetic.binary.cfml
+      push: expression-begin
     - match: |-
         (?x)
         /    | # division        left-to-right   both

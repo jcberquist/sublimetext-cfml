@@ -345,6 +345,7 @@ contexts:
 
     - match: (?=\S)
       push: [expression-statement-end, expression-begin]
+
   expression-no-comma-push:
     - include: angle-bracket-pop
     - match: (?=\S)
@@ -511,7 +512,6 @@ contexts:
         -   - match: \b\d*{{identifier}}\b(\.)?
               scope: entity.name.class.cfml
             - include: else-pop
-
   prefix-operators:
     - match: '!(?!=)'
       scope: keyword.operator.logical.prefix.cfml
@@ -577,6 +577,9 @@ contexts:
       push: expression-begin
     - match: \b(?i:(contains|does\s+not\s+contain))\b
       scope: keyword.operator.decision.binary.cfml
+      push: expression-begin
+    - match: \b(?i:mod)\b
+      scope: keyword.operator.arithmetic.binary.cfml
       push: expression-begin
     - match: |-
         (?x)
@@ -912,22 +915,22 @@ contexts:
               scope: punctuation.section.brackets.end.cfml
               pop: true
             - include: expression-push
-        -   - match: "'"
-              scope: punctuation.definition.string.begin.cfml
+        -   - scope: punctuation.definition.string.begin.cfml
+              match: "'"
               set:
                 -   - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
-                    - pop: true
+                    - scope: punctuation.definition.string.end.cfml
+                      pop: true
                       match: "'"
-                      scope: punctuation.definition.string.end.cfml
                 -   - include: storage-types
                     - include: else-pop
-            - match: '"'
-              scope: punctuation.definition.string.begin.cfml
+            - scope: punctuation.definition.string.begin.cfml
+              match: '"'
               set:
                 -   - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
-                    - pop: true
+                    - scope: punctuation.definition.string.end.cfml
+                      pop: true
                       match: '"'
-                      scope: punctuation.definition.string.end.cfml
                 -   - include: storage-types
                     - include: else-pop
     - include: else-pop

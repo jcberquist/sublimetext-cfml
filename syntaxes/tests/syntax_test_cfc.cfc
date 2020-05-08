@@ -340,3 +340,5 @@ variables?.foo?.bar;
 getFoo()?.getBar();
 //      ^^ punctuation.accessor.safe.cfml
 
+a = 10 mod 5;
+//     ^^^ keyword.operator.arithmetic.binary.cfml
