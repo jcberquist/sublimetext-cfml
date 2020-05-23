@@ -141,6 +141,13 @@ contexts:
           - include: scope:embedding.cfml#cfcomponent-attributes
 
   statements:
+    - match: '```'
+      scope: punctuation.definition.raw.code-fence.begin.cfml
+      embed: scope:embedding.cfml#html
+      embed_scope: text.html.cfml
+      escape: '```'
+      escape_captures:
+        0: punctuation.definition.raw.code-fence.end.cfml
     - match: ';'
       scope: punctuation.terminator.statement.cfml
     - include: conditional

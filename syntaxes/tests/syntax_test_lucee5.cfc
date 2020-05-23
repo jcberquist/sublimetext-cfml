@@ -30,4 +30,13 @@ abstract component {
 //              ^^ punctuation.accessor.static.cfml
 //                ^^^^^^^^^ meta.property.cfml
     }
+
+  ```
+//^^^ source.cfml.script meta.class.body.cfml punctuation.definition.raw.code-fence.begin.cfml
+  <cfset a = 1>
+// ^^^^^ embedding.cfml entity.name.tag
+  ```
+//^^^ punctuation.definition.raw.code-fence.end.cfml
 }
+// <- embedding.cfml source.cfml.script meta.class.body.cfml punctuation.section.block.end.cfml
+

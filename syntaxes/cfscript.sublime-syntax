@@ -153,6 +153,13 @@ contexts:
             - include: scope:embedding.cfml#cfcomponent-attributes
 
   statements:
+    - match: '```'
+      scope: punctuation.definition.raw.code-fence.begin.cfml
+      embed: scope:embedding.cfml#html
+      embed_scope: text.html.cfml
+      escape: '```'
+      escape_captures:
+        0: punctuation.definition.raw.code-fence.end.cfml
     - match: ;
       scope: punctuation.terminator.statement.cfml
     - include: conditional
@@ -923,8 +930,8 @@ contexts:
               match: "'"
               set:
                 -   - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
-                    - scope: punctuation.definition.string.end.cfml
-                      pop: true
+                    - pop: true
+                      scope: punctuation.definition.string.end.cfml
                       match: "'"
                 -   - include: storage-types
                     - include: else-pop
@@ -932,8 +939,8 @@ contexts:
               match: '"'
               set:
                 -   - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
-                    - scope: punctuation.definition.string.end.cfml
-                      pop: true
+                    - pop: true
+                      scope: punctuation.definition.string.end.cfml
                       match: '"'
                 -   - include: storage-types
                     - include: else-pop
