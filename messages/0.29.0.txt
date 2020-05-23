@@ -1,0 +1,7 @@
+CFML v0.29.0 Changelog:
+
+- Various syntax highlighting fixes and updates. Tag island syntax highlighting is now supported
+
+- bug fix for HTML completions being duplicated
+
+PLEASE RESTART SUBLIME TEXT TO ENSURE THESE CHANGES ARE LOADED CORRECTLY, THANKS!
