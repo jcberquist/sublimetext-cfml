@@ -1,10 +1,8 @@
-# CFML Package for Sublime Text 3
+# CFML Package for Sublime Text
 
-This package provides CFML (ColdFusion Markup Language) support in Sublime Text 3. It includes syntax highlighting, function and tag completions, and inline documentation. It also includes a number of other features, so please see below for the full list.
+This package provides CFML (ColdFusion Markup Language) support in Sublime Text. It includes syntax highlighting, function and tag completions, and inline documentation. It also includes a number of other features, so please see below for the full list.
 
 You can install this package via [Package Control](https://packagecontrol.io/). The package name is [CFML](https://packagecontrol.io/packages/CFML). Sublime Text should be restarted after installation. Manual installation is also possible. See the [Installation](#installation) section below for more information about these options.
-
-*Please ensure that you are running at least build 3126 of Sublime Text 3. This package uses only `sublime-syntax` syntax highlighting and as of v0.21.0 takes advantage of features introduced in that beta build.*
 
 ### Acknowledgements
 
@@ -39,27 +37,27 @@ Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](https:
 
 #### Via Package Control
 
-First ensure Package Control is installed. More recent versions of Sublime Text 3 include a menu option and command palette entry for installing Package Control. You can also follow the instructions at <https://packagecontrol.io/installation> to install it.
+First ensure Package Control is installed. More recent versions of Sublime Text include a menu option and command palette entry for installing Package Control. You can also follow the instructions at <https://packagecontrol.io/installation> to install it.
 
 Open the command palette (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on Windows, <kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac) and select `Package Control: Install Package`.
 
 Wait for the list to open and find the `CFML` entry (subtitled with this github repo `github.com/jcberquist/sublimetext-cfml`), then select it to install.
 
-Restart Sublime Text 3.
+Restart Sublime Text.
 
 Package Control will keep the CFML package up to date automatically for you.
 
 #### Manual Installation
 
-First locate your Sublime Text 3 packages directory. This can be easily done by opening the command palette in Sublime Text (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on Windows, <kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac), and running `Preferences: Browse Packages`.
+First locate your Sublime Text packages directory. This can be easily done by opening the command palette in Sublime Text (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on Windows, <kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac), and running `Preferences: Browse Packages`.
 
 On Windows it will typically be something like this:
 
-    C:\Users\Username\AppData\Roaming\Sublime Text 3\Packages\
+    C:\Users\Username\AppData\Roaming\Sublime Text\Packages\
 
 On a Mac it will be something like this
 
-    /Users/Username/Library/Application Support/Sublime Text 3/Packages/
+    /Users/Username/Library/Application Support/Sublime Text/Packages/
 
 *Via Git*
 
@@ -67,7 +65,7 @@ Open Terminal or Command Prompt and `cd` into your packages directory, then run:
 
     git clone https://github.com/jcberquist/sublimetext-cfml.git ./CFML
 
-Restart Sublime Text 3.
+Restart Sublime Text.
 
 As changes are made to this repository and the package is updated, simply run the following command inside the folder where you installed the package in order to get your copy of the package up to date:
 
@@ -77,7 +75,7 @@ As changes are made to this repository and the package is updated, simply run th
 
 Use the `Download ZIP` option to download a zip of the repository to your computer. (The master branch zip file is located at <https://github.com/jcberquist/sublimetext-cfml/archive/master.zip>) Unzip this, and copy the the contents of the resulting repository folder into a subdirectory named `CFML` in your Sublime Text packages directory.
 
-Restart Sublime Text 3.
+Restart Sublime Text.
 
 As changes are made to this repository and the package is updated you will need to repeat this process (replacing the old contents in the `CFML` subdirectory) in order to get your copy of the package up to date.
 
@@ -107,7 +105,7 @@ When entering a function call parameter for a built-in function, a pop-up window
 
 ### Inline Documentation
 
-<kbd>F1</kbd> is mapped to an inline documentation command that provides an inline documentation pop-up based on the cursor position. For Sublime Text builds 3116+ running the documentation command on mouse hover is also supported. This is enabled by default, but can be disabled by setting the package setting `cfml_hover_docs` to `false` in your user package settings.
+<kbd>F1</kbd> is mapped to an inline documentation command that provides an inline documentation pop-up based on the cursor position. The documentation command can also be run on mouse hover. This is enabled by default, but can be disabled by setting the package setting `cfml_hover_docs` to `false` in your user package settings.
 
 *You can always override the default key binding in your user key bindings file.*
 
@@ -219,7 +217,7 @@ The reason formatting is limited by default to the current method in components 
 
 ### Custom Coloring for CFML Tags
 
-Unless you are using a specialized color scheme, CFML and HTML tags will receive the same coloring. In the latest builds of Sublime Text a new color scheme format `.sublime-color-scheme` has been introduced, along with the very easy customization of your active color scheme: <https://www.sublimetext.com/docs/3/color_schemes.html#customization>. This package includes a command that will add such a customization in your `Packages/User/` directory for your active color scheme that applies custom colors for CFML tags. Press <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> to bring up the command palette (<kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac) and run `CFML: Toggle Color Scheme Styles`. You can edit the styles that will be injected via the user settings for this package.
+Unless you are using a specialized color scheme, CFML and HTML tags will receive the same coloring. In the latest builds of Sublime Text a new color scheme format `.sublime-color-scheme` has been introduced, along with the very easy customization of your active color scheme: <https://www.sublimetext.com/docs/color_schemes.html#customization>. This package includes a command that will add such a customization in your `Packages/User/` directory for your active color scheme that applies custom colors for CFML tags. Press <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> to bring up the command palette (<kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac) and run `CFML: Toggle Color Scheme Styles`. You can edit the styles that will be injected via the user settings for this package.
 
 ### Controller/View Toggle
 
