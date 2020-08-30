@@ -27,7 +27,7 @@ def get_script_completions(cfml_view):
         if is_entityname_param(cfml_view.function_call_params):
             completions = projects[cfml_view.project_name]
             if len(completions) > 0:
-                return cfml_view.CompletionList(completions, 3, True)
+                return cfml_view.CompletionList(completions, 0, False)
 
     return None
 
@@ -62,7 +62,7 @@ def get_dot_completions(cfml_view):
             cfml_view.project_name, entity_name
         )
         if completions:
-            return cfml_view.CompletionList(completions, 1, True)
+            return cfml_view.CompletionList(completions, 0, False)
 
     return None
 

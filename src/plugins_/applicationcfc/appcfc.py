@@ -45,7 +45,7 @@ def get_dot_completions(cfml_view):
     ):
         key = ".".join([symbol.name for symbol in reversed(cfml_view.dot_context)])
         if key in appcfc["settings"]:
-            return cfml_view.CompletionList(appcfc["settings"][key], 1, False)
+            return cfml_view.CompletionList(appcfc["settings"][key], 0, False)
 
     return None
 
@@ -56,11 +56,11 @@ def get_script_completions(cfml_view):
             cfml_view.position,
             "meta.class.body.cfml -meta.function -meta.struct-literal",
         ):
-            return cfml_view.CompletionList(appcfc["methods"], 1, False)
+            return cfml_view.CompletionList(appcfc["methods"], 0, False)
 
         key = cfml_view.get_struct_var_assignment(cfml_view.position)
         if key and key in appcfc["settings"]:
-            return cfml_view.CompletionList(appcfc["settings"][key], 1, False)
+            return cfml_view.CompletionList(appcfc["settings"][key], 0, False)
 
     return None
 

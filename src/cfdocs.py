@@ -2,6 +2,7 @@ import json
 import time
 import urllib.request
 import urllib.error
+import certifi
 from collections import deque
 from . import utils
 
@@ -72,7 +73,7 @@ def fetch_cfdoc(function_or_tag):
 
         full_url = CFDOCS_BASE_URL + file_path
         try:
-            json_string = urllib.request.urlopen(full_url).read().decode("utf-8")
+            json_string = urllib.request.urlopen(full_url, cafile=certifi.where()).read().decode("utf-8")
         except urllib.error.HTTPError as e:
             cfdocs_failed_requests.append(time.time())
             data = {

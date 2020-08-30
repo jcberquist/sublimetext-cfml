@@ -28,11 +28,8 @@ def get_completions(view, position, prefix):
                 docs.append(inline_doc)
 
     full_completion_list = []
-    for completionlist in sorted(
-        completion_lists, key=lambda comp_list: comp_list.priority, reverse=True
-    ):
-        if completionlist.priority >= minimum_priority:
-            full_completion_list.extend(completionlist.completions)
+    for completionlist in completion_lists:
+        full_completion_list.extend(completionlist.completions)
 
     if len(docs) > 0:
         inline_documentation.display_documentation(view, docs, "completion_doc", 0)

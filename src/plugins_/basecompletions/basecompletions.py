@@ -60,9 +60,12 @@ def get_script_completions(cfml_view):
         "meta.function-call.parameters.cfml,meta.function-call.parameters.method.cfml",
     ):
         completion_list.append(
-            (
-                "argumentCollection\tparameter struct",
+            sublime.CompletionItem(
+                "argumentCollection",
+                "parameter struct",
                 "argumentCollection = ${1:parameters}",
+                sublime.COMPLETION_FORMAT_SNIPPET,
+                kind=(sublime.KIND_ID_VARIABLE, "v", "CFML"),
             )
         )
 
@@ -72,7 +75,7 @@ def get_script_completions(cfml_view):
         param_completions = get_param_completions(cfml_view)
         if param_completions:
             completion_list.extend(param_completions)
-            return cfml_view.CompletionList(completion_list, 3, True)
+            return cfml_view.CompletionList(completion_list, 0, False)
 
     completion_list.extend(
         completions["cfml_functions"][utils.get_setting("cfml_bif_completions")]
@@ -85,7 +88,7 @@ def get_script_completions(cfml_view):
 def get_dot_completions(cfml_view):
 
     if len(cfml_view.dot_context) == 1 and cfml_view.dot_context[0].name == "cgi":
-        return cfml_view.CompletionList(completions["cgi"], 1, True)
+        return cfml_view.CompletionList(completions["cgi"], 0, False)
 
     completion_list = completions["cfml_member_functions"][
         utils.get_setting("cfml_bif_completions")
@@ -137,10 +140,26 @@ def load_completions():
             make_cf_script_tag_completion(tag_name, tag_attributes[0])
         )
         completions["cfml_tag_attributes"][tag_name] = [
-            (a + "\trequired", a + '="$1"') for a in tag_attributes[0]
+            sublime.CompletionItem(
+                a,
+                "required",
+                a + '="$1"',
+                sublime.COMPLETION_FORMAT_SNIPPET,
+                kind=(sublime.KIND_ID_MARKUP, "a", tag_name),
+            )
+            for a in tag_attributes[0]
         ]
         completions["cfml_tag_attributes"][tag_name].extend(
-            [(a + "\toptional", a + '="$1"') for a in tag_attributes[1]]
+            [
+                sublime.CompletionItem(
+                    a,
+                    "optional",
+                    a + '="$1"',
+                    sublime.COMPLETION_FORMAT_SNIPPET,
+                    kind=(sublime.KIND_ID_MARKUP, "a", tag_name),
+                )
+                for a in tag_attributes[1]
+            ]
         )
         # attribute values
         tag_attribute_values = completions_data["cfml_tags"][tag_name][
@@ -149,7 +168,13 @@ def load_completions():
         completions["cfml_tag_attribute_values"][tag_name] = {}
         for attribute_name in sorted(tag_attribute_values.keys()):
             completions["cfml_tag_attribute_values"][tag_name][attribute_name] = [
-                (v + "\t" + attribute_name, v)
+                sublime.CompletionItem(
+                    v,
+                    attribute_name,
+                    v,
+                    sublime.COMPLETION_FORMAT_TEXT,
+                    kind=(sublime.KIND_ID_AMBIGUOUS, "v", tag_name),
+                )
                 for v in tag_attribute_values[attribute_name]
             ]
 
@@ -158,20 +183,36 @@ def load_completions():
     function_names = []
     for funct in sorted(completions_data["cfml_functions"].keys()):
         completions["cfml_functions"]["basic"].append(
-            (funct + "\tfn (cfml)", funct + "($0)")
+            sublime.CompletionItem(
+                funct,
+                "cfml.fn",
+                funct + "($0)",
+                sublime.COMPLETION_FORMAT_SNIPPET,
+                kind=(sublime.KIND_ID_FUNCTION, "f", "function"),
+                details=completions_data["cfml_functions"][funct][0],
+            )
         )
         completions["cfml_functions"]["required"].append(
-            (
-                funct + "\tfn (cfml)",
-                funct + completions_data["cfml_functions"][funct][0],
+            sublime.CompletionItem(
+                funct,
+                "cfml.fn",
+                funct + completions_data["cfml_functions"][funct][1][0],
+                sublime.COMPLETION_FORMAT_SNIPPET,
+                kind=(sublime.KIND_ID_FUNCTION, "f", "function"),
+                details=completions_data["cfml_functions"][funct][0],
             )
         )
         completions["cfml_functions"]["full"].append(
-            (
-                funct + "\tfn (cfml)",
-                funct + completions_data["cfml_functions"][funct][1],
+            sublime.CompletionItem(
+                funct,
+                "cfml.fn",
+                funct + completions_data["cfml_functions"][funct][1][1],
+                sublime.COMPLETION_FORMAT_SNIPPET,
+                kind=(sublime.KIND_ID_FUNCTION, "f", "function"),
+                details=completions_data["cfml_functions"][funct][0],
             )
         )
+
         function_names.append(funct)
 
     # function params
@@ -182,7 +223,12 @@ def load_completions():
             completions["cfml_function_params"][funct][param] = []
             for value in completions_data["cfml_function_params"][funct][param]:
                 completions["cfml_function_params"][funct][param].append(
-                    (value + "\t" + param, value)
+                    sublime.CompletionItem(
+                        value,
+                        param,
+                        value,
+                        kind=(sublime.KIND_ID_AMBIGUOUS, "p", funct),
+                    )
                 )
 
     # member functions
@@ -194,33 +240,55 @@ def load_completions():
             completions_data["cfml_member_functions"][member_function_type].keys()
         ):
             completions["cfml_member_functions"]["basic"].append(
-                (funct + "\t" + member_function_type + ".fn (cfml)", funct + "($0)")
+                sublime.CompletionItem(
+                    funct,
+                    member_function_type + ".fn",
+                    funct + "($0)",
+                    sublime.COMPLETION_FORMAT_SNIPPET,
+                    kind=(sublime.KIND_ID_FUNCTION, "m", "method"),
+                    details=completions_data["cfml_member_functions"][
+                        member_function_type
+                    ][funct][0],
+                )
             )
             completions["cfml_member_functions"]["required"].append(
-                (
-                    funct + "\t" + member_function_type + ".fn (cfml)",
+                sublime.CompletionItem(
+                    funct,
+                    member_function_type + ".fn",
                     funct
                     + completions_data["cfml_member_functions"][member_function_type][
                         funct
-                    ][0],
+                    ][1][0],
+                    sublime.COMPLETION_FORMAT_SNIPPET,
+                    kind=(sublime.KIND_ID_FUNCTION, "m", "method"),
+                    details=completions_data["cfml_member_functions"][
+                        member_function_type
+                    ][funct][0],
                 )
             )
             completions["cfml_member_functions"]["full"].append(
-                (
-                    funct + "\t" + member_function_type + ".fn (cfml)",
+                sublime.CompletionItem(
+                    funct,
+                    member_function_type + ".fn",
                     funct
                     + completions_data["cfml_member_functions"][member_function_type][
                         funct
-                    ][1],
+                    ][1][1],
+                    sublime.COMPLETION_FORMAT_SNIPPET,
+                    kind=(sublime.KIND_ID_FUNCTION, "m", "method"),
+                    details=completions_data["cfml_member_functions"][
+                        member_function_type
+                    ][funct][0],
                 )
             )
 
     # CGI scope
     cgi = load_json_data("cgi")
     completions["cgi"] = [
-        (
-            scope_variable.split(".").pop().upper() + "\tCGI",
+        sublime.CompletionItem(
             scope_variable.split(".").pop().upper(),
+            "CGI Scope",
+            kind=(sublime.KIND_ID_VARIABLE, "c", "CFML"),
         )
         for scope_variable in sorted(cgi.keys())
     ]
@@ -241,14 +309,26 @@ def make_tag_completion(tag, required_attrs):
     attrs = ""
     for index, attr in enumerate(required_attrs, 1):
         attrs += " " + attr + '="$' + str(index) + '"'
-    return (tag + "\ttag (cfml)", tag + attrs)
+    return sublime.CompletionItem(
+        tag,
+        "tag (cfml)",
+        tag + attrs,
+        sublime.COMPLETION_FORMAT_SNIPPET,
+        kind=(sublime.KIND_ID_MARKUP, "t", "CFML"),
+    )
 
 
 def make_cf_script_tag_completion(tag, required_attrs):
     attrs = []
     for index, attr in enumerate(required_attrs, 1):
         attrs.append(" " + attr + '="$' + str(index) + '"')
-    return (tag + "\ttag (cfml)", tag + "(" + ",".join(attrs) + "$0 )")
+    return sublime.CompletionItem(
+        tag,
+        "tag (cfml)",
+        tag + "(" + ",".join(attrs) + "$0 )",
+        sublime.COMPLETION_FORMAT_SNIPPET,
+        kind=(sublime.KIND_ID_MARKUP, "t", "CFML"),
+    )
 
 
 def get_param_completions(cfml_view):

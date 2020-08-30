@@ -122,7 +122,7 @@ def generate_documentation(view, docs, current_index, doc_type):
         css = ""
         if "foreground" in style:
             css += "color: " + style["foreground"] + ";\n"
-        if style["italic"]:
+        if "italic" in style and style["italic"]:
             css += "font-style: italic;\n"
         doc_html_variables[key.replace(".", "_")] = css
 

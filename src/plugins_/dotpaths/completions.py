@@ -90,7 +90,7 @@ def get_tag_attributes(cfml_view):
         )
 
         if len(completions) > 0:
-            return cfml_view.CompletionList(completions, 2, True)
+            return cfml_view.CompletionList(completions, 0, False)
 
     if cfml_view.view.match_selector(
         cfml_view.position - 1, "entity.other.inherited-class.cfml"
@@ -111,7 +111,7 @@ def get_tag_attributes(cfml_view):
         )
 
         if len(completions) > 0:
-            return cfml_view.CompletionList(completions, 2, True)
+            return cfml_view.CompletionList(completions, 0, False)
 
 
 def get_script_completions(cfml_view):
@@ -141,7 +141,7 @@ def get_script_completions(cfml_view):
         )
 
         if len(completions) > 0:
-            return cfml_view.CompletionList(completions, 2, True)
+            return cfml_view.CompletionList(completions, 0, False)
 
     if cfml_view.view.match_selector(
         cfml_view.position - 1, "meta.instance.constructor.cfml"
@@ -164,7 +164,7 @@ def get_script_completions(cfml_view):
         )
 
         if len(completions) > 0:
-            return cfml_view.CompletionList(completions, 2, True)
+            return cfml_view.CompletionList(completions, 0, False)
 
     return None
 
@@ -200,7 +200,7 @@ def get_dot_completions(cfml_view):
     if component_name:
         completions = get_completions_by_component_name(cfml_view, component_name)
         if completions:
-            return cfml_view.CompletionList(completions, 1, True)
+            return cfml_view.CompletionList(completions, 0, False)
 
     return None
 

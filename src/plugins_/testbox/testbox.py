@@ -92,7 +92,7 @@ def get_dot_completions(cfml_view):
         and len(cfml_view.dot_context) > 0
         and cfml_view.dot_context[-1].name == "expect"
     ):
-        return cfml_view.CompletionList(testbox["completions"]["expectation"], 1, False)
+        return cfml_view.CompletionList(testbox["completions"]["expectation"], 0, False)
 
     # assertions
     if (
@@ -100,7 +100,7 @@ def get_dot_completions(cfml_view):
         and len(cfml_view.dot_context) == 1
         and cfml_view.dot_context[-1].name == "assert"
     ):
-        return cfml_view.CompletionList(testbox["completions"]["assertion"], 1, False)
+        return cfml_view.CompletionList(testbox["completions"]["assertion"], 0, False)
 
     return None
 
@@ -112,7 +112,7 @@ def get_script_completions(cfml_view):
     if is_testbox_file(cfml_view) and cfml_view.view.match_selector(
         cfml_view.position, "meta.class.body.cfml"
     ):
-        return cfml_view.CompletionList(testbox["completions"]["basespec"], 1, False)
+        return cfml_view.CompletionList(testbox["completions"]["basespec"], 0, False)
 
     return None
 

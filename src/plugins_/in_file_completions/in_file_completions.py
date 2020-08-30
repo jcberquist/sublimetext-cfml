@@ -10,7 +10,7 @@ def get_script_completions(cfml_view):
         for completion in completions["functions"]
     ]
     if len(completions) > 0:
-        return cfml_view.CompletionList(completions, 2, False)
+        return cfml_view.CompletionList(completions, 0, False)
     return None
 
 
@@ -28,7 +28,7 @@ def get_dot_completions(cfml_view):
                     make_completion(completion, cfml_view.file_path)
                     for completion in completions["functions"]
                 ]
-                return cfml_view.CompletionList(completions, 1, True)
+                return cfml_view.CompletionList(completions, 0, False)
 
             if len(cfml_view.dot_context) == 1 and symbol.name == "arguments":
                 current_function_body = utils.get_current_function_body(
@@ -44,7 +44,7 @@ def get_dot_completions(cfml_view):
                         completions = [
                             (arg["name"] + "\targuments", arg["name"]) for arg in args
                         ]
-                        return cfml_view.CompletionList(completions, 1, True)
+                        return cfml_view.CompletionList(completions, 0, False)
 
             if (
                 symbol.name == "super"
@@ -70,7 +70,7 @@ def get_dot_completions(cfml_view):
                         (completion.key + "\t" + completion.hint, completion.content)
                         for completion in comp["functions"]
                     ]
-                    return cfml_view.CompletionList(completions, 1, True)
+                    return cfml_view.CompletionList(completions, 0, False)
 
     return None
 
