@@ -16,7 +16,7 @@ variables:
   func_lookahead: ({{storage_modifier}}\s+)?({{storage_modifier}}\s+)?({{dot_path_identifier}}(\[\])?\s+)?\bfunction\b
   sql_lookahead: >-
     (?x:
-      (?i:select\s+($|\*|{{dot_path_identifier}}\s*(?:(?:\s+as\s+{{identifier}}\s*)?,|$|\s+from)))|
+      (?i:select\s+($|\*|top\b|{{dot_path_identifier}}\s*(?:(?:\s+as\s+{{identifier}}\s*)?,|$|\s+from)))|
       (?i:from\s+($|{{dot_path_identifier}}(?:\s*{{identifier}})?\s*$))|
       (?i:where\s+($|{{dot_path_identifier}}\s*=))|
       (?i:(?:left\s+)?(?:outer\s+|inner\s+)?join(\s+|\s*$))|
@@ -357,6 +357,7 @@ contexts:
     - include: angle-bracket-pop
     - match: (?=\S)
       push: [expression-end-no-comma, expression-begin]
+
   expression-end:
     - include: expression-break
     - include: postfix-operators
@@ -922,22 +923,22 @@ contexts:
               scope: punctuation.section.brackets.end.cfml
               pop: true
             - include: expression-push
-        -   - scope: punctuation.definition.string.begin.cfml
-              match: "'"
+        -   - match: "'"
+              scope: punctuation.definition.string.begin.cfml
               set:
                 -   - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
-                    - pop: true
+                    - match: "'"
                       scope: punctuation.definition.string.end.cfml
-                      match: "'"
+                      pop: true
                 -   - include: storage-types
                     - include: else-pop
-            - scope: punctuation.definition.string.begin.cfml
-              match: '"'
+            - match: '"'
+              scope: punctuation.definition.string.begin.cfml
               set:
                 -   - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
-                    - pop: true
+                    - match: '"'
                       scope: punctuation.definition.string.end.cfml
-                      match: '"'
+                      pop: true
                 -   - include: storage-types
                     - include: else-pop
     - include: else-pop
@@ -1456,7 +1457,6 @@ contexts:
           push: expression-no-comma
         - include: expression-no-comma-push
     - include: else-pop
-
   support-method-call:
     - match: |-
         (?x)(?i)\b(add|addautofilter|addborder|addcolumn|addfreezepane|addimage|addinfo|addpagebreaks

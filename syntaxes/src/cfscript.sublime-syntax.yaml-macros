@@ -29,7 +29,7 @@ variables:
 
   sql_lookahead: >-
     (?x:
-      (?i:select\s+($|\*|{{dot_path_identifier}}\s*(?:(?:\s+as\s+{{identifier}}\s*)?,|$|\s+from)))|
+      (?i:select\s+($|\*|top\b|{{dot_path_identifier}}\s*(?:(?:\s+as\s+{{identifier}}\s*)?,|$|\s+from)))|
       (?i:from\s+($|{{dot_path_identifier}}(?:\s*{{identifier}})?\s*$))|
       (?i:where\s+($|{{dot_path_identifier}}\s*=))|
       (?i:(?:left\s+)?(?:outer\s+|inner\s+)?join(\s+|\s*$))|

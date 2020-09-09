@@ -10,7 +10,7 @@ import yamlmacros
 import sublime_lib
 
 
-SRC_DIR = "Packages/CFML/syntaxes/src/"
+SRC_DIR = "CFML/syntaxes/src/"
 DEST_DIR = "CFML/syntaxes/"
 FILES = [
     "cfscript.sublime-syntax.yaml-macros",
@@ -33,8 +33,8 @@ def get_contexts(src):
     return contexts
 
 
-def get_package_file(file_dir, file_name):
-    src_path = os.path.join(sublime.packages_path(), file_dir, file_name)
+def get_file_txt(file_dir, file_name):
+    src_path = os.path.join(file_dir, file_name)
     with open(src_path) as f:
         src = f.read()
     return src_path, src
@@ -50,19 +50,22 @@ class BuildCfmlSyntaxesCommand(sublime_plugin.WindowCommand):
     "sublime_lib" declared.
     """
 
-    def run(self):
+    def run(self, src=None, dest=None):
+        if src is None:
+            src = os.path.join(sublime.packages_path(), SRC_DIR)
+        if dest is None:
+            dest = os.path.join(sublime.packages_path(), DEST_DIR)
+
         output = sublime_lib.OutputPanel.create(self.window, "YAMLMacros")
         output.show()
 
         def run():
             for file_name in FILES:
                 target_name, _ = os.path.splitext(file_name)
-                file_path = os.path.join(sublime.packages_path(), SRC_DIR, file_name)
+                file_path, file_txt = get_file_txt(src, file_name)
                 yamlmacros.build(
-                    source_text=sublime.load_resource(SRC_DIR + file_name),
-                    destination_path=os.path.join(
-                        sublime.packages_path(), DEST_DIR, target_name
-                    ),
+                    source_text=file_txt,
+                    destination_path=os.path.join(dest, target_name),
                     arguments={"file_path": file_path},
                     error_stream=output,
                 )
@@ -71,11 +74,14 @@ class BuildCfmlSyntaxesCommand(sublime_plugin.WindowCommand):
 
 
 class CleanCfmlSyntaxesCommand(sublime_plugin.WindowCommand):
-    def run(self):
+    def run(self, src_dir=None):
+
+        if src_dir is None:
+            src_dir = os.path.join(sublime.packages_path(), DEST_DIR)
 
         for file_name in FILES:
             file_name = ".".join(file_name.split(".")[:-1])
-            src_path, src_txt = get_package_file(DEST_DIR, file_name)
+            src_path, src_txt = get_file_txt(src_dir, file_name)
 
             if file_name == "cfscript-in-tags.sublime-syntax":
                 src_txt = self.move_keys_to_top(
@@ -90,7 +96,7 @@ class CleanCfmlSyntaxesCommand(sublime_plugin.WindowCommand):
                 f.write(src_txt)
 
         self.order_contexts(
-            "cfscript.sublime-syntax", "cfscript-in-tags.sublime-syntax"
+            src_dir, "cfscript.sublime-syntax", "cfscript-in-tags.sublime-syntax"
         )
 
     def move_keys_to_top(self, src_txt, keys):
@@ -125,13 +131,9 @@ class CleanCfmlSyntaxesCommand(sublime_plugin.WindowCommand):
 
         return src_txt[: contexts_section.start(1)] + contexts + "\n"
 
-    def order_contexts(self, src, target):
-        def load_txt(file_path):
-            with open(file_path) as f:
-                return f.read()
-
-        src_path, src_txt = get_package_file(DEST_DIR, src)
-        target_path, target_txt = get_package_file(DEST_DIR, target)
+    def order_contexts(self, src_dir, src, target):
+        src_path, src_txt = get_file_txt(src_dir, src)
+        target_path, target_txt = get_file_txt(src_dir, target)
         src_contexts, target_contexts = get_contexts(src_txt), get_contexts(target_txt)
 
         ordered_contexts = collections.OrderedDict()
