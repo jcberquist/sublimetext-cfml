@@ -1,7 +1,7 @@
 import os
 import re
 
-attribute_regex = re.compile(r"\battributes\.(\w+)\b", re.I)
+attribute_regex = re.compile(r"\battributes\.(\w+)\b(?!\s*\()", re.I)
 end_tag_regex = re.compile(
     r"thistag\.executionmode\s+(?:eq|is|==)\s+[\"']end[\"']", re.I
 )
