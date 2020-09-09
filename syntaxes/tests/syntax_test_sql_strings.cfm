@@ -15,6 +15,10 @@ sql = "
       select
 <!--- ^^^^^^ source.sql -string.quoted.double.cfml --->
 ";
+sql = "
+      select top(2)
+<!--- ^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
+";
 sql = "select a.b.c from";
 <!---  ^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
 sql = "select a.b.c,";
