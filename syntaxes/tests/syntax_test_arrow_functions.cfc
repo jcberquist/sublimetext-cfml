@@ -263,4 +263,11 @@ var test = (a) =>
 //                                 ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -punctuation.section.block.end.cfml
 //                                  ^ -punctuation.terminator.statement.cfml
 
+  test((a) => 1);
+  //    ^ variable.parameter.function.cfml
+  //       ^^ storage.type.function.arrow.cfml
+
+  test(a => 1);
+  //   ^ variable.parameter.function.cfml
+  //     ^^ storage.type.function.arrow.cfml
 }

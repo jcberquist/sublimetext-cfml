@@ -79,7 +79,7 @@ def function_call_params(meta_scope, named_param_scope, delimiter_scope):
                 },
                 {"match": ",", "scope": delimiter_scope},
                 {
-                    "match": r"\b({{identifier}})\s*(?:(=)(?!=)|(:))",
+                    "match": r"\b({{identifier}})\s*(?:(=)(?![=>])|(:))",
                     "captures": {
                         1: named_param_scope,
                         2: "keyword.operator.assignment.binary.cfml",
