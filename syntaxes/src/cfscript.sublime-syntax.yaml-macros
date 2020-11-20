@@ -459,7 +459,7 @@ contexts:
       scope: keyword.operator.word.new.prefix.cfml
 
   binary-operators:
-    - match: \bin\b
+    - match: \b(?i:in)\b
       scope: keyword.operator.binary.cfml
       push: expression-begin
     - match: '&&|\|\|'
