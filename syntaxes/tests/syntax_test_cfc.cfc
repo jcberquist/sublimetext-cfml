@@ -342,3 +342,6 @@ getFoo()?.getBar();
 
 a = 10 mod 5;
 //     ^^^ keyword.operator.arithmetic.binary.cfml
+
+for (var ieeetype IN Dictionary().ieeetypes);
+//                ^^ keyword.operator.binary.cfml
