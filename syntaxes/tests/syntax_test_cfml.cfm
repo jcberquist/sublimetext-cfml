@@ -96,6 +96,10 @@
 #variable#
 <!--- ^ meta.scope.cfmail.cfml text.html.cfml source.cfml.script variable.other.readwrite.cfml  --->
 </cfmail>
+
+<cfset "string" and #string#>
+<!---               ^ embedding.cfml text.html.cfml meta.tag.cfml source.cfml.script punctuation.definition.template-expression.begin.cfml  --->
+
 <cfscript>
 foo = 'hello world';
 <!--- <- embedding.cfml source.cfml.script variable.other.readwrite.cfml --->
@@ -124,4 +128,7 @@ myFunc().addVal(10);
 <!--- ^ embedding.cfml source.cfml.script meta.function-call.cfml meta.function-call.parameters.cfml punctuation.section.group.begin.cfml --->
 <!---    ^ embedding.cfml source.cfml.script meta.function-call.method.cfml --->
 <!---          ^ embedding.cfml source.cfml.script meta.function-call.method.cfml meta.function-call.parameters.method.cfml punctuation.section.group.begin.cfml --->
+
+"string" and #string#;
+<!---        ^ embedding.cfml text.html.cfml source.cfml.script punctuation.definition.template-expression.begin.cfml  --->
 </cfscript>

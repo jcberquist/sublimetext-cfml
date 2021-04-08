@@ -388,8 +388,6 @@ contexts:
       pop: true
     - match: (?i)(?=</cfscript>)
       pop: true
-    - match: (?=#)
-      pop: true
 
   expression-begin:
     - match: \)
@@ -408,6 +406,7 @@ contexts:
     - include: number
     - include: call
     - include: variable
+    - include: scope:embedding.cfml#string-template-expression
     - include: else-pop
 
   restricted-production:
@@ -1028,7 +1027,7 @@ contexts:
                 - include: else-pop
     - match: (?={{identifier}}\s*\??\.\s*{{identifier}}\s*\()
       set:
-        - match: (?={{identifier}}\s*\.)
+        - match: (?={{identifier}}\s*\??\.)
           push:
             -   - match: \?\.
                   scope: punctuation.accessor.safe.cfml
