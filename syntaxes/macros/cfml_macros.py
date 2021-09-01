@@ -3,7 +3,11 @@ from . import cfml_syntax
 
 
 def meta(scope):
-    syntax = [{"meta_scope": scope}, {"include": "immediately-pop"}]
+    syntax = [
+        {"meta_include_prototype": False},
+        {"meta_scope": scope},
+        {"include": "immediately-pop"},
+    ]
     return cfml_syntax.order_output(syntax)
 
 
@@ -129,7 +133,9 @@ def keyword_control(name, scope, meta_scope, contexts="block"):
     return cfml_syntax.order_output(syntax)
 
 
-def template_expression(meta_content_scope, clear_scopes=None, html_entities=False, push_or_set="push"):
+def template_expression(
+    meta_content_scope, clear_scopes=None, html_entities=False, push_or_set="push"
+):
     push_context = [
         {"meta_content_scope": meta_content_scope},
         {"include": "template-expression-contents"},
@@ -184,7 +190,9 @@ def template_expression(meta_content_scope, clear_scopes=None, html_entities=Fal
 
 
 def tags(match):
-    match_indent = len(re.search(r"^(\s*).*?\{tags\}", match, flags=re.MULTILINE).group(1))
+    match_indent = len(
+        re.search(r"^(\s*).*?\{tags\}", match, flags=re.MULTILINE).group(1)
+    )
     tags = cfml_syntax.load_tag_list()
     tags_regex = "|".join(sorted(tags))
     tags_regex = re.sub(r"(.{80}[^|]*)", r"\1\n%s" % (" " * match_indent), tags_regex)

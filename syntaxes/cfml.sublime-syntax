@@ -10,6 +10,7 @@ scope: embedding.cfml
 
 variables:
   attribute_name: '[_[:alpha:]][[:alnum:]_\-:]*'
+
 contexts:
   else-pop:
     - match: (?=\S)
@@ -73,7 +74,8 @@ contexts:
     - match: (?i:\b(?:extends)\b)
       scope: entity.other.attribute-name.cfml storage.modifier.extends.cfml
       push:
-        -   - meta_scope: meta.class.inheritance.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.class.inheritance.cfml
             - include: immediately-pop
         -   - match: '='
               scope: punctuation.separator.key-value.cfml

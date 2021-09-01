@@ -179,7 +179,8 @@ contexts:
     - match: \bswitch\b
       scope: keyword.control.switch.cfml
       push:
-        -   - meta_scope: meta.switch.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.switch.cfml
             - include: immediately-pop
         -   - match: \{
               scope: punctuation.section.block.begin.cfml
@@ -204,7 +205,8 @@ contexts:
     - match: \bdo\b
       scope: keyword.control.loop.cfml
       push:
-        -   - meta_scope: meta.do-while.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.do-while.cfml
             - include: immediately-pop
         -   - include: parens-scope
             - include: else-pop
@@ -217,46 +219,53 @@ contexts:
     - match: \b(?:for)\b
       scope: keyword.control.loop.cfml
       push:
-        -   - meta_scope: meta.for.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.for.cfml
             - include: immediately-pop
         - block-scope
         - parens-scope
     - match: \b(?:while)\b
       scope: keyword.control.loop.cfml
       push:
-        -   - meta_scope: meta.while.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.while.cfml
             - include: immediately-pop
         - block-scope
         - parens-scope
     - match: \b(?:else\s+if|if)\b
       scope: keyword.control.conditional.cfml
       push:
-        -   - meta_scope: meta.conditional.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.conditional.cfml
             - include: immediately-pop
         - block-scope
         - parens-scope
     - match: \b(?:else)\b
       scope: keyword.control.conditional.cfml
       push:
-        -   - meta_scope: meta.conditional.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.conditional.cfml
             - include: immediately-pop
         - block-scope
     - match: \b(?:try)\b
       scope: keyword.control.trycatch.cfml
       push:
-        -   - meta_scope: meta.try.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.try.cfml
             - include: immediately-pop
         - block-scope
     - match: \b(?:finally)\b
       scope: keyword.control.trycatch.cfml
       push:
-        -   - meta_scope: meta.finally.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.finally.cfml
             - include: immediately-pop
         - block-scope
     - match: \b(?:catch)\b
       scope: keyword.control.trycatch.cfml
       push:
-        -   - meta_scope: meta.catch.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.catch.cfml
             - include: immediately-pop
         - block-scope
         - catch-scope
@@ -336,7 +345,8 @@ contexts:
     - match: \bstatic\b(?=\s*[\n\{])
       scope: keyword.control.static.cfml
       push:
-        -   - meta_scope: meta.block.static.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.block.static.cfml
             - include: immediately-pop
         -   - include: block-scope
 
@@ -500,7 +510,8 @@ contexts:
     - match: \bnew\b
       scope: keyword.operator.word.new.cfml
       set:
-        -   - meta_scope: meta.instance.constructor.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.instance.constructor.cfml
             - include: immediately-pop
         -   - match: \(
               scope: punctuation.section.group.begin.cfml
@@ -693,7 +704,8 @@ contexts:
   anonymous-function:
     - match: (?={{func_assignment_lookahead}}|{{arrow_func_lookahead}})
       set:
-        -   - meta_scope: meta.function.anonymous.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.function.anonymous.cfml
             - include: immediately-pop
         -   - include: either-function-declaration
 
@@ -708,7 +720,8 @@ contexts:
       set:
         -   - include: function-block
             - include: else-pop
-        -   - meta_scope: meta.function.declaration.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.function.declaration.cfml
             - include: immediately-pop
         -   - match: (?=[;{])
               pop: true
@@ -733,7 +746,7 @@ contexts:
               pop: true
             - match: (?i){{storage_modifier}}
               scope: storage.modifier.cfml
-            - match: (?=[A-Za-z])
+            - match: (?=[_$[:alpha:]])
               push: storage-types
 
   arrow-function-declaration:
@@ -742,13 +755,15 @@ contexts:
         -   - include: function-block
             - match: (?=\S)
               set:
-                -   - meta_scope: meta.function.body.cfml
+                -   - meta_include_prototype: false
+                    - meta_scope: meta.function.body.cfml
                     - include: immediately-pop
                 -   - match: (?=,)
                       pop: true
                     - include: expression-statement-end
                 - expression-begin
-        -   - meta_scope: meta.function.declaration.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.function.declaration.cfml
             - include: immediately-pop
         -   - match: =>
               scope: storage.type.function.arrow.cfml
@@ -802,7 +817,8 @@ contexts:
             -   - match: '='
                   scope: keyword.operator.assignment.binary.cfml
                   set:
-                    -   - meta_scope: meta.parameter.optional.cfml
+                    -   - meta_include_prototype: false
+                        - meta_scope: meta.parameter.optional.cfml
                         - include: immediately-pop
                     - expression-no-comma
                 - include: else-pop
@@ -844,17 +860,20 @@ contexts:
       push:
         -   - include: either-function-declaration
             - include: else-pop
-        -   - meta_scope: meta.function.declaration.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.function.declaration.cfml
             - include: immediately-pop
         -   - match: '[:=]'
               scope: punctuation.separator.key-value.cfml
             - include: else-pop
-        -   - meta_scope: meta.struct-literal.key.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.struct-literal.key.cfml
             - include: immediately-pop
         - method-name
     - match: (?="|')
       push:
-        -   - meta_scope: meta.struct-literal.key.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.struct-literal.key.cfml
             - include: immediately-pop
         - string
     - match: '[_$[:alnum:]]+(?=\s*[:=])'
@@ -891,7 +910,8 @@ contexts:
   array-literal:
     - match: (?=\[)
       set:
-        -   - meta_scope: meta.sequence.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.sequence.cfml
             - include: immediately-pop
         -   - match: \[
               scope: punctuation.section.brackets.begin.cfml
@@ -927,23 +947,23 @@ contexts:
               pop: true
             - include: expression-push
         -   - match: "'"
-              scope: punctuation.definition.string.begin.cfml
               set:
                 -   - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
-                    - pop: true
-                      match: "'"
+                    - match: "'"
+                      pop: true
                       scope: punctuation.definition.string.end.cfml
                 -   - include: storage-types
                     - include: else-pop
-            - match: '"'
               scope: punctuation.definition.string.begin.cfml
+            - match: '"'
               set:
                 -   - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
-                    - pop: true
-                      match: '"'
+                    - match: '"'
+                      pop: true
                       scope: punctuation.definition.string.end.cfml
                 -   - include: storage-types
                     - include: else-pop
+              scope: punctuation.definition.string.begin.cfml
     - include: else-pop
 
   property-access:
@@ -1010,7 +1030,8 @@ contexts:
         - match: ({{identifier}})(?=\s*\()
           scope: variable.function.cfml
           set:
-            -   - meta_scope: meta.function-call.cfml
+            -   - meta_include_prototype: false
+                - meta_scope: meta.function-call.cfml
                 - include: immediately-pop
             -   - match: \(
                   scope: punctuation.section.group.begin.cfml
@@ -1064,7 +1085,8 @@ contexts:
       captures:
         1: variable.function.cfml
       set:
-        -   - meta_scope: meta.function-call.method.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.function-call.method.cfml
             - include: immediately-pop
         -   - match: \(
               scope: punctuation.section.group.begin.cfml
@@ -1089,7 +1111,8 @@ contexts:
       captures:
         1: variable.function.static.cfml
       set:
-        -   - meta_scope: meta.function-call.method.static.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.function-call.method.static.cfml
             - include: immediately-pop
         -   - match: \(
               scope: punctuation.section.group.begin.cfml
@@ -1192,7 +1215,8 @@ contexts:
                 - match: '='
                   scope: keyword.operator.assignment.binary.cfml
                   set:
-                    -   - meta_scope: source.cfml.script
+                    -   - meta_include_prototype: false
+                        - meta_scope: source.cfml.script
                         - include: immediately-pop
                     - expression
                 - include: else-pop
@@ -1202,7 +1226,8 @@ contexts:
                 - match: '='
                   scope: keyword.operator.assignment.binary.cfml
                   set:
-                    -   - meta_scope: source.cfml.script
+                    -   - meta_include_prototype: false
+                        - meta_scope: source.cfml.script
                         - include: immediately-pop
                     - expression
                 - include: else-pop
@@ -1281,7 +1306,8 @@ contexts:
         |update|wddx|websocket|window|xml|zip|zipparam)(?=\()
       scope: entity.name.tag.script.cfml
       push:
-        -   - meta_scope: meta.tag.script.cf.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.tag.script.cf.cfml
             - include: immediately-pop
         -   - match: \(
               scope: punctuation.section.group.begin.cfml
@@ -1311,28 +1337,32 @@ contexts:
       captures:
         1: support.function.cfml
       set:
-        -   - meta_scope: meta.function-call.support.cfml meta.function-call.support.createcomponent.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.function-call.support.cfml meta.function-call.support.createcomponent.cfml
             - include: immediately-pop
         - support-call-params
     - match: (?i)\b(createobject)(?=\((?:\s*type\s*=)?\s*[\"']java[\"']\s*,)
       captures:
         1: support.function.cfml
       set:
-        -   - meta_scope: meta.function-call.support.cfml meta.function-call.support.createjavaobject.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.function-call.support.cfml meta.function-call.support.createjavaobject.cfml
             - include: immediately-pop
         - support-call-params
     - match: (?i)\b(entity(?:load|loadbypk|new))(?=\()
       captures:
         1: support.function.cfml
       set:
-        -   - meta_scope: meta.function-call.support.cfml meta.function-call.support.entity.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.function-call.support.cfml meta.function-call.support.entity.cfml
             - include: immediately-pop
         - support-call-params
     - match: (?i)\b(arraynew)(?=\[)
       captures:
         1: support.function.cfml
       set:
-        -   - meta_scope: meta.function-call.support.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.function-call.support.cfml
             - include: immediately-pop
         - support-call-params
         - array-types
@@ -1438,7 +1468,8 @@ contexts:
       captures:
         1: support.function.cfml
       set:
-        -   - meta_scope: meta.function-call.support.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.function-call.support.cfml
             - include: immediately-pop
         - support-call-params
 
@@ -1494,7 +1525,8 @@ contexts:
         |year|yesnoformat)(?=\()
       scope: support.function.member.cfml
       set:
-        -   - meta_scope: meta.function-call.method.support.cfml
+        -   - meta_include_prototype: false
+            - meta_scope: meta.function-call.method.support.cfml
             - include: immediately-pop
         -   - match: \(
               scope: punctuation.section.group.begin.cfml

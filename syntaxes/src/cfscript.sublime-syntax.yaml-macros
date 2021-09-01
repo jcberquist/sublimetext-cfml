@@ -644,7 +644,7 @@ contexts:
             pop: true
           - match: (?i){{storage_modifier}}
             scope: storage.modifier.cfml
-          - match: '(?=[A-Za-z])'
+          - match: '(?=[_$[:alpha:]])'
             push: storage-types
 
   arrow-function-declaration:

@@ -184,6 +184,9 @@ private numeric function $fixNumber(required any value) {}
 //                       ^ meta.function.declaration.cfml
 //                       ^ -meta.function.declaration.cfml meta.function.declaration.cfml
 
+_foo function test() {}
+// <- meta.function.declaration.cfml storage.type.object.cfml
+
   var test = {
     key: value,
 //  ^ meta.struct-literal.key.cfml
