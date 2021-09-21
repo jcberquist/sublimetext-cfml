@@ -518,7 +518,7 @@ contexts:
                   pop: true
                 - match: ','
                   scope: punctuation.separator.function-call.method.cfml
-                - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:))
+                - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
                   captures:
                     1: entity.other.method-parameter.cfml
                     2: keyword.operator.assignment.binary.cfml
@@ -912,7 +912,7 @@ contexts:
         -   - match: \[
               scope: punctuation.section.brackets.begin.cfml
               set:
-                - match: (?=('[^']*'|\"[^\"]*\"|[_$[:alnum:]]+)?\s*[:=])
+                - match: (?=('[^']*'|\"[^\"]*\"|[_$[:alnum:]]+)?\s*[:=][^:])
                   set:
                     - match: \]
                       scope: punctuation.section.brackets.end.cfml
@@ -1038,7 +1038,7 @@ contexts:
                       pop: true
                     - match: ','
                       scope: punctuation.separator.function-call.cfml
-                    - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:))
+                    - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
                       captures:
                         1: entity.other.function-parameter.cfml
                         2: keyword.operator.assignment.binary.cfml
@@ -1093,7 +1093,7 @@ contexts:
                   pop: true
                 - match: ','
                   scope: punctuation.separator.function-call.method.cfml
-                - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:))
+                - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
                   captures:
                     1: entity.other.method-parameter.cfml
                     2: keyword.operator.assignment.binary.cfml
@@ -1119,7 +1119,7 @@ contexts:
                   pop: true
                 - match: ','
                   scope: punctuation.separator.function-call.method.cfml
-                - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:))
+                - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
                   captures:
                     1: entity.other.method-parameter.cfml
                     2: keyword.operator.assignment.binary.cfml
@@ -1479,7 +1479,7 @@ contexts:
           pop: true
         - match: ','
           scope: punctuation.separator.function-call.support.cfml
-        - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:))
+        - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
           captures:
             1: entity.other.function-parameter.cfml
             2: keyword.operator.assignment.binary.cfml
@@ -1533,7 +1533,7 @@ contexts:
                   pop: true
                 - match: ','
                   scope: punctuation.separator.function-call.method.support.cfml
-                - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:))
+                - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
                   captures:
                     1: entity.other.method-parameter.cfml
                     2: keyword.operator.assignment.binary.cfml

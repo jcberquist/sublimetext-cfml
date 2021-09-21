@@ -790,7 +790,7 @@ contexts:
         - - match: '\['
             scope: punctuation.section.brackets.begin.cfml
             set:
-              - match: (?=('[^']*'|\"[^\"]*\"|[_$[:alnum:]]+)?\s*[:=])
+              - match: (?=('[^']*'|\"[^\"]*\"|[_$[:alnum:]]+)?\s*[:=][^:])
                 set:
                   - match: '\]'
                     scope: punctuation.section.brackets.end.cfml

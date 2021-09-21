@@ -31,6 +31,14 @@ abstract component {
 //                ^^^^^^^^^ meta.property.cfml
     }
 
+  func(object::staticMethod());
+//     ^^^^^^ entity.name.class.cfml
+//           ^^ punctuation.accessor.static.cfml
+
+  bleh = [bar::foo()];
+//        ^^^ entity.name.class.cfml
+//           ^^ punctuation.accessor.static.cfml
+
   ```
 //^^^ source.cfml.script meta.class.body.cfml punctuation.definition.raw.code-fence.begin.cfml
   <cfset a = 1>
