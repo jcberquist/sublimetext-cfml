@@ -10,12 +10,13 @@ alt_end_tag_regex = re.compile(r"<cfcase\s+value=\s*[\"']end[\"']\s*>")
 
 def index(custom_tag_path):
     custom_tags = {}
-    for path in os.listdir(custom_tag_path):
-        if path.endswith(".cfm") or path.endswith(".cfc"):
-            full_file_path = custom_tag_path.replace("\\", "/") + "/" + path
-            file_index = index_file(full_file_path)
-            if file_index:
-                custom_tags[full_file_path] = file_index
+    for path, directories, filenames in os.walk(custom_tag_path):
+        for filename in filenames:
+            if filename.endswith(".cfm") or filename.endswith(".cfc"):
+                full_file_path = path.replace("\\", "/") + "/" + filename
+                file_index = index_file(full_file_path)
+                if file_index:
+                    custom_tags[full_file_path] = file_index
     return custom_tags
 
 
