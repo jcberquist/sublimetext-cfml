@@ -1369,9 +1369,9 @@ contexts:
 
     - match: |-
         (?x)(?i)\b(array(?:append|avg|clear|contains|containsnocase|delete|deleteat|deletenocase|each
-        |every|filter|find|findall|findallnocase|findnocase|first|getmetadata|indexexists
-        |insertat|isdefined|isempty|last|len|map|max|median|merge|mid|min|new|prepend|reduce
-        |resize|reverse|set|setmetadata|slice|some|sort|splice|sum|swap|tolist|tostruct)
+        |every|filter|find|findall|findallnocase|findnocase|first|getmetadata|indexexists|insertat
+        |isdefined|isempty|last|len|map|max|median|merge|mid|min|new|pop|prepend|push|reduce|reduceright
+        |resize|reverse|set|setmetadata|shift|slice|some|sort|splice|sum|swap|tolist|tostruct|unshift)
         |cache(?:clear|count|delete|get|getall|getallids|getdefaultcachename|getengineproperties
         |getmetadata|getproperties|getsession|idexists|keyexists|put|regionexists|regionnew
         |regionremove|remove|removeall|setproperties)|component(?:cacheclear|cachelist|info)
