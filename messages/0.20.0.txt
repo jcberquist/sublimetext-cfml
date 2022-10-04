@@ -19,7 +19,7 @@ CFML v0.20.0 Changelog:
   list. See the issue below for more discussion:
   https://github.com/jcberquist/sublimetext-cfml/issues/57
 
-- For Sublime Text builds 3116+ running the documention command on mouse hover
+- For Sublime Text builds 3116+ running the documentation command on mouse hover
   is now supported. This is enabled by default, but can be disabled by setting
   the package setting `cfml_hover_docs` to false in your user package settings.
 

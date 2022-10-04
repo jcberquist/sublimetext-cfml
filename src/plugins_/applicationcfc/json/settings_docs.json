@@ -198,7 +198,7 @@
 	},
 	"this.datasources": {
 		"header": "<span class=\"variable-language\">this</span>.datasources",
-		"body": "A structure that contains datasources defintions.",
+		"body": "A structure that contains datasources definitions.",
 		"engines": ["Lucee","ColdFusion"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"},
@@ -775,7 +775,7 @@
 	},
 	"this.timezone": {
 		"header": "<span class=\"variable-language\">this</span>.timezone",
-		"body": "change the timezone defintion for the current application context.",
+		"body": "change the timezone definition for the current application context.",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}
@@ -791,7 +791,7 @@
 	},
 	"this.typechecking": {
 		"header": "<span class=\"variable-language\">this</span>.typeChecking",
-		"body": "If disabled, Lucee ignores type defintions with function arguments and return values",
+		"body": "If disabled, Lucee ignores type definitions with function arguments and return values",
 		"engines": ["Lucee"],
 		"links": [
 			{ "href": "http://docs.lucee.org/reference/tags/application.html", "text": "docs.lucee.org/reference/tags/application.html"}

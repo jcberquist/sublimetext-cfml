@@ -81,7 +81,7 @@
   },
   "variables.framework.defaultitem": {
     "header": "<span class=\"variable-language\">variables</span>.framework.defaultItem",
-    "body": "<div class=\"card\"><div class=\"card-body\">This is the default item to use when none is specified in the URL or form post. It defauts to <span class=\"code\">\"default\"</span>.</div></div>",
+    "body": "<div class=\"card\"><div class=\"card-body\">This is the default item to use when none is specified in the URL or form post. It defaults to <span class=\"code\">\"default\"</span>.</div></div>",
     "links": [
       {
         "href": "http://framework-one.github.io/documentation/4.1/developing-applications.html",
@@ -401,7 +401,7 @@
   },
   "variables.framework.perresourceerror": {
     "header": "<span class=\"variable-language\">variables</span>.framework.perResourceError",
-    "body": "<div class=\"card\"><div class=\"card-body\">Default <span class=\"code\">true</span>. Controls whether a wildcard route is added to each resouce template. See <strong><a href=\"url-routes\">URL Routes</a></strong> for more details.</div></div>",
+    "body": "<div class=\"card\"><div class=\"card-body\">Default <span class=\"code\">true</span>. Controls whether a wildcard route is added to each resource template. See <strong><a href=\"url-routes\">URL Routes</a></strong> for more details.</div></div>",
     "links": [
       {
         "href": "http://framework-one.github.io/documentation/4.1/developing-applications.html",
