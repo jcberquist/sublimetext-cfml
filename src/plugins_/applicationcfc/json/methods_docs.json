@@ -81,7 +81,7 @@
 	},
 	"ondebug": {
 		"header": "<span class=\"entity-name-function\">onDebug()",
-		"body": "This method is triggered when debugging is enabled for this reques</span>t.",
+		"body": "This method is triggered when debugging is enabled for this request</span>t.",
 		"links": [
 			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/ondebug.html", "text": "helpx.adobe.com ondebug.html"}

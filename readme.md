@@ -41,7 +41,7 @@ First ensure Package Control is installed. More recent versions of Sublime Text 
 
 Open the command palette (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on Windows, <kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac) and select `Package Control: Install Package`.
 
-Wait for the list to open and find the `CFML` entry (subtitled with this github repo `github.com/jcberquist/sublimetext-cfml`), then select it to install.
+Wait for the list to open and find the `CFML` entry (subtitled with this GitHub repo `github.com/jcberquist/sublimetext-cfml`), then select it to install.
 
 Restart Sublime Text.
 
@@ -73,7 +73,7 @@ As changes are made to this repository and the package is updated, simply run th
 
 *Via ZIP Download*
 
-Use the `Download ZIP` option to download a zip of the repository to your computer. (The master branch zip file is located at <https://github.com/jcberquist/sublimetext-cfml/archive/master.zip>) Unzip this, and copy the the contents of the resulting repository folder into a subdirectory named `CFML` in your Sublime Text packages directory.
+Use the `Download ZIP` option to download a zip of the repository to your computer. (The master branch zip file is located at <https://github.com/jcberquist/sublimetext-cfml/archive/master.zip>) Unzip this, and copy the contents of the resulting repository folder into a subdirectory named `CFML` in your Sublime Text packages directory.
 
 Restart Sublime Text.
 
