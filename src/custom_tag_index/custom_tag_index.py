@@ -3,7 +3,7 @@ import re
 
 attribute_regex = re.compile(r"\battributes\.(\w+)\b(?!\s*\()", re.I)
 end_tag_regex = re.compile(
-    r"thistag\.executionmode\s+(?:eq|is|==)\s+[\"']end[\"']", re.I
+    r"thistag(?:\.|\[[\"'])executionmode(?:[\"']])?\s+(?:eq|is|==)\s+[\"']end[\"']", re.I
 )
 alt_end_tag_regex = re.compile(r"<cfcase\s+value=\s*[\"']end[\"']\s*>")
 
