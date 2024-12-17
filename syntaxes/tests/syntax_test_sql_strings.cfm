@@ -1,4 +1,4 @@
-<!--- SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax" --->
+<!--- SYNTAX TEST "Packages/CFML/syntaxes/CFML.sublime-syntax" --->
 <cfscript>
 thisQuery = queryExecute("SELECT * from myTable WHERE myColumn = 1", "SELECT * from myTable WHERE myColumn = 1");
 <!---                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->

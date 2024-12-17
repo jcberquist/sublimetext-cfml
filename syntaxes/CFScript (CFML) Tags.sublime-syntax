@@ -1,0 +1,37 @@
+%YAML 1.2
+---
+name: CFScript (CFML) Tags
+scope: source.cfml.script.tags
+version: 2
+hidden: true
+
+extends: CFScript (CFML).sublime-syntax
+
+contexts:
+  angle-bracket-pop:
+    - match: (?=/?>)
+      pop: 1
+
+  expression-break:
+    - meta_prepend: true
+    - include: angle-bracket-pop
+
+  expressions:
+    - meta_prepend: true
+    - include: angle-bracket-pop
+
+  expressions-no-comma:
+    - meta_prepend: true
+    - include: angle-bracket-pop
+
+  parenthesized-expression:
+    - match: \(
+      scope: punctuation.section.group.begin.cfml
+      set:
+        - meta_scope: meta.group.cfml
+        - match: \)
+          scope: punctuation.section.group.end.cfml
+          pop: 1
+        - include: angle-bracket-pop
+        - match: (?=\S)
+          push: expression

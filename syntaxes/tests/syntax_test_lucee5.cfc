@@ -1,4 +1,4 @@
-// SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax"
+// SYNTAX TEST "Packages/CFML/syntaxes/CFML.sublime-syntax"
 abstract component {
 // <- embedding.cfml source.cfml.script meta.class.declaration.cfml storage.modifier.cfml
 
@@ -7,6 +7,9 @@ abstract component {
     staticValue = 5;
   }
 
+  static final test = 1;
+//^^^^^^ storage.modifier.cfml
+    
   private final numeric function testStatic(){
     return static.staticValue;
 //         ^ variable.language.scope.cfml

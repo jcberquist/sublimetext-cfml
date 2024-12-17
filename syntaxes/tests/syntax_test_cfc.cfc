@@ -1,4 +1,4 @@
-// SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax"
+// SYNTAX TEST "Packages/CFML/syntaxes/CFML.sublime-syntax"
 component extends = "root.model.text"
 //        ^ meta.class.inheritance.cfml entity.other.attribute-name.cfml storage.modifier.extends.cfml
 //                ^ meta.class.inheritance.cfml punctuation.separator.key-value.cfml
@@ -54,27 +54,27 @@ default="string";
     var result;
 
     arrayAppend( arr, item, true );
-//             ^ meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.section.group.begin.cfml
+//             ^ meta.function-call.support.cfml meta.function-call.arguments.support.cfml punctuation.section.group.begin.cfml
 //                  ^ punctuation.separator.function-call.support.cfml
     arr.append( item, true );
-//            ^ meta.function-call.method.support.cfml meta.function-call.parameters.method.support.cfml punctuation.section.group.begin.cfml
+//            ^ meta.function-call.method.support.cfml meta.function-call.arguments.method.support.cfml punctuation.section.group.begin.cfml
 //                  ^ punctuation.separator.function-call.method.support.cfml
     doSomething( arr, item, true );
-//             ^ meta.function-call.cfml meta.function-call.parameters.cfml punctuation.section.group.begin.cfml
+//             ^ meta.function-call.cfml meta.function-call.arguments.cfml punctuation.section.group.begin.cfml
 //                  ^ punctuation.separator.function-call.cfml
     $$badRequest();
-//              ^ meta.function-call.cfml meta.function-call.parameters.cfml punctuation.section.group.begin.cfml
+//              ^ meta.function-call.cfml meta.function-call.arguments.cfml punctuation.section.group.begin.cfml
 //
     obj.do( arr, item, true );
-//        ^ meta.function-call.method.cfml meta.function-call.parameters.method.cfml punctuation.section.group.begin.cfml
+//        ^ meta.function-call.method.cfml meta.function-call.arguments.method.cfml punctuation.section.group.begin.cfml
 //             ^ punctuation.separator.function-call.method.cfml
 
     toString( testVar, "utf-8" );
-//          ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.section.group.begin.cfml
-//                             ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.section.group.end.cfml
+//          ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.support.cfml meta.function-call.arguments.support.cfml punctuation.section.group.begin.cfml
+//                             ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.support.cfml meta.function-call.arguments.support.cfml punctuation.section.group.end.cfml
     var new_list = testVar.listAppend( "hello" );
 //                         ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.method.support.cfml support.function.member.cfml
-//                                   ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.method.support.cfml meta.function-call.parameters.method.support.cfml punctuation.section.group.begin.cfml
+//                                   ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.method.support.cfml meta.function-call.arguments.method.support.cfml punctuation.section.group.begin.cfml
     if ( true ) http url="www.google.com" result="result";
 //              ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.tag.script.cfml entity.name.tag.script.cfml
 //                   ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.tag.script.cfml entity.other.attribute-name.cfml
@@ -90,21 +90,21 @@ default="string";
 //            ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml - meta.tag.script.cfml
 
     test.foo( myvar == test );
-//            ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.method.cfml meta.function-call.parameters.method.cfml variable.other.readwrite.cfml
+//            ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.method.cfml meta.function-call.arguments.method.cfml variable.other.readwrite.cfml
 
     foo.method(test = true, random = "string");
 //      ^ meta.function-call.method.cfml
-//            ^ meta.function-call.method.cfml meta.function-call.parameters.method.cfml punctuation.section.group.begin.cfml
-//             ^ meta.function-call.method.cfml meta.function-call.parameters.method.cfml entity.other.method-parameter.cfml
-//                  ^ meta.function-call.method.cfml meta.function-call.parameters.method.cfml keyword.operator.assignment.binary.cfml
+//            ^ meta.function-call.method.cfml meta.function-call.arguments.method.cfml punctuation.section.group.begin.cfml
+//             ^ meta.function-call.method.cfml meta.function-call.arguments.method.cfml entity.other.method-parameter.cfml
+//                  ^ meta.function-call.method.cfml meta.function-call.arguments.method.cfml keyword.operator.assignment.cfml
     var mycfc = createObject( 'component', 'path.to.cfc' );
 //              ^ meta.function-call.support.cfml meta.function-call.support.createcomponent.cfml support.function.cfml
     var mycfc = new path.to.cfc(test = true, random = "string");
 //              ^ meta.instance.constructor.cfml keyword.operator.word.new.cfml
 //                          ^ meta.instance.constructor.cfml entity.name.class.cfml
-//                             ^ meta.instance.constructor.cfml meta.function-call.parameters.method.cfml punctuation.section.group.begin.cfml
-//                              ^ meta.instance.constructor.cfml meta.function-call.parameters.method.cfml entity.other.method-parameter.cfml
-//                                   ^  meta.instance.constructor.cfml meta.function-call.parameters.method.cfml keyword.operator.assignment.binary.cfml
+//                             ^ meta.instance.constructor.cfml meta.function-call.arguments.method.cfml punctuation.section.group.begin.cfml
+//                              ^ meta.instance.constructor.cfml meta.function-call.arguments.method.cfml entity.other.method-parameter.cfml
+//                                   ^  meta.instance.constructor.cfml meta.function-call.arguments.method.cfml keyword.operator.assignment.cfml
     new path.to.cfc().callmethod();
 //                   ^ punctuation.accessor.cfml
 //                    ^ meta.function-call.method.cfml
@@ -127,11 +127,11 @@ default="string";
 
     throw( message = "test error message" );
 //  ^ meta.function-call.support.cfml support.function.cfml
-//       ^ meta.function-call.support.cfml meta.function-call.parameters.support.cfml punctuation.section.group.begin.cfml -support.function.cfml
-//         ^ meta.function-call.parameters.support.cfml entity.other.function-parameter.cfml -meta.brace
+//       ^ meta.function-call.support.cfml meta.function-call.arguments.support.cfml punctuation.section.group.begin.cfml -support.function.cfml
+//         ^ meta.function-call.arguments.support.cfml entity.other.function-parameter.cfml -meta.brace
 
     throw "test error message";
-//  ^^^^^ keyword.control.trycatch.cfml
+//  ^^^^^ keyword.control.flow.throw.cfml
 
     abort;
 //  ^^^^^ keyword.control.flow.cfml
@@ -148,8 +148,8 @@ default="string";
     myarray.append( value = 'test' );
 //  ^ variable.other.object.cfml
 //          ^ meta.function-call.method.support.cfml support.function.member.cfml
-//                ^ meta.function-call.method.support.cfml meta.function-call.parameters.method.support.cfml punctuation.section.group.begin.cfml
-//                  ^ meta.function-call.method.support.cfml meta.function-call.parameters.method.support.cfml entity.other.method-parameter.cfml -meta.brace
+//                ^ meta.function-call.method.support.cfml meta.function-call.arguments.method.support.cfml punctuation.section.group.begin.cfml
+//                  ^ meta.function-call.method.support.cfml meta.function-call.arguments.method.support.cfml entity.other.method-parameter.cfml -meta.brace
 
     return { key: value };
 //         ^ meta.struct-literal.cfml
@@ -212,38 +212,38 @@ _foo function test() {}
 //     ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
 //                       ^ punctuation.separator.struct-literal.cfml
     key: function() {},
-//  ^ meta.function.declaration.cfml meta.struct-literal.key.cfml entity.name.function.cfml
-//     ^ meta.function.declaration.cfml punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
+//  ^ meta.struct-literal.key.cfml entity.name.function.cfml
+//     ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
 //                    ^ punctuation.separator.struct-literal.cfml
     "key": function() {},
-//   ^ meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.double.cfml entity.name.function.cfml
-//       ^ meta.function.declaration.cfml punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
+//   ^ meta.struct-literal.key.cfml string.quoted.double.cfml entity.name.function.cfml
+//       ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
     'key': function() {}
-//   ^ meta.function.declaration.cfml meta.struct-literal.key.cfml string.quoted.single.cfml entity.name.function.cfml
-//       ^ meta.function.declaration.cfml punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
+//   ^ meta.struct-literal.key.cfml string.quoted.single.cfml entity.name.function.cfml
+//       ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
 
   }
 
   switch( foo ) {
-//^ meta.switch.cfml keyword.control.switch.cfml
+//^ meta.switch.cfml keyword.control.conditional.switch.cfml
 //              ^ meta.switch.cfml punctuation.section.block.begin.cfml
     case "baz":
-//  ^ meta.switch.cfml keyword.control.switch.cfml
+//  ^ meta.switch.cfml keyword.control.conditional.case.cfml
 //        ^ meta.switch.cfml string.quoted.double.cfml
     break;
-//  ^ meta.switch.cfml keyword.control.loop.cfml
+//  ^ meta.switch.cfml keyword.control.flow.break.cfml 
     default:
-//  ^ meta.switch.cfml keyword.control.switch.cfml
+//  ^ meta.switch.cfml keyword.control.conditional.default.cfml 
   }
 
   var test = function() { return foo; };
-//    ^ meta.function.declaration.cfml variable.other.readwrite.cfml entity.name.function.cfml
+//    ^ entity.name.function.cfml variable.other.readwrite.cfml
 
   obj.prop = true;
-  // <- variable.other.struct.cfml
+  // <- variable.other.object.cfml
 //    ^ meta.property.cfml
   obj.CONSTANT = true;
-  // <- variable.other.struct.cfml
+  // <- variable.other.object.cfml
 //    ^ meta.property.constant.cfml
 
   var test[key][0] = [ 1, 2, 3 ];
@@ -301,7 +301,7 @@ a = [
     key: value,
 //  ^ meta.struct-literal.key.cfml
 //     ^ punctuation.separator.key-value.cfml
-//            ^ punctuation.separator.sequence.cfml
+//            ^ punctuation.separator.struct-literal.cfml
     'key': value,
 //  ^ meta.struct-literal.key.cfml string.quoted.single.cfml
 //       ^ punctuation.separator.key-value.cfml -string

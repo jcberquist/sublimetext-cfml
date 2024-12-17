@@ -1,0 +1,1957 @@
+%YAML 1.2
+---
+
+name: CFScript (CFML)
+scope: source.cfml.script
+version: 2
+
+file_extensions:
+  - cfs
+
+extends: CFScript (CFML) Base.sublime-syntax
+
+variables:
+  identifier: '[_$[:alpha:]][_$[:alnum:]]*'
+  dot_path_identifier: '[_$[:alnum:]][_$[:alnum:].]*'
+  constant_identifier: '[[:upper:]][_$[:digit:][:upper:]]*\b'
+  attribute_name: '[_[:alpha:]][[:alnum:]_\-:]*'
+  reserved_word: |-
+    (?x:
+      break|case|catch|continue|default|do|else|finally|for|function|if|import|in|new|return|
+      super|switch|this|try|var|void|while|null|true|false
+    )\b
+
+  non_reserved_identifier: (?:(?!{{reserved_word}}){{identifier}})
+
+  param_attributes: \b(name|default|max|maxLength|min|pattern|type)\b
+  access_modifier: \b(private|package|public|remote)\b
+  storage_modifier: \b(static|final|abstract)\b
+  storage_types: \b(?:any|array|binary|boolean|component|date|guid|numeric|query|string|struct|xml|uuid)\b
+  function_declaration_lookahead: |-
+    (?x:
+      ({{access_modifier}}\s+)?
+      ({{storage_modifier}}\s+)?
+      ({{dot_path_identifier}}(\[\])?\s+)?
+      \bfunction\b
+    )
+  function_lookahead: \s*\bfunction\b
+  arrow_func_lookahead: |-
+    (?x:
+      (?:
+        {{identifier}}
+        | \( ( [^()] | \( [^()]* \) )* \)
+      )
+      \s*
+      =>
+    )
+  either_function_lookahead: (?:{{function_lookahead}}|{{arrow_func_lookahead}})
+  possible_arrow_function_begin: (?:\(|{{identifier}})
+  function_assignment_lookahead: |-
+    (?x:(?=
+      \s* = \s*
+      {{either_function_lookahead}}
+    ))
+  function_call_after_lookahead: (?=\s*\()
+
+  block_comment_contents: (?:(?:[^*]|\*(?!/))*)
+  block_comment: (?:/\*{{block_comment_contents}}\*/)
+  nothing: (?:(?:\s|{{block_comment}})*)
+  line_ending_ahead: (?={{nothing}}(?:/\*{{block_comment_contents}}|//.*)?$)
+
+  sql_lookahead: >-
+    (?x:
+      (?i:select\s+($|\*|top\b|{{dot_path_identifier}}\s*(?:(?:\s+as\s+{{identifier}}\s*)?,|$|\s+from)))|
+      (?i:from\s+($|{{dot_path_identifier}}(?:\s*{{identifier}})?\s*$))|
+      (?i:where\s+($|{{dot_path_identifier}}\s*=))|
+      (?i:(?:left\s+)?(?:outer\s+|inner\s+)?join(\s+|\s*$))|
+      (?i:(?:order|group)\s+by\s+($|{{dot_path_identifier}}\s*(?:,|$)))|
+      (?:SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|REPLACE|ALTER|WITH|DECLARE|FROM|WHERE|AND|ORDER
+    BY|GROUP BY|INNER JOIN|OUTER JOIN|LEFT JOIN|TRUNCATE TABLE|BULK INSERT)
+    )
+
+  binding_pattern_lookahead: (?:{{identifier}}|\[|\{)
+  property_name: >-
+    (?x:
+      {{identifier}}
+      | [0-9]+
+      | '(?:[^\\']|\\.)*'
+      | "(?:[^\\"]|\\.)*"
+    )
+
+contexts:
+  prototype:
+    - include: comments
+
+  else-pop:
+    - match: (?=\S)
+      pop: 1
+
+  else-pop-2:
+    - match: (?=\S)
+      pop: 2
+
+  immediately-pop:
+    - meta_include_prototype: false
+    - match: ''
+      pop: 1
+
+  immediately-pop-2:
+    - meta_include_prototype: false
+    - match: ''
+      pop: 2
+
+  main:
+    - match: '\)|\}|\]'
+      scope: invalid.illegal.stray-bracket-end.cfml
+    - include: import-statement
+    - include: statements
+
+  statements:
+    - match: '```'
+      scope: punctuation.definition.raw.code-fence.begin.cfml
+      embed: scope:embedding.cfml#html
+      embed_scope: text.html.cfml
+      escape: '```'
+      escape_captures:
+        0: punctuation.definition.raw.code-fence.end.cfml
+    - match: '\)|\}|\]'
+      scope: invalid.illegal.stray-bracket-end.cfml
+      pop: 1
+    - match: (?=\S)
+      push: statement
+
+  statement:
+    - match: \;
+      scope: punctuation.terminator.statement.empty.cfml
+      pop: 1
+    - include: component-declaration
+    - include: function-declaration
+    - include: static-block
+    - include: variable-declaration
+    - include: conditional
+    - include: block
+    - include: label
+    - include: flow-control
+    - include: tag-in-script
+    - include: tag-in-script-cf
+    - include: expression-statement
+
+  comments:
+    - match: /\*\*(?!/|\*)
+      scope: punctuation.definition.comment.cfml
+      push:
+        - meta_include_prototype: false
+        - meta_scope: comment.block.documentation.cfml
+        - match: \*/
+          scope: punctuation.definition.comment.cfml
+          pop: true
+        - match: ^\s*\*?\s*((\@)\S*)\s
+          captures:
+            1: keyword.other.documentation.cfml
+            2: punctuation.definition.keyword.cfml
+          push: cfmldoc
+        - match: ^\s*(\*(?!/))?\s*(?=\w)
+          push: cfmldoc
+    - match: /\*
+      scope: punctuation.definition.comment.cfml
+      push:
+        - meta_include_prototype: false
+        - meta_scope: comment.block.cfml
+        - match: \*/
+          scope: punctuation.definition.comment.cfml
+          pop: true
+    - match: //
+      scope: punctuation.definition.comment.cfml
+      push:
+        - meta_include_prototype: false
+        - meta_scope: comment.line.double-slash.cfml
+        - match: \n
+          pop: true
+    - include: scope:embedding.cfml#comments
+
+  cfmldoc:
+    - meta_content_scope: text.html
+    - match: (\n|(?=\*/))
+      pop: true
+    - include: scope:text.html.basic
+
+  flow-control:
+    - match: break\b
+      scope: keyword.control.flow.break.cfml
+      set:
+        - expect-semicolon
+        - expect-label
+    - match: continue\b
+      scope: keyword.control.flow.continue.cfml
+      set:
+        - expect-semicolon
+        - expect-label
+    - match: \babort\b
+      scope: keyword.control.flow.cfml
+    - match: return\b
+      scope: keyword.control.flow.return.cfml
+      set: restricted-production
+    - match: \b(throw|rethrow)\b(?!\s*\()
+      scope: keyword.control.flow.throw.cfml
+      set: restricted-production
+    - match: \b(include)\b(?!\s+(?:template|runeonce)=)
+      scope: keyword.control.flow.cfml
+      set: restricted-production
+
+  component-declaration:
+    - match: (?i)^\s*(?:(abstract|final)\s+)?(component)\b
+      captures:
+        1: storage.modifier.cfml
+        2: storage.type.class.cfml
+      set:
+        - component-body
+        - component-attributes
+    - match: (?i)^\s*(interface)\b
+      captures:
+        1: storage.type.interface.cfml
+      set:
+        - interface-body
+        - interface-attributes
+
+  component-attributes:
+    - meta_scope: meta.class.declaration.cfml
+    - match: (?=\{)
+      pop: 1
+    - include: scope:embedding.cfml#cfcomponent-attributes
+
+  component-body:
+    - match: \{
+      scope: punctuation.section.block.begin.cfml
+      set:
+        - meta_scope: meta.class.body.cfml
+        - match: \}
+          scope: punctuation.section.block.end.cfml
+          pop: 1
+        - include: statements
+
+  interface-attributes:
+    - meta_scope: meta.interface.declaration.cfml
+    - match: (?=\{)
+      pop: 1
+    - include: scope:embedding.cfml#cfcomponent-attributes
+
+  interface-body:
+    - match: \{
+      scope: punctuation.section.block.begin.cfml
+      set:
+        - meta_scope: meta.interface.body.cfml
+        - match: \}
+          scope: punctuation.section.block.end.cfml
+          pop: 1
+        - include: statements
+
+  comma-separator:
+    - match: ','
+      scope: punctuation.separator.comma.cfml
+
+  import-statement:
+    - match: \bimport\b
+      scope: keyword.control.import.cfml
+      push:
+        - meta_scope: meta.import.cfml
+        - match: (?=\n|;)
+          pop: true
+        - include: string
+        - match: '{{identifier}}'
+          scope: variable.other.readwrite.cfml
+        - match: \*
+          scope: constant.other.cfml
+        - include: else-pop
+
+  expect-semicolon:
+    - match: \;
+      scope: punctuation.terminator.statement.cfml
+      pop: 1
+    - include: else-pop
+
+  expect-label:
+    - meta_include_prototype: false
+    - match: '(?={{nothing}}{{identifier}})'
+      set:
+        - match: '{{non_reserved_identifier}}'
+          scope: variable.label.cfml
+          pop: 1
+        - match: '{{identifier}}'
+          scope: invalid.illegal.identifier.cfml variable.label.cfml
+          pop: 1
+        - include: else-pop
+    - include: immediately-pop
+
+  static-block:
+    - match: \bstatic\b(?=\s*[\n\{])
+      scope: keyword.control.static.cfml
+      push:
+        - static-block-meta
+        - block
+
+  static-block-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.block.static.cfml
+    - include: immediately-pop
+
+  block:
+    - match: '\{'
+      scope: punctuation.section.block.begin.cfml
+      set:
+        - meta_scope: meta.block.cfml
+        - match: '\}'
+          scope: punctuation.section.block.end.cfml
+          pop: 1
+        - include: statements
+
+  variable-binding-pattern:
+    - include: variable-binding-name
+    - include: variable-binding-array-destructuring
+    - include: variable-binding-struct-destructuring
+    - include: else-pop
+
+  variable-binding-name:
+    - match: (?={{non_reserved_identifier}}\b\[)
+      pop: 1
+    - match: (?={{non_reserved_identifier}})
+      set:
+        - - meta_scope: meta.binding.name.cfml
+          - include: immediately-pop
+        - literal-variable
+
+  variable-binding-array-destructuring:
+    - match: '\['
+      scope: punctuation.section.sequence.begin.cfml
+      set:
+        - meta_scope: meta.binding.destructuring.sequence.cfml
+        - match: '\]'
+          scope: punctuation.section.sequence.end.cfml
+          pop: 1
+        - include: variable-binding-spread
+        - include: variable-binding-list
+
+  variable-binding-struct-destructuring:
+    - match: '\{'
+      scope: punctuation.section.mapping.begin.cfml
+      set:
+        - meta_scope: meta.binding.destructuring.mapping.cfml
+        - match: '\}'
+          scope: punctuation.section.mapping.end.cfml
+          pop: 1
+        - include: variable-binding-spread
+        - match: (?={{identifier}}|\[|'|")
+          push:
+            - initializer
+            - variable-binding-object-alias
+            - struct-literal-meta-key
+            - variable-binding-object-key
+        - include: comma-separator
+
+  variable-binding-object-alias:
+    - match: ':'
+      scope: punctuation.separator.key-value.cfml
+      set: variable-binding-pattern
+    - include: else-pop
+
+  variable-binding-object-key:
+    - match: '{{identifier}}(?=\s*:)'
+      pop: 1
+    - include: string
+    - include: variable-binding-name
+    - include: else-pop
+
+  variable-binding-spread:
+    - match: '\.\.\.'
+      scope: keyword.operator.spread.cfml
+      push: variable-binding-pattern
+
+  variable-binding-list:
+    - include: comma-separator
+    - match: (?={{binding_pattern_lookahead}})
+      push:
+        - initializer
+        - variable-binding-pattern
+    - include: else-pop
+
+  variable-binding-top:
+    - match: (?={{binding_pattern_lookahead}})
+      set:
+        - initializer
+        - variable-binding-pattern
+    - include: else-pop
+
+  variable-binding-list-top:
+    - match: ','
+      scope: punctuation.separator.comma.cfml
+      push: variable-binding-top
+    - include: else-pop
+
+  variable-declaration:
+    - match: var\b
+      scope: keyword.declaration.cfml
+      set:
+        - expect-semicolon
+        - variable-binding-list-top
+        - variable-binding-top
+    - include: static-declaration
+    - include: final-declaration
+
+  static-declaration:
+    - match: static\b(?!\??\.)
+      scope: storage.modifier.cfml
+      set:
+        - match: (?=final\b(?!\??\.))
+          set: final-declaration
+        - match: '(?={{function_lookahead}}\b)'
+          set: function-declaration
+        - include: else-pop
+
+  final-declaration:
+    - match: final\b(?!\??\.)
+      scope: storage.modifier.cfml
+      set:
+        - match: (?=static\b(?!\??\.))
+          set: static-declaration
+        - match: '(?={{function_lookahead}}\b)'
+          set: function-declaration
+        - include: else-pop
+
+  function-parameter-binding-pattern:
+    - include: function-parameter-binding-name
+    - include: function-parameter-binding-array-destructuring
+    - include: function-parameter-binding-object-destructuring
+    - include: else-pop
+
+  function-parameter-binding-name:
+    - match: '{{non_reserved_identifier}}'
+      scope: meta.binding.name.cfml variable.parameter.function.cfml
+    - match: '{{identifier}}'
+      scope: invalid.illegal.identifier.cfml meta.binding.name.cfml variable.parameter.function.cfml
+
+  function-parameter-binding-array-destructuring:
+    - match: '\['
+      scope: punctuation.section.sequence.begin.cfml
+      set:
+        - meta_scope: meta.binding.destructuring.sequence.cfml
+        - match: '\]'
+          scope: punctuation.section.sequence.end.cfml
+          pop: 1
+        - include: function-parameter-binding-list
+
+  function-parameter-binding-object-destructuring:
+    - match: '\{'
+      scope: punctuation.section.mapping.begin.cfml
+      set:
+        - meta_scope: meta.binding.destructuring.mapping.cfml
+        - match: ','
+          scope: punctuation.separator.parameter.function.cfml
+        - match: '\}'
+          scope: punctuation.section.mapping.end.cfml
+          pop: 1
+        - include: function-parameter-binding-spread
+        - match: (?={{identifier}}|\[|'|")
+          push:
+            - initializer
+            - function-parameter-binding-object-alias
+            - struct-literal-meta-key
+            - function-parameter-binding-object-key
+
+  function-parameter-binding-object-alias:
+    - match: ':'
+      scope: punctuation.separator.key-value.cfml
+      set: function-parameter-binding-pattern
+    - include: else-pop
+
+  function-parameter-binding-object-key:
+    - match: '{{identifier}}(?=\s*:)'
+      pop: 1
+    - include: string
+    - include: function-parameter-binding-name
+    - include: else-pop
+
+  function-parameter-binding-spread:
+    - match: '\.\.\.'
+      scope: keyword.operator.spread.cfml
+      push: function-parameter
+
+  function-parameter-binding-list:
+    - match: ','
+      scope: punctuation.separator.parameter.function.cfml
+    - include: function-parameter-binding-spread
+    - match: (?={{binding_pattern_lookahead}})
+      push: function-parameter
+    - include: else-pop
+
+  function-parameter:
+    - match: ''
+      set:
+        - initializer
+        - function-parameter-binding-pattern
+
+  initializer:
+    - match: '='
+      scope: keyword.operator.assignment.cfml
+      set: expression-no-comma
+    - include: else-pop
+
+  restricted-production:
+    - meta_include_prototype: false
+    - match: '{{line_ending_ahead}}'
+      pop: 1
+    - match: ''
+      set: expression-statement
+
+  expect-case-colon:
+    - match: ':'
+      scope: punctuation.separator.cfml
+      pop: 1
+    - include: else-pop
+
+  conditional:
+    - match: switch\b
+      scope: keyword.control.conditional.switch.cfml
+      set:
+        - switch-meta
+        - switch-block
+        - expect-parenthesized-expression
+    - match: do\b
+      scope: keyword.control.loop.do-while.cfml
+      set:
+        - do-while-meta
+        - do-while-condition
+        - statement
+    - match: for\b
+      scope: keyword.control.loop.for.cfml
+      set:
+        - for-meta
+        - block-scope
+        - for-condition
+    - match: while\b
+      scope: keyword.control.loop.while.cfml
+      set:
+        - while-meta
+        - block-scope
+        - expect-parenthesized-expression
+    - match: if\b
+      scope: keyword.control.conditional.if.cfml
+      set:
+        - conditional-meta
+        - statement
+        - expect-parenthesized-expression
+    - match: else\s+if\b
+      scope: keyword.control.conditional.elseif.cfml
+      set:
+        - conditional-meta
+        - statement
+        - expect-parenthesized-expression
+    - match: else\b
+      scope: keyword.control.conditional.else.cfml
+      set:
+        - conditional-meta
+        - statement
+    - match: try\b
+      scope: keyword.control.exception.try.cfml
+      set:
+        - try-meta
+        - block-scope
+    - match: finally\b
+      scope: keyword.control.exception.finally.cfml
+      set:
+        - finally-meta
+        - block-scope
+    - match: catch\b
+      scope: keyword.control.exception.catch.cfml
+      set:
+        - catch-meta
+        - block-scope
+        - catch-binding
+
+  expect-parenthesized-expression:
+    - include: parenthesized-expression
+    - include: else-pop
+
+  switch-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.switch.cfml
+    - include: immediately-pop
+
+  do-while-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.do-while.cfml
+    - include: immediately-pop
+
+  for-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.for.cfml
+    - include: immediately-pop
+
+  while-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.while.cfml
+    - include: immediately-pop
+
+  with-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.with.cfml
+    - include: immediately-pop
+
+  conditional-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.conditional.cfml
+    - include: immediately-pop
+
+  try-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.try.cfml
+    - include: immediately-pop
+
+  finally-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.finally.cfml
+    - include: immediately-pop
+
+  catch-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.catch.cfml
+    - include: immediately-pop
+
+  for-condition:
+    - match: \(
+      scope: punctuation.section.group.begin.cfml
+      branch_point: for-in
+      branch:
+        - for-in
+        - for-oldstyle
+      pop: 1
+    - include: else-pop
+
+  for-condition-end:
+    - meta_scope: meta.group.cfml
+    - match: \)
+      scope: punctuation.section.group.end.cfml
+      pop: 1
+    - match: ;
+      scope: invalid.illegal.unexpected-token.cfml
+    - include: expressions
+
+  for-in:
+    - meta_include_prototype: false
+    - meta_scope: meta.group.cfml
+    - match: ''
+      set:
+        - for-condition-end
+        - for-in-word
+        - for-in-declaration
+
+  for-in-declaration:
+    - match: var\b
+      scope: keyword.declaration.cfml
+      set: for-in-binding
+    - match: (?=\S)
+      set:
+        - left-expression-end
+        - expression-begin
+
+  for-in-binding:
+    - include: variable-binding-name
+    - include: variable-binding-array-destructuring
+    - include: variable-binding-struct-destructuring
+    - match: (?=\S)
+      fail: for-in
+
+  for-in-word:
+    - match: (?i)in\b
+      scope: keyword.operator.binary.cfml
+      pop: 1
+    - match: (?=\S)
+      fail: for-in
+
+  for-oldstyle:
+    - meta_include_prototype: false
+    - meta_scope: meta.group.cfml
+    - match: ''
+      set:
+        - for-condition-end
+        - for-oldstyle-separator
+        - expression
+        - for-oldstyle-separator
+        - for-oldstyle-declaration
+
+  for-oldstyle-declaration:
+    - match: var\b
+      scope: keyword.declaration.cfml
+      set:
+        - variable-binding-list-top
+        - variable-binding-top
+    - match: (?=\S)
+      set: expression
+
+  for-oldstyle-separator:
+    - match: ;
+      scope: punctuation.separator.expression.cfml
+      pop: 1
+    - include: else-pop
+
+  block-scope:
+    - include: block
+    - include: else-pop
+
+  block-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.block.cfml
+    - include: immediately-pop
+
+  function-body-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.function.body.cfml
+    - include: immediately-pop
+
+  switch-block:
+    - match: '\{'
+      scope: punctuation.section.block.begin.cfml
+      set: switch-block-contents
+    - include: else-pop
+
+  switch-block-contents:
+    - meta_scope: meta.block.cfml
+    - match: '\}'
+      scope: punctuation.section.block.end.cfml
+      pop: 1
+    - match: case\b
+      scope: keyword.control.conditional.case.cfml
+      push:
+        - expect-case-colon
+        - expression
+    - match: default\b
+      scope: keyword.control.conditional.default.cfml
+      push:
+        - expect-case-colon
+
+    - include: statements
+
+  do-while-condition:
+    - match: while\b
+      scope: keyword.control.loop.while.cfml
+      set: parenthesized-expression
+    - include: else-pop
+
+  catch-binding:
+    - match: \(
+      scope: punctuation.section.group.begin.cfml
+      set:
+        - catch-binding-end
+        - catch-expression
+    - include: else-pop
+
+  catch-binding-end:
+    - meta_scope: meta.group.cfml
+    - match: \)
+      scope: punctuation.section.group.end.cfml
+      pop: 1
+
+  catch-expression:
+    - match: (?:({{dot_path_identifier}})\s+)?(?i:(var)\s+)?({{identifier}})
+      captures:
+        1: support.type.exception.cfml
+        2: storage.type.cfml
+        3: variable.other.readwrite.cfml
+      pop: 1
+    - include: else-pop
+
+  expressions:
+    - match: (?=\S)
+      push: [ expression-end, expression-begin ]
+
+  expression:
+    - meta_include_prototype: false
+    - match: (?=\S)
+      set: [ expression-end, expression-begin ]
+
+  expressions-no-comma:
+    - match: (?=\S)
+      push: [ expression-end-no-comma, expression-begin ]
+
+  expression-no-comma:
+    - meta_include_prototype: false
+    - match: (?=\S)
+      set: [ expression-end-no-comma, expression-begin ]
+
+  expression-statement:
+    - match: (?=\S)
+      set:
+        - expect-semicolon
+        - expression-statement-end
+        - expression-begin
+
+  expression-begin:
+    - include: expression-break
+    - include: string
+    - include: constructor
+    - include: prefix-operators
+    - include: special-name
+    - include: literal-number
+    - include: function-expression
+    - include: struct-literal
+    - include: array-literal
+    - include: java-block
+    - match: (?={{reserved_word}})
+      pop: 1
+    # if we have a parenthesis expression, or literal variable
+    # they are handled by the first branch `branch-possible-arrow-function`
+    - match: (?={{possible_arrow_function_begin}})
+      pop: 1
+      branch_point: arrow-function
+      branch:
+        - branch-possible-arrow-function
+        - arrow-function-expression
+    - include: scope:embedding.cfml#string-template-expression
+    - include: else-pop
+
+  expression-break:
+    - match: (?=[;})\]])
+      pop: 1
+    - match: (?i)(?=</cfscript>)
+      pop: 1
+
+  expression-end:
+    - include: expression-break
+    - include: postfix-operators
+    - include: binary-operators
+    - include: ternary-operator
+    - include: left-expression-end
+
+  expression-end-no-comma:
+    - match: (?=,)
+      pop: 1
+    - include: expression-end
+
+  left-expression-end:
+    - include: expression-break
+    - match: '{{function_call_after_lookahead}}'
+      push: function-call-arguments
+    - include: property-access
+    - include: else-pop
+
+  expression-statement-end:
+    - match: '{{line_ending_ahead}}'
+      branch_point: expression-statement-continuation
+      branch:
+        - expression-statement-continuation
+        - expression-statement-pop
+    - include: expression-end
+
+  expression-statement-continuation:
+    - match: (?=\+\+|--)
+      fail: expression-statement-continuation
+    - match: |-
+        (?x)
+        (?=
+          !=
+        | [-+*/%><=&|^\[(;,.:?]
+        | in\b
+        )
+      pop: 1
+    - match: (?=\S)
+      fail: expression-statement-continuation
+
+  expression-statement-pop:
+    # Consume only comments (ignore patterns from inheriting syntaxes) and
+    # pop `expression-statement-end` at the same text point the previous branch
+    # fails at in order to prevent ST's syntax engine to lock up.
+    # see: https://github.com/sublimehq/sublime_text/issues/5853
+    - meta_include_prototype: false
+    - include: comments
+    - include: else-pop-2
+
+  branch-possible-arrow-function:
+    - meta_include_prototype: false
+    - match: (?=\()
+      set:
+        - detect-arrow
+        - parenthesized-expression
+    - match: (?={{identifier}})
+      set:
+        - detect-arrow
+        - literal-variable
+
+  detect-arrow:
+    - match: (?==>)
+      fail: arrow-function
+    - include: else-pop
+
+  string:
+    - match: \'
+      scope: punctuation.definition.string.begin.cfml
+      set:
+        - meta_include_prototype: false
+        - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
+        - match: (?={{sql_lookahead}})
+          set: string-sql-single
+        - match: (?=\S)
+          set: string-single
+    - match: \"
+      scope: punctuation.definition.string.begin.cfml
+      set:
+        - meta_include_prototype: false
+        - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
+        - match: (?={{sql_lookahead}})
+          set: string-sql-double
+        - match: (?=\S)
+          set: string-double
+
+  string-single:
+    - meta_include_prototype: false
+    - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
+    - match: "''"
+      scope: constant.character.escape.quote.cfml
+    - match: \'
+      scope: punctuation.definition.string.end.cfml
+      pop: 1
+    - include: scope:embedding.cfml#string-template-expression
+
+  string-sql-single:
+    - meta_include_prototype: false
+    - meta_scope: meta.string.quoted.single.cfml
+    - match: \'
+      scope: string.quoted.single.cfml punctuation.definition.string.end.cfml
+      pop: 1
+    - match: (?={{sql_lookahead}})
+      push: scope:source.sql
+      with_prototype:
+        - match: "''"
+          scope: constant.character.escape.quote.cfml
+        - match: (?=')
+          pop: true
+        - include: scope:embedding.cfml#sql-character-escape
+        - include: scope:embedding.cfml#sql-template-expression
+
+  string-double:
+    - meta_include_prototype: false
+    - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
+    - match: '""'
+      scope: constant.character.escape.quote.cfml
+    - match: \"
+      scope: punctuation.definition.string.end.cfml
+      pop: true
+    - include: scope:embedding.cfml#string-template-expression
+
+  string-sql-double:
+    - meta_include_prototype: false
+    - meta_scope: meta.string.quoted.double.cfml
+    - match: \"
+      scope: string.quoted.double.cfml punctuation.definition.string.end.cfml
+      pop: true
+    - match: (?={{sql_lookahead}})
+      push: scope:source.sql
+      with_prototype:
+        - match: '""'
+          scope: constant.character.escape.quote.cfml
+        - match: (?=")
+          pop: true
+        - include: scope:embedding.cfml#sql-character-escape
+        - include: scope:embedding.cfml#sql-template-expression
+
+  constructor:
+    - match: \bnew\b
+      scope: keyword.operator.word.new.cfml
+      set:
+        - constructor-meta
+        - constructor-body-expect-arguments
+        - constructor-body-expect-entity-name
+
+  constructor-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.instance.constructor.cfml
+    - include: immediately-pop
+
+  constructor-body-expect-arguments:
+    - include: method-call-arguments
+    - include: else-pop
+
+  constructor-body-expect-entity-name:
+    - match: (?i:component)
+      scope: storage.type.class.cfml
+      pop: 1
+    - match: (?i:java)
+      scope: variable.type.cfml
+      pop: 1
+    - match: '{{dot_path_identifier}}'
+      scope: entity.name.class.cfml
+      pop: 1
+    - include: else-pop
+
+  prefix-operators:
+    - match: '!(?!=)'
+      scope: keyword.operator.logical.cfml
+    - match: (?i:not)\b
+      scope: keyword.operator.logical.cfml
+    - match: '--'
+      scope: keyword.operator.arithmetic.cfml
+    - match: '\+\+'
+      scope: keyword.operator.arithmetic.cfml
+    - match: \.\.\.
+      scope: keyword.operator.spread.cfml
+    - match: \+|\-
+      scope: keyword.operator.arithmetic.cfml
+
+  binary-operators:
+    - match: \b(?i:in)\b
+      scope: keyword.operator.binary.cfml
+      push: expression-begin
+    - match: '&&|\|\|'
+      scope: keyword.operator.logical.binary.cfml
+      push: expression-begin
+    - match: \b(?i:(and|or|xor|eqv|imp))\b
+      scope: keyword.operator.logical.binary.cfml
+      push: expression-begin
+    - match: =(?![=>])
+      scope: keyword.operator.assignment.cfml
+      push: expression-begin
+    - match: |-
+        (?x)
+        %=   | # assignment      right-to-left   both
+        &=   | # assignment      right-to-left   both
+        \*=  | # assignment      right-to-left   both
+        \+=  | # assignment      right-to-left   both
+        -=   | # assignment      right-to-left   both
+        /=     # assignment      right-to-left   both
+      scope: keyword.operator.assignment.augmented.binary.cfml
+      push: expression-begin
+    - match: '&'
+      scope: keyword.operator.concat.binary.cfml
+      push: expression-begin
+    - match: |-
+        (?x)
+        ===  | # equality        left-to-right   both
+        !==  | # equality        left-to-right   both
+        ==   | # equality        left-to-right   both
+        \b(?i:neq|is\s+not)\b |
+        !=   |  # equality        left-to-right   both
+        <>   |  # equality        left-to-right   both
+        \b(?i:eq|is)\b
+      scope: keyword.operator.comparison.binary.cfml
+      push: expression-begin
+    - match: |-
+        (?x)
+        <=   | # relational      left-to-right   both
+        \b(?i:(lte|le|less\s+than\s+or\s+equal\s+to))\b |
+        >=   | # relational      left-to-right   both
+        \b(?i:(gte|ge|greater\s+than\s+or\s+equal\s+to))\b |
+        <    | # relational      left-to-right   both
+        \b(?i:(lt|less\s+than\s))\b |
+        >    | # relational      left-to-right   both
+        \b(?i:(gt|greater\s+than\s))\b
+      scope: keyword.operator.relational.binary.cfml
+      push: expression-begin
+    - match: \b(?i:(contains|does\s+not\s+contain))\b
+      scope: keyword.operator.decision.binary.cfml
+      push: expression-begin
+    - match: \b(?i:mod)\b
+      scope: keyword.operator.arithmetic.binary.cfml
+      push: expression-begin
+    - match: |-
+        (?x)
+        /    | # division        left-to-right   both
+        %    | # modulus         left-to-right   both
+        \*   | # multiplication  left-to-right   both
+        \+   | # addition        left-to-right   both
+        -      # subtraction     left-to-right   both
+      scope: keyword.operator.arithmetic.binary.cfml
+      push: expression-begin
+    - match: ','
+      scope: punctuation.separator.comma.cfml
+      push: expression-begin
+
+  ternary-operator:
+    - match: '\?(?=[^.]|\.[0-9])'
+      scope: keyword.operator.ternary.cfml
+      set:
+        - ternary-operator-expect-colon
+        - expression-no-comma
+
+  ternary-operator-expect-colon:
+    - match: ':'
+      scope: keyword.operator.ternary.cfml
+      set: expression-no-comma
+    - include: else-pop
+
+  postfix-operators:
+    - match: '--'
+      scope: keyword.operator.arithmetic.postfix.cfml
+    - match: '\+\+'
+      scope: keyword.operator.arithmetic.postfix.cfml
+
+  special-name:
+    - match: \btrue\b
+      scope: constant.language.boolean.true.cfml
+      pop: 1
+    - match: \bfalse\b
+      scope: constant.language.boolean.false.cfml
+      pop: 1
+    - match: \bnull\b
+      scope: constant.language.null.cfml
+      pop: 1
+
+  function-name-meta:
+    - meta_include_prototype: false
+    - meta_scope: entity.name.function.cfml
+    - include: immediately-pop
+
+  function-expression:
+    - match: (?={{function_lookahead}})
+      set: function-declaration
+
+  function-declaration:
+    - match: (?={{function_declaration_lookahead}})
+      set:
+        - function-declaration-expect-body
+        - function-meta
+        - function-declaration-expect-attributes
+        - function-declaration-expect-parameters
+        - function-declaration-expect-name
+        - function-declaration-expect-function-keyword
+        - function-declaration-expect-return-type
+        - function-declaration-expect-storage-keyword
+        - function-declaration-expect-access-keyword
+
+  function-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.function.declaration.cfml
+    - include: immediately-pop
+
+  function-declaration-expect-body:
+    - include: function-block
+    - include: else-pop
+
+  function-declaration-expect-java-body:
+    - match: '\{'
+      scope: punctuation.section.block.begin.cfml
+      set:
+        - meta_scope: meta.function.body.cfml meta.java.cfml
+        - match: '\}'
+          scope: punctuation.section.block.end.cfml
+          pop: 1
+        - include: scope:source.java#block-body
+    - include: else-pop
+
+  function-declaration-expect-attributes:
+    - match: (?=[;{])
+      pop: 1
+    - match: (?i)(?=type\s*=\s*["']*java['"]*)
+      pop: 2
+      set:
+        - function-declaration-expect-java-body
+        - function-meta
+        - function-declaration-expect-attributes-java
+    - include: scope:embedding.cfml#tag-generic-attribute
+
+  function-declaration-expect-attributes-java:
+    - match: (?=[;{])
+      pop: 1
+    - include: scope:embedding.cfml#tag-generic-attribute
+
+  function-declaration-expect-parameters:
+    - include: function-declaration-parameters
+    - include: else-pop
+
+  function-declaration-expect-name:
+    - match: '{{identifier}}'
+      scope: entity.name.function.cfml
+      pop: 1
+    - include: else-pop
+
+  function-declaration-expect-function-keyword:
+    - match: function\b
+      scope: storage.type.function.cfml
+      pop: 1
+    - include: else-pop
+
+  function-declaration-expect-return-type:
+    - match: (?i)(?={{function_lookahead}}(?!{{function_lookahead}}))
+      pop: 1
+    - include: storage-types
+    - include: else-pop
+
+  function-declaration-expect-storage-keyword:
+    - match: '{{storage_modifier}}'
+      scope: storage.modifier.cfml
+      pop: 1
+    - include: else-pop
+
+  function-declaration-expect-access-keyword:
+    - match: '{{access_modifier}}'
+      scope: storage.modifier.cfml
+      pop: 1
+    - include: else-pop
+
+  storage-types:
+    - match: (?i){{storage_types}}
+      scope: storage.type.primitive.cfml
+      pop: 1
+    - match: (?i:\b(function)\b)
+      scope: storage.type.function.cfml
+      pop: 1
+    - match: (?i:\b(void)\b)
+      scope: storage.type.void.cfml
+      pop: 1
+    - match: (?i:\b({{dot_path_identifier}})\b)(\[)(\])
+      captures:
+        1: storage.type.object.array.cfml
+        2: meta.brackets.cfml punctuation.section.brackets.begin.cfml
+        3: meta.brackets.cfml punctuation.section.brackets.end.cfml
+      pop: 1
+    - match: (?i:\b{{dot_path_identifier}}\b)
+      scope: storage.type.object.cfml
+      pop: 1
+
+  function-block:
+    - match: '\{'
+      scope: punctuation.section.block.begin.cfml
+      set:
+        - meta_scope: meta.function.body.cfml
+        - match: '\}'
+          scope: punctuation.section.block.end.cfml
+          pop: 1
+        - include: statements
+
+  function-declaration-parameters:
+    - match: \(
+      scope: punctuation.section.parameters.begin.cfml
+      set:
+        - meta_scope: meta.function.parameters.cfml
+        - match: \)
+          scope: punctuation.section.parameters.end.cfml
+          pop: 1
+        - match: ','
+          scope: punctuation.separator.parameter.function.cfml
+        - match: (?i)\brequired\b
+          scope: keyword.other.required.parameter.cfml
+        - match: (\.\.\.)({{identifier}})
+          captures:
+            1: keyword.operator.rest.cfml
+            2: variable.parameter.function.cfml
+        - match: (?:({{dot_path_identifier}})\s+)?({{identifier}})
+          captures:
+            1: storage.type.cfml
+            2: variable.parameter.function.cfml
+          push:
+            - function-declaration-parameter-attributes
+            - function-declaration-parameter-default
+
+  function-declaration-parameter-attributes:
+    - match: (?=[,)])
+      pop: true
+    - include: scope:embedding.cfml#tag-generic-attribute
+
+  function-declaration-parameter-default:
+    - match: '='
+      scope: keyword.operator.assignment.cfml
+      set:
+        - function-declaration-parameter-meta
+        - expression-no-comma
+    - include: else-pop
+
+  function-declaration-parameter-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.parameter.optional.cfml
+    - include: immediately-pop
+
+  arrow-function-expression:
+    - meta_include_prototype: false
+    - match: ''
+      set:
+        - arrow-function-expect-body
+        - arrow-function-expect-arrow
+        - function-meta
+        - arrow-function-expect-parameters
+
+  arrow-function-expect-body:
+    - include: function-block
+    - match: (?=\S)
+      set:
+        - function-body-meta
+        - expression-no-comma
+
+  arrow-function-expect-arrow:
+    - match: '=>'
+      scope: storage.type.function.arrow.cfml
+      pop: 1
+    - include: else-pop
+
+  arrow-function-expect-parameters:
+    - match: (?={{identifier}})
+      set:
+        - clear_scopes: 1
+        - meta_scope: meta.function.parameters.cfml
+        - match: '{{identifier}}'
+          scope: variable.parameter.function.cfml
+          pop: 1
+    - include: function-declaration-parameters
+    - include: else-pop
+
+
+  label:
+    - match: '({{identifier}})\s*(:)'
+      captures:
+        1: entity.name.label.cfml
+        2: punctuation.separator.cfml
+
+  struct-literal:
+    - match: '\{'
+      scope: punctuation.section.mapping.begin.cfml
+      set: struct-literal-contents
+
+  struct-literal-contents:
+    - meta_scope: meta.struct-literal.cfml
+    - match: '\}'
+      scope: punctuation.section.mapping.end.cfml
+      pop: 1
+
+    - include: struct-literal-common-content
+
+  struct-literal-ordered:
+    - match: '\['
+      scope: punctuation.section.mapping.begin.cfml
+      set: struct-literal-ordered-contents
+
+  struct-literal-ordered-contents:
+    - meta_scope: meta.mapping.cfml
+
+    - match: '\]'
+      scope: punctuation.section.mapping.end.cfml
+      pop: 1
+
+    - include: struct-literal-common-content
+
+  struct-literal-common-content:
+    - match: \.\.\.
+      scope: keyword.operator.spread.cfml
+      push: expression-no-comma
+
+    - match: >-
+        (?x)(?=
+          {{property_name}}\s*[:=]\s*
+          {{either_function_lookahead}}
+        )
+      push:
+        - struct-literal-meta-key
+        - method-name
+
+    - match: (?={{property_name}})
+      push: struct-literal-element
+
+    - match: ','
+      scope: punctuation.separator.struct-literal.cfml
+
+    - match: '[:=]'
+      scope: punctuation.separator.key-value.cfml
+      push: expression-no-comma
+
+    # If there's any garbage, parse it as an expression
+    # so that close braces won't break things.
+    - match: (?=\S)
+      push: expression-no-comma
+
+  struct-literal-element:
+    - match: '{{identifier}}(?=\s*(?:[},]|$|//|/\*))'
+      scope: variable.other.readwrite.cfml
+      pop: 1
+    - match: (?=["'])
+      set:
+        - struct-literal-meta-key
+        - string
+    - match: (?=\S)
+      set:
+        - struct-literal-meta-key
+        - struct-literal-key
+
+  struct-literal-key:
+    - include: string
+    - match: '[_$[:alnum:]]+'
+      pop: 1
+    - include: else-pop
+
+  struct-literal-meta-key:
+    - meta_include_prototype: false
+    - meta_scope: meta.struct-literal.key.cfml
+    - include: else-pop
+
+  method-name:
+    - match: '{{identifier}}'
+      scope: entity.name.function.cfml
+      pop: 1
+    - match: \'
+      scope: punctuation.definition.string.begin.cfml
+      set:
+        - meta_include_prototype: false
+        - meta_scope: meta.string.cfml string.quoted.single.cfml
+        - meta_content_scope: entity.name.function.cfml
+        - match: \'
+          scope: punctuation.definition.string.end.cfml
+          pop: 1
+    - match: \"
+      scope: punctuation.definition.string.begin.cfml
+      set:
+        - meta_include_prototype: false
+        - meta_scope: meta.string.cfml string.quoted.double.cfml
+        - meta_content_scope: entity.name.function.cfml
+        - match: \"
+          scope: punctuation.definition.string.end.cfml
+          pop: 1
+    - include: else-pop
+
+  parenthesized-expression:
+    - match: \(
+      scope: punctuation.section.group.begin.cfml
+      set:
+        - meta_scope: meta.group.cfml
+        - match: \)
+          scope: punctuation.section.group.end.cfml
+          pop: 1
+        - match: (?=\S)
+          push: expression
+
+  array-literal:
+    - match: (?=\[[^\[\]]*?\]\s*\[)
+      set:
+        - array-literal-typed
+        - array-types
+    - match: (?=\[)
+      pop: 1
+      branch_point: array-or-ordered-struct
+      branch:
+        - array-literal-base
+        - struct-literal-ordered
+
+  array-literal-base:
+    - match: '\['
+      scope: punctuation.section.sequence.begin.cfml
+      set:
+        - array-literal-contents
+        - array-literal-maybe-struct
+
+  array-literal-typed:
+    - match: '\['
+      scope: punctuation.section.sequence.begin.cfml
+      set:
+        - array-literal-contents
+
+  array-literal-contents:
+    - meta_scope: meta.sequence.cfml
+    - match: '\]'
+      scope: punctuation.section.sequence.end.cfml
+      pop: 1
+    - include: expression-break
+    - match: \,
+      scope: punctuation.separator.sequence.cfml
+    - include: expressions-no-comma
+
+  array-literal-maybe-struct:
+    - match: (?={{property_name}}\s*(?:=(?!=)|:(?!:)))
+      fail: array-or-ordered-struct
+    - match: (?=:)
+      fail: array-or-ordered-struct
+    - match: (?=\S)
+      pop: 1
+
+  array-types:
+    - match: \[
+      scope: punctuation.section.brackets.begin.cfml
+      set:
+        - array-typed-meta
+        - array-typed-storage
+    - include: else-pop
+
+  array-typed-meta:
+    - meta_scope: meta.brackets.cfml
+    - match: \]
+      scope: punctuation.section.brackets.end.cfml
+      pop: 1
+    - include: expressions
+
+  array-typed-storage:
+    - match: "'"
+      scope: punctuation.definition.string.begin.cfml
+      set:
+         - array-typed-storage-string-single
+         - array-typed-storage-type
+    - match: '"'
+      scope: punctuation.definition.string.begin.cfml
+      set:
+         - array-typed-storage-string-double
+         - array-typed-storage-type
+
+  array-typed-storage-string-single:
+    - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
+    - match: "'"
+      pop: true
+      scope: punctuation.definition.string.end.cfml
+
+  array-typed-storage-string-double:
+    - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
+    - match: '"'
+      pop: true
+      scope: punctuation.definition.string.end.cfml
+
+  array-typed-storage-type:
+    - include: storage-types
+    - include: else-pop
+
+  property-access:
+    - match: \[
+      scope: punctuation.section.brackets.begin.cfml
+      push:
+        - meta_scope: meta.brackets.cfml
+        - match: \]
+          scope: punctuation.section.brackets.end.cfml
+          pop: true
+        - include: expressions
+    - match: \?\.
+      scope: punctuation.accessor.safe.cfml
+      push:
+        - match: (?={{identifier}}{{function_assignment_lookahead}})
+          set:
+            - function-name-meta
+            - literal-variable-base
+        - match: (?={{identifier}}\s*\()
+          set: method-call
+        - include: struct-property
+    - match: \.
+      scope: punctuation.accessor.cfml
+      push:
+        - match: (?={{identifier}}{{function_assignment_lookahead}})
+          set:
+            - function-name-meta
+            - literal-variable-base
+        - match: (?={{identifier}}\s*\()
+          set: method-call
+        - include: struct-property
+    - match: '::'
+      scope: punctuation.accessor.static.cfml
+      push:
+        - match: (?={{identifier}}{{function_assignment_lookahead}})
+          set:
+            - function-name-meta
+            - literal-variable-base
+        - match: (?={{identifier}}\s*\()
+          set: static-method-call
+        - include: struct-property
+
+  literal-number:
+    - match: |-
+        (?xi)
+        (?:\B[-+])?
+        (?:
+          \b0x[0-9a-f]*|              # hex
+          (
+            \B\.[0-9]+|               # e.g. .999
+            \b[0-9]+(\.[0-9]*)?       # e.g. 999.999, 999. or 999
+          )
+        )
+      scope: constant.numeric.cfml
+      pop: 1
+
+  literal-variable:
+    - match: '(?={{identifier}}{{function_assignment_lookahead}})'
+      set:
+        - function-name-meta
+        - literal-variable-base
+    - match: (?={{identifier}}{{nothing}}{{function_call_after_lookahead}})
+      set: function-call
+    - match: (?i)(?=arraynew{{nothing}}\[)
+      set: function-call
+    - include: cfml-scopes
+    - include: literal-variable-base
+
+  literal-variable-base:
+    - match: '[_.$[:alnum:]]+(?=\s*::)'
+      scope: entity.name.class.cfml
+      pop: 1
+    - match: '{{identifier}}(?=\s*(?:\[|\??\.))'
+      scope: variable.other.object.cfml
+      pop: 1
+    - match: '{{constant_identifier}}'
+      scope: variable.other.constant.cfml
+      pop: 1
+    - match: '{{identifier}}'
+      scope: variable.other.readwrite.cfml
+      pop: 1
+
+  cfml-scopes:
+    - match: \b(?i:super)\b
+      scope: variable.language.super.cfml
+      pop: 1
+    - match: \b(?i:this)\b
+      scope: variable.language.this.cfml
+      pop: 1
+    - match: \b(?i:thread)\b(?=[\[.])
+      scope: variable.language.scope.cfml
+      pop: 1
+    - match: |-
+        (?x)
+          \b(?i:(
+          application|arguments|attributes|caller|cgi|client|cookie|flash|form|
+          local|request|server|session|thistag|url|variables|self|static|argumentcollection
+        ))\b
+      scope: variable.language.scope.cfml
+      pop: 1
+
+  function-call:
+    - include: support-call
+    - match: ({{identifier}})(?=\s*\()
+      scope: variable.function.cfml
+      set:
+        - function-call-meta
+        - function-call-arguments
+
+  function-call-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.function-call.cfml
+    - include: immediately-pop
+
+  function-call-arguments:
+    - meta_content_scope: meta.function-call.cfml
+    - match: \(
+      scope: punctuation.section.group.begin.cfml
+      set:
+        - meta_scope: meta.function-call.arguments.cfml meta.group.cfml
+        - match: \)
+          scope: punctuation.section.group.end.cfml
+          pop: 1
+        - match: ','
+          scope: punctuation.separator.function-call.cfml
+        - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
+          captures:
+            1: entity.other.function-parameter.cfml
+            2: keyword.operator.assignment.cfml
+            3: punctuation.separator.key-value.cfml
+          push: expression-no-comma
+        - include: expressions-no-comma
+
+  struct-property:
+    - match: (?={{identifier}}{{function_assignment_lookahead}})
+      set:
+        - function-name-meta
+        - struct-property-base
+    - include: struct-property-base
+    - include: else-pop
+
+  struct-property-base:
+    - match: '{{constant_identifier}}'
+      scope: meta.property.constant.cfml
+      pop: 1
+    - match: '{{identifier}}'
+      scope: meta.property.cfml
+      pop: 1
+
+  tag-in-script:
+    - match: (?i)\bproperty\b(?=(\s+{{identifier}}\b|\s*[\n\{]))
+      scope: entity.name.tag.script.cfml
+      push:
+        - expect-semicolon
+        - tag-in-script-property
+        - tag-in-script-property-inline
+    - match: (?i)\bparam\b(?=(\s+{{identifier}}\b|\s*[\n\{]))
+      scope: entity.name.tag.script.cfml
+      push:
+        - expect-semicolon
+        - tag-in-script-attributes
+        - tag-in-script-param-inline
+    - match: (?i)\babort\b(?=(\s+{{identifier}}\b|\s*[\n\{;]))
+      scope: entity.name.tag.script.cfml
+      push:
+        - expect-semicolon
+        - tag-in-script-attributes
+    - match: \b({{tags_in_script}})(?=\s+{{attribute_name}}\s*[=;{\n]|\s*[{\n])
+      captures:
+        1: entity.name.tag.script.cfml
+      push:
+        - meta_scope: meta.tag.script.cfml
+        - match: (?=\.)
+          pop: true
+        - match: (?=;)
+          pop: true
+        - match: (?={)
+          set: block-scope
+        - include: tag-generic-attribute-script
+
+  tag-in-script-property:
+    - meta_scope: meta.tag.script.cfml meta.tag.property.cfml
+    - include: tag-in-script-end
+    - include: scope:embedding.cfml#cfproperty-name
+    - include: scope:embedding.cfml#tag-generic-attribute
+
+  tag-in-script-property-inline:
+    - match: ({{identifier}})\s+({{identifier}}\b)(?!\s*=)
+      captures:
+        1: storage.type.cfml
+        2: meta.string.unquoted.cfml string.unquoted.cfml meta.tag.property.name.cfml
+      pop: true
+    - match: ({{identifier}}\b)(?!\s*=)
+      captures:
+        1: meta.string.unquoted.cfml string.unquoted.cfml meta.tag.property.name.cfml
+      pop: true
+    - include: else-pop
+
+  tag-in-script-attributes:
+    - meta_scope: meta.tag.script.cfml
+    - include: tag-in-script-end
+    - include: tag-generic-attribute-script
+
+  tag-in-script-param-inline:
+    - match: (?i)(?=(\s+{{param_attributes}}\s*=|\s*[{;\n]))
+      pop: 1
+    - match: (?i)({{dot_path_identifier}})(?=\s+{{param_attributes}})
+      captures:
+        1: meta.string.unquoted.cfml string.unquoted.cfml
+      pop: 1
+    - match: \b({{identifier}})\s+({{dot_path_identifier}})\b
+      captures:
+        1: storage.type.cfml
+        2: meta.string.unquoted.cfml string.unquoted.cfml
+      set: tag-in-script-param-assignment
+    - match: \b{{dot_path_identifier}}\b
+      scope: meta.string.unquoted.cfml string.unquoted.cfml
+      set: tag-in-script-param-assignment
+    - include: else-pop
+
+  tag-in-script-param-assignment:
+    - match: '='
+      scope: keyword.operator.assignment.cfml
+      set:
+        - tag-in-script-param-assignment-meta
+        - expression
+    - include: else-pop
+
+  tag-in-script-param-assignment-meta:
+    - meta_include_prototype: false
+    - meta_scope: source.cfml.script
+    - include: immediately-pop
+
+  tag-in-script-end:
+    - match: (?=;)
+      pop: 1
+    - match: (?={)
+      set: block-scope
+
+  tag-generic-attribute-script:
+    - match: \b{{attribute_name}}\b
+      scope: entity.other.attribute-name.cfml
+      push:
+        - match: '='
+          scope: punctuation.separator.key-value.cfml
+          set: tag-generic-attribute-script-expression
+        - include: else-pop
+    - match: \S
+      scope: invalid.illegal.attribute-name.cfml
+
+  tag-generic-attribute-script-expression:
+    - match: (?=#)
+      set: scope:embedding.cfml#template-expression-set
+    - match: (?=\S)
+      set: expression
+
+  tag-in-script-cf:
+    - match: \b(cf{{tags_in_script}})(?=\()
+      scope: entity.name.tag.script.cfml
+      push:
+        - tag-in-script-cf-meta
+        - tag-in-script-cf-attributes
+
+  tag-in-script-cf-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.tag.script.cf.cfml
+    - include: immediately-pop
+
+  tag-in-script-cf-attributes:
+    - match: \(
+      scope: punctuation.section.group.begin.cfml
+      set:
+        - meta_scope: meta.tag.script.cf.attributes.cfml
+        - match: \)
+          scope: punctuation.section.group.end.cfml
+          pop: 1
+        - match: ','
+          scope: punctuation.separator.comma.cfml
+        - match: \b{{attribute_name}}\b
+          scope: entity.other.attribute-name.cfml
+          push:
+            - match: '[=:]'
+              scope: punctuation.separator.key-value.cfml
+              set: expression-no-comma
+            - include: else-pop
+        - match: \S
+          scope: invalid.illegal.attribute-name.cfml
+    - include: else-pop
+
+  support-call:
+    - match: (?i)\b(createobject)(?=\((?:\s*type\s*=)?\s*[\"']component[\"']\s*,)
+      captures:
+        1: support.function.cfml
+      set:
+        - support-call-meta-component
+        - support-call-arguments
+    - match: (?i)\b(createobject)(?=\((?:\s*type\s*=)?\s*[\"']java[\"']\s*,)
+      captures:
+        1: support.function.cfml
+      set:
+        - support-call-meta-java
+        - support-call-arguments
+    - match: (?i)\b(entity(?:load|loadbypk|new))(?=\()
+      captures:
+        1: support.function.cfml
+      set:
+        - support-call-meta-entity
+        - support-call-arguments
+    - match: (?i)\b(arraynew)(?=\[)
+      captures:
+        1: support.function.cfml
+      set:
+        - support-call-meta
+        - support-call-arguments
+        - array-types
+
+    - match: \b({{support_functions}})(?=\()
+      captures:
+        1: support.function.cfml
+      set:
+        - support-call-meta
+        - support-call-arguments
+
+  support-call-meta-component:
+    - meta_include_prototype: false
+    - meta_scope: meta.function-call.support.cfml meta.function-call.support.createcomponent.cfml
+    - include: immediately-pop
+
+  support-call-meta-java:
+    - meta_include_prototype: false
+    - meta_scope: meta.function-call.support.cfml meta.function-call.support.createjavaobject.cfml
+    - include: immediately-pop
+
+  support-call-meta-entity:
+    - meta_include_prototype: false
+    - meta_scope: meta.function-call.support.cfml meta.function-call.support.entity.cfml
+    - include: immediately-pop
+
+  support-call-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.function-call.support.cfml
+    - include: immediately-pop
+
+  support-call-arguments:
+    - match: \(
+      scope: punctuation.section.group.begin.cfml
+      set:
+        - meta_scope: meta.function-call.arguments.support.cfml
+        - match: \)
+          scope: punctuation.section.group.end.cfml
+          pop: true
+        - match: ','
+          scope: punctuation.separator.function-call.support.cfml
+        - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
+          captures:
+            1: entity.other.function-parameter.cfml
+            2: keyword.operator.assignment.cfml
+            3: punctuation.separator.key-value.cfml
+          push: expression-no-comma
+        - include: expressions-no-comma
+    - include: else-pop
+
+  method-call:
+    - include: support-method-call
+    - match: ({{identifier}})\s*(?=\()
+      captures:
+        1: variable.function.cfml
+      set:
+        - method-call-meta
+        - method-call-arguments
+
+  method-call-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.function-call.method.cfml
+    - include: immediately-pop
+
+  method-call-arguments:
+    - match: \(
+      scope: punctuation.section.group.begin.cfml
+      set:
+        - meta_scope: meta.function-call.arguments.method.cfml meta.group.cfml
+        - match: \)
+          scope: punctuation.section.group.end.cfml
+          pop: 1
+        - match: ','
+          scope: punctuation.separator.function-call.method.cfml
+        - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
+          captures:
+            1: entity.other.method-parameter.cfml
+            2: keyword.operator.assignment.cfml
+            3: punctuation.separator.key-value.cfml
+          push: expression-no-comma
+        - include: expressions-no-comma
+
+  support-method-call:
+    - match: \b({{member_functions}})(?=\()
+      scope: support.function.member.cfml
+      set:
+        - support-method-call-meta
+        - support-method-call-arguments
+
+  support-method-call-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.function-call.method.support.cfml
+    - include: immediately-pop
+
+  support-method-call-arguments:
+    - match: \(
+      scope: punctuation.section.group.begin.cfml
+      set:
+        - meta_scope: meta.function-call.arguments.method.support.cfml
+        - match: \)
+          scope: punctuation.section.group.end.cfml
+          pop: 1
+        - match: ','
+          scope: punctuation.separator.function-call.method.support.cfml
+        - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
+          captures:
+            1: entity.other.method-parameter.cfml
+            2: keyword.operator.assignment.cfml
+            3: punctuation.separator.key-value.cfml
+          push: expression-no-comma
+        - include: expressions-no-comma
+
+  static-method-call:
+    - match: ({{identifier}})\s*(?=\()
+      captures:
+        1: variable.function.static.cfml
+      set:
+        - static-method-call-meta
+        - method-call-arguments
+
+  static-method-call-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.function-call.method.static.cfml
+    - include: immediately-pop
+
+  java-block:
+    - match: \bjava\b(?=\s*[\n\{])
+      scope: keyword.control.java.cfml
+      set:
+        - java-block-meta
+        - java-block-contents
+
+  java-block-meta:
+    - meta_include_prototype: false
+    - meta_scope: meta.block.java.cfml
+    - include: immediately-pop
+
+  java-block-contents:
+    - match: '\{'
+      scope: punctuation.section.block.begin.cfml
+      set:
+        - meta_include_prototype: false
+        - meta_scope: meta.block.cfml
+        - match: '\}'
+          scope: punctuation.section.block.end.cfml
+          pop: 1
+        - include: scope:source.java#java
+    - include: else-pop

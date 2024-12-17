@@ -1,4 +1,4 @@
-<!--- SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax" --->
+<!--- SYNTAX TEST "Packages/CFML/syntaxes/CFML.sublime-syntax" --->
 <cfcomponent
 <!--- <- embedding.cfml source.cfml meta.tag.cfml meta.class.cfml punctuation.definition.tag.begin.cfml --->
  <!--- <- embedding.cfml source.cfml meta.tag.cfml meta.class.cfml entity.name.tag.cfml storage.type.class.cfml --->

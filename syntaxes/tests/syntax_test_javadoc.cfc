@@ -1,4 +1,4 @@
-// SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax"
+// SYNTAX TEST "Packages/CFML/syntaxes/CFML.sublime-syntax"
 /**
 This is a description of the component
 // <- embedding.cfml source.cfml.script comment.block.documentation.cfml text.html

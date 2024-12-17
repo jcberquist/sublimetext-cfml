@@ -1,4 +1,4 @@
-<!--- SYNTAX TEST "Packages/CFML/syntaxes/cfml.sublime-syntax" --->
+<!--- SYNTAX TEST "Packages/CFML/syntaxes/CFML.sublime-syntax" --->
 <cfscript>
 param NAME="testVar";
 <!--- <- embedding.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->
@@ -71,7 +71,7 @@ cfhttp( url = "www.google.com" ) {
 
 cfcExists( someArg = 1 );
 <!--- <- embedding.cfml source.cfml.script meta.function-call.cfml variable.function.cfml  --->
-<!---      ^ embedding.cfml source.cfml.script meta.function-call.cfml meta.function-call.parameters.cfml entity.other.function-parameter.cfml  --->
+<!---      ^ embedding.cfml source.cfml.script meta.function-call.cfml meta.function-call.arguments.cfml entity.other.function-parameter.cfml  --->
 
 
 loop from=1 to=#params.quantity# index="local.i" {}
