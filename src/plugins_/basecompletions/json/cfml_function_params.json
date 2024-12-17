@@ -5,10 +5,16 @@
     "addsoapresponseheader": {
         "mustunderstand": ["true", "false"]
     },
+    "argon2checkhash": {
+        "variant": ["Argon2i", "Argon2d", "Argon2id"]
+    },
     "arrayappend": {
         "merge": ["true", "false"]
     },
     "arraydelete": {
+        "scope": ["one", "all"]
+    },
+    "arraydeletenocase": {
         "scope": ["one", "all"]
     },
     "arrayeach": {
@@ -35,6 +41,7 @@
         "parallel": ["true", "false"]
     },
     "arraysort": {
+        "localesensitive": ["true", "false"],
         "sortorder": ["asc", "desc"],
         "sorttype": ["numeric", "text", "textnocase"]
     },
@@ -42,16 +49,19 @@
         "ignoreempty": ["true", "false"]
     },
     "binarydecode": {
-        "encoding": ["hex", "uu", "base64"]
+        "encoding": ["hex", "uu", "base64", "base64URL"]
     },
     "binaryencode": {
-        "encoding": ["hex", "uu", "base64"]
+        "encoding": ["hex", "uu", "base64", "base64URL"]
     },
     "cachedelete": {
         "throwonerror": ["true", "false"]
     },
     "cacheget": {
         "throwwhennotexist": ["true", "false"]
+    },
+    "cachegetallids": {
+        "isaccurate": ["true", "false"]
     },
     "cachegetdefaultcachename": {
         "type": ["object", "resource", "template", "query"]
@@ -127,8 +137,8 @@
     "datepart": {
         "datepart": ["yyyy", "q", "m", "y", "d", "w", "ww", "h", "n", "s", "l"]
     },
-    "datetimeformat": {
-        "timezone": ["UTC", "GMT", "America/Chicago"]
+    "dayofweek": {
+        "calendar": ["gregorian", "iso"]
     },
     "dayofweekasstring": {
         "dayofweek": ["1", "2", "3", "4", "5", "6", "7"]
@@ -137,19 +147,27 @@
         "day_of_week": ["1", "2", "3", "4", "5", "6", "7"]
     },
     "decrypt": {
-        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"],
+        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE", "DESX", "RC2", "RC4", "RC5", "PBE", "AES/GCM/NoPadding"],
         "encoding": ["UU", "Base64", "Hex"]
     },
     "decryptbinary": {
-        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"],
+        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE", "DESX", "RC2", "RC4", "RC5", "PBE", "AES/GCM/NoPadding"],
         "encoding": ["UU", "Base64", "Hex"]
     },
     "deserialize": {
         "usecustomserializer": ["true", "false"]
     },
+    "deserializeavro": {
+        "strictmapping": ["true", "false"],
+        "usecustomserialization": ["true", "false"]
+    },
     "deserializejson": {
         "strictmapping": ["true", "false"],
         "usecustomserializer": ["true", "false"]
+    },
+    "deserializeprotobuf": {
+        "strictmapping": ["true", "false"],
+        "usecustomserialization": ["true", "false"]
     },
     "deserializexml": {
         "usecustomserializer": ["true", "false"]
@@ -188,6 +206,12 @@
     "encodefor": {
         "type": ["css", "dn", "html", "htmlattribute", "javascript", "ldap", "url", "xml", "xmlattribute", "xpath"]
     },
+    "encodeforcss": {
+        "canonicalize": ["true", "false"]
+    },
+    "encodefordn": {
+        "canonicalize": ["true", "false"]
+    },
     "encodeforhtml": {
         "canonicalize": ["true", "false"]
     },
@@ -195,6 +219,12 @@
         "canonicalize": ["true", "false"]
     },
     "encodeforjavascript": {
+        "canonicalize": ["true", "false"]
+    },
+    "encodeforldap": {
+        "canonicalize": ["true", "false"]
+    },
+    "encodeforurl": {
         "canonicalize": ["true", "false"]
     },
     "encodeforxml": {
@@ -207,26 +237,30 @@
         "canonicalize": ["true", "false"]
     },
     "encrypt": {
-        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"],
+        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE", "DESX", "RC2", "RC4", "RC5", "PBE", "AES/GCM/NoPadding", "AES/CBC/PKCS5Padding", "AES/CTR/PKCS5Padding"],
         "encoding": ["UU", "Base64", "Hex"]
     },
     "encryptbinary": {
-        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"]
+        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE", "DESX", "RC2", "RC4", "RC5", "PBE", "AES/GCM/NoPadding"]
     },
     "entityload": {
+        "options": ["ignorecase:,offset", "maxresults", "cacheable", "cachename", "timeout"],
         "unique": ["true", "false"]
     },
     "entityloadbyexample": {
         "unique": ["true", "false"]
     },
-    "entityloadbypk": {
-        "unique": ["true", "false"]
+    "entitynew": {
+        "ignoreextras": ["true", "false"]
     },
     "entitysave": {
         "forceinsert": ["true", "false"]
     },
     "extract": {
         "format": ["bzip", "bzip2", "tbz", "tbz2", "tar", "tar.bz", "tar.gz", "gzip", "tgz", "zip"]
+    },
+    "fileappend": {
+        "addnewline": ["true", "false"]
     },
     "filegetmimetype": {
         "strict": ["true", "false"]
@@ -248,19 +282,24 @@
         "onconflict": ["error", "skip", "overwrite", "makeUnique"],
         "strict": ["true", "false"]
     },
+    "generateargon2hash": {
+        "variant": ["Argon2i", "Argon2d", "Argon2id"]
+    },
+    "generatebcrypthash": {
+        "options": ["version", "rounds"]
+    },
     "generatepbkdfkey": {
-        "algorithm": ["PBKDF2WithHmacSHA1", "PBKDF2WithSHA1", "PBKDF2WithSHA224", "PBKDF2WithSHA256", "PBKDF2WithSHA384", "PBKDF2WithSHA512"],
-        "keysize": ["true", "false"]
+        "algorithm": ["PBKDF2WithHmacSHA1", "PBKDF2WithSHA1", "PBKDF2WithSHA224", "PBKDF2WithSHA256", "PBKDF2WithSHA384", "PBKDF2WithSHA512", "PBKDF2WithHmacSHA256", "PBKDF2WithHmacSHA384", "PBKDF2WithHmacSHA512"]
     },
     "generatesecretkey": {
-        "algorithm": ["CFMX_COMPAT", "AES", "BLOWFISH", "DES", "DESEDE"],
+        "algorithm": ["AES", "BLOWFISH", "DES", "DESEDE"],
         "keysize": ["128", "192", "256", "512"]
     },
     "getapplicationsettings": {
         "suppressfunction": ["true", "false"]
     },
     "getencoding": {
-        "scope_name": ["form", "url"]
+        "scope": ["form", "url"]
     },
     "getfunctiondata": {
         "dialect": ["CFML", "Lucee"]
@@ -277,6 +316,9 @@
     },
     "getmetricdata": {
         "mode": ["perf_monitor", "simple_load", "prev_req_time", "avg_req_time"]
+    },
+    "getprofilesections": {
+        "encoding": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
     },
     "getsafehtml": {
         "throwonerror": ["true", "false"]
@@ -316,6 +358,9 @@
     "imageaddborder": {
         "bordertype": ["zero", "constant", "copy", "reflect", "wrap"]
     },
+    "imagecaptcha": {
+        "difficulty": ["low", "medium", "high"]
+    },
     "imagedrawarc": {
         "filled": ["true", "false"]
     },
@@ -346,13 +391,15 @@
         "rule": ["SRC", "DST_IN", "DST_OUT", "DST_OVER", "SRC_IN", "SRC_OVER", "SRC_OUT"]
     },
     "imageresize": {
-        "blurfactor": ["true", "false"]
+        "blurfactor": ["true", "false"],
+        "interpolation": ["highestQuality (default)", "highQuality", "mediumQuality", "highestPerformance", "highPerformance", "mediumPerformance", "nearest", "bilinear", "bicubic", "bessel", "blackman", "hamming", "hanning", "hermite", "lanczos", "mitchell", "quadratic"]
     },
     "imagerotate": {
         "interpolation": ["nearest", "bilinear", "bicubic"]
     },
     "imagescaletofit": {
-        "blurfactor": ["true", "false"]
+        "blurfactor": ["true", "false"],
+        "interpolation": ["highestQuality (default)", "highQuality", "mediumQuality", "highestPerformance", "highPerformance", "mediumPerformance", "nearest", "bilinear", "bicubic", "bessel", "blackman", "hamming", "hanning", "hermite", "lanczos", "mitchell", "quadratic"]
     },
     "imagesetantialiasing": {
         "antialias": ["true", "false"]
@@ -371,10 +418,13 @@
         "standard": ["1b", "2b", "3b"]
     },
     "isvalid": {
-        "type": ["Any", "Array", "Binary", "boolean", "creditcard", "date", "time", "email", "eurodate", "float", "Numeric", "guid", "integer", "Query", "range", "Regex", "regular_expression", "ssn", "social_security_number", "String", "Struct", "telephone", "URL", "UUID", "usdate", "variablename", "xml", "zipcode", "component"]
+        "type": ["any", "array", "binary", "boolean", "component", "creditcard", "date", "email", "eurodate", "float", "function", "guid", "integer", "numeric", "query", "range", "regex", "regular_expression", "social_security_number", "ssn", "string", "struct", "telephone", "time", "time", "url", "usdate", "uuid", "variablename", "xml", "zipcode"]
     },
     "javacast": {
         "type": ["boolean", "double", "float", "int", "long", "string", "null", "byte", "bigdecimal", "char", "short"]
+    },
+    "listappend": {
+        "includeemptyfields": ["true", "false"]
     },
     "listavg": {
         "multicharacterdelimiter": ["true", "false"]
@@ -384,6 +434,9 @@
     },
     "listcompact": {
         "multicharacterdelimiter": ["true", "false"]
+    },
+    "listeach": {
+        "includeemptyfields": ["true", "false"]
     },
     "listevery": {
         "includeemptyfields": ["true", "false"],
@@ -414,11 +467,17 @@
     "listmap": {
         "includeemptyfields": ["true", "false"]
     },
+    "listprepend": {
+        "includeemptyfields": ["true", "false"]
+    },
     "listqualify": {
         "elements": ["all", "char"],
         "includeemptyfields": ["true", "false"]
     },
     "listreduce": {
+        "includeemptyfields": ["true", "false"]
+    },
+    "listreduceright": {
         "includeemptyfields": ["true", "false"]
     },
     "listremoveduplicates": {
@@ -429,24 +488,43 @@
         "multicharacterdelimiter": ["true", "false"],
         "parallel": ["true", "false"]
     },
+    "listsort": {
+        "includeemptyfields": ["true", "false"],
+        "localesensitive": ["true", "false"],
+        "sortorder": ["asc", "desc"],
+        "sorttype": ["numeric", "text", "aabzABZ", "ZBAzbaa", "textnocase", "aAaBbBzzZ", "ZzzBbBaAa"]
+    },
     "listtoarray": {
         "includeemptyfields": ["true", "false"],
         "multicharacterdelimiter": ["true", "false"]
     },
     "location": {
-        "addtoken": ["true", "false"]
+        "addtoken": ["true", "false"],
+        "statuscode": ["300", "301", "302", "303", "304", "305", "306", "307"]
     },
     "lscurrencyformat": {
+        "locale": ["en", "de_DE", "de_CH", "..."],
         "type": ["local", "international", "none"]
     },
     "lsdateformat": {
         "mask": ["short", "medium", "long", "full"]
     },
     "lseurocurrencyformat": {
+        "locale": ["en", "de_DE", "de_CH", "..."],
         "type": ["local", "international", "none"]
     },
+    "lsnumberformat": {
+        "locale": ["en", "de_DE", "de_CH", "..."]
+    },
     "lstimeformat": {
+        "locale": ["en", "de_DE", "de_CH", "..."],
         "mask": ["short", "medium", "long"]
+    },
+    "lsweek": {
+        "locale": ["en", "de-DE", "de-CH", "..."]
+    },
+    "onerror": {
+        "eventname": ["onApplicationStart", "onApplicationEnd", "onRequest", "onRequestStart", "onSessionStart", "onSessionEnd", "[empty string]"]
     },
     "ormexecutequery": {
         "unique": ["true", "false"]
@@ -458,7 +536,7 @@
         "radix": ["bin", "oct", "dec", "hex"]
     },
     "queryaddcolumn": {
-        "datatype": ["Integer", "Bigint", "Double", "Decimal", "Varchar", "Binary", "Bit", "Time", "Date"]
+        "datatype": ["Integer", "Bigint", "Double", "Decimal", "Varchar", "Binary", "Bit", "Time", "Date", "Timestamp"]
     },
     "queryeach": {
         "parallel": ["true", "false"]
@@ -517,16 +595,33 @@
     "rereplacenocase": {
         "scope": ["one", "all"]
     },
+    "sanitizehtml": {
+        "policy": ["BLOCKS", "FORMATTING", "IMAGES", "LINKS", "STYLES", "TABLES"]
+    },
     "serialize": {
         "usecustomserializer": ["true", "false"]
     },
+    "serializeavro": {
+        "queryformat": ["row", "column", "struct"],
+        "usecustomserialization": ["true", "false"]
+    },
     "serializejson": {
-        "serializequerybycolumns": ["true", "false"],
+        "queryformat": ["row", "column", "struct", "False", "True"],
         "usecustomserializer": ["true", "false"],
         "usesecurejsonprefix": ["true", "false"]
     },
+    "serializeprotobuf": {
+        "queryformat": ["row", "column", "struct"],
+        "usecustomserialization": ["true", "false"]
+    },
+    "serializexml": {
+        "usecustomserializer": ["true", "false"]
+    },
     "setencoding": {
         "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
+    },
+    "setlocale": {
+        "new_locale": ["Chinese (China)", "Chinese (Hong Kong)", "Chinese (Taiwan)", "Dutch (Belgian)", "Dutch (Standard)", "English (Australian)", "English (Canadian)", "English (New Zealand)", "English (US)", "English (UK)", "French (Belgian)", "French (Canadian)", "French (Standard)", "French (Swiss)", "German (Austrian)", "German (Standard)", "German (Swiss)", "Italian (Standard)", "Italian (Swiss)", "Japanese", "Korean", "Norwegian (Bokmal)", "Norwegian (Nynorsk)", "Portuguese (Brazilian)", "Portuguese (Standard)", "Spanish (Modern)", "Spanish (Standard)", "Swedish"]
     },
     "sizeof": {
         "complex": ["true", "false"]
@@ -556,7 +651,14 @@
     "structdelete": {
         "indicatenotexisting": ["true", "false"]
     },
+    "structeach": {
+        "parallel": ["true", "false"]
+    },
     "structevery": {
+        "parallel": ["true", "false"]
+    },
+    "structfilter": {
+        "callback": ["true", "false"],
         "parallel": ["true", "false"]
     },
     "structfindkey": {
@@ -572,8 +674,14 @@
         "deeptranslation": ["true", "false"],
         "leaveoriginalkey": ["true", "false"]
     },
+    "structmap": {
+        "parallel": ["true", "false"]
+    },
     "structnew": {
-        "structtype": ["ordered"]
+        "localesensitive": ["true", "false"],
+        "sortorder": ["asc", "desc"],
+        "sorttype": ["text", "numeric"],
+        "type": ["", "ordered", "casesensitive", "ordered-casesensitive"]
     },
     "structsome": {
         "parallel": ["true", "false"]
@@ -616,7 +724,8 @@
     },
     "trace": {
         "abort": ["true", "false"],
-        "inline": ["true", "false"]
+        "inline": ["true", "false"],
+        "type": ["information", "warning", "error", "fatal information"]
     },
     "truefalseformat": {
         "value": ["true", "false"]
@@ -637,6 +746,9 @@
     },
     "urlsessionformat": {
         "requesturl": ["cgi.script_name"]
+    },
+    "week": {
+        "calendar": ["gregorian", "iso"]
     },
     "wrap": {
         "strip": ["true", "false"]

@@ -26,23 +26,23 @@
     "cfapplication": {
         "attributes": [[], ["applicationtimeout", "clientmanagement", "clientstorage", "loginstorage", "name", "scriptprotect", "securejson", "securejsonprefix", "serverSideFormValidation", "sessionmanagement", "sessiontimeout", "setclientcookies", "setdomaincookies"]],
         "attribute_values": {
+            "loginstorage": ["cookie", "session"],
             "clientmanagement": ["true", "false"],
             "clientstorage": ["cookie", "registry", "datasource_name"],
-            "loginstorage": ["cookie", "session"],
-            "scriptprotect": ["none", "all", "form", "url", "cookie", "cgi", "form,url", "form,url,cookie", "form,url,cookie,cgi"],
-            "securejson": ["true", "false"],
-            "securejsonprefix": ["true", "false"],
-            "serverSideFormValidation": ["true", "false"],
-            "sessionmanagement": ["true", "false"],
             "setclientcookies": ["true", "false"],
-            "setdomaincookies": ["true", "false"]
+            "sessionmanagement": ["true", "false"],
+            "setdomaincookies": ["true", "false"],
+            "scriptprotect": ["none", "all", "form", "url", "cookie", "cgi", "form,url", "form,url,cookie", "form,url,cookie,cgi"],
+            "securejsonprefix": ["True", "False"],
+            "securejson": ["true", "false"],
+            "serversideformvalidation": ["true", "false"]
         }
     },
     "cfargument": {
         "attributes": [["name"], ["default", "displayname", "hint", "required", "type"]],
         "attribute_values": {
-            "required": ["true", "false"],
-            "type": ["any", "array", "binary", "boolean", "date", "guid", "numeric", "query", "string", "struct", "uuid", "xml", "variablename", "function", "(component name)"]
+            "type": ["any", "array", "binary", "boolean", "component", "date", "email", "function", "float", "guid", "integer", "numeric", "query", "string", "struct", "uuid", "xml", "variablename", "(component name)"],
+            "required": ["true", "false"]
         }
     },
     "cfassociate": {
@@ -59,20 +59,21 @@
             "action": ["cache", "flush", "clientcache", "servercache", "optimal", "get", "put"],
             "protocol": ["http://", "https://"],
             "stripwhitespace": ["true", "false"],
+            "throwonerror": ["true", "false"],
             "usecache": ["true", "false"]
         }
     },
     "cfcalendar": {
         "attributes": [["name"], ["daynames", "disabled", "enabled", "endrange", "firstdayofweek", "height", "mask", "monthnames", "onblur", "onchange", "onfocus", "selecteddate", "startrange", "style", "tooltip", "visible", "width"]],
         "attribute_values": {
-            "daynames": ["S,  M,  T,  W,  Th,  F,  S", "Sunday,  Monday,  Tuesday,  Wednesday,  Thursday,  Friday,  Saturday", "Sun,  Mon,  Tue,  Wed,  Thu,  Fri,  Sat"],
             "disabled": ["true", "false"],
-            "enabled": ["true", "false"],
-            "firstdayofweek": ["0", "1", "2", "3", "4", "5", "6"],
             "mask": ["MM/DD/YYYY", "DD/MM/YYYY", "MM/YYYY", "MM/YY", "YYYY-MM-DD", "EEE DD. MMM YYYY"],
+            "firstdayofweek": ["0", "1", "2", "3", "4", "5", "6"],
+            "daynames": ["S,  M,  T,  W,  Th,  F,  S", "Sunday,  Monday,  Tuesday,  Wednesday,  Thursday,  Friday,  Saturday", "Sun,  Mon,  Tue,  Wed,  Thu,  Fri,  Sat"],
             "monthnames": ["January,  February,  March,  April,  May,  June,  July,  August,  September,  October,  November,  December", "Jan,  Feb,  Mar,  Apr,  May,  Jun,  Jul,  Aug,  Sep,  Oct,  Nov,  Dec"],
-            "style": ["haloBlue", "haloGreen", "haloOrange", "haloSilver"],
-            "visible": ["true", "false"]
+            "enabled": ["true", "false"],
+            "visible": ["true", "false"],
+            "style": ["haloBlue", "haloGreen", "haloOrange", "haloSilver"]
         }
     },
     "cfcase": {
@@ -88,30 +89,30 @@
     "cfchart": {
         "attributes": [[], ["URL", "backgroundcolor", "base64", "chartheight", "chartwidth", "databackgroundcolor", "font", "fontbold", "fontitalic", "fontsize", "foregroundcolor", "format", "gridlines", "labelformat", "markersize", "name", "pieslicestyle", "scalefrom", "scaleto", "seriesplacement", "show3d", "showborder", "showlegend", "showmarkers", "showxgridlines", "showygridlines", "sortxaxis", "style", "tipbgcolor", "tipstyle", "title", "xaxistitle", "xaxistype", "xoffset", "yaxistitle", "yaxistype", "yoffset"]],
         "attribute_values": {
-            "URL": ["$VALUE$", "$ITEMLABEL$", "$SERIESLABEL$"],
-            "backgroundcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
-            "base64": ["true", "false"],
-            "databackgroundcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
-            "font": ["arial", "times", "courier", "arialunicodeMS"],
-            "fontbold": ["true", "false"],
-            "fontitalic": ["true", "false"],
-            "foregroundcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
-            "format": ["flash", "jpg", "png"],
-            "labelformat": ["number", "currency", "percent", "date"],
-            "pieslicestyle": ["solid", "sliced"],
-            "seriesplacement": ["default", "cluster", "stacked", "percent"],
-            "show3d": ["true", "false"],
-            "showborder": ["true", "false"],
-            "showlegend": ["true", "false"],
-            "showmarkers": ["true", "false"],
+            "format": ["html", "flash", "jpg", "png"],
             "showxgridlines": ["true", "false"],
             "showygridlines": ["true", "false"],
-            "sortxaxis": ["true", "false"],
-            "style": ["beige", "blue", "default", "red", "silver", "yellow"],
-            "tipbgcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
-            "tipstyle": ["mouseDown", "mouseOver", "none"],
+            "seriesplacement": ["default", "cluster", "stacked", "percent"],
+            "foregroundcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
+            "backgroundcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
+            "showborder": ["true", "false"],
+            "databackgroundcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
+            "font": ["arial", "times", "courier", "arialunicodeMS"],
+            "fontitalic": ["true", "false"],
+            "fontbold": ["true", "false"],
+            "labelformat": ["number", "currency", "percent", "date"],
             "xaxistype": ["category", "scale"],
-            "yaxistype": ["category", "scale"]
+            "yaxistype": ["category", "scale"],
+            "sortxaxis": ["true", "false"],
+            "show3d": ["true", "false"],
+            "showlegend": ["true", "false"],
+            "tipstyle": ["mouseDown", "mouseOver", "none"],
+            "tipbgcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
+            "showmarkers": ["true", "false"],
+            "pieslicestyle": ["solid", "sliced"],
+            "url": ["$VALUE$", "$ITEMLABEL$", "$SERIESLABEL$"],
+            "style": ["beige", "blue", "default", "red", "silver", "yellow"],
+            "base64": ["true", "false"]
         }
     },
     "cfchartdata": {
@@ -121,10 +122,10 @@
     "cfchartseries": {
         "attributes": [["type"], ["colorlist", "datalabelstyle", "itemcolumn", "markerstyle", "paintstyle", "query", "seriescolor", "serieslabel", "valuecolumn"]],
         "attribute_values": {
-            "datalabelstyle": ["none", "value", "rowlabel", "columnlabel", "pattern"],
-            "markerstyle": ["rectangle", "triangle", "diamond", "circle", "letter", "mcross", "snow", "rcross"],
+            "type": ["bar", "line", "pyramid", "area", "horizontalbar", "cone", "curve", "cylinder", "step", "scatter", "pie"],
             "paintstyle": ["plain", "raise", "shade", "light"],
-            "type": ["bar", "line", "pyramid", "area", "horizontalbar", "cone", "curve", "cylinder", "step", "scatter", "pie"]
+            "markerstyle": ["rectangle", "triangle", "diamond", "circle", "letter", "mcross", "snow", "rcross"],
+            "datalabelstyle": ["none", "value", "rowlabel", "columnlabel", "pattern"]
         }
     },
     "cfclient": {
@@ -133,7 +134,10 @@
     },
     "cfclientsettings": {
         "attributes": [[], ["detectDevice", "deviceTimeout", "enableDeviceAPI"]],
-        "attribute_values": {}
+        "attribute_values": {
+            "enabledeviceapi": ["true", "false"],
+            "detectdevice": ["true", "false"]
+        }
     },
     "cfcol": {
         "attributes": [["header", "text"], ["align", "width"]],
@@ -152,39 +156,38 @@
     "cfcomponent": {
         "attributes": [[], ["accessors", "attribute", "autoIndex", "batchsize", "bindingname", "cacheName", "cacheUse", "catalog", "consumes", "discriminatorColumn", "discriminatorValue", "displayname", "dynamicinsert", "dynamicupdate", "embedded", "entityname", "extends", "hint", "httpMethod", "implements", "indexLanguage", "indexable", "initmethod", "invokeImplicitAccessor", "joinColumn", "lazy", "mappedSuperClass", "namespace", "optimisticlock", "output", "persistent", "porttypename", "produces", "readonly", "rest", "restPath", "rowid", "saveMapping", "schema", "selectbeforeupdate", "serializable", "serviceaddress", "serviceportname", "style", "table", "wsVersion", "wsdlfile"]],
         "attribute_values": {
-            "accessors": ["true", "false"],
-            "attribute": ["true", "false"],
-            "autoIndex": ["true", "false"],
-            "cacheUse": ["read-only", "nonstrict-read-write", "read-write", "transactional"],
-            "consumes": ["text/plain,text/html", "..."],
+            "output": ["true", "false"],
+            "style": ["rpc", "document"],
+            "persistent": ["true", "false"],
             "dynamicinsert": ["true", "false"],
             "dynamicupdate": ["true", "false"],
-            "embedded": ["true", "false"],
-            "httpMethod": ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
-            "indexable": ["true", "false"],
-            "invokeImplicitAccessor": ["true", "false"],
-            "lazy": ["true", "false"],
-            "mappedSuperClass": ["true", "false"],
-            "optimisticlock": ["none", "dirty", "all", "version"],
-            "output": ["true", "false"],
-            "persistent": ["true", "false"],
-            "produces": ["text/plain,text/html", "..."],
             "readonly": ["true", "false"],
-            "rest": ["true", "false"],
-            "restPath": ["true", "false"],
-            "saveMapping": ["true", "false"],
             "selectbeforeupdate": ["true", "false"],
+            "optimisticlock": ["none", "dirty", "all", "version"],
+            "lazy": ["true", "false"],
+            "embedded": ["true", "false"],
+            "cacheuse": ["read-only", "nonstrict-read-write", "read-write", "transactional"],
+            "savemapping": ["true", "false"],
+            "accessors": ["true", "false"],
             "serializable": ["true", "false"],
-            "style": ["rpc", "document"],
-            "wsVersion": ["1", "2"]
+            "attribute": ["true", "false"],
+            "mappedsuperclass": ["true", "false"],
+            "rest": ["true", "false"],
+            "restpath": ["true", "false"],
+            "httpmethod": ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
+            "produces": ["text/plain,text/html", "..."],
+            "consumes": ["text/plain,text/html", "..."],
+            "indexable": ["true", "false"],
+            "autoindex": ["true", "false"],
+            "wsversion": ["1", "2"],
+            "invokeimplicitaccessor": ["true", "false"]
         }
     },
     "cfcontent": {
         "attributes": [[], ["deletefile", "file", "reset", "type", "variable"]],
         "attribute_values": {
             "deletefile": ["true", "false"],
-            "reset": ["true", "false"],
-            "type": ["text/html", "text/plain", "application/msword", "application/msexcel", "application/poscript", "application/x-zip-compressed", "application/pdf", "application/rtf", "video/x-msvideo", "video/quicktime", "video/x-mpeg2", "audio/x-pn/realaudio", "audio/x-mpeg", "audio/x-waw", "audio/x-aiff", "audio/basic", "image/tiff", "image/jpeg", "image/gif", "image/x-png", "image/x-photo-cd", "image/x-MS-bmp", "image/x-rgb", "image/x-portable-pixmap", "image/x-portable-greymap", "image/x-portablebitmap"]
+            "reset": ["true", "false"]
         }
     },
     "cfcontinue": {
@@ -192,8 +195,14 @@
         "attribute_values": {}
     },
     "cfcookie": {
-        "attributes": [["name"], ["domain", "encodevalue", "expires", "httpOnly", "path", "preserveCase", "secure", "value"]],
-        "attribute_values": {}
+        "attributes": [["name"], ["domain", "encodevalue", "expires", "httpOnly", "path", "preserveCase", "samesite", "secure", "value"]],
+        "attribute_values": {
+            "secure": ["true", "false"],
+            "httponly": ["true", "false"],
+            "encodevalue": ["true", "false"],
+            "preservecase": ["true", "false"],
+            "samesite": ["strict", "lax", "none"]
+        }
     },
     "cfdbinfo": {
         "attributes": [["name", "type"], ["datasource", "dbname", "password", "pattern", "table", "username"]],
@@ -209,45 +218,46 @@
         "attributes": [["directory"], ["action", "filter", "listinfo", "mode", "name", "newdirectory", "recurse", "sort", "type"]],
         "attribute_values": {
             "action": ["list", "create", "delete", "rename"],
-            "listinfo": ["name", "all"],
             "sort": ["asc", "desc"],
-            "type": ["dir", "file", "all"]
+            "recurse": ["true", "false"],
+            "type": ["dir", "file", "all"],
+            "listinfo": ["name", "all"]
         }
     },
     "cfdiv": {
         "attributes": [[], ["bind", "bindonload", "id", "onBindError", "tagName"]],
         "attribute_values": {
-            "bindonload": ["false", "true"],
-            "tagName": ["div", "span"]
+            "tagname": ["div", "span"],
+            "bindonload": ["true", "false"]
         }
     },
     "cfdocument": {
         "attributes": [["format"], ["authpassword", "authuser", "backgroundvisible", "bookmark", "encryption", "filename", "fontembed", "formFields", "formsType", "localurl", "marginbottom", "marginleft", "marginright", "margintop", "mimetype", "name", "openPassword", "orientation", "overwrite", "ownerpassword", "pageheight", "pagetype", "pagewidth", "pdfa", "permissions", "permissionsPassword", "proxyhost", "proxypassword", "proxyport", "proxyuser", "saveasname", "scale", "src", "srcfile", "tagged", "unit", "useragent", "userpassword"]],
         "attribute_values": {
-            "backgroundvisible": ["true", "false"],
-            "bookmark": ["true", "false"],
-            "encryption": ["128-bit", "40-bit", "none"],
-            "fontembed": ["true", "false"],
-            "formFields": ["true", "false"],
             "format": ["PDF", "FlashPaper"],
-            "formsType": ["FDF", "PDF", "HTML", "XML"],
             "localurl": ["true", "false"],
-            "mimetype": ["text/html", "text/plain", "application/xml", "image/bmp", "image/jpeg", "image/png", "image/gif"],
-            "orientation": ["portrait", "landscape"],
             "overwrite": ["true", "false"],
             "pagetype": ["legal", "letter", "A4", "A5", "B5", "custom"],
-            "pdfa": ["true", "false"],
+            "orientation": ["portrait", "landscape"],
+            "unit": ["in", "cm"],
+            "encryption": ["128-bit", "40-bit", "none"],
             "permissions": ["AllowPrinting,AllowCopy,AllowScreenReaders", "AllowPrinting", "AllowModifyContents", "AllowCopy", "AllowModifyAnnotations", "AllowFillIn", "AllowScreenReaders", "AllowAssembly", "AllowDegradedPrinting", "AllowPrinting,AllowModifyContents,AllowCopy,AllowModifyAnnotations,AllowFillIn,AllowScreenReaders,AllowAssembly,AllowDegradedPrinting"],
+            "fontembed": ["true", "false"],
+            "backgroundvisible": ["true", "false"],
             "scale": ["100", "90", "80", "70", "60", "50", "40", "30", "20", "10"],
+            "bookmark": ["true", "false"],
+            "mimetype": ["text/html", "text/plain", "application/xml", "image/bmp", "image/jpeg", "image/png", "image/gif"],
             "tagged": ["true", "false"],
-            "unit": ["in", "cm"]
+            "pdfa": ["true", "false"],
+            "formfields": ["true", "false"],
+            "formstype": ["FDF", "PDF", "HTML", "XML"]
         }
     },
     "cfdocumentitem": {
         "attributes": [["type"], ["evalAtPrint"]],
         "attribute_values": {
-            "evalAtPrint": ["true", "false"],
-            "type": ["pagebreak", "header", "footer"]
+            "type": ["pagebreak", "header", "footer"],
+            "evalatprint": ["true", "false"]
         }
     },
     "cfdocumentsection": {
@@ -259,12 +269,12 @@
     "cfdump": {
         "attributes": [["var"], ["abort", "expand", "format", "hide", "keys", "label", "metainfo", "output", "show", "showUDfs", "top"]],
         "attribute_values": {
-            "abort": ["true", "false"],
             "expand": ["true", "false"],
             "format": ["html", "text"],
             "metainfo": ["true", "false"],
             "output": ["browser", "console", "filename"],
-            "showUDfs": ["true", "false"]
+            "showudfs": ["true", "false"],
+            "abort": ["true", "false"]
         }
     },
     "cfelse": {
@@ -278,33 +288,41 @@
     "cferror": {
         "attributes": [["template", "type"], ["exception", "mailto"]],
         "attribute_values": {
-            "exception": ["any", "application", "database", "template", "security", "object", "missinginclude", "expression", "lock", "custom_type"],
-            "type": ["exception", "validation", "request", "monitor"]
+            "type": ["exception", "validation", "request", "monitor"],
+            "exception": ["any", "application", "database", "template", "security", "object", "missinginclude", "expression", "lock", "custom_type"]
         }
     },
     "cfexchangecalendar": {
         "attributes": [["action", "event", "name", "responseType", "uid"], ["attachmentpath", "connection", "generateUniquefilenames", "message", "notify", "result"]],
         "attribute_values": {
             "action": ["create", "delete", "deleteAttachments", "get", "getAttachments", "modify", "respond"],
-            "generateUniquefilenames": ["true", "false"],
+            "generateuniquefilenames": ["true", "false"],
             "notify": ["true", "false"],
-            "responseType": ["accept", "decline", "tentative"]
+            "responsetype": ["accept", "decline", "tentative"]
         }
     },
     "cfexchangeconnection": {
         "attributes": [["action", "connection", "server", "username"], ["exchangeServerLanguage", "folder", "formBasedAuthentication", "mailboxName", "name", "password", "port", "protocol", "proxyHost", "proxyPort", "recurse"]],
         "attribute_values": {
             "action": ["open", "close", "getsubfolders"],
-            "formBasedAuthentication": ["true", "false"],
             "protocol": ["http", "https"],
-            "recurse": ["false", "true"]
+            "recurse": ["true", "false"],
+            "formbasedauthentication": ["true", "false"]
         }
     },
     "cfexchangecontact": {
         "attributes": [["action", "contact", "name", "uid"], ["attachmentPath", "connection", "generateUniqueFilenames", "result"]],
         "attribute_values": {
             "action": ["create", "delete", "deleteAttachments", "get", "getAttachments", "modify"],
-            "generateUniqueFilenames": ["true", "false"]
+            "generateuniquefilenames": ["true", "false"]
+        }
+    },
+    "cfexchangeconversation": {
+        "attributes": [["action", "connection", "folderID"], ["UID", "deleteType", "destinationFolderID", "isRead", "name"]],
+        "attribute_values": {
+            "action": ["get", "setReadState", "copy", "move", "delete"],
+            "isread": ["true", "false"],
+            "deletetype": ["hardDelete", "softDelete", "moveToDeletedItems"]
         }
     },
     "cfexchangefilter": {
@@ -313,11 +331,19 @@
             "name": ["allDayEvent", "assistant", "attributes", "attributes", "bcc", "billingInfo", "businesAddress", "businessFax", "businessPhoneNumber", "cc", "companies", "company", "dateCompleted", "displayAs", "dueDate", "duration", "email1", "email2", "email3", "endTime", "firstName", "folder", "fromID", "hasAttachment", "homeAddress", "homePhoneNumber", "importance", "isRead", "isRecurring", "jobTitle", "lastName", "location", "mail_ID", "mailingAddressType", "manager", "meeting UIDs", "meeting_response", "meetingUID", "message", "messageType", "middleName", "mileage", "mobilePhoneNumber", "name", "nickName", "office", "optionalAttendees", "organizer", "otherAddress", "otherPhoneNumber", "profession", "requiredAttendees", "sensitivity", "spouseName", "startDate", "startTime", "status", "subject", "timeReceived", "timeSent", "toID", "totalWork", "UID", "Valid", "webPage", "lastModified", "recurrenceID", "maxRows"]
         }
     },
+    "cfexchangefolder": {
+        "attributes": [["action", "connection"], ["deleteSubFolders", "deleteType", "destinationFolderID", "folder", "folderID", "folderPath", "name", "pathDelimiter", "result", "sourceFolderID", "uid"]],
+        "attribute_values": {
+            "action": ["getInfo", "getExtendedInfo", "findSubFolders", "create", "copy", "delete", "move", "modify", "empty"],
+            "deletetype": ["hardDelete", "softDelete", "moveToDeletedItems"],
+            "deletesubfolders": ["true", "false"]
+        }
+    },
     "cfexchangemail": {
         "attributes": [["UID", "meetingUID", "message", "name"], ["action", "attachmentPath", "connection", "destinationfolder", "folder", "generateUniqueFilenames", "mailUID"]],
         "attribute_values": {
             "action": ["get", "getAttachments", "getMeetingInfo", "delete", "deleteAttachments", "move", "set"],
-            "generateUniqueFilenames": ["true", "false"]
+            "generateuniquefilenames": ["true", "false"]
         }
     },
     "cfexchangetask": {
@@ -327,9 +353,9 @@
         }
     },
     "cfexecute": {
-        "attributes": [["name"], ["arguments", "errorFile", "errorVariable", "outputfile", "terminateOnTimeout", "timeout", "variable"]],
+        "attributes": [["name"], ["arguments", "directory", "errorFile", "errorVariable", "outputfile", "terminateOnTimeout", "timeout", "variable"]],
         "attribute_values": {
-            "terminateOnTimeout": ["true", "false"]
+            "terminateontimeout": ["true", "false"]
         }
     },
     "cfexit": {
@@ -342,9 +368,10 @@
         "attributes": [[], ["action", "columnMap", "enclosureDir", "escapeChars", "ignoreEnclosureError", "name", "outputFile", "overwrite", "overwriteEnclosure", "properties", "proxyPassword", "proxyPort", "proxyServer", "proxyUser", "query", "source", "timeout", "userAgent", "xmlvar"]],
         "attribute_values": {
             "action": ["create", "read"],
-            "escapeChars": ["true", "false"],
-            "ignoreEnclosureError": ["true", "false"],
-            "overwrite": ["true", "false"]
+            "ignoreenclosureerror": ["true", "false"],
+            "overwrite": ["true", "false"],
+            "overwriteenclosure": ["true", "false"],
+            "escapechars": ["true", "false"]
         }
     },
     "cffile": {
@@ -354,18 +381,18 @@
             "addnewline": ["true", "false"],
             "attributes": ["readonly", "hidden", "normal", "system", "temporary"],
             "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"],
-            "fixnewline": ["true", "false"],
-            "nameconflict": ["error", "skip", "overwrite", "makeunique"]
+            "nameconflict": ["error", "skip", "overwrite", "makeunique"],
+            "fixnewline": ["True", "False"]
         }
     },
     "cffileupload": {
         "attributes": [["url"], ["addButtonLabel", "align", "bgcolor", "clearButtonLabel", "deleteButtonLabel", "extensionfilter", "height", "hideUploadButton", "maxFileSelect", "maxUploadSize", "name", "onUploadComplete", "oncomplete", "onerror", "progressbar", "stopOnError", "style", "title", "uploadbuttonlabel", "width", "wmode"]],
         "attribute_values": {
-            "align": ["left", "right", "center", "justify"],
-            "hideUploadButton": ["true", "false"],
             "progressbar": ["true", "false"],
-            "stopOnError": ["true", "false"],
-            "wmode": ["opaque", "transparent", "window"]
+            "align": ["left", "right", "center", "justify"],
+            "wmode": ["opaque", "transparent", "window"],
+            "stoponerror": ["true", "false"],
+            "hideuploadbutton": ["true", "false"]
         }
     },
     "cffinally": {
@@ -379,28 +406,28 @@
     "cfform": {
         "attributes": [[], ["accessible", "action", "archive", "codebase", "format", "height", "id", "method", "name", "onerror", "onload", "onreset", "onsubmit", "onsuccess", "passthrough", "preloader", "preservedata", "scriptsrc", "skin", "style", "target", "timeout", "width", "wmode"]],
         "attribute_values": {
-            "accessible": ["true", "false"],
-            "format": ["html", "flash", "xml"],
             "method": ["post", "get"],
-            "preloader": ["true", "false"],
-            "preservedata": ["true", "false"],
+            "format": ["html", "flash", "xml"],
             "skin": ["haloSilver", "haloBlue", "haloGreen", "haloOrange", "beige", "blue", "bluegray", "lightgray", "red", "silver", "none", "default", "basic", "basiccss"],
-            "wmode": ["window", "transparent", "opaque"]
+            "preservedata": ["true", "false"],
+            "wmode": ["window", "transparent", "opaque"],
+            "accessible": ["true", "false"],
+            "preloader": ["true", "false"]
         }
     },
     "cfformgroup": {
         "attributes": [["type"], ["enabled", "height", "id", "label", "maxrows", "onchange", "query", "selectedindex", "startrow", "style", "tooltip", "visible", "width"]],
         "attribute_values": {
-            "enabled": ["true", "false"],
             "type": ["horizontal", "vertical", "fieldset", "repeater", "horizontal", "vertical", "hbox", "vbox", "hdividedbox", "vdividedbox", "panel", "tile", "accordion", "tabnavigator", "page"],
+            "enabled": ["true", "false"],
             "visible": ["true", "false"]
         }
     },
     "cfformitem": {
         "attributes": [["type"], ["bind", "enabled", "height", "style", "tooltip", "visible", "width"]],
         "attribute_values": {
-            "enabled": ["true", "false"],
             "type": ["html", "text", "script", "spacer", "hrule", "vrule"],
+            "enabled": ["true", "false"],
             "visible": ["true", "false"]
         }
     },
@@ -412,59 +439,84 @@
         "attributes": [["action"], ["actionparam", "asciiextensionlist", "attributes", "buffersize", "connection", "directory", "existing", "failifexists", "fingerprint", "item", "key", "localfile", "name", "new", "passive", "passphrase", "password", "port", "proxyserver", "remotefile", "result", "retrycount", "secure", "server", "stoponerror", "systemtype", "timeout", "transfermode", "username"]],
         "attribute_values": {
             "action": ["open", "close", "changedir", "createdir", "listdir", "removedir", "getfile", "putfile", "rename", "remove", "getcurrentdir", "getcurrenturl", "existsdir", "existsfile", "exists", "quote", "site", "allo", "acct"],
-            "failifexists": ["true", "false"],
-            "passive": ["true", "false"],
-            "secure": ["true", "false"],
             "stoponerror": ["true", "false"],
-            "systemtype": ["WINDOWS", "UNIX"],
-            "transfermode": ["auto", "ascii", "binary"]
+            "passive": ["true", "false"],
+            "transfermode": ["auto", "ascii", "binary"],
+            "failifexists": ["true", "false"],
+            "secure": ["True", "False"],
+            "systemtype": ["WINDOWS", "UNIX"]
         }
     },
     "cffunction": {
-        "attributes": [["name"], ["access", "cachedwithin", "consumes", "description", "displayname", "hint", "httpMethod", "output", "produces", "restPath", "returnformat", "returntype", "roles", "securejson", "verifyclient"]],
+        "attributes": [["name"], ["access", "cachedwithin", "consumes", "description", "displayname", "hint", "httpMethod", "localmode", "modifier", "output", "produces", "restPath", "returnformat", "returntype", "roles", "securejson", "verifyclient"]],
         "attribute_values": {
+            "returntype": ["any", "array", "binary", "boolean", "date", "guid", "numeric", "query", "string", "struct", "UUID", "variablename", "void", "xml", "(component name)"],
             "access": ["private", "package", "public", "remote"],
-            "httpMethod": ["get", "post", "put", "delete", "head", "options"],
             "output": ["true", "false"],
             "returnformat": ["JSON", "plain", "WDDX"],
-            "returntype": ["any", "array", "binary", "boolean", "date", "guid", "numeric", "query", "string", "struct", "UUID", "variablename", "void", "xml", "(component name)"],
             "securejson": ["true", "false"],
-            "verifyclient": ["true", "false"]
+            "verifyclient": ["true", "false"],
+            "httpmethod": ["get", "post", "put", "delete", "head", "options"],
+            "localmode": ["classic", "modern"],
+            "modifier": ["abstract", "final", "static"]
         }
     },
     "cfgrid": {
         "attributes": [["name"], ["align", "appendkey", "autowidth", "bgcolor", "bind", "bindonload", "bold", "colheaderalign", "colheaderbold", "colheaderfont", "colheaderfontsize", "colheaderitalic", "colheaders", "colheadertextcolor", "collapsible", "delete", "deletebutton", "enabled", "font", "fontsize", "format", "griddataalign", "gridlines", "groupfield", "height", "highlighthref", "href", "hrefkey", "hspace", "insert", "insertbutton", "italic", "maxrows", "notsupported", "onLoad", "onblur", "onchange", "onerror", "onfocus", "onvalidate", "pagesize", "picturebar", "preservepageonsort", "query", "rowheaderalign", "rowheaderbold", "rowheaderfont", "rowheaderfontsize", "rowheaderitalic", "rowheaders", "rowheadertextcolor", "rowheight", "selectcolor", "selectmode", "selectonload", "sort", "sortascendingbutton", "sortdescendingbutton", "striperowcolor", "striperows", "style", "target", "textcolor", "tooltip", "visible", "vspace", "width"]],
         "attribute_values": {
-            "align": ["top", "left", "bottom", "baseline", "texttop", "absbottom", "middle", "absmiddle", "right"],
-            "bgcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
-            "colheaderalign": ["left", "center", "right"],
-            "colheadertextcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
-            "font": ["arial", "times", "courier", "arialunicodeMS"],
+            "preservepageonsort": ["true", "false"],
+            "striperows": ["true", "false"],
             "format": ["applet", "flash", "xml", "html"],
+            "autowidth": ["true", "false"],
+            "align": ["top", "left", "bottom", "baseline", "texttop", "absbottom", "middle", "absmiddle", "right"],
+            "insert": ["true", "false"],
+            "delete": ["true", "false"],
+            "sort": ["true", "false"],
+            "font": ["arial", "times", "courier", "arialunicodeMS"],
+            "italic": ["true", "false"],
+            "bold": ["true", "false"],
+            "textcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
+            "appendkey": ["true", "false"],
+            "highlighthref": ["true", "false"],
             "griddataalign": ["left", "center", "right"],
+            "gridlines": ["true", "false"],
+            "rowheaders": ["true", "false"],
             "rowheaderalign": ["left", "center", "right"],
+            "rowheaderitalic": ["true", "false"],
+            "rowheaderbold": ["true", "false"],
             "rowheadertextcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
+            "colheaders": ["true", "false"],
+            "colheaderalign": ["left", "center", "right"],
+            "colheaderitalic": ["true", "false"],
+            "colheaderbold": ["true", "false"],
+            "colheadertextcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
+            "bgcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
             "selectcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
             "selectmode": ["edit", "single", "row", "column", "browse"],
-            "textcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"]
+            "picturebar": ["true", "false"],
+            "enabled": ["true", "false"],
+            "visible": ["true", "false"],
+            "bindonload": ["true", "false"],
+            "selectonload": ["true", "false"],
+            "collapsible": ["true", "false"]
         }
     },
     "cfgridcolumn": {
         "attributes": [["name"], ["bgcolor", "bold", "dataalign", "display", "font", "fontsize", "header", "headerIcon", "headeralign", "headerbold", "headerfont", "headerfontsize", "headeritalic", "headertextcolor", "href", "hrefkey", "italic", "mask", "numberformat", "select", "target", "textcolor", "type", "values", "valuesdelimiter", "valuesdisplay", "width"]],
         "attribute_values": {
-            "bgcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
-            "bold": ["true", "false"],
-            "dataalign": ["left", "right", "center"],
-            "display": ["true", "false"],
             "font": ["arial", "times", "courier", "arialunicodeMS"],
-            "headeralign": ["left", "right", "center"],
-            "headerbold": ["true", "false"],
-            "headeritalic": ["true", "false"],
-            "headertextcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
             "italic": ["true", "false"],
-            "select": ["true", "false"],
+            "bold": ["true", "false"],
+            "bgcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
             "textcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
-            "type": ["string_noCase", "Boolean", "numeric", "date", "combobox", "image"]
+            "select": ["true", "false"],
+            "display": ["true", "false"],
+            "type": ["string_noCase", "Boolean", "numeric", "date", "combobox", "image"],
+            "headeritalic": ["true", "false"],
+            "headerbold": ["true", "false"],
+            "headertextcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "white", "lightgray", "yellow"],
+            "dataalign": ["left", "right", "center"],
+            "headeralign": ["left", "right", "center"]
         }
     },
     "cfgridrow": {
@@ -486,7 +538,8 @@
     "cfhtmlbody": {
         "attributes": [[], ["action", "force", "id", "text", "variable"]],
         "attribute_values": {
-            "action": ["append", "read", "reset", "write", "flush"]
+            "action": ["append", "read", "reset", "write", "flush"],
+            "force": ["true", "false"]
         }
     },
     "cfhtmlhead": {
@@ -498,38 +551,44 @@
         "attribute_values": {
             "encryption": ["AES_128", "RC4_40", "RC4_128", "RC4_128M", "none"],
             "orientation": ["portrait", "landscape"],
-            "pageType": ["legal", "letter", "A4", "A5", "B4", "B5", "B4-JIS", "B5-JIS", "custom"],
             "permissions": ["AllowPrinting", "AllowModifyContents", "AllowCopy", "AllowModifyAnnotations", "AllowFillIn", "AllowScreenReaders", "AllowAssembly", "AllowDegradedPrinting", "AllowSecure", "All", "None"],
+            "pagetype": ["legal", "letter", "A4", "A5", "B4", "B5", "B4-JIS", "B5-JIS", "custom"],
             "unit": ["in", "cm"]
         }
     },
     "cfhtmltopdfitem": {
-        "attributes": [["align", "bottommargin", "image", "isBase64", "leftmargin", "numberformat", "opacity", "rightmargin", "showonprint", "topmargin", "type"], []],
+        "attributes": [["type"], ["align", "bottommargin", "image", "isBase64", "leftmargin", "numberformat", "opacity", "rightmargin", "showonprint", "topmargin"]],
         "attribute_values": {
-            "align": ["Left", "Right", "Center"],
+            "type": ["header", "footer", "pagebreak"],
+            "isbase64": ["true", "false"],
             "numberformat": ["LOWERCASEROMAN", "NUMERIC", "UPPERCASEROMAN"],
-            "type": ["header", "footer", "pagebreak"]
+            "showonprint": ["true", "false"],
+            "align": ["Left", "Right", "Center"]
         }
     },
     "cfhttp": {
         "attributes": [["url"], ["authType", "cachedwithin", "charset", "clientcert", "clientcertpassword", "columns", "compression", "delimiter", "domain", "encodeurl", "file", "firstrowasheaders", "getasbinary", "method", "multipart", "multipartType", "name", "password", "path", "port", "proxypassword", "proxyport", "proxyserver", "proxyuser", "redirect", "resolveurl", "result", "textqualifier", "throwonerror", "timeout", "useragent", "username", "workstation"]],
         "attribute_values": {
-            "authType": ["BASIC", "NTLM"],
-            "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"],
-            "encodeurl": ["true", "false"],
-            "getasbinary": ["auto", "false", "true"],
             "method": ["get", "post", "put", "delete", "head", "trace", "options", "patch"],
-            "multipart": ["false", "true"],
-            "multipartType": ["form-data", "related"],
-            "textqualifier": ["\"", "'"]
+            "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"],
+            "resolveurl": ["true", "false"],
+            "throwonerror": ["true", "false"],
+            "redirect": ["true", "false"],
+            "getasbinary": ["auto", "no", "yes", "never"],
+            "firstrowasheaders": ["true", "false"],
+            "textqualifier": ["\"", "'"],
+            "multipart": ["true", "false"],
+            "multiparttype": ["form-data", "related"],
+            "authtype": ["BASIC", "NTLM"],
+            "encodeurl": ["true", "false"]
         }
     },
     "cfhttpparam": {
         "attributes": [["type"], ["encoded", "file", "mimetype", "name", "value"]],
         "attribute_values": {
+            "type": ["header", "body", "xml", "cgi", "file", "url", "formfield", "cookie"],
             "encoded": ["true", "false"],
-            "mimetype": ["text/plain", "text/html"],
-            "type": ["header", "body", "xml", "cgi", "file", "url", "formfield", "cookie"]
+            "mimetype": ["text/plain", "text/html"]
         }
     },
     "cfif": {
@@ -542,23 +601,23 @@
             "action": ["border", "captcha", "convert", "info", "read", "resize", "rotate", "write", "writeToBrowser"],
             "difficulty": ["high", "medium", "low"],
             "format": ["png", "jpg", "jpeg"],
-            "interpolation": ["highestQuality", "highQuality", "mediumQuality", "highestPerformance", "highPerformance", "mediumPerformance", "nearest", "bilinear", "bicubic", "bessel", "blackman", "hamming", "hanning", "hermite", "lanczos", "mitchell", "quadratic"],
-            "isBase64": ["true", "false"],
-            "overwrite": ["true", "false"]
+            "isbase64": ["true", "false"],
+            "overwrite": ["true", "false"],
+            "interpolation": ["highestQuality", "highQuality", "mediumQuality", "highestPerformance", "highPerformance", "mediumPerformance", "nearest", "bilinear", "bicubic", "bessel", "blackman", "hamming", "hanning", "hermite", "lanczos", "mitchell", "quadratic"]
         }
     },
     "cfimap": {
         "attributes": [[], ["action", "attachmentpath", "connection", "folder", "generateUniqueFileNames", "maxrows", "messageNumber", "name", "newFolder", "password", "port", "recurse", "secure", "server", "startRow", "stoponerror", "timeout", "uid", "username"]],
         "attribute_values": {
-            "action": ["createfolder", "open", "close", "getall", "markread", "listallfolders", "getheaderonly", "deletefolder", "delete", "renamefolder", "movemail"],
-            "generateUniqueFileNames": ["true", "false"],
-            "recurse": ["true", "false"],
             "secure": ["true", "false"],
-            "stoponerror": ["true", "false"]
+            "action": ["createfolder", "open", "close", "getall", "markread", "listallfolders", "getheaderonly", "deletefolder", "delete", "renamefolder", "movemail"],
+            "stoponerror": ["true", "false"],
+            "generateuniquefilenames": ["true", "false"],
+            "recurse": ["true", "false"]
         }
     },
     "cfimapfilter": {
-        "attributes": [["from", "name", "to", "value"], []],
+        "attributes": [["name"], ["from", "to", "value"]],
         "attribute_values": {
             "name": ["Subject", "From", "To", "Flag", "TimeReceived", "TimeSent"]
         }
@@ -569,34 +628,36 @@
     },
     "cfinclude": {
         "attributes": [["template"], ["runonce"]],
-        "attribute_values": {}
+        "attribute_values": {
+            "runonce": ["true", "false"]
+        }
     },
     "cfindex": {
         "attributes": [["collection"], ["action", "body", "category", "categoryTree", "custom1", "custom2", "custom3", "custom4", "extensions", "key", "language", "prefix", "query", "recurse", "status", "title", "type", "urlpath"]],
         "attribute_values": {
             "action": ["update", "delete", "purge", "refresh"],
-            "recurse": ["true", "false"],
-            "type": ["file", "path", "custom"]
+            "type": ["file", "path", "custom"],
+            "recurse": ["true", "false"]
         }
     },
     "cfinput": {
         "attributes": [["name"], ["autoSuggestBindDelay", "autoSuggestMinLength", "autosuggest", "bind", "bindAttribute", "bindonload", "checked", "class", "daynames", "delimiter", "disabled", "enabled", "firstdayofweek", "height", "id", "label", "mask", "matchContains", "maxlength", "maxresultsdisplayed", "message", "monthnames", "onbinderror", "onchange", "onclick", "onerror", "onkeydown", "onkeyup", "onmousedown", "onmouseup", "onvalidate", "passthrough", "pattern", "range", "required", "showautosuggestloadingicon", "size", "sourcefortooltip", "src", "style", "tooltip", "type", "typeahead", "validate", "validateat", "value", "visible", "width"]],
         "attribute_values": {
             "bindonload": ["true", "false"],
-            "checked": ["true", "false"],
-            "daynames": ["S", "M", "T", "W", "Th", "F", "Sa", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-            "disabled": ["true", "false"],
-            "enabled": ["true", "false"],
-            "firstdayofweek": ["0", "1", "2", "3", "4", "5", "6"],
-            "matchContains": ["true", "false"],
-            "monthnames": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            "required": ["true", "false"],
-            "showautosuggestloadingicon": ["true", "false"],
             "type": ["button", "checkbox", "file", "hidden", "image", "password", "radio", "reset", "submit", "text", "datefield", "autosuggest"],
-            "typeahead": ["true", "false"],
+            "required": ["true", "false"],
             "validate": ["date", "eurodate", "time", "float", "integer", "telephone", "zipcode", "creditcard", "social_security_number", "regular_expression"],
             "validateat": ["onSubmit", "onServer", "onBlur"],
-            "visible": ["true", "false"]
+            "checked": ["true", "false"],
+            "disabled": ["true", "false"],
+            "daynames": ["S", "M", "T", "W", "Th", "F", "Sa", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            "firstdayofweek": ["0", "1", "2", "3", "4", "5", "6"],
+            "monthnames": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            "enabled": ["true", "false"],
+            "visible": ["true", "false"],
+            "showautosuggestloadingicon": ["true", "false"],
+            "typeahead": ["true", "false"],
+            "matchcontains": ["true", "false"]
         }
     },
     "cfinsert": {
@@ -611,7 +672,7 @@
         "attributes": [["method"], ["argumentcollection", "component", "password", "proxypassword", "proxyport", "proxyserver", "proxyuser", "refreshwsdl", "returnvariable", "serviceport", "timeout", "username", "webservice", "wsVersion", "wsdl2javaargs"]],
         "attribute_values": {
             "refreshwsdl": ["true", "false"],
-            "wsVersion": ["1", "2"]
+            "wsversion": ["1", "2"]
         }
     },
     "cfinvokeargument": {
@@ -620,54 +681,62 @@
             "omit": ["true", "false"]
         }
     },
+    "cfjava": {
+        "attributes": [["handle"], []],
+        "attribute_values": {}
+    },
     "cflayout": {
         "attributes": [["type"], ["activeontop", "align", "buttonStyle", "fillheight", "fitToWindow", "height", "name", "padding", "style", "tabheight", "tabposition", "titlecollapse", "width"]],
         "attribute_values": {
-            "activeontop": ["true", "false"],
+            "type": ["accordion", "border", "hbox", "tab", "vbox"],
             "align": ["center", "justify", "left", "right"],
-            "fillheight": ["true", "false"],
-            "fitToWindow": ["true", "false"],
             "tabposition": ["top", "bottom"],
             "titlecollapse": ["true", "false"],
-            "type": ["accordion", "border", "hbox", "tab", "vbox"]
+            "activeontop": ["true", "false"],
+            "fillheight": ["true", "false"],
+            "fittowindow": ["true", "false"]
         }
     },
     "cflayoutarea": {
         "attributes": [[], ["align", "bindOnLoad", "closable", "collapsible", "disabled", "initCollapsed", "initHide", "maxSize", "minSize", "name", "onBindError", "overflow", "position", "refreshonactivate", "selected", "size", "source", "splitter", "style", "title", "titleIcon"]],
         "attribute_values": {
+            "position": ["bottom", "center", "left", "right", "top"],
             "align": ["center", "justify", "left", "right"],
-            "bindOnLoad": ["true", "false"],
             "closable": ["true", "false"],
             "collapsible": ["true", "false"],
             "disabled": ["true", "false"],
-            "initCollapsed": ["true", "false"],
-            "initHide": ["true", "false"],
+            "initcollapsed": ["true", "false"],
+            "inithide": ["true", "false"],
             "overflow": ["auto", "hidden", "scroll", "visible"],
-            "position": ["bottom", "center", "left", "right", "top"],
-            "refreshonactivate": ["true", "false"],
             "selected": ["true", "false"],
-            "splitter": ["true", "false"]
+            "splitter": ["true", "false"],
+            "refreshonactivate": ["true", "false"],
+            "bindonload": ["true", "false"]
         }
     },
     "cfldap": {
         "attributes": [["server"], ["action", "attributes", "clientcert", "clientcertpassword", "delimiter", "dn", "filter", "maxrows", "modifytype", "name", "password", "port", "rebind", "referral", "returnasbinary", "scope", "secure", "separator", "sort", "sortcontrol", "start", "startrow", "timeout", "username", "usetls"]],
         "attribute_values": {
             "action": ["query", "add", "modify", "modifyDN", "delete"],
+            "scope": ["onelevel", "base", "subtree"],
+            "sortcontrol": ["nocase", "asc", "desc", "nocase, desc", "nocase, asc"],
             "modifytype": ["add", "delete", "replace"],
             "rebind": ["true", "false"],
-            "scope": ["onelevel", "base", "subtree"],
             "secure": ["CFSSL_BASIC"],
-            "sortcontrol": ["nocase", "asc", "desc", "nocase, desc", "nocase, asc"]
+            "usetls": ["true", "false"]
         }
     },
     "cflocation": {
         "attributes": [["url"], ["addtoken", "statuscode"]],
-        "attribute_values": {}
+        "attribute_values": {
+            "addtoken": ["true", "false"]
+        }
     },
     "cflock": {
-        "attributes": [["timeout"], ["name", "scope", "throwontimeout", "type"]],
+        "attributes": [["timeout"], ["name", "result", "scope", "throwontimeout", "type"]],
         "attribute_values": {
             "scope": ["Application", "request", "Server", "Session"],
+            "throwontimeout": ["true", "false"],
             "type": ["readonly", "exclusive"]
         }
     },
@@ -675,7 +744,8 @@
         "attributes": [["text"], ["application", "file", "log", "type"]],
         "attribute_values": {
             "log": ["Application", "Scheduler"],
-            "type": ["information", "warning", "error", "fatal"]
+            "type": ["information", "warning", "error", "fatal"],
+            "application": ["true", "false"]
         }
     },
     "cflogin": {
@@ -692,7 +762,9 @@
     },
     "cfloop": {
         "attributes": [[], ["array", "characters", "collection", "condition", "delimiters", "endrow", "file", "from", "group", "groupcasesensitive", "index", "item", "list", "query", "startrow", "step", "times", "to"]],
-        "attribute_values": {}
+        "attribute_values": {
+            "groupcasesensitive": ["true", "false"]
+        }
     },
     "cfmail": {
         "attributes": [["from", "subject", "to"], ["async", "bcc", "cc", "charset", "debug", "encrypt", "encryptionalgorithm", "failto", "group", "groupcasesensitive", "keyalias", "keypassword", "keystore", "keystorepassword", "mailerid", "maxrows", "mimeattach", "password", "port", "priority", "proxypassword", "proxyport", "proxyserver", "proxyuser", "query", "recipientcert", "remove", "replyto", "sendtime", "server", "sign", "spoolenable", "startrow", "timeout", "type", "username", "usessl", "usetls", "wraptext"]],
@@ -704,6 +776,8 @@
             "encryptionalgorithm": ["DES_EDE3_CBC", "RC2_CBC", "AES128_CBC", "AES192_CBC", "AES256_CBC"],
             "groupcasesensitive": ["true", "false"],
             "priority": ["highest", "urgent", "high", "normal", "low", "lowest", "non-urgent"],
+            "remove": ["true", "false"],
+            "sign": ["true", "false"],
             "spoolenable": ["true", "false"],
             "type": ["plain", "html", "text", "text/html", "text/plain"],
             "usessl": ["true", "false"],
@@ -713,49 +787,55 @@
     "cfmailparam": {
         "attributes": [[], ["content", "contentID", "disposition", "file", "filename", "name", "remove", "type", "value"]],
         "attribute_values": {
-            "disposition": ["attachment", "inline"],
+            "type": ["text/plain", "text/html", "html", "plain", "text"],
             "name": ["Message-Context", "Apparently-To", "Approved-By", "Fax", "Telefax", "For-Approval", "For-Comment", "For-Handling", "Mail-System-Version", "Mailer", "Originating-Client", "X-Mailer ", "X-Newsreader", "X-MimeOLE", "User-Agent", "Originator-Info", "Phone", "X-Envelope-From", "Envelope-To", "X-Envelope-To", "X-Face", "X-RCPT-TO", "X-Sender", "X-X-Sender", "Posted-To", "X-Admin", "Errors-To", "Return-Receipt-To", "Read-Receipt-To", "X-Confirm-reading-to", "Return-Receipt-Requested", "Register-Mail-Reply-Requested-By", "Abuse-Reports-To", "X-Complaints-To", "X-Report-Abuse-To", "Content-Alias", "Delivered-To", "X-Loop", "Translated-By", "Translation-Of", "X-UIDL", "X-URI", "X-URL", "X-IMAP", "X-OriginalArrivalTime", "Precedence", "X-MSMail-Priority", "X-Priority", "Content-Length", "Content-Conversion", "Content-Class", "Content-SGML-Entity", "X-MIME-Autoconverted", "List-Digest", "Mailing-List", "X-Mailing-List", "List-Software", "List-URL", "X-Listserver", "X-List-Host", "Fcc", "Speech-Act", "Status", "X-No-Archive"],
-            "type": ["text/plain", "text/html", "html", "plain", "text"]
+            "disposition": ["attachment", "inline"],
+            "remove": ["true", "false"]
         }
     },
     "cfmailpart": {
         "attributes": [["type"], ["charset", "wraptext"]],
         "attribute_values": {
-            "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"],
-            "type": ["text/plain", "text/html"]
+            "type": ["text/plain", "text/html"],
+            "charset": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
         }
     },
     "cfmap": {
         "attributes": [[], ["centeraddress", "centerlatitude", "centerlongitude", "collapsible", "continuouszoom", "displayscale", "doubleclickzoom", "height", "hideborder", "key", "markerBind", "markerColor", "markerIcon", "markerWindowContent", "name", "onError", "onload", "overview", "scrollwheelzoom", "showCenterMarker", "showMarkerWindow", "showScale", "tip", "title", "type", "typecontrol", "width", "zoomcontrol", "zoomlevel"]],
         "attribute_values": {
-            "collapsible": ["true", "false"],
             "continuouszoom": ["true", "false"],
-            "displayscale": ["true", "false"],
-            "doubleclickzoom": ["true", "false"],
-            "hideborder": ["true", "false"],
-            "overview": ["true", "false"],
-            "scrollwheelzoom": ["true", "false"],
-            "showCenterMarker": ["true", "false"],
-            "showMarkerWindow": ["true", "false"],
-            "showScale": ["true", "false"],
-            "tip": ["true", "false"],
             "type": ["map", "satellite", "hybrid", "earth", "terrain"],
+            "zoomcontrol": ["none", "small", "large", "small3D", "large3D"],
+            "tip": ["True", "False"],
+            "overview": ["true", "false"],
+            "hideborder": ["true", "false"],
+            "doubleclickzoom": ["true", "false"],
+            "collapsible": ["true", "false"],
             "typecontrol": ["none", "basic", "advanced"],
-            "zoomcontrol": ["none", "small", "large", "small3D", "large3D"]
+            "displayscale": ["true", "false"],
+            "scrollwheelzoom": ["true", "false"],
+            "showmarkerwindow": ["true", "false"],
+            "showcentermarker": ["true", "false"],
+            "showscale": ["true", "false"]
         }
     },
     "cfmapitem": {
         "attributes": [[], ["address", "latitude", "longitude", "markerColor", "markerIcon", "markerWindowContent", "name", "showMarkerWindow", "tip"]],
         "attribute_values": {
-            "showMarkerWindow": ["true", "false"]
+            "showmarkerwindow": ["true", "false"]
         }
     },
     "cfmediaplayer": {
         "attributes": [["source"], ["align", "autoPlay", "bgcolor", "controlbar", "fullscreencontrol", "height", "hideBorder", "hideTitle", "name", "oncomplete", "onload", "onstart", "quality", "style", "width", "wmode"]],
         "attribute_values": {
+            "fullscreencontrol": ["true", "false"],
+            "hideborder": ["true", "false"],
+            "controlbar": ["true", "false"],
             "align": ["left", "right", "center"],
             "quality": ["high", "medium", "low"],
-            "wmode": ["opaque", "transparent", "window"]
+            "hidetitle": ["true", "false"],
+            "wmode": ["opaque", "transparent", "window"],
+            "autoplay": ["true", "false"]
         }
     },
     "cfmenu": {
@@ -767,16 +847,16 @@
     "cfmenuitem": {
         "attributes": [[], ["childstyle", "display", "divider", "href", "image", "menustyle", "name", "style", "target"]],
         "attribute_values": {
-            "divider": ["true", "false"]
+            "divider": ["True", "False"]
         }
     },
     "cfmessagebox": {
         "attributes": [["message", "name", "type"], ["bodyStyle", "buttonType", "callbackHandler", "icon", "labelcancel", "labelno", "labelok", "labelyes", "modal", "multiline", "title", "width", "x", "y"]],
         "attribute_values": {
-            "buttonType": ["yesno", "yesnocancel"],
-            "modal": ["true", "false"],
+            "type": ["alert", "confirm", "prompt"],
             "multiline": ["true", "false"],
-            "type": ["alert", "confirm", "prompt"]
+            "buttontype": ["yesno", "yesnocancel"],
+            "modal": ["true", "false"]
         }
     },
     "cfmodule": {
@@ -791,20 +871,20 @@
         }
     },
     "cfoauth": {
-        "attributes": [["Type", "accesstokenendpoint", "authendpoint", "clientid", "redirecturi", "result", "scope", "secretkey", "state", "urlparams"], []],
+        "attributes": [["Type", "clientid"], ["accesstokenendpoint", "authendpoint", "redirecturi", "result", "scope", "secretkey", "state", "urlparams"]],
         "attribute_values": {
-            "Type": ["Facebook", "Google"]
+            "type": ["Facebook", "Google"]
         }
     },
     "cfobject": {
         "attributes": [["name"], ["action", "assembly", "class", "component", "context", "locale", "password", "port", "protocol", "proxypassword", "proxyport", "proxyserver", "proxyuser", "refreshwsdl", "secure", "server", "type", "username", "webservice", "wsdl2javaargs", "wsportname"]],
         "attribute_values": {
+            "type": ["com", "component", "corba", "java", "dotnet", "webservice"],
             "action": ["create", "connect"],
             "context": ["inproc", "local", "remote", "ior", "nameservice"],
-            "protocol": ["tcp", "http"],
-            "refreshwsdl": ["true", "false"],
             "secure": ["true", "false"],
-            "type": ["com", "component", "corba", "java", "dotnet", "webservice"]
+            "protocol": ["tcp", "http"],
+            "refreshwsdl": ["true", "false"]
         }
     },
     "cfobjectcache": {
@@ -816,8 +896,8 @@
     "cfoutput": {
         "attributes": [[], ["encodefor", "group", "groupcasesensitive", "maxrows", "query", "startrow"]],
         "attribute_values": {
-            "encodefor": ["html", "htmlattribute", "javascript", "css", "xml", "xmlattribute", "url", "xpath", "ldap", "dn"],
-            "groupcasesensitive": ["true", "false"]
+            "groupcasesensitive": ["true", "false"],
+            "encodefor": ["html", "htmlattribute", "javascript", "css", "xml", "xmlattribute", "url", "xpath", "ldap", "dn"]
         }
     },
     "cfpageencoding": {
@@ -836,54 +916,54 @@
         "attributes": [["action", "info", "order", "source"], ["addQuads", "algo", "align", "ascending", "bottomMargin", "compressTIFFs", "copyfrom", "ddxfile", "destination", "directory", "encodeAll", "encrypt", "flatten", "foreground", "format", "hScale", "hires", "honourspaces", "image", "imageprefix", "inputfiles", "isBase64", "jpgdpi", "keepbookmark", "leftMargin", "maxBreadth", "maxLength", "maxScale", "name", "newOwnerPassword", "newUserPassword", "noAttachments", "noBookMarks", "noComments", "noFonts", "noJavaScripts", "noLinks", "noMetadata", "noThumbnails", "numberFormat", "opacity", "outputfiles", "overridepage", "overwrite", "package", "pages", "password", "permissions", "position", "resolution", "rightMargin", "rotation", "saveoption", "scale", "showonprint", "stoponerror", "text", "topMargin", "transparent", "type", "useStructure", "vScale", "version"]],
         "attribute_values": {
             "action": ["archive", "addAttachments", "addStamp", "addWatermark", "deletePages", "export", "getInfo", "import", "merge", "processddx", "protect", "read", "removeWatermark", "sanitize", "setInfo", "sign", "thumbnail", "write", "optimize", "extracttext", "extractimage", "addheader", "addfooter", "removeheaderfooter", "transform", "unsign", "validatesignature", "readsignaturefields"],
-            "addQuads": ["true", "false"],
-            "algo": ["Bicubic", "Bilinear", "Nearest_Neighbour"],
-            "align": ["right", "left", "center"],
             "ascending": ["true", "false"],
-            "compressTIFFs": ["true", "false"],
-            "encodeAll": ["true", "false"],
             "encrypt": ["RC4_40", "RC4_128", "RC4_128M", "AES_128", "none"],
             "flatten": ["true", "false"],
             "foreground": ["true", "false"],
+            "isbase64": ["true", "false"],
+            "keepbookmark": ["true", "false"],
+            "order": ["name", "time"],
+            "overwrite": ["True", "False"],
+            "permissions": ["all", "allowassembly", "allowcopy", "AllowDegradedPrinting", "AllowFillIn", "AllowModifyAnnotations", "AllowModifyContents", "AllowPrinting", "AllowScreenReaders", "AllowSecure", "none"],
+            "rotation": ["0", "90", "180", "270"],
+            "showonprint": ["True", "False"],
+            "type": ["string", "xml"],
+            "version": ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6"],
+            "transparent": ["true", "false"],
+            "resolution": ["high", "low"],
+            "stoponerror": ["true", "false"],
+            "saveoption": ["full", "incremental", "linear"],
             "format": ["jpg", "tiff", "png"],
             "hires": ["true", "false"],
-            "honourspaces": ["true", "false"],
-            "isBase64": ["true", "false"],
-            "keepbookmark": ["true", "false"],
-            "noAttachments": ["true", "false"],
-            "noBookMarks": ["true", "false"],
-            "noComments": ["true", "false"],
-            "noFonts": ["true", "false"],
-            "noJavaScripts": ["true", "false"],
-            "noLinks": ["true", "false"],
-            "noMetadata": ["true", "false"],
-            "noThumbnails": ["true", "false"],
-            "numberFormat": ["NUMERIC", "LOWERCASEROMAN", "UPPERCASEROMAN"],
-            "order": ["name", "time"],
+            "compresstiffs": ["true", "false"],
             "overridepage": ["true", "false"],
-            "overwrite": ["true", "false"],
             "package": ["true", "false"],
-            "permissions": ["all", "allowassembly", "allowcopy", "AllowDegradedPrinting", "AllowFillIn", "AllowModifyAnnotations", "AllowModifyContents", "AllowPrinting", "AllowScreenReaders", "AllowSecure", "none"],
-            "resolution": ["high", "low"],
-            "rotation": ["0", "90", "180", "270"],
-            "saveoption": ["full", "incremental", "linear"],
-            "showonprint": ["true", "false"],
-            "stoponerror": ["true", "false"],
+            "nobookmarks": ["true", "false"],
+            "noattachments": ["true", "false"],
+            "nocomments": ["true", "false"],
+            "nojavascripts": ["true", "false"],
+            "nolinks": ["true", "false"],
+            "nometadata": ["true", "false"],
+            "nothumbnails": ["true", "false"],
+            "nofonts": ["true", "false"],
+            "algo": ["Bicubic", "Bilinear", "Nearest_Neighbour"],
+            "numberformat": ["NUMERIC", "LOWERCASEROMAN", "UPPERCASEROMAN"],
+            "align": ["right", "left", "center"],
+            "honourspaces": ["true", "false"],
+            "addquads": ["true", "false"],
             "text": ["_PAGELABEL", "_LASTPAGELABEL", "_PAGENUMBER", "_LASTPAGENUMBER"],
-            "transparent": ["true", "false"],
-            "type": ["string", "xml"],
-            "useStructure": ["true", "false"],
-            "version": ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6"]
+            "usestructure": ["true", "false"],
+            "encodeall": ["true", "false"]
         }
     },
     "cfpdfform": {
         "attributes": [["action", "source"], ["datafile", "destination", "fdf", "fdfData", "name", "overwrite", "overwritedata", "result", "xmldata"]],
         "attribute_values": {
             "action": ["populate", "read"],
-            "fdf": ["true", "false"],
             "overwrite": ["true", "false"],
             "overwritedata": ["true", "false"],
-            "xmldata": ["populate", "read"]
+            "xmldata": ["true", "false"],
+            "fdf": ["true", "false"]
         }
     },
     "cfpdfformparam": {
@@ -908,22 +988,23 @@
         "attributes": [["server"], ["action", "attachmentpath", "delimiter", "generateUniqueFileNames", "maxrows", "messagenumber", "name", "password", "port", "secure", "startrow", "timeout", "uid", "username"]],
         "attribute_values": {
             "action": ["getHeaderOnly", "getAll", "delete", "markRead"],
-            "generateUniqueFileNames": ["true", "false"]
+            "generateuniquefilenames": ["true", "false"],
+            "secure": ["true", "false"]
         }
     },
     "cfpresentation": {
         "attributes": [["title"], ["authpassword", "authuser", "autoplay", "backgroundColor", "control", "controlLocation", "destination", "directory", "format", "glowColor", "initialTab", "lightColor", "loop", "overwrite", "primaryColor", "proxyhost", "proxypassword", "proxyport", "proxyuser", "shadowColor", "showNotes", "showOutline", "showSearch", "textColor", "useragent"]],
         "attribute_values": {
-            "autoplay": ["false", "true"],
             "control": ["normal", "brief"],
-            "controlLocation": ["right", "left"],
-            "format": ["html", "ppt"],
-            "initialTab": ["outline", "search", "notes"],
-            "loop": ["false", "true"],
+            "controllocation": ["right", "left"],
+            "initialtab": ["outline", "search", "notes"],
             "overwrite": ["true", "false"],
-            "showNotes": ["true", "false"],
-            "showOutline": ["true", "false"],
-            "showSearch": ["true", "false"]
+            "shownotes": ["true", "false"],
+            "showoutline": ["true", "false"],
+            "showsearch": ["true", "false"],
+            "autoplay": ["true", "false"],
+            "loop": ["true", "false"],
+            "format": ["html", "ppt"]
         }
     },
     "cfpresentationslide": {
@@ -940,26 +1021,27 @@
         "attributes": [[], ["attributestruct", "color", "copies", "coverpage", "fidelity", "jobname", "orientation", "pages", "paper", "papersize", "password", "printer", "quality", "sides", "source", "type"]],
         "attribute_values": {
             "orientation": ["portrait", "landscape", "reverse-portrait", "reverse-landscape"],
-            "paper": ["na-letter", "na-legal", "iso-a4", "iso-a5", "iso-b4", "iso-b5", "jis-b4", "jis-b5"],
             "papersize": ["letter", "legal", "a4", "a5", "b4", "b5", "b4-jis", "b5-jis"],
             "quality": ["normal", "draft", "high"],
+            "type": ["pdf"],
             "sides": ["duplex", "one-sided", "tumble", "two-sided-long-edge", "two-sided-short-edge"],
-            "type": ["pdf"]
+            "paper": ["na-letter", "na-legal", "iso-a4", "iso-a5", "iso-b4", "iso-b5", "jis-b4", "jis-b5"],
+            "fidelity": ["true", "false"]
         }
     },
     "cfprocessingdirective": {
         "attributes": [[], ["pageEncoding", "suppressWhitespace"]],
         "attribute_values": {
-            "pageEncoding": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"],
-            "suppressWhitespace": ["true", "false"]
+            "suppresswhitespace": ["true", "false"],
+            "pageencoding": ["utf-8", "iso-8859-1", "windows-1252", "us-ascii", "shift_jis", "iso-2022-jp", "euc-jp", "euc-kr", "big5", "euc-cn", "utf-16"]
         }
     },
     "cfprocparam": {
-        "attributes": [["cfsqltype"], ["maxlength", "null", "scale", "type", "value", "variable"]],
+        "attributes": [["cfsqltype"], ["dbVarName", "maxlength", "null", "scale", "type", "value", "variable"]],
         "attribute_values": {
+            "type": ["in", "out", "inout"],
             "cfsqltype": ["CF_SQL_BIGINT", "CF_SQL_BIT", "CF_SQL_CHAR", "CF_SQL_BLOB", "CF_SQL_CLOB", "CF_SQL_DATE", "CF_SQL_DECIMAL", "CF_SQL_DOUBLE", "CF_SQL_FLOAT", "CF_SQL_IDSTAMP", "CF_SQL_INTEGER", "CF_SQL_LONGVARCHAR", "CF_SQL_MONEY", "CF_SQL_MONEY4", "CF_SQL_NUMERIC", "CF_SQL_REAL", "CF_SQL_REFCURSOR", "CF_SQL_SMALLINT", "CF_SQL_TIME", "CF_SQL_TIMESTAMP", "CF_SQL_TINYINT", "CF_SQL_VARCHAR"],
-            "null": ["true", "false"],
-            "type": ["in", "out", "inout"]
+            "null": ["true", "false"]
         }
     },
     "cfprocresult": {
@@ -969,57 +1051,74 @@
     "cfprogressbar": {
         "attributes": [["name"], ["autoDisplay", "bind", "duration", "height", "interval", "onError", "oncomplete", "style", "width"]],
         "attribute_values": {
-            "autoDisplay": ["true", "false"],
-            "style": ["bgcolor", "progresscolor", "textcolor"]
+            "style": ["bgcolor", "progresscolor", "textcolor"],
+            "autodisplay": ["True", "False"]
         }
     },
     "cfproperty": {
         "attributes": [["name"], ["cacheUse", "cascade", "cfc", "column", "constrained", "dbDefault", "default", "displayname", "elementcolumn", "elementtype", "fetch", "fieldtype", "fkcolumn", "formula", "generated", "generator", "getter", "hint", "index", "insert", "inverse", "inversejoincolumn", "joinColumn", "lazy", "length", "linkcatalog", "linkschema", "linktable", "mappedby", "missingRowIgnored", "notnull", "optimisticLock", "orderby", "ormType", "params", "persistent", "precision", "remotingFetch", "required", "scale", "selectkey", "sequence", "serializable", "setter", "singularname", "source", "sqlType", "structkeycolumn", "structkeytype", "table", "type", "unSavedValue", "unique", "uniquekey", "update", "validate", "validateParams", "where"]],
         "attribute_values": {
-            "cacheUse": ["read-only", "nonstrict-read-write", "read-write", "transactional"],
-            "cascade": ["all", "none", "save-update", "delete", "all-delete-orphan", "delete-orphan", "create", "merge", "lock", "refresh", "evict", "replicate"],
-            "elementtype": ["string", "character", "char", "short", "integer", "int", "long", "big_decimal", "float", "double", "boolean", "yes_no", "true_false", "text", "date", "timestamp", "binary", "serializable", "blob", "clob"],
-            "fetch": ["join", "select"],
-            "fieldtype": ["id", "column", "one-to-one", "one-to-many", "many-to-many", "many-to-one", "collection", "timestamp", "version"],
-            "generated": ["never", "insert", "always"],
-            "generator": ["increment", "identity", "sequence", "seqhilo", "uuid", "guid", "native", "assigned", "select", "foreign", "sequence-indentity"],
-            "lazy": ["extra"],
-            "ormType": ["string", "character", "char", "short", "integer", "int", "long", "big_decimal", "float", "double", "boolean", "yes_no", "true_false", "text", "date", "timestamp", "binary", "serializable", "blob", "clob"],
-            "remotingFetch": ["false", "true"],
-            "source": ["vm", "db"],
-            "structkeytype": ["string", "character", "char", "short", "integer", "int", "long", "big_decimal", "float", "double", "boolean", "yes_no", "true_false", "text", "date", "timestamp", "binary", "serializable", "blob", "clob"],
             "type": ["any", "array", "binary", "boolean", "date", "guid", "numeric", "query", "string", "struct", "uuid", "variablename"],
-            "unique": ["false", "true"],
-            "validate": ["string", "boolean", "integer", "numeric", "date", "time", "creditcard", "email", "eurodate", "ssn", "telephone", "UUID", "guid", "zipcode"]
+            "required": ["true", "false"],
+            "fieldtype": ["id", "column", "one-to-one", "one-to-many", "many-to-many", "many-to-one", "collection", "timestamp", "version"],
+            "ormtype": ["string", "character", "char", "short", "integer", "int", "long", "big_decimal", "float", "double", "boolean", "yes_no", "true_false", "text", "date", "timestamp", "binary", "serializable", "blob", "clob"],
+            "generator": ["increment", "identity", "sequence", "seqhilo", "uuid", "guid", "native", "assigned", "select", "foreign", "sequence-indentity"],
+            "setter": ["true", "false"],
+            "getter": ["true", "false"],
+            "source": ["vm", "db"],
+            "elementtype": ["string", "character", "char", "short", "integer", "int", "long", "big_decimal", "float", "double", "boolean", "yes_no", "true_false", "text", "date", "timestamp", "binary", "serializable", "blob", "clob"],
+            "structkeytype": ["string", "character", "char", "short", "integer", "int", "long", "big_decimal", "float", "double", "boolean", "yes_no", "true_false", "text", "date", "timestamp", "binary", "serializable", "blob", "clob"],
+            "missingrowignored": ["true", "false"],
+            "inverse": ["true", "false"],
+            "fetch": ["join", "select"],
+            "cascade": ["all", "none", "save-update", "delete", "all-delete-orphan", "delete-orphan", "create", "merge", "lock", "refresh", "evict", "replicate"],
+            "constrained": ["true", "false"],
+            "unique": ["true", "false"],
+            "notnull": ["true", "false"],
+            "insert": ["true", "false"],
+            "generated": ["never", "insert", "always"],
+            "lazy": ["extra"],
+            "optimisticlock": ["true", "false"],
+            "validate": ["string", "boolean", "integer", "numeric", "date", "time", "creditcard", "email", "eurodate", "ssn", "telephone", "UUID", "guid", "zipcode"],
+            "cacheuse": ["read-only", "nonstrict-read-write", "read-write", "transactional"],
+            "persistent": ["true", "false"],
+            "serializable": ["true", "false"],
+            "remotingfetch": ["true", "false"]
         }
     },
     "cfquery": {
         "attributes": [[], ["blockfactor", "cacheID", "cacheRegion", "cachedafter", "cachedwithin", "clientInfo", "columnkey", "datasource", "dbtype", "debug", "fetchClientInfo", "lazy", "maxrows", "name", "ormoptions", "password", "psq", "result", "returntype", "timeout", "timezone", "username"]],
         "attribute_values": {
             "dbtype": ["query", "hql"],
-            "debug": ["true", "false"]
+            "debug": ["true", "false"],
+            "fetchclientinfo": ["true", "false"],
+            "lazy": ["true", "false"],
+            "psq": ["true", "false"]
         }
     },
     "cfqueryparam": {
         "attributes": [[], ["cfsqltype", "list", "maxlength", "null", "scale", "separator", "value"]],
         "attribute_values": {
-            "cfsqltype": ["cf_sql_bigint", "cf_sql_bit", "cf_sql_char", "cf_sql_blob", "cf_sql_clob", "cf_sql_nclob", "cf_sql_date", "cf_sql_decimal", "cf_sql_double", "cf_sql_float", "cf_sql_idstamp", "cf_sql_integer", "cf_sql_longvarchar", "cf_sql_longnvarchar", "cf_sql_money", "cf_sql_money4", "cf_sql_nchar", "cf_sql_nvarchar", "cf_sql_numeric", "cf_sql_real", "cf_sql_refcursor", "cf_sql_smallint", "cf_sql_sqlxml", "cf_sql_time", "cf_sql_timestamp", "cf_sql_tinyint", "cf_sql_varchar", "bigint", "bit", "char", "blob", "clob", "nclob", "date", "decimal", "double", "float", "idstamp", "integer", "longvarchar", "longnvarchar", "money", "money4", "nchar", "nvarchar", "numeric", "real", "refcursor", "smallint", "sqlxml", "time", "timestamp", "tinyint", "varchar"]
+            "cfsqltype": ["cf_sql_bigint", "cf_sql_bit", "cf_sql_char", "cf_sql_blob", "cf_sql_clob", "cf_sql_nclob", "cf_sql_date", "cf_sql_decimal", "cf_sql_double", "cf_sql_float", "cf_sql_idstamp", "cf_sql_integer", "cf_sql_longvarchar", "cf_sql_longnvarchar", "cf_sql_money", "cf_sql_money4", "cf_sql_nchar", "cf_sql_nvarchar", "cf_sql_numeric", "cf_sql_real", "cf_sql_refcursor", "cf_sql_smallint", "cf_sql_sqlxml", "cf_sql_time", "cf_sql_timestamp", "cf_sql_tinyint", "cf_sql_varchar", "bigint", "bit", "char", "blob", "clob", "nclob", "date", "decimal", "double", "float", "idstamp", "integer", "longvarchar", "longnvarchar", "money", "money4", "nchar", "nvarchar", "numeric", "real", "refcursor", "smallint", "sqlxml", "time", "timestamp", "tinyint", "varchar"],
+            "null": ["true", "false"],
+            "list": ["true", "false"]
         }
     },
     "cfregistry": {
         "attributes": [["action"], ["branch", "directory", "entry", "mode", "name", "newdirectory", "recurse", "registryversion", "sort", "type", "value", "variable"]],
         "attribute_values": {
             "action": ["getAll", "get", "set", "delete"],
+            "type": ["String", "dWord", "key", "Any"],
             "sort": ["entry asc", "entry desc", "type asc", "type desc", "value asc", "value desc"],
-            "type": ["String", "dWord", "key", "Any"]
+            "recurse": ["true", "false"]
         }
     },
     "cfreport": {
         "attributes": [[], ["datasource", "encryption", "filename", "format", "formula", "name", "orderby", "overwrite", "ownerpassword", "password", "permissions", "query", "report", "resourceTimespan", "style", "template", "timeout", "type", "username", "userpassword"]],
         "attribute_values": {
-            "encryption": ["128-bit", "40-bit", "none"],
             "format": ["PDF", "FlashPaper", "Excel", "RTF", "HTML", "XML"],
             "overwrite": ["true", "false"],
+            "encryption": ["128-bit", "40-bit", "none"],
             "permissions": ["AllowPrinting,  AllowCopy,  AllowScreenReaders", "AllowPrinting", "AllowModifyContents", "AllowCopy", "AllowModifyAnnotations", "AllowFillIn", "AllowScreenReaders", "AllowAssembly", "AllowDegradedPrinting", "AllowPrinting,  AllowModifyContents,  AllowCopy,  AllowModifyAnnotations,  AllowFillIn,  AllowScreenReaders,  AllowAssembly,  AllowDegradedPrinting"],
             "type": ["standard", "netscape", "microsoft"]
         }
@@ -1045,14 +1144,21 @@
         "attribute_values": {}
     },
     "cfschedule": {
-        "attributes": [["action", "result (CF10+)/returnvariable (lucee)", "task"], ["URL", "autodelete", "cluster", "cronTime", "endDate", "endTime", "eventHandler", "exclude", "file", "group", "interval", "mode", "onComplete", "onException", "onMisfire", "operation", "overwrite", "password", "path", "port", "priority", "proxypassword", "proxyport", "proxyserver", "proxyuser", "publish", "readonly", "repeat", "requesttimeout", "resolveurl", "retryCount", "startdate", "starttime", "unique", "username"]],
+        "attributes": [["action"], ["URL", "autodelete", "cluster", "cronTime", "endDate", "endTime", "eventHandler", "exclude", "file", "group", "interval", "mode", "onComplete", "onException", "onMisfire", "operation", "overwrite", "password", "path", "port", "priority", "proxypassword", "proxyport", "proxyserver", "proxyuser", "publish", "readonly", "repeat", "requesttimeout", "resolveurl", "result (CF10+)/returnvariable (lucee)", "retryCount", "startdate", "starttime", "task", "unique", "username"]],
         "attribute_values": {
-            "action": ["delete", "update", "run", "pause", "resume", "list", "pauseall", "resumeall"],
+            "action": ["delete", "update", "run", "pause", "resume", "list", "pauseall", "resumeall", "create", "modify"],
+            "publish": ["true", "false"],
             "interval": ["once", "daily", "weekly", "monthly"],
+            "resolveurl": ["true", "false"],
             "mode": ["application", "server"],
-            "onException": ["refire", "pause", "invokeHandler"],
-            "onMisfire": ["fire_now", "invokeHandler"],
-            "retryCount": ["0", "1", "2", "3"]
+            "onexception": ["refire", "pause", "invokeHandler"],
+            "onmisfire": ["fire_now", "invokeHandler"],
+            "retrycount": ["0", "1", "2", "3"],
+            "cluster": ["true", "false"],
+            "overwrite": ["true", "false"],
+            "unique": ["true", "false"],
+            "autodelete": ["true", "false"],
+            "readonly": ["true", "false"]
         }
     },
     "cfscript": {
@@ -1062,14 +1168,20 @@
     "cfsearch": {
         "attributes": [["collection", "name"], ["category", "categorytree", "contextBytes", "contextHighlightBegin", "contextHighlightEnd", "contextPassages", "criteria", "language", "maxrows", "previousCriteria", "startrow", "status", "suggestions", "type"]],
         "attribute_values": {
-            "suggestions": ["always", "never"],
-            "type": ["simple", "explicit", "internet", "internet_basic", "natural", "standard", "dismax", "Standard", "DisMax"]
+            "type": ["simple", "explicit", "internet", "internet_basic", "natural", "standard", "dismax", "Standard", "DisMax"],
+            "suggestions": ["always", "never"]
         }
     },
     "cfselect": {
         "attributes": [["name"], ["bind", "bindAttribute", "bindOnLoad", "display", "editable", "enabled", "group", "height", "id", "label", "message", "multiple", "onbinderror", "onchange", "onclick", "onerror", "onkeydown", "onkeyup", "onmousedown", "onmouseup", "passthrough", "query", "queryposition", "required", "selected", "size", "sourceForTooltip", "style", "tooltip", "value", "visible", "width"]],
         "attribute_values": {
-            "queryposition": ["above", "below"]
+            "bindonload": ["true", "false"],
+            "editable": ["true", "false"],
+            "required": ["true", "false"],
+            "multiple": ["true", "false"],
+            "queryposition": ["above", "below"],
+            "enabled": ["true", "false"],
+            "visible": ["true", "false"]
         }
     },
     "cfservlet": {
@@ -1109,18 +1221,26 @@
         "attributes": [["name"], ["align", "bgcolor", "bold", "clickToChange", "font", "fontsize", "format", "height", "hspace", "increment", "italic", "label", "lookandfeel", "max", "message", "min", "notsupported", "onChange", "onDrag", "onError", "onvalidate", "range", "scale", "textcolor", "tip", "value", "vertical", "vspace", "width"]],
         "attribute_values": {
             "align": ["top", "left", "bottom", "baseline", "texttop", "absbottom", "middle", "absmiddle", "right"],
-            "bgcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "gray", "white", "lightgray", "yellow"],
-            "font": ["arial", "times", "courier", "arialunicodeMS"],
-            "format": ["html", "applet"],
             "lookandfeel": ["motif", "windows", "metal"],
-            "textcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "gray", "white", "lightgray", "yellow"]
+            "vertical": ["true", "false"],
+            "bgcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "gray", "white", "lightgray", "yellow"],
+            "textcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "gray", "white", "lightgray", "yellow"],
+            "font": ["arial", "times", "courier", "arialunicodeMS"],
+            "italic": ["true", "false"],
+            "bold": ["true", "false"],
+            "clicktochange": ["true", "false"],
+            "tip": ["true", "false"],
+            "format": ["html", "applet"]
         }
     },
     "cfspreadsheet": {
         "attributes": [["action"], ["autosize", "columnnames", "columns", "excludeHeaderRow", "filename", "format", "headerrow", "name", "overwrite", "password", "query", "rows", "sheet", "sheetname", "src"]],
         "attribute_values": {
             "action": ["read", "update", "write"],
-            "format": ["html", "csv"]
+            "autosize": ["true", "false"],
+            "excludeheaderrow": ["true", "false"],
+            "format": ["html", "csv"],
+            "overwrite": ["true", "false"]
         }
     },
     "cfsprydataset": {
@@ -1151,30 +1271,31 @@
     "cftextarea": {
         "attributes": [["name"], ["basepath", "bind", "bindattribute", "bindonload", "disabled", "enabled", "fontformats", "fontnames", "fontsizes", "height", "html", "label", "maxlength", "message", "onbinderror", "onchange", "onclick", "onerror", "onkeydown", "onkeyup", "onmousedown", "onmouseup", "onvalidate", "pattern", "range", "required", "richtext", "secureUpload", "skin", "sourcefortooltip", "style", "stylesxml", "templatesxml", "toolbar", "toolbaronfocus", "tooltip", "validate", "validateat", "value", "visible", "width", "wrap"]],
         "attribute_values": {
-            "bindonload": ["true", "false"],
+            "required": ["true", "false"],
+            "html": ["true", "false"],
+            "validateat": ["onSubmit", "onServer", "onBlur"],
             "disabled": ["true", "false"],
             "enabled": ["true", "false"],
-            "html": ["true", "false"],
-            "required": ["true", "false"],
-            "richtext": ["true", "false"],
-            "secureUpload": ["true", "false"],
-            "skin": ["default", "silver", "office2003"],
-            "validateat": ["onSubmit", "onServer", "onBlur"],
             "visible": ["true", "false"],
-            "wrap": ["hard", "off", "physical", "virtual", "soft"]
+            "bindonload": ["true", "false"],
+            "richtext": ["true", "false"],
+            "skin": ["default", "silver", "office2003"],
+            "wrap": ["hard", "off", "physical", "virtual", "soft"],
+            "toolbaronfocus": ["true", "false"],
+            "secureupload": ["true", "false"]
         }
     },
     "cftextinput": {
         "attributes": [["name"], ["align", "bgcolor", "bold", "font", "fontsize", "height", "hspace", "italic", "label", "maxlength", "message", "notsupported", "onerror", "onvalidate", "pattern", "range", "required", "size", "textcolor", "validate", "value", "vspace", "width"]],
         "attribute_values": {
-            "align": ["top", "left", "bottom", "baseline", "texttop", "absbottom", "middle", "absmiddle", "right"],
-            "bgcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "gray", "white", "lightgray", "yellow"],
-            "bold": ["true", "false"],
+            "required": ["true", "false"],
+            "validate": ["date", "eurodate", "time", "float", "integer", "telephone", "zipcode", "creditcard", "social_security_number", "regular_expression"],
             "font": ["arial", "times", "courier", "arialunicodeMS"],
             "italic": ["true", "false"],
-            "required": ["true", "false"],
-            "textcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "gray", "white", "lightgray", "yellow"],
-            "validate": ["date", "eurodate", "time", "float", "integer", "telephone", "zipcode", "creditcard", "social_security_number", "regular_expression"]
+            "bold": ["true", "false"],
+            "align": ["top", "left", "bottom", "baseline", "texttop", "absbottom", "middle", "absmiddle", "right"],
+            "bgcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "gray", "white", "lightgray", "yellow"],
+            "textcolor": ["black", "red", "blue", "magenta", "cyan", "orange", "darkgray", "pink", "gray", "white", "lightgray", "yellow"]
         }
     },
     "cfthread": {
@@ -1203,6 +1324,8 @@
     "cftrace": {
         "attributes": [[], ["abort", "category", "inline", "text", "type", "var"]],
         "attribute_values": {
+            "abort": ["true", "false"],
+            "inline": ["true", "false"],
             "type": ["information", "warning", "error", "fatal information"]
         }
     },
@@ -1217,29 +1340,29 @@
     "cftree": {
         "attributes": [["name"], ["align", "appendkey", "bold", "border", "cache", "completepath", "delimiter", "enabled", "font", "fontsize", "format", "height", "highlighthref", "hscroll", "hspace", "italic", "lookandfeel", "message", "notsupported", "onblur", "onchange", "onerror", "onfocus", "onvalidate", "required", "style", "tooltip", "visible", "vscroll", "vspace", "width"]],
         "attribute_values": {
-            "align": ["top", "left", "bottom", "baseline", "texttop", "absbottom", "middle", "absmiddle", "right"],
-            "appendkey": ["true", "false"],
-            "bold": ["true", "false"],
-            "border": ["true", "false"],
-            "cache": ["true", "false"],
-            "completepath": ["true", "false"],
-            "enabled": ["true", "false"],
-            "font": ["arial", "times", "courier", "arialunicodeMS"],
             "format": ["applet", "flash", "html", "object", "xml"],
-            "highlighthref": ["true", "false"],
-            "hscroll": ["true", "false"],
-            "italic": ["true", "false"],
-            "lookandfeel": ["motif", "windows", "metal"],
             "required": ["true", "false"],
+            "completepath": ["true", "false"],
+            "appendkey": ["true", "false"],
+            "highlighthref": ["true", "false"],
+            "lookandfeel": ["motif", "windows", "metal"],
+            "font": ["arial", "times", "courier", "arialunicodeMS"],
+            "italic": ["true", "false"],
+            "bold": ["true", "false"],
+            "align": ["top", "left", "bottom", "baseline", "texttop", "absbottom", "middle", "absmiddle", "right"],
+            "border": ["true", "false"],
+            "hscroll": ["true", "false"],
+            "vscroll": ["true", "false"],
+            "enabled": ["true", "false"],
             "visible": ["true", "false"],
-            "vscroll": ["true", "false"]
+            "cache": ["true", "false"]
         }
     },
     "cftreeitem": {
         "attributes": [[], ["bind", "display", "expand", "href", "img", "imgopen", "onbinderror", "parent", "query", "queryAsRoot", "target", "value"]],
         "attribute_values": {
-            "expand": ["true", "false"],
-            "img": ["cd", "computer", "document", "element", "folder", "floppy", "fixed", "remote"]
+            "img": ["cd", "computer", "document", "element", "folder", "floppy", "fixed", "remote"],
+            "expand": ["true", "false"]
         }
     },
     "cftry": {
@@ -1253,24 +1376,42 @@
     "cfwddx": {
         "attributes": [["action", "input"], ["output", "toplevelvariable", "usetimezoneinfo", "validate"]],
         "attribute_values": {
-            "action": ["cfml2wddx", "wddx2cfml", "cfml2js", "wddx2js"]
+            "action": ["cfml2wddx", "wddx2cfml", "cfml2js", "wddx2js"],
+            "usetimezoneinfo": ["true", "false"],
+            "validate": ["true", "false"]
         }
     },
     "cfwebsocket": {
         "attributes": [["name", "onMessage"], ["onClose", "onError", "onOpen", "secure", "subscribeTo", "usecfAuth"]],
-        "attribute_values": {}
+        "attribute_values": {
+            "usecfauth": ["true", "false"],
+            "secure": ["true", "false"]
+        }
     },
     "cfwhile": {
         "attributes": [[], ["condition", "label"]],
-        "attribute_values": {}
+        "attribute_values": {
+            "condition": ["true", "false"]
+        }
     },
     "cfwindow": {
         "attributes": [[], ["bodyStyle", "center", "closable", "destroyOnClose", "draggable", "headerStyle", "height", "initShow", "minHeight", "minWidth", "modal", "name", "onBindError", "refreshonshow", "resizable", "source", "title", "width", "x", "y"]],
-        "attribute_values": {}
+        "attribute_values": {
+            "center": ["true", "false"],
+            "closable": ["true", "false"],
+            "draggable": ["true", "false"],
+            "initshow": ["true", "false"],
+            "modal": ["true", "false"],
+            "resizable": ["true", "false"],
+            "refreshonshow": ["true", "false"],
+            "destroyonclose": ["true", "false"]
+        }
     },
     "cfxml": {
         "attributes": [["variable"], ["casesensitive"]],
-        "attribute_values": {}
+        "attribute_values": {
+            "casesensitive": ["true", "false"]
+        }
     },
     "cfzip": {
         "attributes": [[], ["action", "charset", "destination", "entrypath", "file", "filter", "name", "overwrite", "password", "prefix", "recurse", "showDirectory", "source", "storePath", "variable"]],
@@ -1279,8 +1420,8 @@
             "charset": ["JIS", "RFC1345", "UTF-16"],
             "overwrite": ["true", "false"],
             "recurse": ["true", "false"],
-            "showDirectory": ["true", "false"],
-            "storePath": ["true", "false"]
+            "showdirectory": ["true", "false"],
+            "storepath": ["true", "false"]
         }
     },
     "cfzipparam": {
