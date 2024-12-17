@@ -1,0 +1,13 @@
+CFML v0.31.0 Changelog:
+
+- Updated syntax highlighting to work with the updated features in the Sublime
+  Text 4 syntax highlighting engine, as well as the latest default syntax
+  highlighting files released in stable build 4186
+
+  Please note: these changes are significant and thus might introduce syntax
+  highlighting errors, but the latest JavaScript syntax file bundled with
+  Sublime Text causes the CFML syntax to break completely, so I decided to
+  release this now to allow CFML syntax highlighting to continue to
+  function.
+
+PLEASE RESTART SUBLIME TEXT TO ENSURE THESE CHANGES ARE LOADED CORRECTLY, THANKS!
