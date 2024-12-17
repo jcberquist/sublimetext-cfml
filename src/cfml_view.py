@@ -247,7 +247,7 @@ class CfmlView:
 
     def get_function_call_params(self, pt):
         if self.view.match_selector(
-            pt, "source.cfml.script meta.function-call.parameters"
+            pt, "source.cfml.script meta.function-call.arguments"
         ):
             return CfmlFunctionCallParams(self, pt)
         return None

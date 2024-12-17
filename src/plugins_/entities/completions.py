@@ -22,7 +22,7 @@ def get_script_completions(cfml_view):
 
     if cfml_view.view.match_selector(
         cfml_view.position,
-        "meta.function-call.support.entity.cfml meta.function-call.parameters.support.cfml string.quoted",
+        "meta.function-call.support.entity.cfml meta.function-call.arguments.support.cfml string.quoted",
     ):
         if is_entityname_param(cfml_view.function_call_params):
             completions = projects[cfml_view.project_name]

@@ -57,7 +57,7 @@ def get_script_completions(cfml_view):
 
     if cfml_view.view.match_selector(
         cfml_view.position,
-        "meta.function-call.parameters.cfml,meta.function-call.parameters.method.cfml",
+        "meta.function-call.arguments.cfml,meta.function-call.arguments.method.cfml",
     ):
         completion_list.append(
             sublime.CompletionItem(
@@ -70,7 +70,7 @@ def get_script_completions(cfml_view):
         )
 
     if cfml_view.view.match_selector(
-        cfml_view.position, "source.cfml.script meta.function-call.parameters"
+        cfml_view.position, "source.cfml.script meta.function-call.arguments"
     ):
         param_completions = get_param_completions(cfml_view)
         if param_completions:

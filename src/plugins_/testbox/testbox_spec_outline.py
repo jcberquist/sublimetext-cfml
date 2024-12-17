@@ -13,8 +13,8 @@ testbox_function_names = [
     "then",
 ]
 func_call_scope = "meta.function-call.cfml variable.function.cfml"
-string_scope = "meta.function-call.cfml meta.function-call.parameters.cfml meta.string"
-func_param_name_scope = "meta.function-call.cfml meta.function-call.parameters.cfml entity.other.function-parameter.cfml"
+string_scope = "meta.function-call.cfml meta.function-call.arguments.cfml meta.string"
+func_param_name_scope = "meta.function-call.cfml meta.function-call.arguments.cfml entity.other.function-parameter.cfml"
 
 
 class TestboxSpecOutlineCommand(sublime_plugin.TextCommand):

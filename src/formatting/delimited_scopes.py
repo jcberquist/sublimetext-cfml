@@ -22,7 +22,7 @@ DELIMITED_SCOPES = {
         "separator": "punctuation.separator.parameter.function.cfml",
     },
     "function_call": {
-        "scope": "meta.function-call.parameters",
+        "scope": "meta.function-call.arguments",
         "start": "punctuation.section.group.begin.cfml",
         "end": "punctuation.section.group.end.cfml",
         "separator": "punctuation.separator.function-call",
