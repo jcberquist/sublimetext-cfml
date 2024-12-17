@@ -80,6 +80,8 @@ class CustomHtmlTagCompletions(html_completions.HtmlTagCompletions):
     """
     There is no text.html scope in <cffunction> bodies, so this
     allows the HTML completions to still function there
+
+    uses Default Packages HtmlTagCompletions code
     """
 
     def on_query_completions(self, view, prefix, locations):
@@ -91,9 +93,28 @@ class CustomHtmlTagCompletions(html_completions.HtmlTagCompletions):
         if not view.match_selector(locations[0], selector):
             return None
 
-        # check if we are inside a tag
-        is_inside_tag = view.match_selector(
-            locations[0], "meta.tag - punctuation.definition.tag.begin"
-        )
+        pt = locations[0] - len(prefix) - 1
+        ch = view.substr(pt)
 
-        return self.get_completions(view, prefix, locations, is_inside_tag)
+        if ch == '&':
+            return self.entity_completions
+
+        if ch == '<':
+            # If the caret is within tag, complete only tag names.
+            # see: https://github.com/sublimehq/sublime_text/issues/3508
+            if view.match_selector(locations[0], "meta.tag"):
+                return self.tag_name_completions
+            return self.tag_completions
+
+        # Note: Exclude opening punctuation to enable abbreviations
+        #       if the caret is located directly in front of a html tag.
+        if view.match_selector(locations[0], "meta.function.body.tag.cfml meta.tag - meta.string - punctuation.definition.tag.begin"):
+            if ch in ' \f\n\t':
+                return self.attribute_completions(view, locations[0], prefix)
+            return None
+
+        if view.match_selector(locations[0], "meta.function.body.tag.cfml - meta.tag, meta.function.body.tag.cfml punctuation.definition.tag.begin"):
+            # Expand tag and attribute abbreviations
+            return self.expand_tag_attributes(view, locations) or self.tag_abbreviations
+
+        return None

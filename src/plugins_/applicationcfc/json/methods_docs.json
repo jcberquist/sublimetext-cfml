@@ -64,24 +64,24 @@
 		]
 	},
 	"onerror": {
-		"header": "<span class=\"entity-name-function\">onError()",
-		"body": "This method is triggered when a uncaught exception occurs in this application context. As arguments you get the exception (cfcatch block) and the eventNam</span>e.",
+		"header": "<span class=\"entity-name-function\">onError</span>()",
+		"body": "This method is triggered when a uncaught exception occurs in this application context. As arguments you get the exception (cfcatch block) and the eventName.",
 		"links": [
 			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/onerror.html", "text": "helpx.adobe.com onerror.html"}
 		]
 	},
 	"onabort": {
-		"header": "<span class=\"entity-name-function\">onAbort()",
-		"body": "This method is triggered when a request is ended with help of the tag <cfabort</span>>.",
+		"header": "<span class=\"entity-name-function\">onAbort</span>()",
+		"body": "This method is triggered when a request is ended with help of the tag <cfabort>.",
 		"links": [
 			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/onabort.html", "text": "helpx.adobe.com onabort.html"}
 		]
 	},
 	"ondebug": {
-		"header": "<span class=\"entity-name-function\">onDebug()",
-		"body": "This method is triggered when debugging is enabled for this request</span>t.",
+		"header": "<span class=\"entity-name-function\">onDebug</span>()",
+		"body": "This method is triggered when debugging is enabled for this request.",
 		"links": [
 			{ "href": "http://docs.lucee.org/guides/cookbooks/application-context-basic.html", "text": "docs.lucee.org/guides/cookbooks/application-context-basic.html"},
 			{ "href": "https://helpx.adobe.com/coldfusion/cfml-reference/application-cfc-reference/ondebug.html", "text": "helpx.adobe.com ondebug.html"}
