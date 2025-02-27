@@ -789,6 +789,7 @@ contexts:
     - include: constructor
     - include: prefix-operators
     - include: special-name
+    - include: cfml-scopes
     - include: literal-number
     - include: function-expression
     - include: struct-literal
@@ -1560,7 +1561,6 @@ contexts:
       set: function-call
     - match: (?i)(?=arraynew{{nothing}}\[)
       set: function-call
-    - include: cfml-scopes
     - include: literal-variable-base
 
   literal-variable-base:
@@ -1645,7 +1645,7 @@ contexts:
       pop: 1
 
   tag-in-script:
-    - match: (?i)\bproperty\b(?=(\s+{{identifier}}\b|\s*[\n\{]))
+    - match: (?i)\bproperty\b(?=(\s+{{dot_path_identifier}}\b|\s*[\n\{]))
       scope: entity.name.tag.script.cfml
       push:
         - expect-semicolon
@@ -1682,7 +1682,7 @@ contexts:
     - include: scope:embedding.cfml#tag-generic-attribute
 
   tag-in-script-property-inline:
-    - match: ({{identifier}})\s+({{identifier}}\b)(?!\s*=)
+    - match: ({{dot_path_identifier}})\s+({{identifier}}\b)(?!\s*=)
       captures:
         1: storage.type.cfml
         2: meta.string.unquoted.cfml string.unquoted.cfml meta.tag.property.name.cfml

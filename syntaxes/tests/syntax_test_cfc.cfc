@@ -48,6 +48,10 @@ default="string";
 // <- embedding.cfml source.cfml.script meta.class.body.cfml meta.tag.script.cfml entity.other.attribute-name.cfml
 //       ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.tag.script.cfml string.quoted.double.cfml
 
+property cfc.models.Dog Dog;
+//       ^^^^^^^^^^^^^^ storage.type.cfml
+//                      ^^^ source.cfml.script meta.class.body.cfml meta.tag.script.cfml meta.tag.property.cfml meta.tag.property.name.cfml
+
   public string function foo() {
 // <- embedding.cfml source.cfml.script meta.class.body.cfml - meta.function.declaration.cfml
 //^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.declaration.cfml

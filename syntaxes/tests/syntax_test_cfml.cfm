@@ -89,8 +89,8 @@
 <!---                       ^^^^^^^^ source.sql source.cfml.script meta.property.cfml --->
 <!---                                                 ^^^^ source.sql source.cfml.script meta.property.cfml --->
 <cfquery>BULK INSERT VAR1 FROM 'C:\#path#'</cfquery>
-<!---                             ^ source.sql string.quoted.single.sql constant.character.escape.sql  --->
-<!---                              ^ source.sql string.quoted.single.sql punctuation.definition.template-expression.begin.cfml --->
+<!---                             ^ source.sql constant.character.escape.sql  --->
+<!---                              ^ source.sql punctuation.definition.template-expression.begin.cfml --->
 
 <cfmail>
 #variable#

@@ -6,7 +6,7 @@ thisQuery = queryExecute("SELECT * from myTable WHERE myColumn = 1", "SELECT * f
 thisQuery = queryExecute(params = {}, sql = "SELECT * FROM myTable");
 <!---                                        ^^^^^^^^^^^^^^^^^^^^^ source.sql -string.quoted.double.cfml --->
 var test = "FROM myTable WHERE test = '#obj.property#'"
-<!---       ^^^^ meta.string.quoted.double.cfml source.sql keyword.other.DML.sql --->
+<!---       ^^^^ meta.string.quoted.double.cfml source.sql keyword.other.dml.sql --->
 <!---                                       ^^^^^^^^ source.cfml.script source.sql source.cfml.script meta.property.cfml --->
 
 sql = "select *";
