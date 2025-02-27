@@ -63,7 +63,7 @@ def cached_method_preview(view, cache, function_file_path, function_name):
             file_string = f.read()
         cfml_minihtml_view = view.window().create_output_panel("cfml_minihtml")
         cfml_minihtml_view.assign_syntax(
-            "Packages/" + utils.get_plugin_name() + "/syntaxes/cfml.sublime-syntax"
+            "Packages/" + utils.get_plugin_name() + "/syntaxes/CFML.sublime-syntax"
         )
         cfml_minihtml_view.run_command(
             "append", {"characters": file_string, "force": True, "scroll_to_end": True}

@@ -24,9 +24,10 @@ def get_project_list():
 
 
 def get_project_name(view):
-    project_file_name = view.window().project_file_name()
-    if project_file_name:
-        return normalize_path(project_file_name)
+    if view.window():
+        project_file_name = view.window().project_file_name()
+        if project_file_name:
+            return normalize_path(project_file_name)
     return None
 
 
