@@ -849,7 +849,7 @@ contexts:
         (?=
           !=
         | [-+*/%><=&|^\[(;,.:?]
-        | in\b
+        | (?:and|or|xor|eqv|imp|mod|in|eq|neq|is|lt|le|gt|ge|contains)\b
         )
       pop: 1
     - match: (?=\S)
