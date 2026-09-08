@@ -435,6 +435,7 @@ contexts:
             - meta_content_scope: meta.scope.cfoutput.cfml text.html.cfml
             - include: tag-end-pop
             - include: template-expression-html
+        - include: tag-generic-attribute
 
   cfmail:
     - match: (?i)(<)(cfmail)\b
