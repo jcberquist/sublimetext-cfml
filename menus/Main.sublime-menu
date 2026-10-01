@@ -39,14 +39,6 @@
                                     "contents": "[\n\t$0\n]\n"
                                 },
                                 "caption": "Mouse Bindings"
-                            },
-                            {
-                                "command": "cfml_edit_settings",
-                                "args": {
-                                    "file": "${packages}/{cfml_package_name}/settings/cfml_format.sublime-settings",
-                                    "default": "{\n\t$0\n}\n"
-                                },
-                                "caption": "Format Settings"
                             }
                         ]
                     }

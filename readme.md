@@ -26,7 +26,6 @@ Special thanks to [@foundeo](https://github.com/foundeo) and [cfdocs.org](https:
 - [Default Key Bindings](#default-key-bindings)
 - [CFC Indexing and Dot Paths](#cfc-indexing-and-dot-paths)
 - [Custom Tags](#custom-tags)
-- [Code Formatting](#code-formatting)
 - [Custom Coloring for CFML Tags](#custom-coloring-for-cfml-tags)
 - [Controller/View Toggle](#controllerview-toggle)
 - [CommandBox](#commandbox)
@@ -205,15 +204,6 @@ Once this is done, `page` will be offered as a custom tag prefix completion, and
 You can use the <kbd>F1</kbd> documentation command to get some minimal documentation about that custom tag, and <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> can be used to jump to the custom tag file.
 
 The indexer will search for `thistag.executionmode is/eq/== "end"/'end'` (case insensitive) or `<cfcase value="end"/'end'>` (case insensitive) in custom tag files in order to determine whether or not to auto close the custom tag.
-
-### Code Formatting
-
-This package includes a CFScript code formatter. You can view the default settings for this command via the menu: `Package Settings -> CFML -> Format Settings`, or from the command palette via `CFML: Format CFScript - Settings`. Please view these settings to see the various formatting options available. These settings can be overridden in your user format settings file.
-
-There is a key binding included that runs the formatting command: <kbd>SHIFT</kbd>+<kbd>ALT</kbd>+<kbd>F</kbd>. By default this will format only the current method when in a component - though if any text is selected it formats that text, and in `.cfm` files it formats all CFScript in the file. To format an entire component the `CFML: Format CFScript` command palette command can be used, or you can override the default key binding with a custom one in your user key bindings - pass in the argument `"current_method": false` to bind this to full component formatting. (You can look in the `inputmaps` folder at the `.sublime-keymap` files to see the default key bindings - there is a commented out "args" object for this binding, so that you can simply copy the binding to your user key bindings and then uncomment the "args" object.)
-
-*PLEASE NOTE:*
-The reason formatting is limited by default to the current method in components is that the formatting is CPU intensive and is currently run on the main thread, meaning Sublime Text will "freeze" while formatting is ongoing. On small blocks of code, this should be very quick, but on a large file it can take some time.
 
 ### Custom Coloring for CFML Tags
 

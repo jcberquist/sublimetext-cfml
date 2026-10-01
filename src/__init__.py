@@ -8,7 +8,6 @@ from . import inline_documentation
 from . import method_preview
 from . import utils
 from . import commands
-from . import formatting
 
 command_list = []
 

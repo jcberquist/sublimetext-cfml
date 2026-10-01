@@ -129,14 +129,6 @@
     ]
   },
   {
-    "keys": ["shift+alt+f"],
-    "command": "cfml_format",
-    // "args": {"current_method": false},
-    "context": [
-      {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
-    ]
-  },
-  {
     "keys": [","],
     "command": "cfml_update_completion_doc",
     "context": [
