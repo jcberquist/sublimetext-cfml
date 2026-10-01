@@ -7,10 +7,16 @@
     <string>source.cfml.script</string>
     <key>settings</key>
     <dict>
+        <!--
+            The `<cfscript>` and `</cfscript>` alternatives are here because the
+            opening tag line ends and the closing tag line starts in the script
+            scope, so typing Enter or `</cfscript>` uses these rules; see
+            cfml-indent.tmPreferences for leaving tag bodies unindented.
+        -->
         <key>decreaseIndentPattern</key>
-        <string>^(.*\*/)?\s*\}.*$</string>
+        <string>^(.*\*/)?\s*[}\])].*$|^\s*&lt;/(?i:cfscript)\s*&gt;</string>
         <key>increaseIndentPattern</key>
-        <string>^.*\{[^}"']*$</string>
+        <string>^.*(\{[^}"']*|\[[^\]"']*|\([^)"']*)$|^\s*&lt;(?i:cfscript)\b[^&gt;]*&gt;\s*$</string>
 
         <key>bracketIndentNextLinePattern</key>
         <string>(?x)

@@ -7,11 +7,21 @@
     <string>embedding.cfml source.cfml -source.cfml.script, embedding.cfml text.html</string>
     <key>settings</key>
     <dict>
+        <!--
+            `<cfscript>` and `<script>` bodies are indented one level, as in the
+            HTML syntax and Prettier. To leave them at the tag's indent, override
+            this file and cfscript-indent.tmPreferences:
+            - here, change `(?!html)` in both dedent patterns to
+              `(?!(?i:html|cfscript|script)\b)` and add `cfscript` and `script`
+              to the tag lists in both indent patterns
+            - in cfscript-indent, remove the `<cfscript>` and `</cfscript>`
+              alternatives
+        -->
         <key>decreaseIndentPattern</key>
         <string><![CDATA[(?x)
             ^\s*+
             (
-                    [^<>]*+</(?!html|cfscript)[A-Za-z0-9-]+\b[^>]*>
+                    [^<>]*+</(?!html)[A-Za-z0-9-]+\b[^>]*>
                 |   ---?>
                 |   \}
                 |   [^<>]*+<cfelse[^>]*>
@@ -21,7 +31,7 @@
         <string><![CDATA[(?x)
             ^\s*+
             (
-                    [^<>]*+</(?!html|cfscript)[A-Za-z0-9-]+\b[^>]*>
+                    [^<>]*+</(?!html)[A-Za-z0-9-]+\b[^>]*>
                 |   ---?>
                 |   \}
                 |   [^<>]*+<cfelse[^>]*>
