@@ -21,7 +21,7 @@
 <cfoutput>
 <!---     ^ embedding.cfml text.html.cfml meta.scope.cfoutput.cfml text.html.cfml --->
 #now()#
-<!--- <- embedding.cfml text.html.cfml meta.scope.cfoutput.cfml text.html.cfml punctuation.definition.template-expression.begin.cfml --->
+<!--- <- embedding.cfml text.html.cfml meta.scope.cfoutput.cfml text.html.cfml punctuation.section.interpolation.begin.cfml --->
   <!--- <- embedding.cfml text.html.cfml meta.scope.cfoutput.cfml text.html.cfml source.cfml.script support.function.cfml --->
 
       &##123;
@@ -90,7 +90,7 @@
 <!---                                                 ^^^^ source.sql source.cfml.script meta.property.cfml --->
 <cfquery>BULK INSERT VAR1 FROM 'C:\#path#'</cfquery>
 <!---                             ^ source.sql constant.character.escape.sql  --->
-<!---                              ^ source.sql punctuation.definition.template-expression.begin.cfml --->
+<!---                              ^ source.sql punctuation.section.interpolation.begin.cfml --->
 
 <cfmail>
 #variable#
@@ -98,7 +98,7 @@
 </cfmail>
 
 <cfset "string" and #string#>
-<!---               ^ embedding.cfml text.html.cfml meta.tag.cfml punctuation.definition.template-expression.begin.cfml  --->
+<!---               ^ embedding.cfml text.html.cfml meta.tag.cfml punctuation.section.interpolation.begin.cfml  --->
 
 <cfscript>
 foo = 'hello world';
@@ -130,8 +130,55 @@ myFunc().addVal(10);
 <!---          ^ embedding.cfml source.cfml.script meta.function-call.method.cfml meta.function-call.arguments.method.cfml punctuation.section.group.begin.cfml --->
 
 "string" and #string#;
-<!---        ^ embedding.cfml text.html.cfml punctuation.definition.template-expression.begin.cfml  --->
+<!---        ^ embedding.cfml text.html.cfml punctuation.section.interpolation.begin.cfml  --->
 
 new component(test);
 new java(foo);
 </cfscript>
+
+<cfset y = 1.5e3>
+<!---      ^^^^^ meta.number.float.decimal.cfml constant.numeric.value.cfml --->
+<cfparam name="a" default="say ""hi"" or 'bye' ''x''">
+<!---                          ^^ constant.character.escape.quote.cfml --->
+<!---                                  ^ string.quoted.double.cfml -constant.character.escape --->
+<!---                                            ^^ string.quoted.double.cfml -constant.character.escape --->
+<cfquery name="q">select 1</cfquery>
+<!---                       ^^^^^^^ entity.name.tag.cfml --->
+<cfloop list=a,b,c index="i"></cfloop>
+<!---        ^^^^^ string.unquoted.cfml --->
+<cffunction name="g" returntype="string[]"></cffunction>
+<!---                            ^^^^^^ storage.type.primitive.cfml --->
+<!---                                  ^^ meta.brackets.cfml --->
+<cfif a><p>x</p></cfif >
+<!---             ^^^^ meta.tag.cfml entity.name.tag.cfml --->
+<!---                  ^ meta.tag.cfml punctuation.definition.tag.end.cfml --->
+<cfscript>x = 1;</cfscript >
+<!---             ^^^^^^^^ meta.tag.cfml entity.name.tag.cfml -source.cfml.script --->
+<p>text after</p>
+<!---   ^^^^^ text.html.cfml -source.cfml.script --->
+<cfquery name="q">select 1</cfquery >
+<!---                       ^^^^^^^ entity.name.tag.cfml -source.sql --->
+<cf_foo2 a="1">x</cf_foo2>
+ <!--- <- meta.tag.custom.cfml entity.name.tag.custom.cfml --->
+<!---    ^ meta.tag.custom.cfml entity.other.attribute-name.cfml --->
+<!---             ^^^^^^^ meta.tag.custom.cfml entity.name.tag.custom.cfml --->
+<ns:widget2 /><cfx_img2 src="a">
+    <!--- <- meta.tag.custom.cfml entity.name.tag.custom.cfml --->
+<!---          ^^^^^^^^ meta.tag.extension.cfml entity.name.tag.extension.cfml --->
+<!---                   ^^^ meta.tag.extension.cfml entity.other.attribute-name.cfml --->
+<cfoutputs x="1">y</cfoutputs>
+ <!--- <- meta.tag.cfml entity.name.tag.cfml --->
+<!---      ^ meta.tag.cfml entity.other.attribute-name.cfml --->
+<cfjavax a="1"><p>still cfml</p></cfjavax>
+ <!--- <- meta.tag.cfml entity.name.tag.cfml --->
+<!---             ^^^^^ text.html.cfml -meta.java --->
+<cfscript>
+  if (x) {
+    y = "</cfscript>";
+<!---    ^^^^^^^^^^^ string.quoted.double.cfml --->
+</cfscript>
+  <!--- <- meta.tag.cfml entity.name.tag.cfml -source.cfml.script --->
+<p>text after</p>
+<!---   ^^^^^ text.html.cfml -source.cfml.script --->
+<cfif len( catch.detail )></cfif>
+<!---      ^^^^^ variable.other.object.cfml -keyword --->

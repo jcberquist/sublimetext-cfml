@@ -24,7 +24,7 @@ param numeric testVar = 321;
 <!--- <- embedding.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->
 <!--- ^ embedding.cfml source.cfml.script meta.tag.script.cfml storage.type.cfml --->
 <!---         ^ embedding.cfml source.cfml.script meta.tag.script.cfml string.unquoted.cfml --->
-<!---                   ^ embedding.cfml source.cfml.script meta.tag.script.cfml constant.numeric.cfml --->
+<!---                   ^ embedding.cfml source.cfml.script meta.tag.script.cfml constant.numeric.value.cfml --->
 param testVar default = "hello";
 <!--- <- embedding.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->
 <!--- ^ embedding.cfml source.cfml.script meta.tag.script.cfml string.unquoted.cfml --->
@@ -43,7 +43,7 @@ param rc.testVar = 100;
 <!--- <- embedding.cfml source.cfml.script meta.tag.script.cfml entity.name.tag.script.cfml --->
 <!--- ^ embedding.cfml source.cfml.script meta.tag.script.cfml string.unquoted.cfml --->
 <!---    ^ embedding.cfml source.cfml.script meta.tag.script.cfml string.unquoted.cfml --->
-<!---              ^ embedding.cfml source.cfml.script meta.tag.script.cfml constant.numeric.cfml --->
+<!---              ^ embedding.cfml source.cfml.script meta.tag.script.cfml constant.numeric.value.cfml --->
   param integer testVar = 100;
 <!--- <- embedding.cfml source.cfml.script - meta.tag.script.cfml --->
 
@@ -75,7 +75,7 @@ cfcExists( someArg = 1 );
 
 
 loop from=1 to=#params.quantity# index="local.i" {}
-<!---          ^ punctuation.definition.template-expression.begin.cfml - invalid.illegal.attribute-name.cfml  --->
+<!---          ^ punctuation.section.interpolation.begin.cfml - invalid.illegal.attribute-name.cfml  --->
 
 query
   .test();

@@ -95,8 +95,8 @@ component {
 //                      ^ -variable.other.readwrite.cfml
 //                       ^ keyword.operator.arithmetic.binary.cfml
 //                        ^ -keyword.operator.arithmetic.binary.cfml
-//                         ^ constant.numeric.cfml
-//                          ^ -constant.numeric.cfml
+//                         ^ constant.numeric.value.cfml
+//                          ^ -constant.numeric.value.cfml
 //                           ^ punctuation.section.block.end.cfml
 //                            ^  -meta.function.anonymous.cfml -meta.function.body.cfml -punctuation.section.block.end.cfml
 
@@ -116,8 +116,8 @@ component {
 //              ^ -variable.other.readwrite.cfml
 //               ^ keyword.operator.arithmetic.binary.cfml
 //                ^ -keyword.operator.arithmetic.binary.cfml
-//                 ^ constant.numeric.cfml
-//                  ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -constant.numeric.cfml
+//                 ^ constant.numeric.value.cfml
+//                  ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -constant.numeric.value.cfml
 //                   ^ -punctuation.terminator.statement.cfml
 
   var test = ( param ) => param * 2;
@@ -139,8 +139,8 @@ component {
 //                             ^ -variable.other.readwrite.cfml
 //                              ^ keyword.operator.arithmetic.binary.cfml
 //                               ^ -keyword.operator.arithmetic.binary.cfml
-//                                ^ constant.numeric.cfml
-//                                 ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -constant.numeric.cfml
+//                                ^ constant.numeric.value.cfml
+//                                 ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -constant.numeric.value.cfml
 //                                  ^ -punctuation.terminator.statement.cfml
 
   var test = ( param ) => { param * 2 };
@@ -164,8 +164,8 @@ component {
 //                               ^ -variable.other.readwrite.cfml
 //                                ^ keyword.operator.arithmetic.binary.cfml
 //                                 ^ -keyword.operator.arithmetic.binary.cfml
-//                                  ^ constant.numeric.cfml
-//                                   ^ -constant.numeric.cfml
+//                                  ^ constant.numeric.value.cfml
+//                                   ^ -constant.numeric.value.cfml
 //                                    ^ punctuation.section.block.end.cfml
 //                                     ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -punctuation.section.block.end.cfml
 //                                      ^ -punctuation.terminator.statement.cfml
@@ -189,8 +189,8 @@ component {
 //               ^ -variable.other.readwrite.cfml
 //                ^ keyword.operator.arithmetic.binary.cfml
 //                 ^ -keyword.operator.arithmetic.binary.cfml
-//                  ^ constant.numeric.cfml
-//                   ^ -constant.numeric.cfml
+//                  ^ constant.numeric.value.cfml
+//                   ^ -constant.numeric.value.cfml
 //                    ^ punctuation.section.block.end.cfml
 //                     ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -punctuation.section.block.end.cfml
 //                      ^ -punctuation.terminator.statement.cfml
@@ -212,8 +212,8 @@ component {
 //             ^ -variable.other.readwrite.cfml
 //              ^ keyword.operator.arithmetic.binary.cfml
 //               ^ -keyword.operator.arithmetic.binary.cfml
-//                ^ constant.numeric.cfml
-//                 ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -constant.numeric.cfml
+//                ^ constant.numeric.value.cfml
+//                 ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -constant.numeric.value.cfml
 //                  ^ -punctuation.terminator.statement.cfml
 
 var test = (a) =>
@@ -235,8 +235,8 @@ var test = (a) =>
 //                         ^ -variable.other.readwrite.cfml
 //                          ^ keyword.operator.arithmetic.binary.cfml
 //                           ^ -keyword.operator.arithmetic.binary.cfml
-//                            ^ constant.numeric.cfml
-//                             ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -constant.numeric.cfml
+//                            ^ constant.numeric.value.cfml
+//                             ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -constant.numeric.value.cfml
 //                              ^ -punctuation.terminator.statement.cfml
 
   var test = param => { param * 2 };
@@ -256,8 +256,8 @@ var test = (a) =>
 //                           ^ -variable.other.readwrite.cfml
 //                            ^ keyword.operator.arithmetic.binary.cfml
 //                             ^ -keyword.operator.arithmetic.binary.cfml
-//                              ^ constant.numeric.cfml
-//                               ^ -constant.numeric.cfml
+//                              ^ constant.numeric.value.cfml
+//                               ^ -constant.numeric.value.cfml
 //                                ^ punctuation.section.block.end.cfml
 //                                 ^ punctuation.terminator.statement.cfml -meta.function.body.cfml -punctuation.section.block.end.cfml
 //                                  ^ -punctuation.terminator.statement.cfml

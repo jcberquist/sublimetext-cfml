@@ -23,3 +23,30 @@ component {
 //       ^ source.cfml.script variable.other.readwrite.cfml - comment
 
 }
+component {
+    /* block */
+//  ^^ comment.block.cfml punctuation.definition.comment.begin.cfml
+//           ^^ comment.block.cfml punctuation.definition.comment.end.cfml
+    /** doc */
+//  ^^^ comment.block.documentation.cfml punctuation.definition.comment.begin.cfml
+//          ^^ comment.block.documentation.cfml punctuation.definition.comment.end.cfml
+    <!--- tag --->
+//  ^^^^^ comment.block.cfml punctuation.definition.comment.begin.cfml
+//            ^^^^ comment.block.cfml punctuation.definition.comment.end.cfml
+    // line
+//  ^^ comment.line.double-slash.cfml punctuation.definition.comment.cfml
+}
+component {
+    /**
+     * Returns a Map<Boolean, List<String>> where a <> 5.
+//                  ^ comment.block.documentation.cfml - invalid
+//                                ^ comment.block.documentation.cfml - invalid
+//                                                  ^^ comment.block.documentation.cfml - invalid
+     * @param x the <b>value</b>
+//                   ^ comment.block.documentation.cfml meta.tag.inline.any.html entity.name.tag.inline.any.html
+     * "><img src=x onerror=alert(1)
+     */
+//   ^^ comment.block.documentation.cfml punctuation.definition.comment.end.cfml
+    function f(x) {}
+//           ^ meta.function.declaration.cfml entity.name.function.cfml
+}

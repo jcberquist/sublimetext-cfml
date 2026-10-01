@@ -15,26 +15,31 @@ variables:
   dot_path_identifier: '[_$[:alnum:]][_$[:alnum:].]*'
   constant_identifier: '[[:upper:]][_$[:digit:][:upper:]]*\b'
   attribute_name: '[_[:alpha:]][[:alnum:]_\-:]*'
+  # `default` is not reserved: it is the switch label only before a colon
+  # and an ordinary identifier elsewhere (`var default = 1`, `x.default`).
   reserved_word: |-
-    (?x:
-      break|case|catch|continue|default|do|else|finally|for|function|if|import|in|new|return|
+    (?xi:
+      break|case|catch|continue|do|else|finally|for|function|if|import|in|new|return|
       super|switch|this|try|var|void|while|null|true|false
     )\b
 
   non_reserved_identifier: (?:(?!{{reserved_word}}){{identifier}})
+  # Keywords that still name a variable when what follows shows it is one:
+  # `catch.message` (error templates), `out &= case;`, `var in = 1`.
+  keyword_variable: (?i:break|case|catch|continue|do|else|finally|for|if|import|in|return|switch|try|var|void|while)\b
 
-  param_attributes: \b(name|default|max|maxLength|min|pattern|type)\b
-  access_modifier: \b(private|package|public|remote)\b
-  storage_modifier: \b(static|final|abstract)\b
+  param_attributes: (?i:\b(name|default|max|maxLength|min|pattern|type)\b)
+  access_modifier: (?i:\b(private|package|public|remote)\b)
+  storage_modifier: (?i:\b(static|final|abstract)\b)
   storage_types: \b(?:any|array|binary|boolean|component|date|guid|numeric|query|string|struct|xml|uuid)\b
   function_declaration_lookahead: |-
-    (?x:
-      ({{access_modifier}}\s+)?
-      ({{storage_modifier}}\s+)?
+    (?xi:
+      (?:(?:{{access_modifier}}|{{storage_modifier}})\s+)*
       ({{dot_path_identifier}}(\[\])?\s+)?
+      (?:(?:{{access_modifier}}|{{storage_modifier}})\s+)*
       \bfunction\b
     )
-  function_lookahead: \s*\bfunction\b
+  function_lookahead: \s*\b(?i:function)\b
   arrow_func_lookahead: |-
     (?x:
       (?:
@@ -95,18 +100,16 @@ contexts:
     - match: ''
       pop: 1
 
-  immediately-pop-2:
-    - meta_include_prototype: false
-    - match: ''
-      pop: 2
-
   main:
     - match: '\)|\}|\]'
       scope: invalid.illegal.stray-bracket-end.cfml
-    - include: import-statement
     - include: statements
 
   statements:
+    # An unclosed block must not run past the end of a `<cfscript>` body: every
+    # block pops back to the body, whose own rule matches the closing tag.
+    - match: (?i)(?=</cfscript\s*>)
+      pop: 1
     - match: '```'
       scope: punctuation.definition.raw.code-fence.begin.cfml
       embed: scope:embedding.cfml#html
@@ -124,7 +127,10 @@ contexts:
     - match: \;
       scope: punctuation.terminator.statement.empty.cfml
       pop: 1
+    - match: (?={{keyword_variable}}\s*(?:\.|\?\.|=(?![=>])))
+      set: expression-statement
     - include: component-declaration
+    - include: import-statement
     - include: function-declaration
     - include: static-block
     - include: variable-declaration
@@ -138,12 +144,12 @@ contexts:
 
   comments:
     - match: /\*\*(?!/|\*)
-      scope: punctuation.definition.comment.cfml
+      scope: punctuation.definition.comment.begin.cfml
       push:
         - meta_include_prototype: false
         - meta_scope: comment.block.documentation.cfml
         - match: \*/
-          scope: punctuation.definition.comment.cfml
+          scope: punctuation.definition.comment.end.cfml
           pop: true
         - match: ^\s*\*?\s*((\@)\S*)\s
           captures:
@@ -153,12 +159,12 @@ contexts:
         - match: ^\s*(\*(?!/))?\s*(?=\w)
           push: cfmldoc
     - match: /\*
-      scope: punctuation.definition.comment.cfml
+      scope: punctuation.definition.comment.begin.cfml
       push:
         - meta_include_prototype: false
         - meta_scope: comment.block.cfml
         - match: \*/
-          scope: punctuation.definition.comment.cfml
+          scope: punctuation.definition.comment.end.cfml
           pop: true
     - match: //
       scope: punctuation.definition.comment.cfml
@@ -173,28 +179,31 @@ contexts:
     - meta_content_scope: text.html
     - match: (\n|(?=\*/))
       pop: true
+    # Only a whole tag on the line is HTML: a `<` in `Map<K, V>` or `a <> 5`
+    # is comment text, and an unclosed `<img …` cannot run past the line.
+    - match: <(?!/?[A-Za-z][-:\w]*(?:\s[^<>\n]*)?/?>)
     - include: scope:text.html.basic
 
   flow-control:
-    - match: break\b
+    - match: (?i)break\b
       scope: keyword.control.flow.break.cfml
       set:
         - expect-semicolon
         - expect-label
-    - match: continue\b
+    - match: (?i)continue\b
       scope: keyword.control.flow.continue.cfml
       set:
         - expect-semicolon
         - expect-label
-    - match: \babort\b
+    - match: (?i)\babort\b
       scope: keyword.control.flow.cfml
-    - match: return\b
+    - match: (?i)return\b
       scope: keyword.control.flow.return.cfml
       set: restricted-production
-    - match: \b(throw|rethrow)\b(?!\s*\()
+    - match: (?i)\b(throw|rethrow)\b(?!\s*\()
       scope: keyword.control.flow.throw.cfml
       set: restricted-production
-    - match: \b(include)\b(?!\s+(?:template|runeonce)=)
+    - match: (?i)\b(include)\b(?!\s+(?:template|runeonce)=)
       scope: keyword.control.flow.cfml
       set: restricted-production
 
@@ -202,16 +211,30 @@ contexts:
     - match: (?i)^\s*(?:(abstract|final)\s+)?(component)\b
       captures:
         1: storage.modifier.cfml
-        2: storage.type.class.cfml
+        2: storage.type.class.cfml keyword.declaration.class.cfml
       set:
         - component-body
         - component-attributes
+    # A comment between the modifier and the keyword:
+    # `abstract /* base */ component {}`.
+    - match: (?i)^\s*(abstract|final)\b(?=(?:\s|/\*.*?\*/)*component\b)
+      captures:
+        1: storage.modifier.cfml
+      set: component-declaration-keyword
     - match: (?i)^\s*(interface)\b
       captures:
-        1: storage.type.interface.cfml
+        1: storage.type.interface.cfml keyword.declaration.interface.cfml
       set:
         - interface-body
         - interface-attributes
+
+  component-declaration-keyword:
+    - match: (?i)component\b
+      scope: storage.type.class.cfml keyword.declaration.class.cfml
+      set:
+        - component-body
+        - component-attributes
+    - include: else-pop
 
   component-attributes:
     - meta_scope: meta.class.declaration.cfml
@@ -249,19 +272,26 @@ contexts:
     - match: ','
       scope: punctuation.separator.comma.cfml
 
+  # `import a.b.c;` and `import a.b.*;`. `import taglib="…" prefix="…";` is
+  # the generic script tag, left to `tag-in-script`.
   import-statement:
-    - match: \bimport\b
+    - match: (?i)\bimport\b(?!\s+{{attribute_name}}\s*=)
       scope: keyword.control.import.cfml
-      push:
-        - meta_scope: meta.import.cfml
-        - match: (?=\n|;)
-          pop: true
-        - include: string
-        - match: '{{identifier}}'
-          scope: variable.other.readwrite.cfml
-        - match: \*
-          scope: constant.other.cfml
-        - include: else-pop
+      set:
+        - expect-semicolon
+        - import-path
+
+  import-path:
+    - meta_scope: meta.import.cfml
+    - match: (?=\n|;)
+      pop: 1
+    - match: (?=['"])
+      push: string
+    - match: '{{dot_path_identifier}}'
+      scope: variable.other.readwrite.cfml
+    - match: \*
+      scope: constant.other.cfml
+    - include: else-pop
 
   expect-semicolon:
     - match: \;
@@ -283,9 +313,9 @@ contexts:
     - include: immediately-pop
 
   static-block:
-    - match: \bstatic\b(?=\s*[\n\{])
+    - match: (?i)\bstatic\b(?=\s*[\n\{])
       scope: keyword.control.static.cfml
-      push:
+      set:
         - static-block-meta
         - block
 
@@ -313,6 +343,11 @@ contexts:
   variable-binding-name:
     - match: (?={{non_reserved_identifier}}\b\[)
       pop: 1
+    - match: (?={{keyword_variable}}\s*(?:=(?![=>])|;|,|\.|\bin\b))
+      set:
+        - - meta_scope: meta.binding.name.cfml
+          - include: immediately-pop
+        - literal-variable-base
     - match: (?={{non_reserved_identifier}})
       set:
         - - meta_scope: meta.binding.name.cfml
@@ -387,7 +422,7 @@ contexts:
     - include: else-pop
 
   variable-declaration:
-    - match: var\b
+    - match: (?i)var\b
       scope: keyword.declaration.cfml
       set:
         - expect-semicolon
@@ -397,20 +432,20 @@ contexts:
     - include: final-declaration
 
   static-declaration:
-    - match: static\b(?!\??\.)
+    - match: (?i)static\b(?!\??\.)
       scope: storage.modifier.cfml
       set:
-        - match: (?=final\b(?!\??\.))
+        - match: (?i)(?=final\b(?!\??\.))
           set: final-declaration
         - match: '(?={{function_lookahead}}\b)'
           set: function-declaration
         - include: else-pop
 
   final-declaration:
-    - match: final\b(?!\??\.)
+    - match: (?i)final\b(?!\??\.)
       scope: storage.modifier.cfml
       set:
-        - match: (?=static\b(?!\??\.))
+        - match: (?i)(?=static\b(?!\??\.))
           set: static-declaration
         - match: '(?={{function_lookahead}}\b)'
           set: function-declaration
@@ -508,58 +543,59 @@ contexts:
     - include: else-pop
 
   conditional:
-    - match: switch\b
+    - match: (?i)switch\b
       scope: keyword.control.conditional.switch.cfml
       set:
         - switch-meta
         - switch-block
         - expect-parenthesized-expression
-    - match: do\b
+    - match: (?i)do\b
       scope: keyword.control.loop.do-while.cfml
       set:
         - do-while-meta
         - do-while-condition
         - statement
-    - match: for\b
+    - match: (?i)for\b
       scope: keyword.control.loop.for.cfml
       set:
         - for-meta
         - block-scope
         - for-condition
-    - match: while\b
+    - match: (?i)while\b
       scope: keyword.control.loop.while.cfml
       set:
         - while-meta
         - block-scope
         - expect-parenthesized-expression
-    - match: if\b
+    - match: (?i)if\b
       scope: keyword.control.conditional.if.cfml
       set:
         - conditional-meta
         - statement
         - expect-parenthesized-expression
-    - match: else\s+if\b
+    # `elseif` is Lucee's one-word spelling (Adobe rejects it).
+    - match: (?i)(?:else\s+if|elseif)\b
       scope: keyword.control.conditional.elseif.cfml
       set:
         - conditional-meta
         - statement
         - expect-parenthesized-expression
-    - match: else\b
+    - match: (?i)else\b
       scope: keyword.control.conditional.else.cfml
       set:
         - conditional-meta
         - statement
-    - match: try\b
+    - match: (?i)try\b
       scope: keyword.control.exception.try.cfml
       set:
         - try-meta
         - block-scope
-    - match: finally\b
+    - match: (?i)finally\b
       scope: keyword.control.exception.finally.cfml
       set:
         - finally-meta
         - block-scope
-    - match: catch\b
+    - match: (?i)catch\b
       scope: keyword.control.exception.catch.cfml
       set:
         - catch-meta
@@ -644,7 +680,7 @@ contexts:
         - for-in-declaration
 
   for-in-declaration:
-    - match: var\b
+    - match: (?i)var\b
       scope: keyword.declaration.cfml
       set: for-in-binding
     - match: (?=\S)
@@ -678,7 +714,7 @@ contexts:
         - for-oldstyle-declaration
 
   for-oldstyle-declaration:
-    - match: var\b
+    - match: (?i)var\b
       scope: keyword.declaration.cfml
       set:
         - variable-binding-list-top
@@ -717,12 +753,12 @@ contexts:
     - match: '\}'
       scope: punctuation.section.block.end.cfml
       pop: 1
-    - match: case\b
+    - match: (?i)case\b
       scope: keyword.control.conditional.case.cfml
       push:
         - expect-case-colon
         - expression
-    - match: default\b
+    - match: (?i)default\b(?=\s*:)
       scope: keyword.control.conditional.default.cfml
       push:
         - expect-case-colon
@@ -730,7 +766,7 @@ contexts:
     - include: statements
 
   do-while-condition:
-    - match: while\b
+    - match: (?i)while\b
       scope: keyword.control.loop.while.cfml
       set: parenthesized-expression
     - include: else-pop
@@ -750,7 +786,24 @@ contexts:
       pop: 1
 
   catch-expression:
-    - match: (?:({{dot_path_identifier}})\s+)?(?i:(var)\s+)?({{identifier}})
+    # A quoted exception type (`catch ("java.lang.Exception" e)`) is a type
+    # name, not an expression: scope it as one, with the quotes as string
+    # punctuation.
+    - match: |-
+        (?x:
+          ( (") [^"]* (") | (') [^']* (') ) \s+
+          (?i:(var)\s+)? ({{identifier}})
+        )
+      captures:
+        1: support.type.exception.cfml
+        2: punctuation.definition.string.begin.cfml
+        3: punctuation.definition.string.end.cfml
+        4: punctuation.definition.string.begin.cfml
+        5: punctuation.definition.string.end.cfml
+        6: storage.type.cfml
+        7: variable.other.readwrite.cfml
+      pop: 1
+    - match: (?:({{dot_path_identifier}})\s+)?(?i:(var)\s+)?({{identifier}}(?:\.{{identifier}})*)
       captures:
         1: support.type.exception.cfml
         2: storage.type.cfml
@@ -795,6 +848,12 @@ contexts:
     - include: struct-literal
     - include: array-literal
     - include: java-block
+    # A declaration inside an expression (Lucee):
+    # `while ((var line = r.readLine()) != -1)`.
+    - match: (?i)var\b(?=\s+{{identifier}})
+      scope: keyword.declaration.cfml
+    - match: (?={{keyword_variable}}\s*(?:[.;,)\]}\[&]|\?\.|=(?![=>])))
+      set: literal-variable-base
     - match: (?={{reserved_word}})
       pop: 1
     # if we have a parenthesis expression, or literal variable
@@ -811,7 +870,7 @@ contexts:
   expression-break:
     - match: (?=[;})\]])
       pop: 1
-    - match: (?i)(?=</cfscript>)
+    - match: (?i)(?=</cfscript\s*>)
       pop: 1
 
   expression-end:
@@ -848,7 +907,7 @@ contexts:
         (?x)
         (?=
           !=
-        | [-+*/%><=&|^\[(;,.:?]
+        | [-+*/\\%><=&|^\[(;,.:?]
         | (?:and|or|xor|eqv|imp|mod|in|eq|neq|is|lt|le|gt|ge|contains)\b
         )
       pop: 1
@@ -953,7 +1012,7 @@ contexts:
         - include: scope:embedding.cfml#sql-template-expression
 
   constructor:
-    - match: \bnew\b
+    - match: (?i)\bnew\b
       scope: keyword.operator.word.new.cfml
       set:
         - constructor-meta
@@ -970,15 +1029,18 @@ contexts:
     - include: else-pop
 
   constructor-body-expect-entity-name:
-    - match: (?i:component)
+    - match: (?i:component)\b
       scope: storage.type.class.cfml
       pop: 1
-    - match: (?i:java)
+    - match: (?i:java)\b
       scope: variable.type.cfml
       pop: 1
     - match: '{{dot_path_identifier}}'
       scope: entity.name.class.cfml
       pop: 1
+    # `new "com.foo"(…)` / `new '#path#'(…)`: `string` sets, so the string
+    # replaces this context and returns to `constructor-body-expect-arguments`.
+    - include: string
     - include: else-pop
 
   prefix-operators:
@@ -1026,10 +1088,10 @@ contexts:
         ===  | # equality        left-to-right   both
         !==  | # equality        left-to-right   both
         ==   | # equality        left-to-right   both
-        \b(?i:neq|is\s+not)\b |
+        \b(?i:neq|is\s+not|not\s+equal)\b |
         !=   |  # equality        left-to-right   both
         <>   |  # equality        left-to-right   both
-        \b(?i:eq|is)\b
+        \b(?i:eq|is|equal)\b
       scope: keyword.operator.comparison.binary.cfml
       push: expression-begin
     - match: |-
@@ -1052,6 +1114,8 @@ contexts:
       push: expression-begin
     - match: |-
         (?x)
+        \^   | # exponent        right-to-left   both
+        \\   | # integer division left-to-right  both
         /    | # division        left-to-right   both
         %    | # modulus         left-to-right   both
         \*   | # multiplication  left-to-right   both
@@ -1083,13 +1147,13 @@ contexts:
       scope: keyword.operator.arithmetic.postfix.cfml
 
   special-name:
-    - match: \btrue\b
+    - match: (?i)\btrue\b
       scope: constant.language.boolean.true.cfml
       pop: 1
-    - match: \bfalse\b
+    - match: (?i)\bfalse\b
       scope: constant.language.boolean.false.cfml
       pop: 1
-    - match: \bnull\b
+    - match: (?i)\bnull\b
       scope: constant.language.null.cfml
       pop: 1
 
@@ -1111,9 +1175,9 @@ contexts:
         - function-declaration-expect-parameters
         - function-declaration-expect-name
         - function-declaration-expect-function-keyword
+        - function-declaration-expect-modifiers
         - function-declaration-expect-return-type
-        - function-declaration-expect-storage-keyword
-        - function-declaration-expect-access-keyword
+        - function-declaration-expect-modifiers
 
   function-meta:
     - meta_include_prototype: false
@@ -1138,6 +1202,7 @@ contexts:
   function-declaration-expect-attributes:
     - match: (?=[;{])
       pop: 1
+    - include: script-attributes-end
     - match: (?i)(?=type\s*=\s*["']*java['"]*)
       pop: 2
       set:
@@ -1149,6 +1214,7 @@ contexts:
   function-declaration-expect-attributes-java:
     - match: (?=[;{])
       pop: 1
+    - include: script-attributes-end
     - include: scope:embedding.cfml#tag-generic-attribute
 
   function-declaration-expect-parameters:
@@ -1162,8 +1228,8 @@ contexts:
     - include: else-pop
 
   function-declaration-expect-function-keyword:
-    - match: function\b
-      scope: storage.type.function.cfml
+    - match: (?i)function\b
+      scope: storage.type.function.cfml keyword.declaration.function.cfml
       pop: 1
     - include: else-pop
 
@@ -1173,19 +1239,22 @@ contexts:
     - include: storage-types
     - include: else-pop
 
-  function-declaration-expect-storage-keyword:
-    - match: '{{storage_modifier}}'
+  # Access and storage modifiers, in any order: `public static`,
+  # `static public`, `final public`. Lucee also accepts them after the return
+  # type: `boolean public function`.
+  function-declaration-expect-modifiers:
+    - match: '{{access_modifier}}|{{storage_modifier}}'
       scope: storage.modifier.cfml
-      pop: 1
-    - include: else-pop
-
-  function-declaration-expect-access-keyword:
-    - match: '{{access_modifier}}'
-      scope: storage.modifier.cfml
-      pop: 1
     - include: else-pop
 
   storage-types:
+    # An array of a primitive type: `string[] function f()`.
+    - match: (?i)({{storage_types}})(\[)(\])
+      captures:
+        1: storage.type.primitive.cfml
+        2: meta.brackets.cfml punctuation.section.brackets.begin.cfml
+        3: meta.brackets.cfml punctuation.section.brackets.end.cfml
+      pop: 1
     - match: (?i){{storage_types}}
       scope: storage.type.primitive.cfml
       pop: 1
@@ -1225,7 +1294,9 @@ contexts:
           pop: 1
         - match: ','
           scope: punctuation.separator.parameter.function.cfml
-        - match: (?i)\brequired\b
+        # `required` is a keyword before a type or name, and otherwise the
+        # parameter's own name: `function map(required required=true)`.
+        - match: (?i)\brequired\b(?=\s+[_$[:alpha:]])
           scope: keyword.other.required.parameter.cfml
         - match: (\.\.\.)({{identifier}})
           captures:
@@ -1242,7 +1313,7 @@ contexts:
   function-declaration-parameter-attributes:
     - match: (?=[,)])
       pop: true
-    - include: scope:embedding.cfml#tag-generic-attribute
+    - include: scope:embedding.cfml#tag-generic-attribute-in-parens
 
   function-declaration-parameter-default:
     - match: '='
@@ -1275,7 +1346,7 @@ contexts:
 
   arrow-function-expect-arrow:
     - match: '=>'
-      scope: storage.type.function.arrow.cfml
+      scope: storage.type.function.arrow.cfml keyword.declaration.function.arrow.cfml
       pop: 1
     - include: else-pop
 
@@ -1292,7 +1363,8 @@ contexts:
 
 
   label:
-    - match: '({{identifier}})\s*(:)'
+    # `(?!:)` keeps a static call (`Service::get()`) out of the label rule.
+    - match: '({{identifier}})\s*(:)(?!:)'
       captures:
         1: entity.name.label.cfml
         2: punctuation.separator.cfml
@@ -1303,7 +1375,7 @@ contexts:
       set: struct-literal-contents
 
   struct-literal-contents:
-    - meta_scope: meta.struct-literal.cfml
+    - meta_scope: meta.struct-literal.cfml meta.mapping.cfml
     - match: '\}'
       scope: punctuation.section.mapping.end.cfml
       pop: 1
@@ -1372,9 +1444,11 @@ contexts:
       pop: 1
     - include: else-pop
 
+  # `meta.mapping.key` comes last: the built-in color schemes color a quoted
+  # key through `meta.mapping.key string - meta.mapping.key meta meta`.
   struct-literal-meta-key:
     - meta_include_prototype: false
-    - meta_scope: meta.struct-literal.key.cfml
+    - meta_scope: meta.struct-literal.key.cfml meta.mapping.key.cfml
     - include: else-pop
 
   method-name:
@@ -1412,8 +1486,10 @@ contexts:
         - match: (?=\S)
           push: expression
 
+  # A typed array literal (`['string'][…]`, Lucee): only a bracket holding a
+  # single quoted type name is a type; `[1,2][1]` is an array and an index.
   array-literal:
-    - match: (?=\[[^\[\]]*?\]\s*\[)
+    - match: (?=\[\s*(?:'{{dot_path_identifier}}'|"{{dot_path_identifier}}")\s*\]\s*\[)
       set:
         - array-literal-typed
         - array-types
@@ -1539,17 +1615,27 @@ contexts:
         - include: struct-property
 
   literal-number:
+    - match: (?i)((?:\B[-+])?\b0x)(\h*)
+      scope: meta.number.integer.hexadecimal.cfml
+      captures:
+        1: constant.numeric.base.cfml
+        2: constant.numeric.value.cfml
+      pop: 1
     - match: |-
         (?xi)
         (?:\B[-+])?
         (?:
-          \b0x[0-9a-f]*|              # hex
-          (
-            \B\.[0-9]+|               # e.g. .999
-            \b[0-9]+(\.[0-9]*)?       # e.g. 999.999, 999. or 999
-          )
+          \b[0-9]+ (\.) [0-9]* (?:e[-+]?[0-9]+)?    # 999.999, 999., 9.9e9
+        | \B (\.) [0-9]+ (?:e[-+]?[0-9]+)?          # .999, .9e9
+        | \b[0-9]+ e[-+]?[0-9]+                      # 9e9
         )
-      scope: constant.numeric.cfml
+      scope: meta.number.float.decimal.cfml constant.numeric.value.cfml
+      captures:
+        1: punctuation.separator.decimal.cfml
+        2: punctuation.separator.decimal.cfml
+      pop: 1
+    - match: (?:\B[-+])?\b[0-9]+
+      scope: meta.number.integer.decimal.cfml constant.numeric.value.cfml
       pop: 1
 
   literal-variable:
@@ -1620,13 +1706,27 @@ contexts:
           pop: 1
         - match: ','
           scope: punctuation.separator.function-call.cfml
-        - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
+        - include: quoted-named-argument
+        - match: ({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
           captures:
             1: entity.other.function-parameter.cfml
             2: keyword.operator.assignment.cfml
             3: punctuation.separator.key-value.cfml
           push: expression-no-comma
         - include: expressions-no-comma
+
+  # A quoted argument name: `query('a':[1], 'b':[2])` (Lucee).
+  quoted-named-argument:
+    - match: (?=(?:"[^"]*"|'[^']*')\s*:(?!:))
+      push:
+        - quoted-named-argument-separator
+        - string
+
+  quoted-named-argument-separator:
+    - match: ':'
+      scope: punctuation.separator.key-value.cfml
+      set: expression-no-comma
+    - include: else-pop
 
   struct-property:
     - match: (?={{identifier}}{{function_assignment_lookahead}})
@@ -1638,42 +1738,75 @@ contexts:
 
   struct-property-base:
     - match: '{{constant_identifier}}'
-      scope: meta.property.constant.cfml
+      scope: meta.property.constant.cfml variable.other.member.cfml
       pop: 1
     - match: '{{identifier}}'
-      scope: meta.property.cfml
+      scope: meta.property.cfml variable.other.member.cfml
+      pop: 1
+    # A numeric member (`form.1`, `a.b.1234`).
+    - match: '[0-9]+'
+      scope: meta.property.cfml variable.other.member.cfml
       pop: 1
 
   tag-in-script:
     - match: (?i)\bproperty\b(?=(\s+{{dot_path_identifier}}\b|\s*[\n\{]))
       scope: entity.name.tag.script.cfml
-      push:
+      set:
         - expect-semicolon
         - tag-in-script-property
         - tag-in-script-property-inline
     - match: (?i)\bparam\b(?=(\s+{{identifier}}\b|\s*[\n\{]))
       scope: entity.name.tag.script.cfml
-      push:
+      set:
         - expect-semicolon
         - tag-in-script-attributes
         - tag-in-script-param-inline
     - match: (?i)\babort\b(?=(\s+{{identifier}}\b|\s*[\n\{;]))
       scope: entity.name.tag.script.cfml
-      push:
+      set:
         - expect-semicolon
         - tag-in-script-attributes
-    - match: \b({{tags_in_script}})(?=\s+{{attribute_name}}\s*[=;{\n]|\s*[{\n])
+    # A bare tag name ending the line is ambiguous: `query` followed by a line
+    # starting with `.` is a variable heading a member chain, not a tag. The
+    # `.` is on the next line, so only a branch point can see it. Both
+    # alternatives replace `statement`.
+    - match: (?=\b(?:cf)?(?:{{tags_in_script}})\b\s*$)
+      pop: 1
+      branch_point: tag-in-script-bare
+      branch:
+        - tag-in-script-bare
+        - expression-statement
+    # `http url="…";` and Lucee's `cfhttp url="…";` alike.
+    - match: \b((?:cf)?{{tags_in_script}})(?=\s+{{attribute_name}}\s*[=;{\n]|\s*[{\n])
       captures:
         1: entity.name.tag.script.cfml
-      push:
-        - meta_scope: meta.tag.script.cfml
-        - match: (?=\.)
-          pop: true
-        - match: (?=;)
-          pop: true
-        - match: (?={)
-          set: block-scope
-        - include: tag-generic-attribute-script
+      set:
+        - expect-semicolon
+        - tag-in-script-generic
+
+  tag-in-script-bare:
+    - match: \b((?:cf)?{{tags_in_script}})\b
+      captures:
+        1: entity.name.tag.script.cfml
+      set:
+        - expect-semicolon
+        - tag-in-script-bare-attributes
+
+  tag-in-script-bare-attributes:
+    - meta_scope: meta.tag.script.cfml
+    - match: (?=\.)
+      fail: tag-in-script-bare
+    - include: tag-in-script-generic
+
+  # Its attributes, up to the `;` (matched by `expect-semicolon` below) or a
+  # block body.
+  tag-in-script-generic:
+    - meta_scope: meta.tag.script.cfml
+    - match: (?=;)
+      pop: 1
+    - match: (?={)
+      set: block-scope
+    - include: tag-generic-attribute-script
 
   tag-in-script-property:
     - meta_scope: meta.tag.script.cfml meta.tag.property.cfml
@@ -1731,8 +1864,19 @@ contexts:
   tag-in-script-end:
     - match: (?=;)
       pop: 1
+    - include: script-attributes-end
     - match: (?={)
       set: block-scope
+
+  # A script attribute list (after a function's parameters, or on `property`
+  # and `param`) has no terminator of its own when the `;` is left out. It
+  # also ends at a `}`, and at a line that starts a statement: a call, a
+  # function declaration, or a reserved word.
+  script-attributes-end:
+    - match: (?=\})
+      pop: 1
+    - match: ^(?=\s*(?:{{identifier}}\s*\(|{{function_declaration_lookahead}}|{{reserved_word}}))
+      pop: 1
 
   tag-generic-attribute-script:
     - match: \b{{attribute_name}}\b
@@ -1748,13 +1892,19 @@ contexts:
   tag-generic-attribute-script-expression:
     - match: (?=#)
       set: scope:embedding.cfml#template-expression-set
+    # A quoted value standing alone is a string, which ends at its closing
+    # quote, so a tag without a `;` still ends before the next statement.
+    - match: (?=(?:"[^"]*"|'[^']*')\s*(?:;|\{|$|{{attribute_name}}\s*=))
+      set: string
     - match: (?=\S)
       set: expression
 
   tag-in-script-cf:
-    - match: \b(cf{{tags_in_script}})(?=\()
+    # `cffile(…)`, and Lucee's `cffile (…)` with a space before the `(`.
+    - match: \b(cf{{tags_in_script}})(?=\s*\()
       scope: entity.name.tag.script.cfml
-      push:
+      set:
+        - expect-semicolon
         - tag-in-script-cf-meta
         - tag-in-script-cf-attributes
 
@@ -1811,7 +1961,7 @@ contexts:
         - support-call-arguments
         - array-types
 
-    - match: \b({{support_functions}})(?=\()
+    - match: \b({{support_functions}})(?=\s*\()
       captures:
         1: support.function.cfml
       set:
@@ -1848,7 +1998,8 @@ contexts:
           pop: true
         - match: ','
           scope: punctuation.separator.function-call.support.cfml
-        - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
+        - include: quoted-named-argument
+        - match: ({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
           captures:
             1: entity.other.function-parameter.cfml
             2: keyword.operator.assignment.cfml
@@ -1881,7 +2032,8 @@ contexts:
           pop: 1
         - match: ','
           scope: punctuation.separator.function-call.method.cfml
-        - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
+        - include: quoted-named-argument
+        - match: ({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
           captures:
             1: entity.other.method-parameter.cfml
             2: keyword.operator.assignment.cfml
@@ -1890,7 +2042,7 @@ contexts:
         - include: expressions-no-comma
 
   support-method-call:
-    - match: \b({{member_functions}})(?=\()
+    - match: \b({{member_functions}})(?=\s*\()
       scope: support.function.member.cfml
       set:
         - support-method-call-meta
@@ -1911,7 +2063,8 @@ contexts:
           pop: 1
         - match: ','
           scope: punctuation.separator.function-call.method.support.cfml
-        - match: \b({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
+        - include: quoted-named-argument
+        - match: ({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
           captures:
             1: entity.other.method-parameter.cfml
             2: keyword.operator.assignment.cfml
@@ -1933,7 +2086,7 @@ contexts:
     - include: immediately-pop
 
   java-block:
-    - match: \bjava\b(?=\s*[\n\{])
+    - match: (?i)\bjava\b(?=\s*[\n\{])
       scope: keyword.control.java.cfml
       set:
         - java-block-meta

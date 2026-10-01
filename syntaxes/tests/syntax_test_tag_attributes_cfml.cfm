@@ -37,5 +37,5 @@ type = "string" default = "hello">
    <!---  <- embedding.cfml meta.tag.cfml string.quoted.double.cfml --->
 
 <cfhttp url=#some_url_var#>
-<!---       ^ punctuation.definition.template-expression.begin.cfml --->
+<!---       ^ punctuation.section.interpolation.begin.cfml --->
 <!---        ^ variable.other.readwrite.cfml --->
