@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0">
+<dict>
+    <!--
+        closures and struct methods named by assignment or a struct key
+        stay in the file's symbol list but out of the project index
+    -->
+    <key>scope</key>
+    <string>source.cfml entity.name.function - meta.function.declaration - meta.function.cfml</string>
+    <key>settings</key>
+    <dict>
+        <key>showInIndexedSymbolList</key>
+        <string>0</string>
+    </dict>
+</dict>
+</plist>

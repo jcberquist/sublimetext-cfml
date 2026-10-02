@@ -2,5 +2,6 @@
 <cfcomponent extends="base.Thing">
 <!---                 @@@@@@@@@@ reference --->
     <cffunction name="alpha" access="public"><cfreturn 1></cffunction>
-<!---                 @@@@@ definition --->
+<!---                 @@@@@ local-definition --->
+<!---                 @@@@@ global-definition --->
 </cfcomponent>

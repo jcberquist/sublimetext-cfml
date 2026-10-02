@@ -2,17 +2,19 @@
 component extends="base.Thing" {
 //                 @@@@@@@@@@ reference
     public string function alpha() {
-//                         @@@@@ definition
+//                         @@@@@ local-definition
+//                         @@@@@ global-definition
         var cb = function() {};
-//          @@ definition
+//          @@ local-definition
         var s = { beta: function() {}, gamma: () => 1 };
-//                @@@@ definition
-//                                     @@@@@ definition
+//                @@@@ local-definition
+//                                     @@@@@ local-definition
         doIt({ delta: function() {} });
 //      @@@@ reference
         this.epsilon = function() {};
-//           @@@@@@@ definition
+//           @@@@@@@ local-definition
     }
     function zeta() {}
-//           @@@@ definition
+//           @@@@ local-definition
+//           @@@@ global-definition
 }
