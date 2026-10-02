@@ -81,7 +81,7 @@
         "attribute_values": {}
     },
     "cfcatch": {
-        "attributes": [[], ["type"]],
+        "attributes": [[], ["name", "type"]],
         "attribute_values": {
             "type": ["application", "database", "template", "security", "object", "missinginclude", "expression", "lock", "custom_type", "searchengine", "any"]
         }

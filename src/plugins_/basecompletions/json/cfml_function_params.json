@@ -113,6 +113,9 @@
         "format": ["bzip", "bzip2", "tbz", "tbz2", "tar", "tar.bz", "tar.gz", "gzip", "tgz", "zip"],
         "includebasefolder": ["true", "false"]
     },
+    "configimport": {
+        "type": ["web", "server"]
+    },
     "contractpath": {
         "placeholder": ["true", "false"]
     },
@@ -402,7 +405,7 @@
         "interpolation": ["highestQuality (default)", "highQuality", "mediumQuality", "highestPerformance", "highPerformance", "mediumPerformance", "nearest", "bilinear", "bicubic", "bessel", "blackman", "hamming", "hanning", "hermite", "lanczos", "mitchell", "quadratic"]
     },
     "imagesetantialiasing": {
-        "antialias": ["true", "false"]
+        "antialias": ["on", "true", "off", "false"]
     },
     "imageshear": {
         "direction": ["horizontal", "vertical"]
@@ -418,7 +421,7 @@
         "standard": ["1b", "2b", "3b"]
     },
     "isvalid": {
-        "type": ["any", "array", "binary", "boolean", "component", "creditcard", "date", "email", "eurodate", "float", "function", "guid", "integer", "numeric", "query", "range", "regex", "regular_expression", "social_security_number", "ssn", "string", "struct", "telephone", "time", "time", "url", "usdate", "uuid", "variablename", "xml", "zipcode"]
+        "type": ["any", "array", "binary", "boolean", "component", "creditcard", "date", "email", "eurodate", "float", "function", "guid", "integer", "numeric", "query", "range", "regex", "regular_expression", "social_security_number", "ssn", "string", "struct", "telephone", "time", "url", "usdate", "uuid", "variablename", "xml", "zipcode"]
     },
     "javacast": {
         "type": ["boolean", "double", "float", "int", "long", "string", "null", "byte", "bigdecimal", "char", "short"]
@@ -447,7 +450,7 @@
         "includeemptyvalues": ["true", "false"]
     },
     "listfindnocase": {
-        "includeemptyvalues": ["true", "false"]
+        "includeemptyfields": ["true", "false"]
     },
     "listgetat": {
         "includeemptyvalues": ["true", "false"]
@@ -658,7 +661,6 @@
         "parallel": ["true", "false"]
     },
     "structfilter": {
-        "callback": ["true", "false"],
         "parallel": ["true", "false"]
     },
     "structfindkey": {

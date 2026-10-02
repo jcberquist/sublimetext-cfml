@@ -2,14 +2,16 @@ import json
 import pathlib
 import re
 
+package_path = pathlib.Path(__file__).resolve().parent.parent
+json_path = package_path / "src/plugins_/basecompletions/json"
+
+
 def wrap_regex(regex, indent=8):
     return re.sub(r"(.{80}[^|]*)", r"\1\n%s" % (" " * indent), regex)
 
 
 def generate_function_regex():
-    functions = pathlib.Path(
-        "../src/plugins_/basecompletions/json/cfml_functions.json"
-    ).read_text()
+    functions = (json_path / "cfml_functions.json").read_text()
     keys = [k.lower() for k in json.loads(functions)]
     prefixes = [
         'array',
@@ -61,9 +63,7 @@ def generate_member_function_regex():
 
     member_functions = set()
 
-    data = pathlib.Path(
-        "../src/plugins_/basecompletions/json/cfml_member_functions.json"
-    ).read_text()
+    data = (json_path / "cfml_member_functions.json").read_text()
     data = json.loads(data)
     
 
@@ -103,9 +103,7 @@ def generate_tag_regex():
         'try',
         'while',
     ]
-    tags = pathlib.Path(
-        "../src/plugins_/basecompletions/json/cfml_tags.json"
-    ).read_text()
+    tags = (json_path / "cfml_tags.json").read_text()
     tags = [t.lower()[2:] for t in json.loads(tags).keys() if t.lower()[2:] not in tags_to_filter]
     return wrap_regex("|".join(sorted(tags)))
 
@@ -145,4 +143,4 @@ contexts:
     - match: .
 """
 
-pathlib.Path('CFScript (CFML) Base.sublime-syntax').write_text(syntax.lstrip())
+(package_path / "syntaxes/CFScript (CFML) Base.sublime-syntax").write_text(syntax.lstrip())
