@@ -57,12 +57,20 @@
     // completion docs for BIFs and indexed components
     "cfml_completion_docs": true,
 
-    // color scheme styles to inject for Lucee/CFML tags
+    // color scheme styles to inject for Lucee/CFML tags, with "light" used for
+    // color schemes with a light background and "dark" for dark ones
+    // (a style without "light" and "dark" keys is used for both)
     // valid keys are "foreground" and "font_style"
     // "foreground": see <https://www.sublimetext.com/docs/color_schemes.html#colors>
     // "font_style": "bold", "italic", "bold italic", or ""
-    "cfml_tag_style": { "foreground": "#4C9BB0", "font_style": "" },
-    "cfml_tag_attribute_style": { "foreground": "#D9995E", "font_style": "" },
+    "cfml_tag_style": {
+        "light": { "foreground": "#377180", "font_style": "" },
+        "dark": { "foreground": "#4C9BB0", "font_style": "" }
+    },
+    "cfml_tag_attribute_style": {
+        "light": { "foreground": "#955923", "font_style": "" },
+        "dark": { "foreground": "#D9995E", "font_style": "" }
+    },
 
     // default controller and view folder names that the
     // toggle_controller_view command looks for when switching

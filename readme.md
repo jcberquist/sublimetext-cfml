@@ -205,7 +205,7 @@ The indexer will search for `thistag.executionmode is/eq/== "end"/'end'` (case i
 
 ### Custom Coloring for CFML Tags
 
-Unless you are using a specialized color scheme, CFML and HTML tags will receive the same coloring. In the latest builds of Sublime Text a new color scheme format `.sublime-color-scheme` has been introduced, along with the very easy customization of your active color scheme: <https://www.sublimetext.com/docs/color_schemes.html#customization>. This package includes a command that will add such a customization in your `Packages/User/` directory for your active color scheme that applies custom colors for CFML tags. Press <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> to bring up the command palette (<kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac) and run `CFML: Toggle Color Scheme Styles`. You can edit the styles that will be injected via the user settings for this package.
+Unless you are using a specialized color scheme, CFML and HTML tags will receive the same coloring. This package includes a command that adds a customization of your color scheme (<https://www.sublimetext.com/docs/color_schemes.html#customization>) in your `Packages/User/` directory, giving CFML tags and their attributes their own colors. Press <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> to bring up the command palette (<kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd> on a Mac) and run `CFML: Toggle Color Scheme Styles`; run it again to remove them. If your `color_scheme` setting is `"auto"`, both your light and dark color schemes are customized. The colors are set by the `cfml_tag_style` and `cfml_tag_attribute_style` package settings, separately for light and dark color schemes.
 
 ### Controller/View Toggle
 
