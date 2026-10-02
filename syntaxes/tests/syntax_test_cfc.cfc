@@ -58,24 +58,24 @@ property cfc.models.Dog Dog;
     var result;
 
     arrayAppend( arr, item, true );
-//             ^ meta.function-call.support.cfml meta.function-call.arguments.support.cfml punctuation.section.group.begin.cfml
-//                  ^ punctuation.separator.function-call.support.cfml
+//             ^ meta.function-call.support.cfml meta.function-call.arguments.support.cfml meta.group.cfml punctuation.section.group.begin.cfml
+//                  ^ punctuation.separator.comma.cfml
     arr.append( item, true );
-//            ^ meta.function-call.method.support.cfml meta.function-call.arguments.method.support.cfml punctuation.section.group.begin.cfml
-//                  ^ punctuation.separator.function-call.method.support.cfml
+//            ^ meta.function-call.method.support.cfml meta.function-call.arguments.method.support.cfml meta.group.cfml punctuation.section.group.begin.cfml
+//                  ^ punctuation.separator.comma.cfml
     doSomething( arr, item, true );
-//             ^ meta.function-call.cfml meta.function-call.arguments.cfml punctuation.section.group.begin.cfml
-//                  ^ punctuation.separator.function-call.cfml
+//             ^ meta.function-call.cfml meta.function-call.arguments.cfml meta.group.cfml punctuation.section.group.begin.cfml
+//                  ^ punctuation.separator.comma.cfml
     $$badRequest();
-//              ^ meta.function-call.cfml meta.function-call.arguments.cfml punctuation.section.group.begin.cfml
+//              ^ meta.function-call.cfml meta.function-call.arguments.cfml meta.group.cfml punctuation.section.group.begin.cfml
 //
     obj.do( arr, item, true );
-//        ^ meta.function-call.method.cfml meta.function-call.arguments.method.cfml punctuation.section.group.begin.cfml
-//             ^ punctuation.separator.function-call.method.cfml
+//        ^ meta.function-call.method.cfml meta.function-call.arguments.method.cfml meta.group.cfml punctuation.section.group.begin.cfml
+//             ^ punctuation.separator.comma.cfml
 
     toString( testVar, "utf-8" );
-//          ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.support.cfml meta.function-call.arguments.support.cfml punctuation.section.group.begin.cfml
-//                             ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.support.cfml meta.function-call.arguments.support.cfml punctuation.section.group.end.cfml
+//          ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.support.cfml meta.function-call.arguments.support.cfml meta.group.cfml punctuation.section.group.begin.cfml
+//                             ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.support.cfml meta.function-call.arguments.support.cfml meta.group.cfml punctuation.section.group.end.cfml
     var new_list = testVar.listAppend( "hello" );
 //                         ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.method.support.cfml support.function.member.cfml
 //                                   ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.function-call.method.support.cfml meta.function-call.arguments.method.support.cfml punctuation.section.group.begin.cfml
@@ -83,7 +83,7 @@ property cfc.models.Dog Dog;
 //              ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.tag.script.cfml entity.name.tag.script.cfml
 //                   ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.tag.script.cfml entity.other.attribute-name.cfml
     var test = "#foo
-//              ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.string.quoted.double.cfml punctuation.section.interpolation.begin.cfml
+//              ^ embedding.cfml source.cfml.script meta.class.body.cfml meta.function.body.cfml meta.string.cfml punctuation.section.interpolation.begin.cfml
     # true";
 
     foo = document;
@@ -126,7 +126,7 @@ property cfc.models.Dog Dog;
   var test = {
     1: true ? 1 : 0,
     2: test
-//  ^ meta.struct-literal.key.cfml -constant.numeric.value.cfml
+//  ^ meta.mapping.key.cfml -constant.numeric.value.cfml
   }
 
     throw( message = "test error message" );
@@ -156,7 +156,7 @@ property cfc.models.Dog Dog;
 //                  ^ meta.function-call.method.support.cfml meta.function-call.arguments.method.support.cfml entity.other.method-parameter.cfml -meta.brace
 
     return { key: value };
-//         ^ meta.struct-literal.cfml
+//         ^ meta.mapping.cfml
 
   }
 
@@ -173,7 +173,7 @@ property cfc.models.Dog Dog;
 //                                                         ^ string.quoted.double.cfml punctuation.definition.string.begin.cfml
 
   function go( required string param = true ) {}
-//^ storage.type.function.cfml
+//^ keyword.declaration.function.cfml
 //                                     ^ meta.parameter.optional.cfml constant.language.boolean.true.cfml
 
 public void function setup( required root.model.cava.connection connection ) {}
@@ -193,38 +193,38 @@ _foo function test() {}
 
   var test = {
     key: value,
-//  ^ meta.struct-literal.key.cfml
+//  ^ meta.mapping.key.cfml
 //     ^ punctuation.separator.key-value.cfml
-//            ^ punctuation.separator.struct-literal.cfml
+//            ^ punctuation.separator.sequence.cfml
     'key': value,
-//  ^ meta.struct-literal.key.cfml string.quoted.single.cfml
+//  ^ meta.mapping.key.cfml string.quoted.single.cfml
 //       ^ punctuation.separator.key-value.cfml -string
     "key": value,
-//  ^ meta.struct-literal.key.cfml string.quoted.double.cfml
+//  ^ meta.mapping.key.cfml string.quoted.double.cfml
 //       ^ punctuation.separator.key-value.cfml -string
     key = value,
-//  ^ meta.struct-literal.key.cfml -entity.name.function
+//  ^ meta.mapping.key.cfml -entity.name.function
 //      ^ punctuation.separator.key-value.cfml
     'key' = value,
-//  ^^^^^ meta.struct-literal.key.cfml string.quoted.single.cfml
+//  ^^^^^ meta.mapping.key.cfml string.quoted.single.cfml
 //        ^ punctuation.separator.key-value.cfml -string
     "key" = value,
-//  ^^^^^ meta.struct-literal.key.cfml string.quoted.double.cfml
+//  ^^^^^ meta.mapping.key.cfml string.quoted.double.cfml
 //        ^ punctuation.separator.key-value.cfml -string
     456: 'A valid struct',
-//  ^^^ meta.struct-literal.key.cfml
-//     ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
-//                       ^ punctuation.separator.struct-literal.cfml
+//  ^^^ meta.mapping.key.cfml
+//     ^ punctuation.separator.key-value.cfml -meta.mapping.key.cfml
+//                       ^ punctuation.separator.sequence.cfml
     key: function() {},
-//  ^ meta.struct-literal.key.cfml entity.name.function.cfml
-//     ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
-//                    ^ punctuation.separator.struct-literal.cfml
+//  ^ meta.mapping.key.cfml entity.name.function.cfml
+//     ^ punctuation.separator.key-value.cfml -meta.mapping.key.cfml
+//                    ^ punctuation.separator.sequence.cfml
     "key": function() {},
-//   ^ meta.struct-literal.key.cfml string.quoted.double.cfml entity.name.function.cfml
-//       ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
+//   ^ meta.mapping.key.cfml string.quoted.double.cfml entity.name.function.cfml
+//       ^ punctuation.separator.key-value.cfml -meta.mapping.key.cfml
     'key': function() {}
-//   ^ meta.struct-literal.key.cfml string.quoted.single.cfml entity.name.function.cfml
-//       ^ punctuation.separator.key-value.cfml -meta.struct-literal.key.cfml
+//   ^ meta.mapping.key.cfml string.quoted.single.cfml entity.name.function.cfml
+//       ^ punctuation.separator.key-value.cfml -meta.mapping.key.cfml
 
   }
 
@@ -245,10 +245,10 @@ _foo function test() {}
 
   obj.prop = true;
   // <- variable.other.object.cfml
-//    ^ meta.property.cfml
+//    ^ variable.other.member.cfml
   obj.CONSTANT = true;
   // <- variable.other.object.cfml
-//    ^ meta.property.constant.cfml
+//    ^ variable.other.member.cfml
 
   var test[key][0] = [ 1, 2, 3 ];
 //        ^^^^^^^^ meta.brackets.cfml
@@ -281,8 +281,8 @@ _foo function test() {}
 cflock(name:"name-of-lock") {}
 //    ^ meta.tag.script.cf.cfml  meta.tag.script.cf.attributes.cfml punctuation.section.group.begin.cfml
 //         ^ meta.tag.script.cf.cfml punctuation.separator.key-value.cfml
-//          ^ meta.string.quoted.double.cfml string.quoted.double.cfml punctuation.definition.string.begin.cfml
-//           ^^^^^^^^^^^^ meta.string.quoted.double.cfml string.quoted.double.cfml
+//          ^ meta.string.cfml string.quoted.double.cfml punctuation.definition.string.begin.cfml
+//           ^^^^^^^^^^^^ meta.string.cfml string.quoted.double.cfml
 //                        ^ meta.tag.script.cf.cfml  meta.tag.script.cf.attributes.cfml punctuation.section.group.end.cfml
 //                          ^ meta.block.cfml punctuation.section.block.begin.cfml
   test(name:"arg");
@@ -295,22 +295,22 @@ cflock(name:"name-of-lock") {}
 a = arrayNew["string"](1);
 //  ^^^^^^^^ source.cfml.script support.function.cfml
 //          ^ source.cfml.script meta.brackets.cfml punctuation.section.brackets.begin.cfml
-//            ^^^^^^ meta.brackets.cfml meta.string.quoted.double.cfml string.quoted.double.cfml storage.type.primitive.cfml
+//            ^^^^^^ meta.brackets.cfml meta.string.cfml string.quoted.double.cfml storage.type.primitive.cfml
 
 a = ['string']["a", "b"];
-//    ^^^^^^ meta.brackets.cfml meta.string.quoted.single.cfml string.quoted.single.cfml storage.type.primitive.cfml
+//    ^^^^^^ meta.brackets.cfml meta.string.cfml string.quoted.single.cfml storage.type.primitive.cfml
 //            ^^^^^^^^^^ source.cfml.script meta.sequence.cfml
 
 a = [
     key: value,
-//  ^ meta.struct-literal.key.cfml
+//  ^ meta.mapping.key.cfml
 //     ^ punctuation.separator.key-value.cfml
-//            ^ punctuation.separator.struct-literal.cfml
+//            ^ punctuation.separator.sequence.cfml
     'key': value,
-//  ^ meta.struct-literal.key.cfml string.quoted.single.cfml
+//  ^ meta.mapping.key.cfml string.quoted.single.cfml
 //       ^ punctuation.separator.key-value.cfml -string
     "key": value,
-//  ^ meta.struct-literal.key.cfml string.quoted.double.cfml
+//  ^ meta.mapping.key.cfml string.quoted.double.cfml
 //       ^ punctuation.separator.key-value.cfml -string
 ];
 
@@ -338,7 +338,7 @@ try {
 }
 
 if (a <> b) {}
-//    ^^ source.cfml.script meta.conditional.cfml meta.group.cfml keyword.operator.comparison.binary.cfml
+//    ^^ source.cfml.script meta.conditional.cfml meta.group.cfml keyword.operator.comparison.cfml
 
 
 variables?.foo?.bar;
@@ -350,7 +350,7 @@ test?.foo();
 // <- variable.other.object.cfml
 
 a = 10 mod 5;
-//     ^^^ keyword.operator.arithmetic.binary.cfml
+//     ^^^ keyword.operator.arithmetic.cfml
 
 for (var ieeetype IN Dictionary().ieeetypes);
-//                ^^ keyword.operator.binary.cfml
+//                ^^ keyword.operator.word.cfml

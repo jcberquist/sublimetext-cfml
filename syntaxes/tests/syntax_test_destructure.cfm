@@ -7,8 +7,8 @@ var [ a, b ] = [ 1, 2 ];
 
 var { a, b } = { a: 1, b: 2 };
     <!--- <- meta.binding.destructuring.mapping.cfml punctuation.section.mapping.begin.cfml --->
-<!--- ^ meta.binding.destructuring.mapping.cfml meta.struct-literal.key.cfml meta.binding.name.cfml variable.other.readwrite.cfml --->
+<!--- ^ meta.binding.destructuring.mapping.cfml meta.mapping.key.cfml meta.binding.name.cfml variable.other.readwrite.cfml --->
 ({ a, b } = { a: 1, b: 2 });
- <!--- <- meta.struct-literal.cfml punctuation.section.mapping.begin.cfml --->
-<!--- ^ meta.struct-literal.cfml variable.other.readwrite.cfml --->
+ <!--- <- meta.mapping.cfml punctuation.section.mapping.begin.cfml --->
+<!--- ^ meta.mapping.cfml variable.other.readwrite.cfml --->
 </cfscript>

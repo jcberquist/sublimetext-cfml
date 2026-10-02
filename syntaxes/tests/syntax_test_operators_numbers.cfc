@@ -2,12 +2,12 @@
 component {
     function f() {
         x = a ^ 2 \ 3;
-//            ^ keyword.operator.arithmetic.binary.cfml
+//            ^ keyword.operator.arithmetic.cfml
 //              ^ constant.numeric.value.cfml
-//                ^ keyword.operator.arithmetic.binary.cfml
+//                ^ keyword.operator.arithmetic.cfml
         y = a
             \ 2;
-//          ^ keyword.operator.arithmetic.binary.cfml
+//          ^ keyword.operator.arithmetic.cfml
 //            ^ constant.numeric.value.cfml
 
         n = 42;
@@ -48,8 +48,19 @@ component {
         y = 1;
 //      ^ variable.other.readwrite.cfml -meta.brackets
         z = a equal b AND c NOT EQUAL d;
-//            ^^^^^ keyword.operator.comparison.binary.cfml
-//                    ^^^ keyword.operator.logical.binary.cfml
-//                          ^^^^^^^^^ keyword.operator.comparison.binary.cfml
+//            ^^^^^ keyword.operator.comparison.cfml
+//                    ^^^ keyword.operator.logical.cfml
+//                          ^^^^^^^^^ keyword.operator.comparison.cfml
+        z = a < b || c GTE d || e less than f;
+//            ^ keyword.operator.comparison.cfml
+//                     ^^^ keyword.operator.comparison.cfml
+//                                ^^^^^^^^^ keyword.operator.comparison.cfml
+        s = "a" & b;
+//              ^ keyword.operator.concatenation.cfml
+        s &= b;
+//        ^^ keyword.operator.assignment.augmented.cfml
+        b = s contains "a" || s does not contain "b";
+//            ^^^^^^^^ keyword.operator.comparison.cfml
+//                              ^^^^^^^^^^^^^^^^ keyword.operator.comparison.cfml
     }
 }

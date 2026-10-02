@@ -4,7 +4,7 @@ component {
 //  ^^^^^^ meta.function.declaration.cfml storage.modifier.cfml
 //         ^^^^^^ meta.function.declaration.cfml storage.modifier.cfml
 //                ^^^^^^ meta.function.declaration.cfml storage.type.primitive.cfml
-//                       ^^^^^^^^ meta.function.declaration.cfml storage.type.function.cfml
+//                       ^^^^^^^^ meta.function.declaration.cfml keyword.declaration.function.cfml
 //                                ^^^ meta.function.declaration.cfml entity.name.function.cfml
 
     static public struct function two() {}
@@ -17,7 +17,7 @@ component {
 //                               ^^^^^ meta.function.declaration.cfml entity.name.function.cfml
 
     Function bar() {
-//  ^^^^^^^^ meta.function.declaration.cfml storage.type.function.cfml
+//  ^^^^^^^^ meta.function.declaration.cfml keyword.declaration.function.cfml
         IF (a) { RETURN 1; } ELSE IF (b) { BREAK; } ELSE { VAR x = TRUE; }
 //      ^^ keyword.control.conditional.if.cfml
 //               ^^^^^^ keyword.control.flow.return.cfml
@@ -60,9 +60,9 @@ component {
 }
 component {
     function f() { g = (a) => a; }
-//  ^^^^^^^^ storage.type.function.cfml keyword.declaration.function.cfml
-//                         ^^ storage.type.function.arrow.cfml keyword.declaration.function.arrow.cfml
+//  ^^^^^^^^ keyword.declaration.function.cfml
+//                         ^^ keyword.declaration.function.arrow.cfml
 }
 abstract component {
-//       ^^^^^^^^^ meta.class.declaration.cfml storage.type.class.cfml keyword.declaration.class.cfml
+//       ^^^^^^^^^ meta.class.declaration.cfml keyword.declaration.class.cfml
 }

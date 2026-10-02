@@ -31,14 +31,14 @@ component {
         x = default; var default = 1; y = a.default;
 //          ^^^^^^^ variable.other.readwrite.cfml
 //                       ^^^^^^^ meta.binding.name.cfml variable.other.readwrite.cfml
-//                                          ^^^^^^^ meta.property.cfml
+//                                          ^^^^^^^ variable.other.member.cfml
         switch (x) { case 1: default = 1; break; default : break; }
 //                           ^^^^^^^ variable.other.readwrite.cfml
 //                                               ^^^^^^^ keyword.control.conditional.default.cfml
 //                                                       ^ punctuation.separator.cfml
         a.b.1234 = form.1;
-//          ^^^^ meta.property.cfml -constant.numeric
-//                      ^ meta.property.cfml -constant.numeric
+//          ^^^^ variable.other.member.cfml -constant.numeric
+//                      ^ variable.other.member.cfml -constant.numeric
         n = a.b + .5;
 //                ^^ constant.numeric.value.cfml
         if (x) {} elseif (y) {} else {}
@@ -81,8 +81,8 @@ component {
 component {
     function f() {
         x = a.b.MAX_SIZE + form.1;
-//            ^ meta.property.cfml variable.other.member.cfml
-//              ^^^^^^^^ meta.property.constant.cfml variable.other.member.cfml
-//                              ^ meta.property.cfml variable.other.member.cfml
+//            ^ variable.other.member.cfml
+//              ^^^^^^^^ variable.other.member.cfml
+//                              ^ variable.other.member.cfml
     }
 }

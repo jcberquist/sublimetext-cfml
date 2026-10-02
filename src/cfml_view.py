@@ -58,11 +58,9 @@ class CfmlFunctionCallParams:
             .strip()
             .split(" ")[:-1]
         )
-        separator_scope = " ".join(start_scope_list) + " "
-        last_key = start_scope_list[-2].replace("meta.", "punctuation.separator.") + " "
-        for scope_name in ["entity.", "createcomponent.", "createjavaobject."]:
-            last_key = last_key.replace(scope_name, "")
-        separator_scope += last_key
+        separator_scope = (
+            " ".join(start_scope_list) + " punctuation.separator.comma.cfml "
+        )
 
         start = self.params_region.begin() + 1
         for pt in range(self.params_region.begin() + 1, self.params_region.end()):

@@ -98,7 +98,7 @@ def get_dot_completions(cfml_view):
 
 def get_inline_documentation(cfml_view, doc_type):
 
-    if cfml_view.view.match_selector(cfml_view.position, "meta.property.constant"):
+    if cfml_view.view.match_selector(cfml_view.position, "variable.other.member"):
         word = cfml_view.view.word(cfml_view.position)
         dot_context = cfml_view.get_dot_context(word.begin() - 1)
         if len(dot_context) == 1 and dot_context[0].name == "cgi":

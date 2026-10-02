@@ -54,7 +54,7 @@ def get_script_completions(cfml_view):
     if cfml_view.file_name == "application.cfc":
         if cfml_view.view.match_selector(
             cfml_view.position,
-            "meta.class.body.cfml -meta.function -meta.struct-literal",
+            "meta.class.body.cfml -meta.function -meta.mapping",
         ):
             return cfml_view.CompletionList(appcfc["methods"], 0, False)
 
@@ -73,11 +73,11 @@ def get_inline_documentation(cfml_view, doc_type):
     context = []
     word_region = cfml_view.view.word(cfml_view.position)
 
-    if cfml_view.view.match_selector(cfml_view.position, "meta.property"):
+    if cfml_view.view.match_selector(cfml_view.position, "variable.other.member"):
         context = cfml_view.get_dot_context(word_region.begin() - 1)
 
     if cfml_view.view.match_selector(
-        cfml_view.position, "meta.class.body.cfml meta.struct-literal.cfml"
+        cfml_view.position, "meta.class.body.cfml meta.mapping.cfml"
     ):
         context = cfml_view.get_struct_context(cfml_view.position)
 
@@ -85,7 +85,7 @@ def get_inline_documentation(cfml_view, doc_type):
         key = ".".join([symbol.name for symbol in reversed(context)])
         if cfml_view.view.match_selector(
             cfml_view.position,
-            "meta.property, meta.struct-literal.key.cfml, variable.other.readwrite.cfml",
+            "variable.other.member, meta.mapping.key.cfml, variable.other.readwrite.cfml",
         ):
             key += "." + cfml_view.view.substr(word_region).lower()
         if key in appcfc["settings_docs"]:

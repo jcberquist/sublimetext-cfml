@@ -75,10 +75,10 @@
 <!--- ^ meta.tag.cfml source.cfml.script variable.other.readwrite.cfml --->
 
 <cfif col is 1>
-<!---     ^^ meta.tag.cfml source.cfml.script keyword.operator.comparison.binary.cfml --->
+<!---     ^^ meta.tag.cfml source.cfml.script keyword.operator.comparison.cfml --->
 
 <cfif col is not 1>
-<!---     ^^^^^^ meta.tag.cfml source.cfml.script keyword.operator.comparison.binary.cfml --->
+<!---     ^^^^^^ meta.tag.cfml source.cfml.script keyword.operator.comparison.cfml --->
 
 <cfset f.result = componentCall(
     component="#f.componentName#",
@@ -86,8 +86,8 @@
 )>
 
 <cfquery>SELECT * FROM #obj.property# WHERE s = '#obj.prop#'</cfquery>
-<!---                       ^^^^^^^^ source.sql source.cfml.script meta.property.cfml --->
-<!---                                                 ^^^^ source.sql source.cfml.script meta.property.cfml --->
+<!---                       ^^^^^^^^ source.sql source.cfml.script.embedded variable.other.member.cfml --->
+<!---                                                 ^^^^ source.sql source.cfml.script variable.other.member.cfml --->
 <cfquery>BULK INSERT VAR1 FROM 'C:\#path#'</cfquery>
 <!---                             ^ source.sql constant.character.escape.sql  --->
 <!---                              ^ source.sql punctuation.section.interpolation.begin.cfml --->
@@ -182,3 +182,12 @@ new java(foo);
 <!---   ^^^^^ text.html.cfml -source.cfml.script --->
 <cfif len( catch.detail )></cfif>
 <!---      ^^^^^ variable.other.object.cfml -keyword --->
+<script>
+  var t = html`<b>${a + `n${b}`}</b>`;
+<!---^^^ source.js.embedded.html source.js.plain --->
+<!---     ^^^^ variable.function.tagged-template.js --->
+<!---          ^^^ meta.string.template.js string.quoted.other.js -text.html.basic --->
+<!---               ^ meta.string.template.js meta.interpolation.js --->
+<!---                       ^ meta.interpolation.js meta.string.template.js meta.interpolation.js --->
+<!---                               ^ meta.string.template.js punctuation.definition.string.end.js --->
+</script>

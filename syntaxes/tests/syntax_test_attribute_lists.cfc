@@ -3,7 +3,7 @@ interface {
     function f()
 //           ^ meta.function.declaration.cfml entity.name.function.cfml
     function g();
-//  ^^^^^^^^ meta.function.declaration.cfml storage.type.function.cfml
+//  ^^^^^^^^ meta.function.declaration.cfml keyword.declaration.function.cfml
 //           ^ meta.function.declaration.cfml entity.name.function.cfml
     public string function h() output=false
 //                             ^^^^^^ meta.function.declaration.cfml entity.other.attribute-name.cfml
@@ -31,5 +31,5 @@ component {
 //  ^^^^^^ keyword.control.flow.return.cfml -meta.tag
 }
 interface {
-// <- meta.interface.declaration.cfml storage.type.interface.cfml keyword.declaration.interface.cfml
+// <- meta.interface.declaration.cfml keyword.declaration.interface.cfml
 }

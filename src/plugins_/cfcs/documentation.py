@@ -140,7 +140,7 @@ def find_cfc(cfml_view):
     if cfml_view.view.match_selector(cfml_view.position, "punctuation.accessor.cfml"):
         check_position = cfml_view.position + 1
     if cfml_view.view.match_selector(
-        check_position, "variable.other, meta.property.cfml"
+        check_position, "variable.other"
     ):
         # we need to find the whole dot context now in order to search for variable names that contain dots
         dot_context = get_dot_context(cfml_view, check_position)
@@ -177,7 +177,7 @@ def get_dot_context(cfml_view, position):
     if cfml_view.view.match_selector(
         next_pt, "punctuation.accessor.cfml"
     ) and cfml_view.view.match_selector(
-        next_pt + 1, "variable.other, meta.property.cfml"
+        next_pt + 1, "variable.other"
     ):
         return get_dot_context(cfml_view, next_pt + 1)
 

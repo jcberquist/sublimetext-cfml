@@ -4,7 +4,7 @@
  */
 abstract /* base */ component {
 //       ^^ source.cfml.script comment.block.cfml
-//                  ^^^^^^^^^ source.cfml.script meta.class.declaration.cfml storage.type.class.cfml
+//                  ^^^^^^^^^ source.cfml.script meta.class.declaration.cfml keyword.declaration.class.cfml
     function f() {}
 //           ^ source.cfml.script meta.function.declaration.cfml entity.name.function.cfml
 }

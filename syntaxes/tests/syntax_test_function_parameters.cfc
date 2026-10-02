@@ -16,7 +16,7 @@ component {
     private string[] function b() {}
 //          ^^^^^^ meta.function.declaration.cfml storage.type.primitive.cfml
 //                ^^ meta.function.declaration.cfml meta.brackets.cfml
-//                   ^^^^^^^^ storage.type.function.cfml
+//                   ^^^^^^^^ keyword.declaration.function.cfml
 //                            ^ entity.name.function.cfml
     public Foo[] function c() {}
 //         ^^^ storage.type.object.array.cfml

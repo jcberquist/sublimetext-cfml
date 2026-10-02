@@ -107,7 +107,7 @@ def get_script_completions(cfml_view):
     if extends_fw1(cfml_view):
         if cfml_view.view.match_selector(
             cfml_view.position,
-            "meta.class.body.cfml -meta.function.body -meta.struct-literal",
+            "meta.class.body.cfml -meta.function.body -meta.mapping",
         ):
             return cfml_view.CompletionList(fw1["methods"]["definitions"], 0, False)
 
@@ -136,19 +136,19 @@ def get_inline_documentation(cfml_view, doc_type):
     word_region = cfml_view.view.word(cfml_view.position)
 
     if view_extends_fw1 and cfml_view.view.match_selector(
-        cfml_view.position, "meta.property"
+        cfml_view.position, "variable.other.member"
     ):
         context = cfml_view.get_dot_context(word_region.begin() - 1)
 
     if view_extends_fw1 and cfml_view.view.match_selector(
-        cfml_view.position, "meta.class.body.cfml meta.struct-literal.cfml"
+        cfml_view.position, "meta.class.body.cfml meta.mapping.cfml"
     ):
         context = cfml_view.get_struct_context(cfml_view.position)
 
     if len(context) > 0:
         key = ".".join([symbol.name for symbol in reversed(context)])
         if cfml_view.view.match_selector(
-            cfml_view.position, "meta.property,meta.struct-literal.key,variable.other"
+            cfml_view.position, "meta.mapping.key,variable.other"
         ):
             key += "." + cfml_view.view.substr(word_region).lower()
         if key in fw1["settings_docs"]:

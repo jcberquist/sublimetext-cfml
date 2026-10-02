@@ -176,7 +176,7 @@ def find_cfc(cfml_view, position):
                         regions.append(funct_region)
                     return cfc_path, file_path, dot_path, function_name, regions
 
-    if cfml_view.view.match_selector(position, "variable.other, meta.property.cfml"):
+    if cfml_view.view.match_selector(position, "variable.other"):
         var_region = cfml_view.view.word(position)
         dot_context = cfml_view.get_dot_context(var_region.begin() - 1)
         if len(dot_context) == 0 or (

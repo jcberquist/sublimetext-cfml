@@ -31,7 +31,7 @@ abstract component {
       test.class::staticVal;
 //    ^^^^^^^^^^ entity.name.class.cfml
 //              ^^ punctuation.accessor.static.cfml
-//                ^^^^^^^^^ meta.property.cfml
+//                ^^^^^^^^^ variable.other.member.cfml
     }
 
   func(object::staticMethod());

@@ -211,7 +211,7 @@ contexts:
     - match: (?i)^\s*(?:(abstract|final)\s+)?(component)\b
       captures:
         1: storage.modifier.cfml
-        2: storage.type.class.cfml keyword.declaration.class.cfml
+        2: keyword.declaration.class.cfml
       set:
         - component-body
         - component-attributes
@@ -223,14 +223,14 @@ contexts:
       set: component-declaration-keyword
     - match: (?i)^\s*(interface)\b
       captures:
-        1: storage.type.interface.cfml keyword.declaration.interface.cfml
+        1: keyword.declaration.interface.cfml
       set:
         - interface-body
         - interface-attributes
 
   component-declaration-keyword:
     - match: (?i)component\b
-      scope: storage.type.class.cfml keyword.declaration.class.cfml
+      scope: keyword.declaration.class.cfml
       set:
         - component-body
         - component-attributes
@@ -697,7 +697,7 @@ contexts:
 
   for-in-word:
     - match: (?i)in\b
-      scope: keyword.operator.binary.cfml
+      scope: keyword.operator.word.cfml
       pop: 1
     - match: (?=\S)
       fail: for-in
@@ -944,7 +944,7 @@ contexts:
       scope: punctuation.definition.string.begin.cfml
       set:
         - meta_include_prototype: false
-        - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
+        - meta_scope: meta.string.cfml string.quoted.single.cfml
         - match: (?={{sql_lookahead}})
           set: string-sql-single
         - match: (?=\S)
@@ -953,7 +953,7 @@ contexts:
       scope: punctuation.definition.string.begin.cfml
       set:
         - meta_include_prototype: false
-        - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
+        - meta_scope: meta.string.cfml string.quoted.double.cfml
         - match: (?={{sql_lookahead}})
           set: string-sql-double
         - match: (?=\S)
@@ -961,7 +961,7 @@ contexts:
 
   string-single:
     - meta_include_prototype: false
-    - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
+    - meta_scope: meta.string.cfml string.quoted.single.cfml
     - match: "''"
       scope: constant.character.escape.quote.cfml
     - match: \'
@@ -971,7 +971,7 @@ contexts:
 
   string-sql-single:
     - meta_include_prototype: false
-    - meta_scope: meta.string.quoted.single.cfml
+    - meta_scope: meta.string.cfml
     - match: \'
       scope: string.quoted.single.cfml punctuation.definition.string.end.cfml
       pop: 1
@@ -987,7 +987,7 @@ contexts:
 
   string-double:
     - meta_include_prototype: false
-    - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
+    - meta_scope: meta.string.cfml string.quoted.double.cfml
     - match: '""'
       scope: constant.character.escape.quote.cfml
     - match: \"
@@ -997,7 +997,7 @@ contexts:
 
   string-sql-double:
     - meta_include_prototype: false
-    - meta_scope: meta.string.quoted.double.cfml
+    - meta_scope: meta.string.cfml
     - match: \"
       scope: string.quoted.double.cfml punctuation.definition.string.end.cfml
       pop: true
@@ -1059,13 +1059,13 @@ contexts:
 
   binary-operators:
     - match: \b(?i:in)\b
-      scope: keyword.operator.binary.cfml
+      scope: keyword.operator.word.cfml
       push: expression-begin
     - match: '&&|\|\|'
-      scope: keyword.operator.logical.binary.cfml
+      scope: keyword.operator.logical.cfml
       push: expression-begin
     - match: \b(?i:(and|or|xor|eqv|imp))\b
-      scope: keyword.operator.logical.binary.cfml
+      scope: keyword.operator.logical.cfml
       push: expression-begin
     - match: =(?![=>])
       scope: keyword.operator.assignment.cfml
@@ -1078,10 +1078,10 @@ contexts:
         \+=  | # assignment      right-to-left   both
         -=   | # assignment      right-to-left   both
         /=     # assignment      right-to-left   both
-      scope: keyword.operator.assignment.augmented.binary.cfml
+      scope: keyword.operator.assignment.augmented.cfml
       push: expression-begin
     - match: '&'
-      scope: keyword.operator.concat.binary.cfml
+      scope: keyword.operator.concatenation.cfml
       push: expression-begin
     - match: |-
         (?x)
@@ -1092,7 +1092,7 @@ contexts:
         !=   |  # equality        left-to-right   both
         <>   |  # equality        left-to-right   both
         \b(?i:eq|is|equal)\b
-      scope: keyword.operator.comparison.binary.cfml
+      scope: keyword.operator.comparison.cfml
       push: expression-begin
     - match: |-
         (?x)
@@ -1104,13 +1104,13 @@ contexts:
         \b(?i:(lt|less\s+than\s))\b |
         >    | # relational      left-to-right   both
         \b(?i:(gt|greater\s+than\s))\b
-      scope: keyword.operator.relational.binary.cfml
+      scope: keyword.operator.comparison.cfml
       push: expression-begin
     - match: \b(?i:(contains|does\s+not\s+contain))\b
-      scope: keyword.operator.decision.binary.cfml
+      scope: keyword.operator.comparison.cfml
       push: expression-begin
     - match: \b(?i:mod)\b
-      scope: keyword.operator.arithmetic.binary.cfml
+      scope: keyword.operator.arithmetic.cfml
       push: expression-begin
     - match: |-
         (?x)
@@ -1121,7 +1121,7 @@ contexts:
         \*   | # multiplication  left-to-right   both
         \+   | # addition        left-to-right   both
         -      # subtraction     left-to-right   both
-      scope: keyword.operator.arithmetic.binary.cfml
+      scope: keyword.operator.arithmetic.cfml
       push: expression-begin
     - match: ','
       scope: punctuation.separator.comma.cfml
@@ -1229,7 +1229,7 @@ contexts:
 
   function-declaration-expect-function-keyword:
     - match: (?i)function\b
-      scope: storage.type.function.cfml keyword.declaration.function.cfml
+      scope: keyword.declaration.function.cfml
       pop: 1
     - include: else-pop
 
@@ -1346,7 +1346,7 @@ contexts:
 
   arrow-function-expect-arrow:
     - match: '=>'
-      scope: storage.type.function.arrow.cfml keyword.declaration.function.arrow.cfml
+      scope: keyword.declaration.function.arrow.cfml
       pop: 1
     - include: else-pop
 
@@ -1375,7 +1375,7 @@ contexts:
       set: struct-literal-contents
 
   struct-literal-contents:
-    - meta_scope: meta.struct-literal.cfml meta.mapping.cfml
+    - meta_scope: meta.mapping.cfml
     - match: '\}'
       scope: punctuation.section.mapping.end.cfml
       pop: 1
@@ -1414,7 +1414,7 @@ contexts:
       push: struct-literal-element
 
     - match: ','
-      scope: punctuation.separator.struct-literal.cfml
+      scope: punctuation.separator.sequence.cfml
 
     - match: '[:=]'
       scope: punctuation.separator.key-value.cfml
@@ -1444,11 +1444,12 @@ contexts:
       pop: 1
     - include: else-pop
 
-  # `meta.mapping.key` comes last: the built-in color schemes color a quoted
-  # key through `meta.mapping.key string - meta.mapping.key meta meta`.
+  # No other meta scope may follow `meta.mapping.key`: the built-in color
+  # schemes color a quoted key through
+  # `meta.mapping.key string - meta.mapping.key meta meta`.
   struct-literal-meta-key:
     - meta_include_prototype: false
-    - meta_scope: meta.struct-literal.key.cfml meta.mapping.key.cfml
+    - meta_scope: meta.mapping.key.cfml
     - include: else-pop
 
   method-name:
@@ -1559,13 +1560,13 @@ contexts:
          - array-typed-storage-type
 
   array-typed-storage-string-single:
-    - meta_scope: meta.string.quoted.single.cfml string.quoted.single.cfml
+    - meta_scope: meta.string.cfml string.quoted.single.cfml
     - match: "'"
       pop: true
       scope: punctuation.definition.string.end.cfml
 
   array-typed-storage-string-double:
-    - meta_scope: meta.string.quoted.double.cfml string.quoted.double.cfml
+    - meta_scope: meta.string.cfml string.quoted.double.cfml
     - match: '"'
       pop: true
       scope: punctuation.definition.string.end.cfml
@@ -1705,7 +1706,7 @@ contexts:
           scope: punctuation.section.group.end.cfml
           pop: 1
         - match: ','
-          scope: punctuation.separator.function-call.cfml
+          scope: punctuation.separator.comma.cfml
         - include: quoted-named-argument
         - match: ({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
           captures:
@@ -1738,14 +1739,14 @@ contexts:
 
   struct-property-base:
     - match: '{{constant_identifier}}'
-      scope: meta.property.constant.cfml variable.other.member.cfml
+      scope: variable.other.member.cfml
       pop: 1
     - match: '{{identifier}}'
-      scope: meta.property.cfml variable.other.member.cfml
+      scope: variable.other.member.cfml
       pop: 1
     # A numeric member (`form.1`, `a.b.1234`).
     - match: '[0-9]+'
-      scope: meta.property.cfml variable.other.member.cfml
+      scope: variable.other.member.cfml
       pop: 1
 
   tag-in-script:
@@ -1818,11 +1819,11 @@ contexts:
     - match: ({{dot_path_identifier}})\s+({{identifier}}\b)(?!\s*=)
       captures:
         1: storage.type.cfml
-        2: meta.string.unquoted.cfml string.unquoted.cfml meta.tag.property.name.cfml
+        2: meta.string.cfml string.unquoted.cfml meta.tag.property.name.cfml
       pop: true
     - match: ({{identifier}}\b)(?!\s*=)
       captures:
-        1: meta.string.unquoted.cfml string.unquoted.cfml meta.tag.property.name.cfml
+        1: meta.string.cfml string.unquoted.cfml meta.tag.property.name.cfml
       pop: true
     - include: else-pop
 
@@ -1836,15 +1837,15 @@ contexts:
       pop: 1
     - match: (?i)({{dot_path_identifier}})(?=\s+{{param_attributes}})
       captures:
-        1: meta.string.unquoted.cfml string.unquoted.cfml
+        1: meta.string.cfml string.unquoted.cfml
       pop: 1
     - match: \b({{identifier}})\s+({{dot_path_identifier}})\b
       captures:
         1: storage.type.cfml
-        2: meta.string.unquoted.cfml string.unquoted.cfml
+        2: meta.string.cfml string.unquoted.cfml
       set: tag-in-script-param-assignment
     - match: \b{{dot_path_identifier}}\b
-      scope: meta.string.unquoted.cfml string.unquoted.cfml
+      scope: meta.string.cfml string.unquoted.cfml
       set: tag-in-script-param-assignment
     - include: else-pop
 
@@ -1992,12 +1993,12 @@ contexts:
     - match: \(
       scope: punctuation.section.group.begin.cfml
       set:
-        - meta_scope: meta.function-call.arguments.support.cfml
+        - meta_scope: meta.function-call.arguments.support.cfml meta.group.cfml
         - match: \)
           scope: punctuation.section.group.end.cfml
           pop: true
         - match: ','
-          scope: punctuation.separator.function-call.support.cfml
+          scope: punctuation.separator.comma.cfml
         - include: quoted-named-argument
         - match: ({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
           captures:
@@ -2031,7 +2032,7 @@ contexts:
           scope: punctuation.section.group.end.cfml
           pop: 1
         - match: ','
-          scope: punctuation.separator.function-call.method.cfml
+          scope: punctuation.separator.comma.cfml
         - include: quoted-named-argument
         - match: ({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
           captures:
@@ -2057,12 +2058,12 @@ contexts:
     - match: \(
       scope: punctuation.section.group.begin.cfml
       set:
-        - meta_scope: meta.function-call.arguments.method.support.cfml
+        - meta_scope: meta.function-call.arguments.method.support.cfml meta.group.cfml
         - match: \)
           scope: punctuation.section.group.end.cfml
           pop: 1
         - match: ','
-          scope: punctuation.separator.function-call.method.support.cfml
+          scope: punctuation.separator.comma.cfml
         - include: quoted-named-argument
         - match: ({{identifier}})\s*(?:(=)(?![=>])|(:)(?!:))
           captures:

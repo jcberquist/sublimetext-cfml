@@ -3,7 +3,7 @@ component {
     function f() {
         writeOutput(catch.message);
 //                  ^^^^^ variable.other.object.cfml -keyword
-//                        ^^^^^^^ meta.property.cfml
+//                        ^^^^^^^ variable.other.member.cfml
         catch.detail = "x";
 //      ^^^^^ variable.other.object.cfml -keyword
         out &= case;
@@ -19,7 +19,7 @@ component {
         return;
 //      ^^^^^^ keyword.control.flow.return.cfml
         for (k in s) {}
-//             ^^ keyword.operator.binary.cfml
+//             ^^ keyword.operator.word.cfml
         if (a) {} else {}
 //                ^^^^ keyword.control.conditional.else.cfml
         switch (x) { case 1: break; }

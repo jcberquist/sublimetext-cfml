@@ -21,7 +21,7 @@ contexts:
         3: keyword.declaration.cdata.html
         4: punctuation.definition.tag.begin.html
       pop: 1  # make sure to match only once
-      embed: scope:source.js.cfml
+      embed: scope:source.js.plain
       embed_scope: meta.tag.sgml.cdata.html source.js.embedded.html
       escape: \]\]>
       escape_captures:
@@ -30,7 +30,7 @@ contexts:
       captures:
         1: comment.block.html punctuation.definition.comment.begin.html
       pop: 1  # make sure to match only once
-      embed: scope:source.js.cfml
+      embed: scope:source.js.plain
       embed_scope: source.js.embedded.html
       escape: '{{script_content_end}}'
       escape_captures:
@@ -42,14 +42,14 @@ contexts:
   tag-event-attribute-value:
     - match: \"
       scope: meta.string.html string.quoted.double.html punctuation.definition.string.begin.html
-      embed: scope:source.js.cfml
+      embed: scope:source.js.plain
       embed_scope: meta.string.html meta.interpolation.html source.js.embedded.html
       escape: \"
       escape_captures:
         0: meta.string.html string.quoted.double.html punctuation.definition.string.end.html
     - match: \'
       scope: meta.string.html string.quoted.single.html punctuation.definition.string.begin.html
-      embed: scope:source.js.cfml
+      embed: scope:source.js.plain
       embed_scope: meta.string.html meta.interpolation.html source.js.embedded.html
       escape: \'
       escape_captures:
