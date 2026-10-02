@@ -17,37 +17,37 @@ contexts:
       push: skipped
     - match: \(([+P])\)
       captures:
-        1: testbox.success
+        1: markup.inserted.testbox
     - match: \((!)\)
       captures:
-        1: testbox.failure
+        1: markup.changed.testbox
     - match: \((X)\)
       captures:
-        1: testbox.error
+        1: markup.deleted.testbox
     - match: \((-)\)
       captures:
-        1: testbox.skipped
+        1: markup.ignored.testbox
     - match: \S.*testbox[\\/]system.*:\d+$
-      scope: testbox.stack.testbox
+      scope: markup.italic.testbox
     - match: \S.*:\d+$
-      scope: testbox.stack
+      scope: markup.bold.testbox
   success:
     - match: '[1-9]\d*'
-      scope: testbox.success
+      scope: markup.inserted.testbox
     - match: \S
       pop: true
   failure:
     - match: '[1-9]\d*'
-      scope: testbox.failure
+      scope: markup.changed.testbox
     - match: \S
       pop: true
   error:
     - match: '[1-9]\d*'
-      scope: testbox.error
+      scope: markup.deleted.testbox
     - match: \S
       pop: true
   skipped:
     - match: '[1-9]\d*'
-      scope: testbox.skipped
+      scope: markup.ignored.testbox
     - match: \S
       pop: true
