@@ -314,21 +314,6 @@ def get_tag_attribute_name(view, pos):
     return None
 
 
-def between_cfml_tag_pair(view, pos):
-    if (
-        not view.substr(pos - 1) == ">"
-        or not view.substr(sublime.Region(pos, pos + 2)) == "</"
-    ):
-        return False
-    if not view.match_selector(
-        pos - 1, "meta.tag.cfml, meta.tag.custom.cfml"
-    ) or not view.match_selector(pos + 2, "meta.tag.cfml, meta.tag.custom.cfml"):
-        return False
-    if get_tag_name(view, pos - 1) != get_tag_name(view, pos + 2):
-        return False
-    return True
-
-
 def get_function(view, pt):
     if view.match_selector(pt, "meta.function.cfml"):
         function_scope = "meta.function.cfml"

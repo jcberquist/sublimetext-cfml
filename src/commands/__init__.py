@@ -1,3 +1,5 @@
+import os
+import sublime
 import sublime_plugin
 from .. import utils
 from ..component_index import component_index
@@ -51,26 +53,6 @@ class CfmlAutoInsertClosingTagCommand(sublime_plugin.TextCommand):
                         )
                         return
         self.view.run_command("insert_snippet", {"contents": ">"})
-
-
-class CfmlBetweenTagPairCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
-        pt = self.view.sel()[0].begin()
-        cfml_between_tag_pair = utils.get_setting("cfml_between_tag_pair")
-        if cfml_between_tag_pair in [
-            "newline",
-            "indent",
-        ] and utils.between_cfml_tag_pair(self.view, pt):
-            self.view.run_command(
-                "insert_snippet",
-                {
-                    "contents": "\n"
-                    + ("\t" if cfml_between_tag_pair == "indent" else "")
-                    + "$0\n"
-                },
-            )
-            return
-        self.view.run_command("insert_snippet", {"contents": "\n"})
 
 
 class CfmlEditSettingsCommand(sublime_plugin.WindowCommand):

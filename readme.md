@@ -126,8 +126,6 @@ If Sublime Text's `auto_close_tags` setting is `true`, when a closing tag's `/` 
 
 If the package setting `cfml_auto_insert_closing_tag` is set to `true` (by default it is `false`), when `>` is pressed in a tag, the corresponding closing tag will be automatically inserted after the cursor position. The package setting `cfml_non_closing_tags` controls which CFML tags will not get a closing tag auto inserted.
 
-The package setting `cfml_between_tag_pair` controls the behavior of the editor when <kbd>ENTER</kbd> is pressed while the cursor is between a CFML tag pair (e.g. `<cfoutput>|</cfoutput>`). By default only a single new line is inserted. This can be changed to have an extra new line auto inserted between the tag pair (with an optional indent), and the cursor placed there. See the default package settings file for more information.
-
 ### CFC Indexing and Dot Paths
 
 There are two settings that are set on a per project basis in a project file, `cfc_folders` and `mappings`. Here is an example (a real project file will have other settings in it as well):
