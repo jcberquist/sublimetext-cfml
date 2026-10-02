@@ -49,7 +49,11 @@ def load():
 
 
 class TestboxCommand(sublime_plugin.WindowCommand):
-    def run(self, test_type="", **kwargs):
+    def run(self, test_type="", kill=False, **kwargs):
+        # Cancel Build calls the build target again with kill=True
+        if kill:
+            return
+
         project_file_dir = (
             utils.normalize_path(os.path.dirname(self.window.project_file_name()))
             if self.window.project_file_name()
@@ -254,10 +258,12 @@ class TestboxCommand(sublime_plugin.WindowCommand):
         return urllib.parse.urlunsplit(runner_tuple)
 
     def get_testbox_results(self, project_file_dir):
-        testbox_results = self.get_setting("results")
+        # a user's "testbox" setting replaces the default one, so "results"
+        # or its keys may be missing
+        testbox_results = self.get_setting("results") or {}
         for key in ["server_root", "sublime_root"]:
             testbox_results[key] = utils.normalize_path(
-                testbox_results[key], project_file_dir
+                testbox_results.get(key, ""), project_file_dir
             )
             if len(testbox_results[key]) > 0:
                 testbox_results[key] += "/"

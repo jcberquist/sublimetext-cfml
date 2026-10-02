@@ -27,7 +27,7 @@ NAME_CASING = {
 
 
 def load_members():
-    src = json.loads((root / 'completion_members.json').read_text())
+    src = json.loads((root / 'completion_members.json').read_text(encoding='utf-8'))
     out = {}
     for member_type, builtins in src.items():
         for builtin, member in builtins.items():
@@ -46,7 +46,7 @@ def fix_casing(data):
         data['name'] = name
         syntax = data['syntax']
         if syntax.lower().startswith(name.lower() + '('):
-            data['syntax'] = name + syntax[len(name):]
+            data['syntax'] = name + syntax[len(name) :]
     return data
 
 
@@ -123,6 +123,12 @@ def format_json(src, sort_nested=True):
     return out + '\n'
 
 
+def write_json(file_name, src, sort_nested=True):
+    (out_path / file_name).write_text(
+        format_json(src, sort_nested), encoding='utf-8', newline='\n'
+    )
+
+
 def main(cfdocs_path):
     base_path = pathlib.Path(cfdocs_path) / 'data/en'
     members = load_members()
@@ -133,7 +139,7 @@ def main(cfdocs_path):
     tags = {}
 
     for p in base_path.iterdir():
-        data = json.loads(p.read_text())
+        data = json.loads(p.read_text(encoding='utf-8'))
         if is_boxlang_only(data):
             continue
 
@@ -176,10 +182,10 @@ def main(cfdocs_path):
 
             tags[data['name'].lower()] = tag
 
-    (out_path / 'cfml_functions.json').write_text(format_json(functions))
-    (out_path / 'cfml_function_params.json').write_text(format_json(function_params))
-    (out_path / 'cfml_member_functions.json').write_text(format_json(member_functions))
-    (out_path / 'cfml_tags.json').write_text(format_json(tags, False))
+    write_json('cfml_functions.json', functions)
+    write_json('cfml_function_params.json', function_params)
+    write_json('cfml_member_functions.json', member_functions)
+    write_json('cfml_tags.json', tags, False)
 
 
 if __name__ == '__main__':

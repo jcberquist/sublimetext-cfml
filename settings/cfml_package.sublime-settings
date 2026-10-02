@@ -1,7 +1,7 @@
 {
     // you can override the following settings in your user package settings
-    // this is accessible in the menu via Package Settings -> CFML -> Package Settings - User
-    // or via the command palette - CFML: User Package Settings
+    // this is accessible in the menu via Package Settings -> CFML -> Settings
+    // or via the command palette - CFML: Settings
 
     // BIF completions
     // "basic" - only the function name
@@ -81,7 +81,8 @@
     // if there is a `box.json` file in the root of a project
     // these settings can be placed there as well
     "testbox": {
-        "runner": "http://localhost:8888/testbox/system/Testbox.cfc?method=runremote",
+        // e.g. "http://localhost:8888/testbox/system/TestBox.cfc?method=runRemote"
+        "runner": "",
         "tests_root": "",
         "reporter": "compacttext", // options are `compacttext` and `text`
         "results": {"server_root": "", "sublime_root": ""}
