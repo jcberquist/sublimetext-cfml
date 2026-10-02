@@ -11,15 +11,12 @@ def get_completions(view, position, prefix):
         return None
 
     completion_lists = []
-    minimum_priority = 0
     docs = []
 
     for p in cfml_plugins.plugins:
         completionlist = p.get_completions(cfml_view)
         if completionlist:
             completion_lists.append(completionlist)
-            if completionlist.exclude_lower_priority:
-                minimum_priority = completionlist.priority
 
     if utils.get_setting("cfml_completion_docs"):
         for p in cfml_plugins.plugins:

@@ -145,8 +145,8 @@ class CustomTags:
         if project_name in self.data and file_path in self.data[project_name]["index"]:
             with self.watcher.lock:
                 if (
-                    project_name in self.projects
-                    and file_path in self.projects[project_name]["index"]
+                    project_name in self.data
+                    and file_path in self.data[project_name]["index"]
                 ):
                     del self.data[project_name]["index"][file_path]
                     self.build_project_data(project_name)

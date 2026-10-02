@@ -10,7 +10,7 @@ def get_dot_completions(cfml_view):
     )
     if cfc_name:
         return cfml_view.CompletionList(
-            cfcs.get_cfc_completions(cfml_view.project_name, cfc_name), 1, True
+            cfcs.get_cfc_completions(cfml_view.project_name, cfc_name)
         )
 
     # also check for getter being used to access property
@@ -18,9 +18,7 @@ def get_dot_completions(cfml_view):
     if symbol.is_function and symbol.name.startswith("get"):
         if cfcs.has_cfc(cfml_view.project_name, symbol.name[3:]):
             return cfml_view.CompletionList(
-                cfcs.get_cfc_completions(cfml_view.project_name, symbol.name[3:]),
-                1,
-                True,
+                cfcs.get_cfc_completions(cfml_view.project_name, symbol.name[3:])
             )
 
     return None

@@ -213,7 +213,7 @@ CFML MVC frameworks typically have the convention that a `controllers` and a `vi
 
 ### CommandBox
 
-CommandBox (<https://www.ortussolutions.com/products/commandbox>) has been added as the default CFML build system. This simply means that running the build command (<kbd>F7</kbd> on Windows) on a CFML file will run `box ${filename}` as a shell command in the directory of the file and output the result in a pane within Sublime Text (it can also be selected from the build system menu available via <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>B</kbd>). For this to work, CommandBox needs to be installed, and the CommandBox `box` binary needs to be available system wide, so that `box` can be run in any directory (see <https://ortus.gitbooks.io/commandbox-documentation/content/setup/installation.html>).
+CommandBox (<https://www.ortussolutions.com/products/commandbox>) has been added as the default CFML build system. This simply means that running the build command (<kbd>F7</kbd> on Windows) on a CFML file will run `box $file_name` as a shell command in the directory of the file and output the result in a pane within Sublime Text (it can also be selected from the build system menu available via <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>B</kbd>). For this to work, CommandBox needs to be installed, and the CommandBox `box` binary needs to be available system wide, so that `box` can be run in any directory (see <https://ortus.gitbooks.io/commandbox-documentation/content/setup/installation.html>).
 
 ### TestBox
 

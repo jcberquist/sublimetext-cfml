@@ -21,7 +21,7 @@ cgi = {}
 
 
 def get_tags(cfml_view):
-    return cfml_view.CompletionList(completions["cfml_tags"], 0, False)
+    return cfml_view.CompletionList(completions["cfml_tags"])
 
 
 def get_tag_attributes(cfml_view):
@@ -37,7 +37,7 @@ def get_tag_attributes(cfml_view):
             cfml_view.tag_name, None
         )
         if completion_list:
-            return cfml_view.CompletionList(completion_list, 0, False)
+            return cfml_view.CompletionList(completion_list)
     elif (
         cfml_view.tag_name in completions["cfml_tag_attribute_values"]
         and cfml_view.tag_attribute_name
@@ -47,7 +47,7 @@ def get_tag_attributes(cfml_view):
         completion_list = completions["cfml_tag_attribute_values"][cfml_view.tag_name][
             cfml_view.tag_attribute_name
         ]
-        return cfml_view.CompletionList(completion_list, 0, False)
+        return cfml_view.CompletionList(completion_list)
 
     return None
 
@@ -75,25 +75,25 @@ def get_script_completions(cfml_view):
         param_completions = get_param_completions(cfml_view)
         if param_completions:
             completion_list.extend(param_completions)
-            return cfml_view.CompletionList(completion_list, 0, False)
+            return cfml_view.CompletionList(completion_list)
 
     completion_list.extend(
         completions["cfml_functions"][utils.get_setting("cfml_bif_completions")]
     )
     completion_list.extend(completions["cfml_cf_tags_in_script"])
     completion_list.extend(completions["cfml_tags_in_script"])
-    return cfml_view.CompletionList(completion_list, 0, False)
+    return cfml_view.CompletionList(completion_list)
 
 
 def get_dot_completions(cfml_view):
 
     if len(cfml_view.dot_context) == 1 and cfml_view.dot_context[0].name == "cgi":
-        return cfml_view.CompletionList(completions["cgi"], 0, False)
+        return cfml_view.CompletionList(completions["cgi"])
 
     completion_list = completions["cfml_member_functions"][
         utils.get_setting("cfml_bif_completions")
     ]
-    return cfml_view.CompletionList(completion_list, 0, False)
+    return cfml_view.CompletionList(completion_list)
 
 
 def get_inline_documentation(cfml_view, doc_type):

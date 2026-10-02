@@ -5,9 +5,7 @@ from collections import namedtuple
 from . import utils
 from . import buffer_metadata
 
-CompletionList = namedtuple(
-    "CompletionList", "completions priority exclude_lower_priority"
-)
+CompletionList = namedtuple("CompletionList", "completions")
 Documentation = namedtuple(
     "Documentation", "doc_regions doc_html_variables on_navigate priority"
 )
@@ -215,7 +213,7 @@ class CfmlView:
         return self._cache["get_dot_context"][pt]
 
     def get_struct_context(self, pt, cachable=True):
-        if not cachable or pt not in self._cache["get_function"]:
+        if not cachable or pt not in self._cache["get_struct_context"]:
             self._cache["get_struct_context"][pt] = utils.get_struct_context(
                 self.view, pt
             )

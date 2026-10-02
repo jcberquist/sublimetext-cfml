@@ -4,6 +4,7 @@ import sublime
 import sublime_plugin
 import json
 import os
+import re
 import urllib.parse
 import urllib.request
 from functools import partial
@@ -129,7 +130,8 @@ class TestboxCommand(sublime_plugin.WindowCommand):
         reporter = self.get_setting("reporter")
 
         self.output_view.settings().set(
-            "result_file_regex", testbox_results["server_root"] + "([^\\s].*):([0-9]+)$"
+            "result_file_regex",
+            re.escape(testbox_results["server_root"]) + "([^\\s].*):([0-9]+)$",
         )
         self.output_view.settings().set(
             "result_base_dir", testbox_results["sublime_root"]

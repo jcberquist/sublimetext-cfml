@@ -130,7 +130,7 @@ class ComponentIndex():
     def remove_project_file(self, project_name, file_path):
         if project_name in self.data and file_path in self.data[project_name]["index"]:
             with self.watcher.lock:
-                if project_name in self.projects and file_path in self.projects[project_name]["index"]:
+                if project_name in self.data and file_path in self.data[project_name]["index"]:
                     del self.data[project_name]["index"][file_path]
                     del self.data[project_name]["cache"][file_path]
                     self.build_project_data(project_name)
@@ -204,12 +204,15 @@ class ComponentIndex():
         except:
             return None
 
-    def get_extended_metadata_by_file_path(self, project_name, file_path, stack=[]):
+    def get_extended_metadata_by_file_path(self, project_name, file_path, stack=None):
         """
         returns the full metadata for a given cfc file path
         this is used, rather than just `cfc_index[file_path]["functions"]`
         in order to take into account the `extends` attribute
         """
+        if stack is None:
+            stack = []
+
         base_meta = self.get_metadata_by_file_path(project_name, file_path)
 
         if not base_meta:
@@ -235,13 +238,6 @@ class ComponentIndex():
 
     def get_metadata_by_dot_path(self, project_name, dot_path):
         cfc_file_path = self.get_file_path_by_dot_path(project_name, dot_path)
-        if cfc_file_path:
-            return self.get_metadata_by_file_path(project_name, cfc_file_path["file_path"])
-        return None
-
-
-    def get_metadata_by_entity_name(project_name, entity_name):
-        cfc_file_path = self.get_file_path_by_entity_name(project_name, entity_name)
         if cfc_file_path:
             return self.get_metadata_by_file_path(project_name, cfc_file_path["file_path"])
         return None

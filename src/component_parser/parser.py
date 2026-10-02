@@ -84,9 +84,9 @@ WHERE hash NOT IN (
 """
 
 
-CLEAR_PATHS = """
+CLEAR_PATH = """
 DELETE FROM file_hashes
-WHERE file_path IN(?);
+WHERE file_path = ?;
 """
 
 
@@ -148,7 +148,7 @@ class Parser:
                 invalid_paths.append(file_path)
 
         if len(invalid_paths) > 0:
-            con.execute(CLEAR_PATHS, (",".join(invalid_paths),))
+            con.executemany(CLEAR_PATH, [(path,) for path in invalid_paths])
 
         con.execute(CLEAN_CACHE)
 

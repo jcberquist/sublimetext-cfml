@@ -38,7 +38,7 @@
                                 "args": {
                                     "file": "${packages}/{cfml_package_name}/inputmaps/Default.sublime-mousemap",
                                     "user_file": "${packages}/User/Default ($platform).sublime-mousemap",
-                                    "contents": "[\n\t$0\n]\n"
+                                    "default": "[\n\t$0\n]\n"
                                 },
                                 "caption": "Mouse Bindings"
                             }

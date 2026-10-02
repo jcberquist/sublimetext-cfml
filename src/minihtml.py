@@ -1,5 +1,4 @@
 import sublime
-import plistlib
 
 
 def from_source_text(source_text, syntax, region=None):
@@ -17,17 +16,17 @@ def from_view(view, region=None):
 
     region = view.line(region)
 
-    color_scheme = get_color_scheme(view)
+    color_scheme = view.style()
 
     start_point = region.begin()
     scope_name = view.scope_name(start_point)
-    style_dict = get_style_for_point(view, start_point, color_scheme)
+    style_dict = get_style_for_point(view, start_point)
     spans = []
     for pt in range(region.begin(), region.end() + 1):
         current_scope_name = view.scope_name(pt)
         if scope_name != current_scope_name:
             scope_name = current_scope_name
-            style_dict_current = get_style_for_point(view, pt, color_scheme)
+            style_dict_current = get_style_for_point(view, pt)
             if not match_style_dicts(style_dict, style_dict_current):
                 span = {}
                 span["style"] = style_dict
@@ -113,19 +112,8 @@ def get_classname(key, color, styles, style_map):
     return style_map[map_key]
 
 
-def get_style_for_point(view, pt, color_scheme):
-    if int(sublime.version()) > 3153:
-        # use new api
-        return view.style_for_scope(view.scope_name(pt))
-
-    top_score = 0
-    style = None
-    for scope in color_scheme["scopes"]:
-        score = view.score_selector(pt, scope["scope"])
-        if score > 0 and score >= top_score:
-            top_score = score
-            style = scope["style"]
-    return style
+def get_style_for_point(view, pt):
+    return view.style_for_scope(view.scope_name(pt))
 
 
 def match_style_dicts(a, b):
@@ -143,45 +131,4 @@ def match_style_dicts(a, b):
 
 
 def get_selector_style_map(view, selectors):
-    styles = {}
-
-    if int(sublime.version()) > 3153:
-        for s in selectors:
-            styles[s] = view.style_for_scope(s)
-    else:
-        color_scheme = get_color_scheme()
-        top_scores = {}
-        for s in selectors:
-            for scope in color_scheme["scopes"]:
-                score = sublime.score_selector(s, scope["scope"])
-                top_score = top_scores.get(s, 0)
-                if score > 0 and score >= top_score:
-                    top_scores[s] = score
-                    styles[s] = scope["style"]
-    return styles
-
-
-def get_color_scheme(view=None):
-    if int(sublime.version()) > 3153:
-        return view.style()
-
-    setting = sublime.load_settings("Preferences.sublime-settings").get("color_scheme")
-    color_scheme_bytes = sublime.load_binary_resource(setting)
-    color_scheme = {"scopes": []}
-    for setting in plistlib.readPlistFromBytes(color_scheme_bytes)["settings"]:
-        if "scope" in setting:
-            this_scope = {"scope": setting["scope"], "style": {}}
-            for key in ["foreground", "background"]:
-                if key in setting["settings"]:
-                    this_scope["style"][key] = setting["settings"][key]
-            for key in ["italic", "bold"]:
-                this_scope["style"][key] = (
-                    "fontStyle" in setting["settings"]
-                    and key in setting["settings"]["fontStyle"].lower()
-                )
-            color_scheme["scopes"].append(this_scope)
-        elif "settings" in setting:
-            for key in ["foreground", "background"]:
-                if key in setting["settings"]:
-                    color_scheme[key] = setting["settings"][key]
-    return color_scheme
+    return {s: view.style_for_scope(s) for s in selectors}
