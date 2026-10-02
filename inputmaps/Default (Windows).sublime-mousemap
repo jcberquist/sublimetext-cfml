@@ -1,6 +1,0 @@
-[
-	{
-		"button": "button1", "modifiers": ["ctrl", "alt"],
-		"command": "cfml_goto_file"
-	}
-]

@@ -1,58 +1,58 @@
 [
-  // ctrl+alt+a <cfabort>/<:abort>
+  // primary+alt+a <cfabort>/<:abort>
   {
-    "keys": ["ctrl+alt+a"],
+    "keys": ["primary+alt+a"],
     "command": "insert_snippet",
     "args": {"contents": "<cfabort>"},
     "context": [
-      {"key": "selector", "operator": "equal", "operand": "embedding.cfml"},
-      {"key": "selector", "operator": "not_equal", "operand": "source.cfml.script"}
+      {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all": true},
+      {"key": "selector", "operator": "not_equal", "operand": "source.cfml.script", "match_all": true}
     ]
   },
   {
-    "keys": ["ctrl+alt+a"],
+    "keys": ["primary+alt+a"],
     "command": "insert_snippet",
     "args": {"contents": "abort;"},
     "context": [
-      {"key": "selector", "operator": "equal", "operand": "source.cfml.script"}
+      {"key": "selector", "operator": "equal", "operand": "source.cfml.script", "match_all": true}
     ]
   },
-  // ctrl+alt+d writeDump()/dump();
+  // primary+alt+d writeDump()/dump();
   {
-    "keys": ["ctrl+alt+d"],
+    "keys": ["primary+alt+d"],
     "command": "insert_snippet",
     "args": {"contents": "writeDump(${0:$SELECTION});"},
     "context": [
-      {"key": "selector", "operator": "equal", "operand": "source.cfml.script"}
+      {"key": "selector", "operator": "equal", "operand": "source.cfml.script", "match_all": true}
     ]
   },
-  // ctrl+alt+d  <cfdump var="##">/<:dump var="##">
+  // primary+alt+d  <cfdump var="##">/<:dump var="##">
   {
-    "keys": ["ctrl+alt+d"],
+    "keys": ["primary+alt+d"],
     "command": "insert_snippet",
     "args": {"contents": "<cfdump var=\"#${1:$SELECTION}#\">"},
     "context": [
-      {"key": "selector", "operator": "equal", "operand": "embedding.cfml"},
-      {"key": "selector", "operator": "not_equal", "operand": "source.cfml.script"}
+      {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all": true},
+      {"key": "selector", "operator": "not_equal", "operand": "source.cfml.script", "match_all": true}
     ]
   },
-  // ctrl+shift+o  <cfoutput>/<:output>
+  // primary+shift+o  <cfoutput>/<:output>
   {
-    "keys": ["ctrl+shift+o"],
+    "keys": ["primary+shift+o"],
     "command": "insert_snippet",
     "args": {"contents": "<cfoutput>${1:$SELECTION}</cfoutput>"},
     "context": [
-      {"key": "selector", "operand": "embedding.cfml"},
-      {"key": "selector", "operator": "not_equal", "operand": "source.cfml.script"}
+      {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all": true},
+      {"key": "selector", "operator": "not_equal", "operand": "source.cfml.script", "match_all": true}
     ]
   },
-  // ctrl+shift+o  writeOutput();
+  // primary+shift+o  writeOutput();
   {
-    "keys": ["ctrl+shift+o"],
+    "keys": ["primary+shift+o"],
     "command": "insert_snippet",
     "args": {"contents": "writeOutput(${1:$SELECTION});"},
     "context": [
-      {"key": "selector", "operand": "source.cfml.script" }
+      {"key": "selector", "operator": "equal", "operand": "source.cfml.script", "match_all": true}
     ]
   },
   // shift+3 wrap selection with hash
@@ -98,24 +98,13 @@
     "keys": [">"],
     "command": "cfml_auto_insert_closing_tag",
     "context": [
-      {"key": "selector", "operator": "equal", "operand": "meta.tag.cfml - comment, meta.tag.custom.cfml - comment", "match_all":true},
+      {"key": "selector", "operator": "equal", "operand": "(meta.tag.cfml, meta.tag.custom.cfml) - comment - (meta.tag.cfml string - punctuation.definition.string.begin) - (meta.tag.custom.cfml string - punctuation.definition.string.begin)", "match_all":true},
       {"key": "selection_empty", "operator": "equal", "operand": true, "match_all": true},
       {"key": "preceding_text", "operator": "regex_match", "operand": ".*[^/]$", "match_all":true}
     ]
   },
   {
-    "keys": ["enter"],
-    "command": "cfml_between_tag_pair",
-    "context":
-    [
-      {"key": "selector", "operator": "equal", "operand": "meta.tag.cfml - comment - source.cfml.script, meta.tag.custom.cfml - comment - source.cfml.script", "match_all":true},
-      {"key": "selection_empty", "operator": "equal", "operand": true, "match_all": true},
-      {"key": "preceding_text", "operator": "regex_match", "operand": ".*>$", "match_all":true},
-      {"key": "following_text", "operator": "regex_match", "operand": "^</.*", "match_all":true}
-    ]
-  },
-  {
-    "keys": ["ctrl+f1"],
+    "keys": ["primary+f1"],
     "command": "cfml_toggle_controller_view",
     "context": [
       {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}

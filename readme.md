@@ -116,11 +116,11 @@ If the documentation command is run when the cursor is within a built-in functio
 
 In tag attributes, script strings, and between `cfoutput` tags, pressing `#` when text is selected will wrap the currently selected text `#selected#`.
 
-<kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>D</kbd> will output a `<cfdump>` tag or `writeDump()/dump()` function in CFML script, wrapping any currently selected text.
+<kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>D</kbd> (<kbd>CMD</kbd>+<kbd>ALT</kbd>+<kbd>D</kbd> on a Mac) will output a `<cfdump>` tag or `writeDump()/dump()` function in CFML script, wrapping any currently selected text.
 
-<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>O</kbd> will output a `<cfoutput>` tag or `writeOutput()` function in CFML script, wrapping any currently selected text.
+<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>O</kbd> (<kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>O</kbd> on a Mac) will output a `<cfoutput>` tag or `writeOutput()` function in CFML script, wrapping any currently selected text.
 
-<kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>A</kbd> will output a `<cfabort>` tag or `abort;` in CFML script.
+<kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>A</kbd> (<kbd>CMD</kbd>+<kbd>ALT</kbd>+<kbd>A</kbd> on a Mac) will output a `<cfabort>` tag or `abort;` in CFML script.
 
 If Sublime Text's `auto_close_tags` setting is `true`, when a closing tag's `/` has been pressed, the closing tag will be completed. There are two package settings that control which CFML and HTML tags should not be closed: `cfml_non_closing_tags` and `html_non_closing_tags`.
 
@@ -150,7 +150,7 @@ There are two settings that are set on a per project basis in a project file, `c
 
 *__Note__: the paths specified above can either be absolute paths, or relative paths. If they are relative paths, they will be resolved relative to the location of the `.sublime-project` file.*
 
-The specified mappings are used to resolve file paths to dot paths when right clicking on a CFC file in the sidebar and selecting `Copy CFC Dotted Path`. If more than one mapping matches, you will be given a choice, and if none match, it will fall back to using the base folder of the project as a dot path root. The mappings are also used to resolve dot paths specified in the `extends` attribute in a component, the `createObject` function, and when using the `new` operator to instantiate a component (e.g. `new dot.path.to.component()`). If the <kbd>F1</kbd> command is used when the cursor is in any of these, you will get a pop-up with the file path for the component (plus more information about the component if it is one that has been indexed). You can click on the file path to jump to the component file. You can also <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> (<kbd>CMD</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> on a Mac) on any of these to jump straight to the component file without going through the pop-up. In addition, these same commands will work in any quoted string that is used as a function call argument if it contains a dot path that can be resolved.
+The specified mappings are used to resolve file paths to dot paths when right clicking on a CFC file in the sidebar and selecting `Copy CFC Dotted Path`. If more than one mapping matches, you will be given a choice, and if none match, it will fall back to using the base folder of the project as a dot path root. The mappings are also used to resolve dot paths specified in the `extends` attribute in a component, the `createObject` function, and when using the `new` operator to instantiate a component (e.g. `new dot.path.to.component()`). If the <kbd>F1</kbd> command is used when the cursor is in any of these, you will get a pop-up with the file path for the component (plus more information about the component if it is one that has been indexed). You can click on the file path to jump to the component file. You can also <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Left Click</kbd> (on a Mac too) on any of these to jump straight to the component file without going through the pop-up. In addition, these same commands will work in any quoted string that is used as a function call argument if it contains a dot path that can be resolved.
 
 *You can see the structure of this mouse binding in the `Mouse Bindings - Default` file. Use the `Mouse Bindings - User` file to create your own.*
 

@@ -74,11 +74,22 @@ class CfmlBetweenTagPairCommand(sublime_plugin.TextCommand):
 
 
 class CfmlEditSettingsCommand(sublime_plugin.WindowCommand):
-    def run(self, file, default):
+    def run(self, file, default, user_file=None):
         package_file = file.replace("{cfml_package_name}", __name__.split(".")[0])
-        self.window.run_command(
-            "edit_settings", {"base_file": package_file, "default": default}
-        )
+        args = {"base_file": package_file, "default": default}
+        if user_file:
+            args["user_file"] = self.resolve_user_file(user_file)
+        self.window.run_command("edit_settings", args)
+
+    def resolve_user_file(self, user_file):
+        # as edit_settings does for a platform base file: open the user's
+        # platform file, or the shared one when only that exists
+        variables = self.window.extract_variables()
+        platform_file = sublime.expand_variables(user_file, variables)
+        shared_file = platform_file.replace(f" ({variables['platform']})", "")
+        if not os.path.exists(platform_file) and os.path.exists(shared_file):
+            return shared_file
+        return platform_file
 
 
 class CfmlIndexProjectCommand(sublime_plugin.WindowCommand):
