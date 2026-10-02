@@ -18,3 +18,7 @@ component extends="base.Thing" {
 //           @@@@ local-definition
 //           @@@@ global-definition
 }
+component name="Sub" {
+//              @@@ local-definition
+//              @@@ global-definition
+}

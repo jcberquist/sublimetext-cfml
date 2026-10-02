@@ -191,6 +191,7 @@ contexts:
         - match: '>'
           scope: punctuation.definition.tag.end.cfml
           set: cfcomponent-contents
+        - include: cfcomponent-name-attribute
         - include: cfcomponent-attributes
 
   cfcomponent-attributes:
@@ -200,6 +201,41 @@ contexts:
         - cfcomponent-extends-meta
         - cfcomponent-extends
     - include: tag-generic-attribute
+
+  # `name="Sub"` names a component; Lucee 6 reaches a sub component (a
+  # further component in the same file) as `MyCFC$Sub`.
+  cfcomponent-name-attribute:
+    - match: (?i:\bname\b)(?=\s*=)
+      scope: entity.other.attribute-name.cfml
+      push: cfcomponent-name
+
+  cfcomponent-name:
+    - match: '='
+      scope: punctuation.separator.key-value.cfml
+      set:
+        - match: \'
+          scope: punctuation.definition.string.begin.cfml
+          set:
+            - string-content-single
+            - cfcomponent-name-class
+            - tag-attribute-string-single
+        - match: \"
+          scope: punctuation.definition.string.begin.cfml
+          set:
+            - string-content-double
+            - cfcomponent-name-class
+            - tag-attribute-string-double
+        - match: (?=[A-Za-z0-9\-_.$])
+          set:
+            - string-unquoted-content
+            - cfcomponent-name-class
+            - tag-attribute-string-unquoted
+        - include: else-pop
+    - include: else-pop
+
+  cfcomponent-name-class:
+    - meta_content_scope: entity.name.class.cfml
+    - include: immediately-pop
 
   cfcomponent-extends:
     - match: '='
@@ -525,7 +561,7 @@ contexts:
           pop: 1
           scope: punctuation.definition.tag.end.cfml
           embed: scope:source.java#java
-          embed_scope: meta.java.cfml
+          embed_scope: meta.java.cfml source.java.embedded.cfml
           escape: (?i)(</)(cfjava)\s*(>)
           escape_captures:
             0: meta.tag.cfml

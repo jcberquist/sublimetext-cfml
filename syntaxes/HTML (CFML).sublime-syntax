@@ -56,3 +56,11 @@ contexts:
         0: meta.string.html string.quoted.single.html punctuation.definition.string.end.html
     - include: else-pop
 
+
+  tag-generic-attribute:
+    - meta_prepend: true
+    # `<option <cfif x>selected</cfif>>`: a name directly followed by a CFML
+    # tag is the whole attribute. Pushing the name context would let the
+    # prototype match `</cfif>` inside it.
+    - match: (?i)[^{{attribute_name_break_char}}"'`<]+(?=</?cf)
+      scope: meta.attribute-with-value.html entity.other.attribute-name.html

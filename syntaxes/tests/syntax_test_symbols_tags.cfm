@@ -5,3 +5,7 @@
 <!---                 @@@@@ local-definition --->
 <!---                 @@@@@ global-definition --->
 </cfcomponent>
+<cfcomponent name="Sub">
+<!---              @@@ local-definition --->
+<!---              @@@ global-definition --->
+</cfcomponent>

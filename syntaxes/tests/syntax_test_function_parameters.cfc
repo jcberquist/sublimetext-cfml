@@ -30,3 +30,14 @@ component {
 //                                       ^^^^^^^^ meta.function.parameters.cfml keyword.other.required.parameter.cfml
 //                                                       ^^^^ meta.function.parameters.cfml variable.parameter.function.cfml
 }
+component {
+    function f(string[] a, required Foo[] b = []) {}
+//             ^^^^^^ storage.type.cfml
+//                   ^^ meta.brackets.cfml - invalid
+//                      ^ variable.parameter.function.cfml
+//                                  ^^^ storage.type.cfml
+//                                     ^^ meta.brackets.cfml - invalid
+//                                        ^ variable.parameter.function.cfml
+//                                          ^ keyword.operator.assignment.cfml
+//                                            ^^ meta.parameter.optional.cfml - string
+}

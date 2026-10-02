@@ -240,6 +240,7 @@ contexts:
     - meta_scope: meta.class.declaration.cfml
     - match: (?=\{)
       pop: 1
+    - include: scope:embedding.cfml#cfcomponent-name-attribute
     - include: scope:embedding.cfml#cfcomponent-attributes
 
   component-body:
@@ -449,6 +450,12 @@ contexts:
           set: static-declaration
         - match: '(?={{function_lookahead}}\b)'
           set: function-declaration
+        # A pattern binds as after `var`: `final {a, b: c} = s;`.
+        - match: (?=[\[{])
+          set:
+            - expect-semicolon
+            - variable-binding-list-top
+            - variable-binding-top
         - include: else-pop
 
   function-parameter-binding-pattern:
@@ -1012,12 +1019,48 @@ contexts:
         - include: scope:embedding.cfml#sql-template-expression
 
   constructor:
+    # Lucee's inline component: `new component extends="Base" { … }`. It
+    # takes no arguments, so `new component(…)` is an ordinary constructor;
+    # otherwise the branch fails back to one at the first token that is not
+    # an attribute or the `{` (a `(` on the next line, a `;`).
+    - match: (?i)(?=\bnew\s+component\b(?![.$])(?!\s*\())
+      pop: 1
+      branch_point: inline-component
+      branch:
+        - inline-component
+        - constructor-new
+    - include: constructor-new
+
+  constructor-new:
     - match: (?i)\bnew\b
       scope: keyword.operator.word.new.cfml
       set:
         - constructor-meta
         - constructor-body-expect-arguments
         - constructor-body-expect-entity-name
+
+  inline-component:
+    - match: (?i)\bnew\b
+      scope: keyword.operator.word.new.cfml
+      set:
+        - component-body
+        - constructor-meta
+        - inline-component-attributes
+        - inline-component-keyword
+
+  inline-component-keyword:
+    - match: (?i)component\b
+      scope: storage.type.class.cfml
+      pop: 1
+
+  inline-component-attributes:
+    - match: (?=\{)
+      pop: 1
+    # Fail ahead of the attribute rules, which mark any other character as
+    # an invalid attribute name instead of ending the run.
+    - match: (?!/[/*])(?=[^_[:alpha:]\s])
+      fail: inline-component
+    - include: scope:embedding.cfml#cfcomponent-attributes
 
   constructor-meta:
     - meta_include_prototype: false
@@ -1029,7 +1072,8 @@ contexts:
     - include: else-pop
 
   constructor-body-expect-entity-name:
-    - match: (?i:component)\b
+    # `new component.path.Thing()` is a dot path.
+    - match: (?i:component)\b(?!\.)
       scope: storage.type.class.cfml
       pop: 1
     - match: (?i:java)\b
@@ -1193,6 +1237,7 @@ contexts:
       scope: punctuation.section.block.begin.cfml
       set:
         - meta_scope: meta.function.body.cfml meta.java.cfml
+        - meta_content_scope: source.java.embedded.cfml
         - match: '\}'
           scope: punctuation.section.block.end.cfml
           pop: 1
@@ -1302,10 +1347,18 @@ contexts:
           captures:
             1: keyword.operator.rest.cfml
             2: variable.parameter.function.cfml
-        - match: (?:({{dot_path_identifier}})\s+)?({{identifier}})
+        # A struct pattern (Adobe 2025): `function f({a, b: {c}} = {}, d)`.
+        - match: (?=\{)
+          push:
+            - function-declaration-parameter-default
+            - function-parameter-binding-object-destructuring
+        # An array type: `function f(string[] a)`.
+        - match: (?:({{dot_path_identifier}})(?:(\[)(\]))?\s+)?({{identifier}})
           captures:
             1: storage.type.cfml
-            2: variable.parameter.function.cfml
+            2: meta.brackets.cfml punctuation.section.brackets.begin.cfml
+            3: meta.brackets.cfml punctuation.section.brackets.end.cfml
+            4: variable.parameter.function.cfml
           push:
             - function-declaration-parameter-attributes
             - function-declaration-parameter-default
@@ -2104,6 +2157,7 @@ contexts:
       set:
         - meta_include_prototype: false
         - meta_scope: meta.block.cfml
+        - meta_content_scope: source.java.embedded.cfml
         - match: '\}'
           scope: punctuation.section.block.end.cfml
           pop: 1

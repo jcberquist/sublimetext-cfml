@@ -39,3 +39,10 @@ type = "string" default = "hello">
 <cfhttp url=#some_url_var#>
 <!---       ^ punctuation.section.interpolation.begin.cfml --->
 <!---        ^ variable.other.readwrite.cfml --->
+
+<input <cfif a>checked<cfelse>disabled</cfif> value="#v#">
+<!---          ^^^^^^^ meta.tag.inline.form.html entity.other.attribute-name.html --->
+<!---                 ^ meta.tag.inline.form.html meta.tag.cfml punctuation.definition.tag.begin.cfml - entity.other.attribute-name - meta.attribute-with-value --->
+<!---                         ^^^^^^^^ meta.tag.inline.form.html entity.other.attribute-name.html --->
+<!---                                 ^^ meta.tag.inline.form.html meta.tag.cfml punctuation.definition.tag.begin.cfml - entity.other.attribute-name - meta.attribute-with-value --->
+<!---                                         ^^^^^ meta.tag.inline.form.html entity.other.attribute-name.html --->
