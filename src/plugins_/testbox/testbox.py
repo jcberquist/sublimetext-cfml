@@ -22,20 +22,34 @@ def load():
         if cfc == "Basespec":
             cfc = "BaseSpec"
         testbox["completions"][key] = [
-            (comp_key + "\t" + "TestBox " + cfc, completions_data[key][comp_key])
+            make_completion(comp_key, completions_data[key][comp_key], cfc)
             for comp_key in sorted(completions_data[key].keys())
         ]
         if key == "expectation":
             negated_completions = [
-                (
-                    negate_string(comp_key) + "\t" + cfc,
+                make_completion(
+                    negate_string(comp_key),
                     negate_string(completions_data[key][comp_key]),
+                    cfc,
                 )
                 for comp_key in sorted(completions_data[key].keys())
             ]
             testbox["completions"][key].extend(negated_completions)
 
     testbox["documentation"] = load_json_data("documentation")
+
+
+def make_completion(comp_key, contents, cfc):
+    # keys are "name():returntype"
+    name, returntype = comp_key.split("():")
+    return sublime.CompletionItem(
+        name,
+        returntype,
+        contents,
+        sublime.COMPLETION_FORMAT_SNIPPET,
+        kind=(sublime.KIND_ID_FUNCTION, "m", "method"),
+        details="TestBox " + cfc,
+    )
 
 
 def load_json_data(filename):

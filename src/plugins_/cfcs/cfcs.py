@@ -1,6 +1,6 @@
 import sublime
 import os
-from ...component_index import component_index
+from ...component_index import component_index, to_completion_item
 from ... import utils
 
 projects = {}
@@ -116,20 +116,13 @@ def get_cfc_completions(project_name, cfc_name):
         if not completion.private and (
             cfc_info["accessors"] or not completion.accessor
         ):
-            filtered_completions.append(get_completion(completion, cfc_info))
+            filtered_completions.append(to_completion_item(completion))
     return filtered_completions
 
 
 def get_cfc_metadata(project_name, cfc_name):
     file_path = get_cfc_info(project_name, cfc_name)["file_path"]
     return component_index.get_extended_metadata_by_file_path(project_name, file_path)
-
-
-def get_completion(completion, cfc_info):
-    hint = completion.hint
-    if hint != "method" and cfc_info["file_path"] == completion.file_path:
-        hint = cfc_info["name"]
-    return completion.key + "\t" + hint, completion.content
 
 
 def uppercase(string):

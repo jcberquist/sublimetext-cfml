@@ -39,19 +39,11 @@ def toggle_controller_view(view, position):
         )
         if controller_exists:
             file_path = root_path + "/" + containing_folder + "/" + controller_path
-            if file_path[1] == ":":
-                file_path = "/" + file_path[0] + file_path[2:]
             symbol = view.file_name().replace("\\", "/").split("/")[-1].split(".")[0]
-            row, col = 1, 1
-            index_locations = view.window().lookup_symbol_in_index(symbol)
-
-            for full_path, project_path, rowcol in index_locations:
-                if utils.format_lookup_file_path(full_path) == file_path:
-                    row, col = rowcol
-                    break
+            location = utils.find_symbol_location(view.window(), symbol, file_path)
 
             view.window().open_file(
-                file_path + ":" + str(row) + ":" + str(col),
+                location.path_encoded_position() if location else file_path,
                 sublime.ENCODED_POSITION | sublime.FORCE_GROUP,
             )
 

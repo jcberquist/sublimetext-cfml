@@ -16,14 +16,25 @@ def load():
             data = {k: make_setting_completions(k, data[k]) for k in data}
         elif key == "methods":
             data = [
-                (key + "\tapplication.cfc", key + data[key])
+                sublime.CompletionItem(
+                    key,
+                    "application.cfc",
+                    key + data[key],
+                    sublime.COMPLETION_FORMAT_SNIPPET,
+                    kind=(sublime.KIND_ID_FUNCTION, "m", "method"),
+                )
                 for key in sorted(data.keys())
             ]
         appcfc[key] = data
 
 
 def make_setting_completions(prefix, source_list):
-    return [(key + "\t" + prefix, key) for key in sorted(source_list)]
+    return [
+        sublime.CompletionItem(
+            key, prefix, kind=(sublime.KIND_ID_VARIABLE, "s", "setting")
+        )
+        for key in sorted(source_list)
+    ]
 
 
 def load_json_data(filename):

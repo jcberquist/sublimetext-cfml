@@ -1,4 +1,5 @@
-from ...component_index import component_index
+import sublime
+from ...component_index import component_index, to_completion_item
 from . import entity_utils
 
 
@@ -11,7 +12,11 @@ def build_project_entities(project_name):
     completions = []
     for key in entities:
         completions.append(
-            (entities[key]["entity_name"] + "\tentity", entities[key]["entity_name"])
+            sublime.CompletionItem(
+                entities[key]["entity_name"],
+                "entity",
+                kind=(sublime.KIND_ID_TYPE, "e", "entity"),
+            )
         )
     projects[project_name] = completions
 
@@ -84,10 +89,7 @@ def get_completions_by_entity_name(project_name, entity_name):
         filtered_completions = []
         for completion in comp["functions"]:
             if not completion.private:
-                hint = "method" if completion.hint == "method" else entity_name
-                filtered_completions.append(
-                    (completion.key + "\t" + hint, completion.content)
-                )
+                filtered_completions.append(to_completion_item(completion))
         return filtered_completions
 
     return None

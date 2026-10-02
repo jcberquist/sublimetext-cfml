@@ -15,14 +15,6 @@
     // "full" - all params and types are included in the completion
     "cfml_cfc_completions": "required",
 
-    // component completion names - please note that "full" completions
-    // block Sublime Text from including local buffer completions in the
-    // completion list. You can use a plugin such as `All Autocomplete` to
-    // get around this.
-    // "basic" - only the function name
-    // "full" - includes `():returntype` - e.g. `getSomething():struct`
-    "cfc_completion_names": "basic",
-
     // provide method completions for variables referring to instantiated components
     // e.g. myvar = new path.to.cfc();
     "instantiated_component_completions": true,

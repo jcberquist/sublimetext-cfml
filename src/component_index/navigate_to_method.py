@@ -8,13 +8,9 @@ class CfmlNavigateToMethodCommand(sublime_plugin.WindowCommand):
     def run(self, file_path, href):
 
         if len(file_path) > 0:
-            index_locations = self.window.lookup_symbol_in_index(href)
-
-            for full_path, project_path, rowcol in index_locations:
-                if utils.format_lookup_file_path(full_path) == file_path:
-                    row, col = rowcol
-                    self.window.open_file(full_path + ":" + str(row) + ":" + str(col), sublime.ENCODED_POSITION | sublime.FORCE_GROUP)
-                    break
+            location = utils.find_symbol_location(self.window, href, file_path)
+            if location:
+                self.window.open_file(location.path_encoded_position(), sublime.ENCODED_POSITION | sublime.FORCE_GROUP)
             else:
                 # might be a setter, so for now just open the file
                 self.window.open_file(file_path)

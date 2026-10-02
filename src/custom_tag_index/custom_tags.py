@@ -28,9 +28,11 @@ def generate_completions_and_closing_tags(custom_tag_folders, index, project_fil
         root_path = utils.normalize_path(tag_folder["path"], project_file_dir)
         if "prefix" in tag_folder:
             prefixes.append(
-                (
-                    tag_folder["prefix"] + "\tcustom tag prefix (cfml)",
+                sublime.CompletionItem(
+                    tag_folder["prefix"],
+                    "custom tag prefix (cfml)",
                     tag_folder["prefix"] + ":",
+                    kind=(sublime.KIND_ID_NAMESPACE, "p", "prefix"),
                 )
             )
         for file_path in index:
@@ -47,7 +49,13 @@ def generate_completions_and_closing_tags(custom_tag_folders, index, project_fil
                     make_tag_completion(prefix, index[file_path]["tag_name"])
                 )
                 attributes[key] = [
-                    (a + "\t" + key, a + '="$1"')
+                    sublime.CompletionItem(
+                        a,
+                        key,
+                        a + '="$1"',
+                        sublime.COMPLETION_FORMAT_SNIPPET,
+                        kind=(sublime.KIND_ID_MARKUP, "a", key),
+                    )
                     for a in index[file_path]["attributes"]
                 ]
                 if index[file_path]["has_end_tag"]:
@@ -59,7 +67,11 @@ def generate_completions_and_closing_tags(custom_tag_folders, index, project_fil
 def make_tag_completion(prefix, tag):
     suffix = " (" + prefix + ")" if prefix != "cf_" else ""
     comp_prefix = "cf_" if prefix == "cf_" else ""
-    return (comp_prefix + tag + "\tcustom tag" + suffix, comp_prefix + tag)
+    return sublime.CompletionItem(
+        comp_prefix + tag,
+        "custom tag" + suffix,
+        kind=(sublime.KIND_ID_MARKUP, "t", "custom tag"),
+    )
 
 
 class CustomTags:

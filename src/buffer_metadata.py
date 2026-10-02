@@ -121,11 +121,10 @@ def on_view_modified(view):
     get_view_metadata(view)
 
 
-def on_view_closed(view):
-    if view.buffer_id() in buffer_metadata_cache:
-        del buffer_metadata_cache[view.buffer_id()]
+def on_buffer_closed(buffer):
+    buffer_metadata_cache.pop(buffer.id(), None)
 
 
 events.subscribe("on_load_async", on_view_loaded)
 events.subscribe("on_modified_async", on_view_modified)
-events.subscribe("on_close", on_view_closed)
+events.subscribe("on_close_buffer", on_buffer_closed)

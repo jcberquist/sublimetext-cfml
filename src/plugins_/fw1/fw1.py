@@ -16,18 +16,13 @@ def load():
         if key == "settings":
             data = {k: make_setting_completions(k, data[k]) for k in data}
         elif key == "methods":
-            data["calls"] = [
-                (key + "\tframework.one", key.split("(")[0] + data["calls"][key])
-                for key in sorted(data["calls"].keys())
-            ]
-            data["definitions"] = [
-                (key + "\tframework.one", key.split("(")[0] + data["definitions"][key])
-                for key in sorted(data["definitions"].keys())
-            ]
-            data["renderdata"] = [
-                (key + "\trenderData()", key.split("(")[0] + data["renderdata"][key])
-                for key in sorted(data["renderdata"].keys())
-            ]
+            data["calls"] = make_method_completions(data["calls"], "framework.one")
+            data["definitions"] = make_method_completions(
+                data["definitions"], "framework.one"
+            )
+            data["renderdata"] = make_method_completions(
+                data["renderdata"], "renderData()"
+            )
         fw1[key] = data
 
 
@@ -42,8 +37,31 @@ def load_json_data(filename):
     return json.loads(json_data)
 
 
+def make_method_completions(source, details):
+    completions = []
+    for key in sorted(source.keys()):
+        # keys are "name():returntype"
+        name, returntype = key.split("():")
+        completions.append(
+            sublime.CompletionItem(
+                name,
+                returntype,
+                name + source[key],
+                sublime.COMPLETION_FORMAT_SNIPPET,
+                kind=(sublime.KIND_ID_FUNCTION, "m", "method"),
+                details=details,
+            )
+        )
+    return completions
+
+
 def make_setting_completions(prefix, source_list):
-    return [(key + "\t" + prefix, key) for key in sorted(source_list)]
+    return [
+        sublime.CompletionItem(
+            key, prefix, kind=(sublime.KIND_ID_VARIABLE, "s", "setting")
+        )
+        for key in sorted(source_list)
+    ]
 
 
 def get_setting(view, setting_key):

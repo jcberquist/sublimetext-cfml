@@ -11,9 +11,11 @@ def get_plugin_name():
     return __package__.split(".")[0]
 
 
-def get_project_list():
+def get_project_list(exclude_window=None):
     project_list = []
     for window in sublime.windows():
+        if exclude_window and window.id() == exclude_window.id():
+            continue
         if window.project_file_name():
             project_tuple = (
                 normalize_path(window.project_file_name()),
@@ -64,11 +66,14 @@ def normalize_mapping(mapping, root_path=None):
     return normalized_mapping
 
 
-def format_lookup_file_path(file_path):
-    file_path = normalize_path(file_path)
-    if file_path[1] == ":":
-        file_path = "/" + file_path[0] + file_path[2:]
-    return file_path
+def find_symbol_location(window, symbol, file_path):
+    locations = window.symbol_locations(
+        symbol, sublime.SYMBOL_SOURCE_INDEX, sublime.SYMBOL_TYPE_DEFINITION
+    )
+    for location in locations:
+        if normalize_path(location.path) == file_path:
+            return location
+    return None
 
 
 def get_previous_character(view, position):

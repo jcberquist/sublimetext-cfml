@@ -20,13 +20,18 @@ class ProjectWatcher:
         self.folder_key = folder_key
         self.listener = listener
 
-        events.subscribe("on_load_async", lambda view: self.sync_projects())
-        events.subscribe("on_close", lambda view: self.sync_projects())
+        events.subscribe("on_load_project_async", lambda window: self.sync_projects())
+        events.subscribe("on_new_project_async", lambda window: self.sync_projects())
+        # the closing window still has its project, so leave it out
+        events.subscribe("on_pre_close_project", self.sync_projects)
+        events.subscribe("on_pre_close_window", self.sync_projects)
+        events.subscribe("on_post_save_project_async", self.on_post_save_project_async)
+        # fallback for a .sublime-project edited and saved in a view
         events.subscribe("on_post_save_async", self.on_post_save_async)
         events.subscribe("on_post_window_command", self.on_post_window_command)
 
-    def sync_projects(self):
-        project_list = utils.get_project_list()
+    def sync_projects(self, closing_window=None):
+        project_list = utils.get_project_list(closing_window)
 
         with self.lock:
             current_project_names = set(self.projects.keys())
@@ -50,6 +55,11 @@ class ProjectWatcher:
                 if project_name in new_project_names:
                     self.add_project(project_name, project_data)
                     self.listener("project_added", project_name)
+
+    def on_post_save_project_async(self, window):
+        project_name = utils.get_project_name_from_window(window)
+        if project_name:
+            self.project_updated(project_name, window.project_data())
 
     def on_post_save_async(self, view):
         file_name = utils.normalize_path(view.file_name())
@@ -88,6 +98,10 @@ class ProjectWatcher:
     def project_updated(self, project_name, updated_project_data):
         if project_name not in self.projects:
             self.sync_projects()
+            return
+
+        # both save events can report the same save
+        if self.projects[project_name]["project_data"] == updated_project_data:
             return
 
         # if this project has already been indexed, reindexing should only be

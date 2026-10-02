@@ -18,18 +18,12 @@ def get_cfml_files(cfml_view):
 
 
 def open_file_at_symbol(view, file_path, symbol):
-    index_locations = view.window().lookup_symbol_in_index(symbol)
-    if file_path[1] == ":":
-        file_path = "/" + file_path[0] + file_path[2:]
-
-    for full_path, project_path, rowcol in index_locations:
-        if utils.format_lookup_file_path(full_path) == file_path:
-            row, col = rowcol
-            view.window().open_file(
-                full_path + ":" + str(row) + ":" + str(col),
-                sublime.ENCODED_POSITION | sublime.FORCE_GROUP,
-            )
-            break
+    location = utils.find_symbol_location(view.window(), symbol, file_path)
+    if location:
+        view.window().open_file(
+            location.path_encoded_position(),
+            sublime.ENCODED_POSITION | sublime.FORCE_GROUP,
+        )
     else:
         # if symbol can't be found in the index, go ahead and open the file
         view.window().open_file(file_path)

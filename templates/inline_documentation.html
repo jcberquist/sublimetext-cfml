@@ -71,15 +71,12 @@ a.plain-link {
 }
 
 .pagination {
-    color: #000000;
-    background-color: #DDDDDD;
+    color: var(--foreground);
+    background-color: color(var(--background) blend(var(--foreground) 85%));
     padding-top: 2px;
     padding-bottom: 2px;
     padding-left: 10px;
     padding-right: 10px;
-}
-.pagination a {
-    color: #0000EE;
 }
 
 .engines {
@@ -142,7 +139,13 @@ a.plain-link {
 .entity-other-inherited-class {
     ${entity_other_inherited-class}
 }
-${styles}
+.minihtml-container {
+    color: var(--foreground);
+    background-color: var(--background);
+    font-size: 0.9em;
+    margin: 0;
+    padding: 4px;
+}
 </style>
 <div class="container">
     <h1>${header}</h1>

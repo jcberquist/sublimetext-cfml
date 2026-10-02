@@ -1,10 +1,13 @@
 import sublime
-from ...component_index import component_index
+from ...component_index import component_index, to_completion_item
 from ... import utils
 from . import cfc_utils
 
 
 projects = {}
+
+COMPONENT_KIND = (sublime.KIND_ID_TYPE, "c", "component")
+PATH_KIND = (sublime.KIND_ID_NAMESPACE, "p", "package")
 
 
 def build_project_map(project_name):
@@ -47,11 +50,12 @@ def make_completion(path_part_dict, key, dot_paths, project_name, constructor):
             completion = completion + "()"
     if not path_part_dict["is_cfc"]:
         completion += "."
-    return (
-        path_part_dict["path_part"]
-        + "\t"
-        + ("cfc" if path_part_dict["is_cfc"] else "cfc path"),
+    return sublime.CompletionItem(
+        path_part_dict["path_part"],
+        "cfc" if path_part_dict["is_cfc"] else "cfc path",
         completion,
+        sublime.COMPLETION_FORMAT_SNIPPET,
+        kind=COMPONENT_KIND if path_part_dict["is_cfc"] else PATH_KIND,
     )
 
 
@@ -230,9 +234,7 @@ def get_completions_by_component_name(cfml_view, component_name):
         filtered_completions = []
         for completion in comp["functions"]:
             if not completion.private:
-                filtered_completions.append(
-                    (completion.key + "\t" + completion.hint, completion.content)
-                )
+                filtered_completions.append(to_completion_item(completion))
         return filtered_completions
 
     return None

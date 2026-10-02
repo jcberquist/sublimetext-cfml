@@ -54,11 +54,9 @@ def get_function_call_params_doc(
 
 
 def cached_method_preview(view, cache, function_file_path, function_name):
-    current_color_scheme = view.settings().get("color_scheme")
-    if (
-        function_name not in cache
-        or cache[function_name]["color_scheme"] != current_color_scheme
-    ):
+    # the resolved scheme's globals, so "auto" switching light/dark counts
+    current_style = view.style()
+    if function_name not in cache or cache[function_name]["style"] != current_style:
         with open(function_file_path, "r", encoding="utf-8") as f:
             file_string = f.read()
         cfml_minihtml_view = view.window().create_output_panel("cfml_minihtml")
@@ -69,7 +67,7 @@ def cached_method_preview(view, cache, function_file_path, function_name):
             "append", {"characters": file_string, "force": True, "scroll_to_end": True}
         )
         cache[function_name] = {
-            "color_scheme": current_color_scheme,
+            "style": current_style,
             "preview": build_method_preview(cfml_minihtml_view, function_name),
         }
         view.window().destroy_output_panel("cfml_minihtml")
@@ -163,8 +161,7 @@ def build_documentation(extended_metadata, file_path, class_name):
 
 def build_method_preview(cfml_minihtml_view, function_name):
     function_region = get_function_region(cfml_minihtml_view, function_name)
-    css, html = minihtml.from_view(cfml_minihtml_view, function_region)
-    return {"css": css, "html": html}
+    return minihtml.from_view(cfml_minihtml_view, function_region)
 
 
 def build_method_documentation(
@@ -230,9 +227,7 @@ def build_method_documentation(
             model_doc["html"]["body"] += "\n"
 
     if method_preview:
-        css = method_preview["css"].replace("<style>", "").replace("</style>", "")
-        model_doc["html"]["styles"] = css
-        model_doc["html"]["body"] += method_preview["html"]
+        model_doc["html"]["body"] += method_preview
 
     return model_doc
 
@@ -250,9 +245,7 @@ def build_method_preview_doc(extended_metadata, function_name, method_preview):
         + function_file_path
         + "</a>"
     )
-    css = method_preview["css"].replace("<style>", "").replace("</style>", "")
-    preview["html"]["styles"] = css
-    preview["html"]["body"] = method_preview["html"]
+    preview["html"]["body"] = method_preview
 
     return preview
 

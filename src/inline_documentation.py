@@ -113,9 +113,6 @@ def generate_documentation(view, docs, current_index, doc_type):
         "side_color"
     ]
 
-    if "styles" in docs[current_index].doc_html_variables:
-        doc_html_variables.update(docs[current_index].doc_html_variables["styles"])
-
     styles_by_selector = minihtml.get_selector_style_map(view, SELECTORS)
     for key in styles_by_selector:
         style = styles_by_selector[key]

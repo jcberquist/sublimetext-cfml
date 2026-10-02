@@ -1,3 +1,4 @@
+import sublime
 from ... import utils, component_index
 
 
@@ -6,7 +7,7 @@ def get_script_completions(cfml_view):
         utils.get_setting("cfml_cfc_completions")
     ]
     completions = [
-        make_completion(completion, cfml_view.file_path)
+        component_index.to_completion_item(completion)
         for completion in completions["functions"]
     ]
     if len(completions) > 0:
@@ -25,7 +26,7 @@ def get_dot_completions(cfml_view):
                     cfml_view.view_metadata
                 )[utils.get_setting("cfml_cfc_completions")]
                 completions = [
-                    make_completion(completion, cfml_view.file_path)
+                    component_index.to_completion_item(completion)
                     for completion in completions["functions"]
                 ]
                 return cfml_view.CompletionList(completions)
@@ -42,7 +43,12 @@ def get_dot_completions(cfml_view):
                     if "functions" in meta and function[0] in meta["functions"]:
                         args = meta["functions"][function[0]]["meta"]["parameters"]
                         completions = [
-                            (arg["name"] + "\targuments", arg["name"]) for arg in args
+                            sublime.CompletionItem(
+                                arg["name"],
+                                "arguments",
+                                kind=(sublime.KIND_ID_VARIABLE, "a", "argument"),
+                            )
+                            for arg in args
                         ]
                         return cfml_view.CompletionList(completions)
 
@@ -67,16 +73,9 @@ def get_dot_completions(cfml_view):
 
                 if comp:
                     completions = [
-                        (completion.key + "\t" + completion.hint, completion.content)
+                        component_index.to_completion_item(completion)
                         for completion in comp["functions"]
                     ]
                     return cfml_view.CompletionList(completions)
 
     return None
-
-
-def make_completion(comp, file_path):
-    hint = "this"
-    if len(comp.file_path) > 0 and comp.file_path != file_path:
-        hint = comp.hint
-    return (comp.key + "\t" + hint, comp.content)

@@ -7,7 +7,7 @@ from .documentation import (
     build_method_preview_doc,
     build_function_call_params_doc,
 )
-from .completions import build_file_completions
+from .completions import build_file_completions, to_completion_item
 from .navigate_to_method import CfmlNavigateToMethodCommand
 
 

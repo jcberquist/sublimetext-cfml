@@ -18,6 +18,9 @@ class CfmlEventListener(sublime_plugin.EventListener):
     def on_close(self, view):
         events.trigger("on_close", view)
 
+    def on_close_buffer(self, buffer):
+        events.trigger("on_close_buffer", buffer)
+
     def on_modified_async(self, view):
         events.trigger("on_modified_async", view)
 
@@ -57,6 +60,21 @@ class CfmlEventListener(sublime_plugin.EventListener):
 
     def on_post_window_command(self, window, command_name, args):
         events.trigger("on_post_window_command", window, command_name, args)
+
+    def on_load_project_async(self, window):
+        events.trigger("on_load_project_async", window)
+
+    def on_new_project_async(self, window):
+        events.trigger("on_new_project_async", window)
+
+    def on_post_save_project_async(self, window):
+        events.trigger("on_post_save_project_async", window)
+
+    def on_pre_close_project(self, window):
+        events.trigger("on_pre_close_project", window)
+
+    def on_pre_close_window(self, window):
+        events.trigger("on_pre_close_window", window)
 
     def on_query_completions(self, view, prefix, locations):
         if not view.match_selector(locations[0], "embedding.cfml"):

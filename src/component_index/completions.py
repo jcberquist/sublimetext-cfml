@@ -1,10 +1,12 @@
+import sublime
 from collections import namedtuple
-from .. import utils
 
-CfcCompletion = namedtuple("CfcCompletion", "key hint content file_path accessor private")
+CfcCompletion = namedtuple("CfcCompletion", "name returntype content file_path accessor private")
 
-# note that the completion tuples include 4 elements, so they will need to be modified before
-# being returned by subscribers
+METHOD_KIND = (sublime.KIND_ID_FUNCTION, "m", "method")
+
+# subscribers filter these on accessor/private and turn them into
+# CompletionItems with to_completion_item()
 
 
 def build(project_name, file_paths, get_extended_metadata_by_file_path):
@@ -36,21 +38,25 @@ def make_completions(funct_meta, funct_cfcs, completion_type):
 
 
 def make_completion(funct, cfc_file_path, completion_type):
-    key = funct["name"]
-    hint = "method"
-    if utils.get_setting("cfc_completion_names") == "full":
-        key += "()"
-        if funct["meta"]["returntype"]:
-            key += ":" + funct["meta"]["returntype"]
-        hint = cfc_file_path.split("/").pop().split(".")[0]
-
     return CfcCompletion(
-        key,
-        hint,
+        funct["name"],
+        funct["meta"]["returntype"] or "",
         funct["name"] + "(" + make_arguments_string(funct["meta"]["parameters"], completion_type) + ")",
         cfc_file_path,
         funct["implicit"],
         funct["meta"]["access"] == "private"
+    )
+
+
+def to_completion_item(completion):
+    # details name the component that declares the method
+    return sublime.CompletionItem(
+        completion.name,
+        completion.returntype,
+        completion.content,
+        sublime.COMPLETION_FORMAT_SNIPPET,
+        kind=METHOD_KIND,
+        details=completion.file_path.split("/").pop().split(".")[0],
     )
 
 
