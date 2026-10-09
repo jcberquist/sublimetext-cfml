@@ -536,6 +536,11 @@ contexts:
       scope: punctuation.definition.tag.end.cfml
       set:
         - meta_content_scope: meta.scope.cfquery.cfml source.sql
+        # Including another syntax's main context does not bring along that
+        # syntax's `prototype`, and SQL's prototype is where `--` and `/* */`
+        # comments live. Without them here, a top-level `--` comment is read
+        # as a column name and an apostrophe in it opens a string.
+        - include: scope:source.sql#comments
         - include: scope:source.sql
       with_prototype:
         - match: (?i)(?=</cfquery\s*>)

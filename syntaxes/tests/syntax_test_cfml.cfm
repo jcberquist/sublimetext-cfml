@@ -42,6 +42,21 @@
 'unclosed sql string
 </cfquery>
 <!--- <- -source.sql --->
+<cfquery>
+SELECT u.id,
+-- top-level comments come from SQL's prototype, which include: does not bring along
+<!--- ^^^^^^^^^^^ source.sql comment.line.double-dash.sql --->
+<!--- ^ -meta.column-name.sql --->
+u.name
+FROM users u
+WHERE u.status = 'active'
+-- an apostrophe here mustn't open a string
+<!--- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.line.double-dash.sql --->
+/* block comments too */
+<!--- ^^^^^^^^^^^^^^^^^^ comment.block.sql --->
+AND u.created > <cfqueryparam value="#arguments.since#">
+<!--- <- source.sql keyword.operator.logical.sql -comment -string --->
+</cfquery>
 <cf_custom attrname="#test#">
 <!--- <- meta.tag.custom.cfml --->
  <!--- <- meta.tag.custom.cfml entity.name.tag.custom.cfml --->
