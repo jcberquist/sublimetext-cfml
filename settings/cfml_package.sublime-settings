@@ -3,10 +3,11 @@
     // this is accessible in the menu via Package Settings -> CFML -> Settings
     // or via the command palette - CFML: Settings
 
-    // BIF completions
+    // built-in function (BIF) completions
     // "basic" - only the function name
     // "required" - only required params are included, and no types
     // "full" - all params and types are included in the completion
+    // member function completions are always the name with empty parentheses
     "cfml_bif_completions": "required",
 
     // component completions
@@ -19,8 +20,30 @@
     // e.g. myvar = new path.to.cfc();
     "instantiated_component_completions": true,
 
-    // provide HTML completions in tag component functions
-    "html_completions_in_tag_components": true,
+    // component indexing for a window that has no project file, or a project
+    // file without "cfc_folders" (a project that sets "cfc_folders" indexes
+    // only those folders, and these settings do not apply to it)
+    // these can also be set on a per project basis
+    // settings contained in a project override the package settings
+
+    // index the components in the folders of the window: in a git work tree,
+    // the files that git does not ignore, plus the folders that the box.json
+    // files there install dependencies into; a folder that is not a git work
+    // tree is indexed only when it has a CFML file such as box.json or
+    // Application.cfc at its root
+    "cfml_auto_index": true,
+
+    // the variable names that indexed components are known by, written as the
+    // "variable_names" of a "cfc_folders" entry are (see the readme)
+    // "{cfc}" is the component's name, and "{cfc_folder_singularized}" the name
+    // of its folder without a trailing "s", so services/User.cfc is known as
+    // user and userService
+    // an empty list turns this off
+    "cfml_auto_variable_names": ["{cfc}", "{cfc}{cfc_folder_singularized}"],
+
+    // the most component files a folder can have to be indexed: a folder with
+    // more is not indexed, and the console says so
+    "cfml_index_max_files": 5000,
 
     // if true, when a ">" is typed to end a tag the corresponding closing tag will be inserted after the cursor position,
     // except for the cfml tags listed in the "cfml_non_closing_tags" setting below
@@ -85,7 +108,9 @@
         "runner": "",
         "tests_root": "",
         "reporter": "compacttext", // options are `compacttext` and `text`
-        "results": {"server_root": "", "sublime_root": ""}
+        "results": {"server_root": "", "sublime_root": ""},
+        // seconds to wait for the runner to respond before giving up
+        "timeout": 300
     },
 
     // framework one settings
@@ -101,5 +126,10 @@
         "script_template": "property {name};",
         "tag_template": "<cfproperty name=\"{name}\">",
         "sort_properties": true
-    }
+    },
+
+    // the cfformat binary that the cfml_format command formats a file with
+    // (see https://github.com/jcberquist/cfformat): either a path to it,
+    // or the name of a binary that is on the PATH
+    "cfformat_path": "cfformat"
 }

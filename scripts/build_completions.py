@@ -1,10 +1,11 @@
 """
-Build the completion data in src/plugins_/basecompletions/json from a cfdocs
+Build the completion data in src/providers/language/json from a cfdocs
 checkout (https://github.com/foundeo/cfdocs):
 
     python3 scripts/build_completions.py /path/to/cfdocs
 
-Member function names come from completion_members.json. Run
+Member function names come from completion_members.json, along with the
+parameter a member is called on where that is not the first one. Run
 scripts/build_base_cfscript_syntax.py afterwards to update the function and
 tag names in the CFScript base syntax.
 """
@@ -16,7 +17,7 @@ import sys
 
 
 root = pathlib.Path(__file__).resolve().parent
-out_path = root.parent / 'src/plugins_/basecompletions/json'
+out_path = root.parent / 'src/providers/language/json'
 
 # cfdocs spells these in lowercase
 NAME_CASING = {
@@ -27,12 +28,52 @@ NAME_CASING = {
 
 
 def load_members():
+    # builtin name -> a [type, name, receiver] for each member type the
+    # builtin is a member function of
     src = json.loads((root / 'completion_members.json').read_text(encoding='utf-8'))
     out = {}
     for member_type, builtins in src.items():
+        names = {}
         for builtin, member in builtins.items():
-            out[builtin.lower()] = [member_type, member]
+            # a member is its name, or {"name": ..., "receiver": ...} when
+            # the value it is called on is not the first parameter
+            if isinstance(member, str):
+                member = {'name': member}
+            mappings = out.setdefault(builtin.lower(), [])
+            if any(m[0] == member_type for m in mappings):
+                # JSON keys that differ only in case do not collide
+                raise ValueError(f'{builtin} is listed under {member_type} twice')
+            other = names.setdefault(member['name'].lower(), builtin)
+            if other != builtin:
+                raise ValueError(
+                    f'{other} and {builtin} are both {member_type}.{member["name"]}'
+                )
+            mappings.append([member_type, member['name'], member.get('receiver')])
     return out
+
+
+def member_params(name, params, receiver=None):
+    # the parameters of the member function: the builtin's without the one
+    # the member is called on, which is the first unless named
+    if receiver is None:
+        return params[1:]
+    for i, p in enumerate(params):
+        if p['name'].lower() == receiver.lower():
+            return params[:i] + params[i + 1 :]
+    raise ValueError(f'{name} has no parameter {receiver!r} to be the receiver')
+
+
+def member_signature(member_type, member_name, params):
+    # the signature in cfdocs' notation, for a member cfdocs has none for:
+    # type.name(one, two [, three] [, four])
+    out = ''
+    for i, p in enumerate(params):
+        comma = ', ' if i else ''
+        if p['required']:
+            out += comma + p['name']
+        else:
+            out += (' ' if i else '') + '[' + comma + p['name'] + ']'
+    return f'{member_type}.{member_name}({out})'
 
 
 def is_boxlang_only(data):
@@ -57,15 +98,15 @@ def wrap_param(param, index):
 
 
 def wrap_param_full(param, index):
-    if index > 1 and not param['required']:
-        prefix = '${' + str(index) + ':'
-        index += 1
-    else:
-        prefix = ''
-
-    prefix += ', ${' if index > 1 else '${'
-    wrapped = prefix + str(index) + ':' + param['type'] + ' ' + param['name'] + '}'
-    return wrapped, index + 1
+    field = param['type'] + ' ' + param['name']
+    if index == 1:
+        return '${1:' + field + '}', 2
+    if param['required']:
+        return ', ${' + str(index) + ':' + field + '}', index + 1
+    # an optional parameter is its own field, comma included, so that
+    # deleting the placeholder removes the whole argument
+    inner = '${' + str(index + 1) + ':' + field + '}'
+    return '${' + str(index) + ':, ' + inner + '}', index + 2
 
 
 def build_params_completion(params):
@@ -137,14 +178,17 @@ def main(cfdocs_path):
     function_params = {}
     member_functions = {}
     tags = {}
+    documented = set()
 
-    for p in base_path.iterdir():
+    # in a fixed order, so that the output does not depend on the file system
+    for p in sorted(base_path.iterdir()):
         data = json.loads(p.read_text(encoding='utf-8'))
         if is_boxlang_only(data):
             continue
 
         if data.get('type') == 'function':
             data = fix_casing(data)
+            documented.add(data['name'].lower())
             params_min, params_full = build_params_completion(data['params'])
             functions[data['name']] = [
                 data['syntax'],
@@ -155,14 +199,17 @@ def main(cfdocs_path):
             if len(function_param_completions):
                 function_params[data['name'].lower()] = function_param_completions
 
-            if data['name'].lower() in members:
-                member_type, member_name = members[data['name'].lower()]
-                if member_type not in member_functions:
-                    member_functions[member_type] = {}
-
-                params_min, params_full = build_params_completion(data['params'][1:])
-                member_functions[member_type][member_name] = [
-                    data.get('member', f'{member_type}.{member_name}()'),
+            for member_type, member_name, receiver in members.get(
+                data['name'].lower(), []
+            ):
+                params = member_params(data['name'], data['params'], receiver)
+                params_min, params_full = build_params_completion(params)
+                if 'member' in data:
+                    signature = data['member']
+                else:
+                    signature = member_signature(member_type, member_name, params)
+                member_functions.setdefault(member_type, {})[member_name] = [
+                    signature,
                     ['(' + params_min + ')', '(' + params_full + ')'],
                 ]
 
@@ -181,6 +228,14 @@ def main(cfdocs_path):
             tag['attributes'][1].sort()
 
             tags[data['name'].lower()] = tag
+
+    undocumented = sorted(set(members) - documented)
+    if undocumented:
+        # a key with no cfdocs function would generate nothing
+        raise ValueError(
+            'completion_members.json lists builtins cfdocs does not have: '
+            + ', '.join(undocumented)
+        )
 
     write_json('cfml_functions.json', functions)
     write_json('cfml_function_params.json', function_params)

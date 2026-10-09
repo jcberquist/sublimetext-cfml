@@ -1,0 +1,198 @@
+/*
+The styles of the doc popup, the completion doc and the method preview.
+Colors are taken from the color scheme: its background and foreground
+here, and minihtml.py adds a rule for each scope the docs are colored by
+and one for the side color of the doc.
+
+Prose is in the font of the user interface, as it is in the popups of
+Sublime Text, and code in the font of the view, which minihtml.py puts
+in for $code_font; it gives that font to the text it colors by scope too.
+
+At one size the font of a view looks larger than that of the interface,
+so the sizes are those of Sublime Text's popups: prose at 1.05rem, and
+code that is set in prose at 0.9em of it. Code on its own, as in the
+header, has the size it has in the view.
+*/
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: system;
+    font-size: 1.05rem;
+}
+
+h1 {
+    font-family: $code_font;
+    font-size: 1rem;
+    margin: 4px 0;
+    padding: 4px;
+    background-color: color(var(--background) blend(var(--foreground) 95%));
+}
+h2 {
+    font-size: 1.05rem;
+    margin: 4px 0;
+    padding: 4px;
+}
+
+a.plain-link {
+    color: var(--foreground);
+    text-decoration: none;
+}
+
+.pagination {
+    color: var(--foreground);
+    background-color: color(var(--background) blend(var(--foreground) 85%));
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* the doc popup; the body's background shows on its left, as the side color */
+
+.container {
+    margin-left: 2px;
+    padding: 4px;
+    padding-right: 10px;
+    background-color: color(var(--background) blend(var(--foreground) 98%));
+}
+
+.path {
+    margin: 4px 0;
+    padding: 4px;
+}
+.path a {
+    text-decoration: none;
+}
+
+.card {
+    margin: 6px 0;
+    padding: 0;
+    background-color: color(var(--background) blend(var(--foreground) 90%));
+    border-radius: 3px;
+}
+.card-header {
+    font-family: $code_font;
+    font-size: 1rem;
+    margin: 0;
+    padding: 4px;
+    background-color: color(var(--background) blend(var(--foreground) 85%));
+    border-radius: 3px 3px 0 0;
+}
+.card-header-empty {
+    border-radius: 3px;
+}
+.card-body {
+    margin: 0;
+    padding: 4px;
+    border-radius: 0 0 3px 3px;
+}
+
+.pre {
+    font-family: $code_font;
+    font-size: 0.9em;
+    margin: 4px 0;
+    padding: 4px;
+    background-color: color(var(--background) blend(var(--foreground) 80%));
+    color: color(var(--foreground) blend(var(--background) 95%));
+}
+.code {
+    font-family: $code_font;
+    font-size: 0.9em;
+    background-color: var(--background);
+    color: var(--foreground);
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+.engines {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+.signature {
+    font-family: $code_font;
+    font-size: 0.9em;
+}
+
+.engine {
+    font-family: system;
+    background-color: color(var(--foreground) blend(var(--background) 20%));
+    border-radius: 3px;
+}
+
+.required {
+    font-family: system;
+    background-color: var(--redish);
+    color: var(--background);
+    border-radius: 3px;
+    margin-bottom: 3px;
+}
+
+/* code exported from a view, in the doc popup and the method preview */
+
+.minihtml-container {
+    font-family: $code_font;
+    color: var(--foreground);
+    background-color: var(--background);
+    font-size: 0.9rem;
+    margin: 0;
+    padding: 4px;
+}
+
+/* the completion doc, with the side color on its left as the doc popup has */
+
+.completion {
+    margin-left: 2px;
+    padding: 2px;
+    background-color: color(var(--background) blend(var(--foreground) 98%));
+}
+.completion h1 {
+    margin: 1px 0;
+}
+.completion .pagination {
+    margin: 1px 0 0;
+}
+.arguments {
+    font-family: $code_font;
+    font-size: 0.9rem;
+    margin: 1px 0 0;
+    padding: 2px;
+    background-color: color(var(--background) blend(var(--foreground) 85%));
+}
+.description {
+    font-size: 0.95rem;
+    margin: 1px 0 0;
+    padding: 3px;
+    background-color: color(var(--background) blend(var(--foreground) 90%));
+}
+.argument-active {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--greenish);
+}
+.argument-optional {
+    font-style: italic;
+}
+
+/* the method preview */
+
+.preview {
+    margin: 3px;
+}
+.link {
+    padding: 3px 0 7px 0;
+}
+.link .close {
+    text-decoration: inherit;
+    padding: 0.35rem 0.7rem 0.45rem 0.8rem;
+    position: relative;
+    bottom: 0.05rem;
+    border-radius: 0 0.2rem 0.2rem 0;
+    font-weight: bold;
+}
+html.dark .link .close {
+    background-color: #00000018;
+}
+html.light .link .close {
+    background-color: #ffffff18;
+}

@@ -2,7 +2,7 @@
 <plist version="1.0">
 <dict>
     <key>scope</key>
-    <string>embedding.cfml</string>
+    <string>embedding.cfml, source.cfml.script</string>
     <key>settings</key>
     <dict>
         <!-- CF and HTML tag pairs still fold by indentation -->

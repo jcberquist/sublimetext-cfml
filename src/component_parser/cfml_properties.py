@@ -17,21 +17,32 @@ from . import cfml_functions, regex, ranges
 
 
 
-def index(file_string, cfscript_range=None):
+def index(file_string, cfscript_range=None, hidden_tags=None):
     if cfscript_range is None:
         cfscript_range = ranges.RangeWalker(file_string, 0, 'cfscript').walk()
+    if cfscript_range is None:
+        # only an empty file has no script range
+        return {}
+    if hidden_tags is None:
+        hidden_tags = ranges.TagText(file_string)
 
     properties = {}
     for property_match in re.finditer(regex.cfml_property, file_string):
+        # the match starts with the line's indentation, so check the ranges
+        # at the keyword itself
+        property_string = property_match.group().lstrip()
+        keyword_pt = property_match.end() - len(property_string)
 
-        if cfscript_range.is_in_range(property_match.start(), ranges.NON_SCRIPT_RANGES):
-            continue
+        if property_string.lower().startswith('<cf'):
+            if hidden_tags.contains(keyword_pt):
+                continue
+        else:
+            if cfscript_range.is_in_range(keyword_pt, ranges.NON_SCRIPT_RANGES):
+                continue
 
-        property_string = property_match.group()
-
-        if not property_string.startswith('<cf'):
-            dr = cfscript_range.deepest_range(property_match.start())
-            if dr.depth() != 2:
+            # a script property belongs directly in the component body
+            dr = cfscript_range.deepest_range(keyword_pt)
+            if dr is None or dr.name != 'curly_brackets' or dr.depth() != 1:
                 continue
 
         property_string = property_match.group(1)
@@ -48,7 +59,9 @@ def index(file_string, cfscript_range=None):
         if type_name_search and type_name_search.group(1):
             attributes["type"] = type_name_search.group(1)
 
-        if "name" in attributes:
+        # an empty name, as `property name=""` has while it is typed, is
+        # not a property
+        if attributes.get("name"):
             property_name = attributes["name"]
             del attributes["name"]
             properties[property_name] = attributes

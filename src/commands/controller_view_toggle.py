@@ -1,5 +1,6 @@
 import sublime
 import sublime_plugin
+from typing import Any
 from .. import utils
 
 
@@ -29,7 +30,7 @@ def toggle_controller_view(view, position):
             if view_exists:
                 view.window().open_file(
                     root_path + "/" + containing_folder + "/" + view_path,
-                    sublime.FORCE_GROUP,
+                    sublime.NewFileFlags.FORCE_GROUP,
                 )
 
     if file_type == "view":
@@ -44,11 +45,12 @@ def toggle_controller_view(view, position):
 
             view.window().open_file(
                 location.path_encoded_position() if location else file_path,
-                sublime.ENCODED_POSITION | sublime.FORCE_GROUP,
+                sublime.NewFileFlags.ENCODED_POSITION
+                | sublime.NewFileFlags.FORCE_GROUP,
             )
 
 
-def get_folder_settings(type):
+def get_folder_settings(type) -> Any:
     folder_settings = sublime.load_settings("cfml_package.sublime-settings")
     return folder_settings.get(type)
 
@@ -118,8 +120,10 @@ def get_controller_function(view, position):
     ):
         function_position = position
 
-    if function_position:
-        return view.substr(utils.get_function(view, function_position)[1])
+    if function_position is not None:
+        function = utils.get_function(view, function_position)
+        if function:
+            return view.substr(function[1])
 
     return None
 

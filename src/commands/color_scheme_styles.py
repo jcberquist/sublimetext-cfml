@@ -1,6 +1,7 @@
 import sublime
 import sublime_plugin
 import os
+from typing import Any
 
 
 def get_rule_dicts():
@@ -29,7 +30,7 @@ def get_cfml_rules(appearance):
     style_dicts = get_rule_dicts()
     rules = []
     for style_setting_key in style_dicts:
-        style_setting = cfml_settings.get(style_setting_key)
+        style_setting: Any = cfml_settings.get(style_setting_key)
         # a style without "light" and "dark" keys applies to both
         if style_setting and ("light" in style_setting or "dark" in style_setting):
             style_setting = style_setting.get(appearance)
@@ -44,14 +45,14 @@ def get_cfml_rules(appearance):
     return rules
 
 
-def get_user_color_scheme(color_scheme_file):
+def get_user_color_scheme(color_scheme_file) -> dict[str, Any]:
     try:
         src_str = sublime.load_resource(color_scheme_file)
-        user_color_scheme = sublime.decode_value(src_str)
+        user_color_scheme: Any = sublime.decode_value(src_str)
         if "rules" not in user_color_scheme:
             user_color_scheme["rules"] = []
         return user_color_scheme
-    except IOError:
+    except OSError:
         return {"rules": []}
 
 
@@ -72,7 +73,8 @@ def get_file_name(color_scheme):
 
 def get_active_appearance():
     # whether the color scheme in use has a light or a dark background
-    palette = sublime.ui_info().get("color_scheme", {}).get("palette", {})
+    ui_info: Any = sublime.ui_info()
+    palette = ui_info.get("color_scheme", {}).get("palette", {})
     background = palette.get("background", "#000000")
     r, g, b = (int(background[i : i + 2], 16) for i in (1, 3, 5))
     luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255
@@ -118,11 +120,11 @@ def toggle():
         user_color_scheme_path = os.path.join(
             sublime.packages_path(), "User", file_name
         )
-        with open(user_color_scheme_path, "w") as f:
+        with open(user_color_scheme_path, "w", encoding="utf-8") as f:
             f.write(sublime.encode_value(user_color_scheme, True))
 
         if len(user_color_scheme.keys()) == 1 and len(user_color_scheme["rules"]) == 0:
-            print("CFML: Packages/User/{} is now empty.".format(file_name))
+            print(f"CFML: Packages/User/{file_name} is now empty.")
 
 
 class CfmlColorSchemeStylesCommand(sublime_plugin.ApplicationCommand):

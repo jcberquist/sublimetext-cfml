@@ -1,7 +1,7 @@
 """
 Regenerate syntaxes/CFScript (CFML) Base.sublime-syntax (the built-in
 function, member function and tags-in-script name regexes) from the
-completion data in src/plugins_/basecompletions/json:
+completion data in src/providers/language/json:
 
     python3 scripts/build_base_cfscript_syntax.py
 
@@ -13,11 +13,12 @@ import pathlib
 import re
 
 package_path = pathlib.Path(__file__).resolve().parent.parent
-json_path = package_path / 'src/plugins_/basecompletions/json'
+json_path = package_path / 'src/providers/language/json'
 
 
 def wrap_regex(regex, indent=8):
-    return re.sub(r'(.{80}[^|]*)', r'\1\n%s' % (' ' * indent), regex)
+    # a break after the last chunk would leave a line of only the indent
+    return re.sub(r'(.{80}[^|]*)', r'\1\n%s' % (' ' * indent), regex).rstrip()
 
 
 def generate_function_regex():

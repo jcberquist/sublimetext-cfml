@@ -1,6 +1,10 @@
+import functools
+import json
 import sublime
 import os
+import traceback
 from collections import namedtuple
+from typing import Any, cast, overload
 
 Symbol = namedtuple(
     "Symbol", "name is_function function_region args_region name_region"
@@ -8,36 +12,91 @@ Symbol = namedtuple(
 
 
 def get_plugin_name():
-    return __package__.split(".")[0]
+    # the first part of this module's name is the package in Packages/
+    return __name__.split(".")[0]
 
 
-def get_project_list(exclude_window=None):
-    project_list = []
-    for window in sublime.windows():
-        if exclude_window and window.id() == exclude_window.id():
-            continue
-        if window.project_file_name():
-            project_tuple = (
-                normalize_path(window.project_file_name()),
-                window.project_data(),
-            )
-            project_list.append(project_tuple)
-    return project_list
+def package_resource_path(relative_path):
+    return "Packages/" + get_plugin_name() + "/" + relative_path
+
+
+# the package's top-level syntaxes: CFML for components and templates
+# (scope embedding.cfml), CFScript (CFML) for .cfs script files (scope
+# source.cfml.script, the scope of the script inside CFML files)
+CFML_SYNTAXES = ("syntaxes/CFML.sublime-syntax", "syntaxes/CFScript (CFML).sublime-syntax")
+
+
+def is_cfml_view(settings):
+    """
+    Returns whether the settings are those of a view with one of the
+    package's top-level syntaxes: what a ViewEventListener is given to
+    decide whether it applies to a view.
+    """
+    syntax = settings.get("syntax")
+    return any(syntax == package_resource_path(path) for path in CFML_SYNTAXES)
+
+
+def expand_variables(template: str, variables) -> str:
+    # sublime.expand_variables() accepts any JSON value; templates are strings
+    return cast(str, sublime.expand_variables(template, variables))
+
+
+def load_json_resource(relative_path):
+    return json.loads(sublime.load_resource(package_resource_path(relative_path)))
+
+
+@functools.cache
+def load_template(relative_path):
+    template = sublime.load_resource(package_resource_path("templates/" + relative_path))
+    return template.replace("\r", "")
+
+
+def call_plugin_loaded(module):
+    call_reporting_failure(module.__name__ + "._plugin_loaded()", module._plugin_loaded)
+
+
+def call_reporting_failure(label, callback):
+    # report a failure without stopping the caller from going on
+    try:
+        callback()
+    except Exception:
+        print("CFML: " + label + " failed")
+        traceback.print_exc()
+
+
+def get_window_folders(window) -> tuple[str, ...]:
+    """Returns the folders of a window, normalized and sorted."""
+    return tuple(sorted(normalize_path(folder) for folder in window.folders()))
 
 
 def get_project_name(view):
-    if view.window():
-        project_file_name = view.window().project_file_name()
-        if project_file_name:
-            return normalize_path(project_file_name)
-    return None
+    window = view.window()
+    return get_project_name_from_window(window) if window else None
 
 
 def get_project_name_from_window(window):
+    """
+    Returns the name of the window's project, which the indexes keep its
+    data under: the path of the project file, or for a window with folders
+    and no project file, a name made of the folders, so that windows on the
+    same folders share a project. None for a window with neither. The name
+    is a key, not a path to resolve anything against.
+    """
     project_file_name = window.project_file_name()
     if project_file_name:
         return normalize_path(project_file_name)
+    folders = get_window_folders(window)
+    if folders:
+        return "folders:" + "|".join(folders)
     return None
+
+
+@overload
+def normalize_path(path: str, root_path: str | None = None) -> str: ...
+@overload
+def normalize_path(path: None, root_path: str | None = None) -> None: ...
+@overload
+def normalize_path(path: str | None, root_path: str | None = None) -> str | None: ...
 
 
 def normalize_path(path, root_path=None):
@@ -53,9 +112,6 @@ def normalize_path(path, root_path=None):
 
 def normalize_mapping(mapping, root_path=None):
     normalized_mapping = {}
-    # convenience check for project file path
-    if root_path.endswith("sublime-project"):
-        root_path = os.path.dirname(root_path)
     normalized_mapping["path"] = normalize_path(mapping["path"], root_path)
     normalized_mapping_path = mapping["mapping"].replace("\\", "/")
     if normalized_mapping_path[0] != "/":
@@ -66,9 +122,21 @@ def normalize_mapping(mapping, root_path=None):
     return normalized_mapping
 
 
+def get_mapped_path_parts(file_path, mapping):
+    """
+    Returns the segments of file_path as seen through a normalized mapping,
+    so with /site/model mapped to /model, /site/model/user.cfc gives
+    ["model", "user.cfc"]. Returns None for a file outside the mapped folder.
+    """
+    if not file_path.startswith(mapping["path"] + "/"):
+        return None
+    mapped_path = mapping["mapping"] + file_path[len(mapping["path"]) :]
+    return mapped_path.split("/")[1:]
+
+
 def find_symbol_location(window, symbol, file_path):
     locations = window.symbol_locations(
-        symbol, sublime.SYMBOL_SOURCE_INDEX, sublime.SYMBOL_TYPE_DEFINITION
+        symbol, sublime.SymbolSource.INDEX, sublime.SymbolType.DEFINITION
     )
     for location in locations:
         if normalize_path(location.path) == file_path:
@@ -76,19 +144,24 @@ def find_symbol_location(window, symbol, file_path):
     return None
 
 
+WORD_OR_PUNCTUATION_END = (
+    sublime.PointClassification.WORD_END | sublime.PointClassification.PUNCTUATION_END
+)
+WORD_OR_PUNCTUATION_START = (
+    sublime.PointClassification.WORD_START
+    | sublime.PointClassification.PUNCTUATION_START
+)
+
+
 def get_previous_character(view, position):
     if view.substr(position - 1) in [" ", "\t", "\n"]:
-        position = view.find_by_class(
-            position, False, sublime.CLASS_WORD_END | sublime.CLASS_PUNCTUATION_END
-        )
+        position = view.find_by_class(position, False, WORD_OR_PUNCTUATION_END)
     return position - 1
 
 
 def get_next_character(view, position):
     if view.substr(position) in [" ", "\t", "\n"]:
-        position = view.find_by_class(
-            position, True, sublime.CLASS_WORD_START | sublime.CLASS_PUNCTUATION_START
-        )
+        position = view.find_by_class(position, True, WORD_OR_PUNCTUATION_START)
     return position
 
 
@@ -97,17 +170,29 @@ def get_previous_word(view, position):
     return view.substr(view.word(previous_character)).lower()
 
 
+def merge_regions(regions):
+    merged_regions = []
+    for region in sorted(regions):
+        if len(merged_regions) > 0 and merged_regions[-1].contains(region):
+            continue
+        elif len(merged_regions) > 0 and merged_regions[-1].end() == region.begin():
+            merged_regions[-1] = sublime.Region(
+                merged_regions[-1].begin(), region.end()
+            )
+        else:
+            merged_regions.append(region)
+    return merged_regions
+
+
 def get_scope_region_containing_point(view, pt, scope):
     scope_count = view.scope_name(pt).count(scope) - view.scope_name(pt).count(
         "." + scope
     )
     if scope_count == 0:
         return None
-    scope_to_find = " ".join([scope] * scope_count)
-    for r in view.find_by_selector(scope_to_find):
-        if r.contains(pt):
-            return r
-    return None
+    # expand_to_scope() returns the outermost match, so repeat the scope to
+    # the depth at pt to get the innermost region instead
+    return view.expand_to_scope(pt, " ".join([scope] * scope_count))
 
 
 def get_char_point_before_scope(view, pt, scope):
@@ -125,16 +210,15 @@ def get_dot_context(view, dot_position):
         return context
 
     if view.substr(dot_position - 1) in [" ", "\t", "\n"]:
-        dot_position = view.find_by_class(
-            dot_position, False, sublime.CLASS_WORD_END | sublime.CLASS_PUNCTUATION_END
-        )
+        dot_position = view.find_by_class(dot_position, False, WORD_OR_PUNCTUATION_END)
 
     base_scope_count = view.scope_name(dot_position).count("meta.function-call")
     scope_to_find = " ".join(["meta.function-call"] * (base_scope_count + 1))
+    function_call = None
     if view.match_selector(dot_position - 1, scope_to_find):
-        function_name, name_region, function_args_region = get_function_call(
-            view, dot_position - 1
-        )
+        function_call = get_function_call(view, dot_position - 1)
+    if function_call:
+        function_name, name_region, function_args_region = function_call
         context.append(
             Symbol(function_name, True, name_region, function_args_region, name_region)
         )
@@ -187,9 +271,31 @@ def get_struct_context(view, position):
     return context
 
 
-def get_setting(setting_key):
+def get_setting(setting_key) -> Any:
     cfml_settings = sublime.load_settings("cfml_package.sublime-settings")
     return cfml_settings.get(setting_key)
+
+
+def get_project_setting(window, setting_key) -> Any:
+    """
+    Returns a setting from the window's .sublime-project file if it is set
+    there, and otherwise from the package settings.
+    """
+    project_data = {}
+    if window and window.project_file_name():
+        project_data = window.project_data() or {}
+    return get_project_data_setting(project_data, setting_key)
+
+
+def get_project_data_setting(project_data, setting_key) -> Any:
+    """
+    Returns a setting from the data of a project file if it is set there,
+    and otherwise from the package settings: get_project_setting() for
+    code that has a project's data, such as Project.data, but no window.
+    """
+    if setting_key in project_data:
+        return project_data[setting_key]
+    return get_setting(setting_key)
 
 
 def get_tag_end(view, pos, is_cfml):
@@ -273,13 +379,31 @@ def get_tag_name(view, pos):
     tag_name_scope = (
         "entity.name.tag.cfml, entity.name.tag.custom.cfml, entity.name.tag.script.cfml"
     )
-    tag_regions = view.find_by_selector(tag_scope)
-    tag_name_regions = view.find_by_selector(tag_name_scope)
+    # pos may also sit just after the end of a tag, or at the end of the
+    # buffer with the tag still open, where there is no scope to expand
+    # from: then the tag is the one at the position before
+    tag_region = None
+    if view.match_selector(pos, tag_scope):
+        tag_region = view.expand_to_scope(pos, tag_scope)
+    if tag_region is None and pos > 0 and view.match_selector(pos - 1, tag_scope):
+        tag_region = view.expand_to_scope(pos - 1, tag_scope)
+    if tag_region is None:
+        return None
 
-    for tag_region, tag_name_region in zip(tag_regions, tag_name_regions):
-        if tag_region.contains(pos):
-            return view.substr(tag_name_region).lower()
-    return None
+    # the name can be split over tokens, e.g. a custom tag's prefix
+    name_region = None
+    for r, scope in view.extract_tokens_with_scopes(tag_region):
+        if sublime.score_selector(scope, tag_name_scope):
+            if name_region is None:
+                name_region = r
+            elif r.begin() == name_region.end():
+                name_region = name_region.cover(r)
+            else:
+                break
+        elif name_region is not None:
+            break
+
+    return view.substr(name_region).lower() if name_region else None
 
 
 def get_tag_attribute_name(view, pos):
@@ -357,23 +481,20 @@ def get_function_call(view, pt, support=False):
     return None
 
 
-def get_current_function_body(view, pt, component_method=True):
-    selector = "meta.function.body"
-    if component_method:
-        selector = "meta.class.body " + selector
-    return get_scope_region_containing_point(view, pt, selector)
+def get_current_function_body(view, pt):
+    return get_scope_region_containing_point(view, pt, "meta.function.body")
 
 
 def find_variable_assignment(view, position, variable_name):
     regex_prefix = r"(\bvariables\.|\s|\bvar\s+)"
     regex = regex_prefix + variable_name + r"\b\s*=\s*"
-    assignments = view.find_all(regex, sublime.IGNORECASE)
+    assignments = view.find_all(regex, sublime.FindFlags.IGNORECASE)
     for r in reversed(assignments):
         if r.begin() < position:
             # check for local var assignment
             # and ensure it is in the same function body
             if view.substr(r).lower().startswith("var "):
-                function_region = get_current_function_body(view, r.end(), False)
+                function_region = get_current_function_body(view, r.end())
                 if not function_region or not function_region.contains(position):
                     continue
             return r

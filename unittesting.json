@@ -1,0 +1,4 @@
+{
+    "tests_dir": "tests/sublime",
+    "pattern": "test*.py"
+}

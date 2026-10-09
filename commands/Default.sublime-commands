@@ -8,6 +8,24 @@
         }
     },
     {
+        "caption": "CFML: Syntax Settings",
+        "command": "cfml_edit_settings",
+        "args": {
+            "file": "${packages}/{cfml_package_name}/settings/CFML.sublime-settings",
+            "user_file": "${packages}/User/CFML.sublime-settings",
+            "default": "// These settings override both User and Default settings for the CFML syntax\n{\n\t$0\n}\n"
+        }
+    },
+    {
+        "caption": "CFML: Script Syntax Settings",
+        "command": "cfml_edit_settings",
+        "args": {
+            "file": "${packages}/{cfml_package_name}/settings/CFScript (CFML).sublime-settings",
+            "user_file": "${packages}/User/CFScript (CFML).sublime-settings",
+            "default": "// These settings override both User and Default settings for the CFScript (CFML) syntax\n{\n\t$0\n}\n"
+        }
+    },
+    {
         "caption": "CFML: Key Bindings",
         "command": "cfml_edit_settings",
         "args": {
@@ -26,8 +44,16 @@
         }
     },
     {
+        "caption": "CFML: Format File",
+        "command": "cfml_format"
+    },
+    {
         "caption": "CFML: Index Active Project",
         "command": "cfml_index_project"
+    },
+    {
+        "caption": "CFML: Clear Index Cache and Reindex",
+        "command": "cfml_clear_index_cache"
     },
     {
         "caption": "CFML: Toggle Color Scheme Styles",

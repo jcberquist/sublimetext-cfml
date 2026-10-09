@@ -1,0 +1,12 @@
+{
+	// the triggers of CFML.sublime-settings that apply in script, for .cfs
+	// files; syntax settings replace Default's triggers rather than adding to
+	// them, so the first repeats Default's
+	"auto_complete_triggers": [
+		{"selector": "punctuation.accessor", "rhs_empty": true},
+		{"selector": "source.cfml.script - string", "characters": "."},
+		{"selector": "source.cfml.script meta.function-call.support.createcomponent.cfml string.quoted", "characters": "."},
+		{"selector": "meta.class.inheritance.cfml", "characters": "."},
+		{"selector": "meta.tag.script.cfml - string, meta.tag.script.cf.cfml - string, meta.class.declaration.cfml - string", "characters": " "}
+	]
+}

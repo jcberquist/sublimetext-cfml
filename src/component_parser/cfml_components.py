@@ -1,35 +1,19 @@
-# This module, via index(), takes in a directory path and recursively
-# browses it and its subfolders looking for ".cfc" files, and then uses the
-# functions module to index the functions from those files.
-# It assumes that all such files in the directory are component files, and does
-# not check that the files actually define components. It returns a dict of
-# normalized file paths mapped to a named tuple containing function metadata
-# and completions.
-
-# The returned dict structure looks like this:
-# {
-#   "/path/to/mycfc.cfc": {
-#     "accessors": true/false,
-#     "entityname": entityname,
-#     "extends": extends,
-#     "functions": metadata,
-#     "initmethod": initmethod,
-#     "persistent": true/false,
-#     "properties": metadata
-#   },
-#   ...
-# }
+# This module parses the source of a component file into its metadata: the
+# attributes of the component, its properties and its functions. The shape of
+# the metadata is described in the metadata module.
 
 
-import re
+from typing import Any, cast
 from . import cfml_functions, cfml_properties, regex, ranges
+from .metadata import ComponentMetadata, Function, Property
 
 
-def parse_cfc_file_string(file_string):
+def parse_cfc_file_string(file_string) -> ComponentMetadata:
     cfscript_range = ranges.RangeWalker(file_string, 0, 'cfscript').walk()
-    cfc_index = {}
+    cfc_index: dict[str, Any] = {}
 
-    component_search = re.search(regex.component, file_string)
+    tag_text = ranges.TagText(file_string)
+    component_search = find_component(file_string, cfscript_range, tag_text)
 
     if component_search:
         component = regex.Component(
@@ -57,17 +41,42 @@ def parse_cfc_file_string(file_string):
         else:
             cfc_index[key] = False
 
-    properties = cfml_properties.index(file_string, cfscript_range)
-    functions = cfml_functions.index(file_string, cfscript_range)
+    # in a script component a tag is text, as in the strings of code that
+    # writes a component, so there the strings and comments of script hide it
+    hidden_tags = tag_text
+    if component_search and not component_search.group(2).startswith('<'):
+        hidden_tags = ranges.ScriptText(cfscript_range)
+
+    properties = cfml_properties.index(file_string, cfscript_range, hidden_tags)
+    functions = cfml_functions.index(file_string, cfscript_range, hidden_tags)
 
     cfc_index["properties"] = prop_metadata_dict(properties)
     cfc_index["functions"] = get_accessors_metadata_dict(cfc_index["accessors"] or cfc_index["persistent"], properties)
     cfc_index["functions"].update(funct_metadata_dict(functions))
 
-    return cfc_index
+    return cast(ComponentMetadata, cfc_index)
 
 
-def funct_metadata_dict(functions):
+def find_component(file_string, cfscript_range, tag_text):
+    # the word component in a comment or string above the declaration is
+    # not the declaration
+    pos = 0
+    while True:
+        component_search = regex.component.search(file_string, pos)
+        if component_search is None:
+            return None
+        keyword_pt = component_search.start(2)
+        if component_search.group(2).startswith('<'):
+            hidden = tag_text.contains(keyword_pt)
+        else:
+            hidden = cfscript_range.is_in_range(keyword_pt, ranges.NON_SCRIPT_RANGES)
+        if not hidden:
+            return component_search
+        # a match runs on to the next `{`, past the declaration
+        pos = component_search.end(2)
+
+
+def funct_metadata_dict(functions) -> dict[str, Function]:
     meta = {}
     for function_name in functions:
         meta[function_name.lower()] = {
@@ -78,7 +87,7 @@ def funct_metadata_dict(functions):
     return meta
 
 
-def prop_metadata_dict(properties):
+def prop_metadata_dict(properties) -> dict[str, Property]:
     meta = {}
     for prop_name in properties:
         meta[prop_name.lower()] = {
@@ -88,7 +97,7 @@ def prop_metadata_dict(properties):
     return meta
 
 
-def get_accessors_metadata_dict(cfc_accessors, properties):
+def get_accessors_metadata_dict(cfc_accessors, properties) -> dict[str, Function]:
     """
     build a dict for each property that has a getter and/or a setter
     these will be used as a base for explicit functions to be merged into
@@ -111,7 +120,7 @@ def get_accessors_metadata_dict(cfc_accessors, properties):
         # setter
         if attrs["setter"] or (attrs["setter"] is None and cfc_accessors):
             funct_meta = {"access": "public", "parameters": []}
-            arg = {"default": None}
+            arg: dict[str, Any] = {"default": None}
             arg["name"] = prop_name
             arg["required"] = True
             arg["type"] = attrs["type"]

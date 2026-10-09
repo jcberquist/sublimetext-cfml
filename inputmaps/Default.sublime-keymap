@@ -72,7 +72,7 @@
     "command": "cfml_inline_documentation",
     "args": {"doc_type": "inline_doc"},
     "context": [
-      {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
+      {"key": "selector", "operator": "equal", "operand": "embedding.cfml, source.cfml.script", "match_all":true}
     ]
   },
   // method preview
@@ -80,13 +80,13 @@
     "keys": ["shift+f1"],
     "command": "cfml_preview_method",
     "context": [
-      {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
+      {"key": "selector", "operator": "equal", "operand": "embedding.cfml, source.cfml.script", "match_all":true}
     ]
   },
   // close tags
   {
     "keys": ["/"],
-    "command": "close_cfml_tag",
+    "command": "cfml_close_tag",
     "context": [
       {"key": "selector", "operator": "equal", "operand": "embedding.cfml - string.quoted - comment - source.cfml.script", "match_all":true},
       {"key": "preceding_text", "operator": "regex_match", "operand": ".*<$", "match_all":true},
@@ -107,7 +107,7 @@
     "keys": ["primary+f1"],
     "command": "cfml_toggle_controller_view",
     "context": [
-      {"key": "selector", "operator": "equal", "operand": "embedding.cfml", "match_all":true}
+      {"key": "selector", "operator": "equal", "operand": "embedding.cfml, source.cfml.script", "match_all":true}
     ]
   },
   {

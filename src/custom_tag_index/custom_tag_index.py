@@ -1,5 +1,6 @@
 import os
 import re
+from typing import Any
 
 attribute_regex = re.compile(r"\battributes\.(\w+)\b(?!\s*\()", re.I)
 end_tag_regex = re.compile(
@@ -8,11 +9,15 @@ end_tag_regex = re.compile(
 alt_end_tag_regex = re.compile(r"<cfcase\s+value=\s*[\"']end[\"']\s*>")
 
 
+def is_custom_tag_file(file_path):
+    return file_path.endswith(".cfm") or file_path.endswith(".cfc")
+
+
 def index(custom_tag_path):
     custom_tags = {}
-    for path, directories, filenames in os.walk(custom_tag_path):
+    for path, _directories, filenames in os.walk(custom_tag_path):
         for filename in filenames:
-            if filename.endswith(".cfm") or filename.endswith(".cfc"):
+            if is_custom_tag_file(filename):
                 full_file_path = path.replace("\\", "/") + "/" + filename
                 file_index = index_file(full_file_path)
                 if file_index:
@@ -22,7 +27,7 @@ def index(custom_tag_path):
 
 def index_file(full_file_path):
     try:
-        with open(full_file_path, "r", encoding="utf-8") as f:
+        with open(full_file_path, encoding="utf-8") as f:
             file_string = f.read()
     except Exception:
         print("CFML: unable to read file - " + full_file_path)
@@ -34,7 +39,7 @@ def index_file(full_file_path):
 
 
 def parse_cfm_file_string(file_string):
-    tag_index = {"has_end_tag": False}
+    tag_index: dict[str, Any] = {"has_end_tag": False}
     tag_index["attributes"] = list(
         sorted(set([attr.lower() for attr in re.findall(attribute_regex, file_string)]))
     )

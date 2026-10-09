@@ -1,0 +1,17 @@
+{
+  "include": [
+    "cfml_plugin.py",
+    "src",
+    "scripts"
+  ],
+  "pythonVersion": "3.14",
+  "typeCheckingMode": "basic",
+  "extraPaths": [
+    "/opt/sublime_text/Lib/python314",
+    "/opt/sublime_text/Lib/python3",
+    "/Applications/Sublime Text.app/Contents/MacOS/Lib/python314",
+    "/Applications/Sublime Text.app/Contents/MacOS/Lib/python3",
+    "C:/Program Files/Sublime Text/Lib/python314",
+    "C:/Program Files/Sublime Text/Lib/python3"
+  ]
+}

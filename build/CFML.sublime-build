@@ -1,7 +1,7 @@
 {
 	"shell_cmd": "box \"$file_name\"",
 	"file_regex": "(\\S.*): line ([0-9]+)",
-	"selector": "embedding.cfml",
+	"selector": "embedding.cfml, source.cfml.script",
 
 	"variants":
 	[

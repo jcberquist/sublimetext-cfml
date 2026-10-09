@@ -1,15 +1,16 @@
+"""
+The commands of the editor itself: closing tags and opening settings.
+A command over one feature lives next to that feature, as the index,
+goto, documentation and TestBox commands do.
+"""
+
 import os
-import sublime
 import sublime_plugin
 from .. import utils
-from ..component_index import component_index
 from ..custom_tag_index import custom_tag_index
-from .cfc_dotted_path import CfmlCfcDottedPathCommand, CfmlSidebarCfcDottedPathCommand
-from .controller_view_toggle import CfmlToggleControllerViewCommand
-from .color_scheme_styles import CfmlColorSchemeStylesCommand
 
 
-class CloseCfmlTagCommand(sublime_plugin.TextCommand):
+class CfmlCloseTagCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         for sel in self.view.sel():
             pt = sel.begin()
@@ -67,16 +68,8 @@ class CfmlEditSettingsCommand(sublime_plugin.WindowCommand):
         # as edit_settings does for a platform base file: open the user's
         # platform file, or the shared one when only that exists
         variables = self.window.extract_variables()
-        platform_file = sublime.expand_variables(user_file, variables)
+        platform_file = utils.expand_variables(user_file, variables)
         shared_file = platform_file.replace(f" ({variables['platform']})", "")
         if not os.path.exists(platform_file) and os.path.exists(shared_file):
             return shared_file
         return platform_file
-
-
-class CfmlIndexProjectCommand(sublime_plugin.WindowCommand):
-    def run(self):
-        project_name = utils.get_project_name_from_window(self.window)
-        if project_name:
-            custom_tag_index.resync_project(project_name)
-            component_index.resync_project(project_name)

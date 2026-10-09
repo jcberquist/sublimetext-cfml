@@ -3,7 +3,7 @@
 		"button": "button1", "modifiers": ["ctrl", "alt"],
 		"command": "cfml_goto_file",
 		"context": [
-			{"key": "selector", "operator": "equal", "operand": "embedding.cfml"}
+			{"key": "selector", "operator": "equal", "operand": "embedding.cfml, source.cfml.script"}
 		]
 	}
 ]

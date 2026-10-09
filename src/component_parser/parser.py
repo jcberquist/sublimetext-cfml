@@ -1,36 +1,18 @@
-# This module takes in a directory path and recursively
-# browses it and its subfolders looking for ".cfc" files, and then uses the
-# cfml_functions module to index the functions from those files.
-# It assumes that all such files in the directory are component files, and does
-# not check that the files actually define components. It returns a dict of
-# normalized file paths mapped to a named tuple containing function metadata
-# and completions.
-
-# The returned dict structure looks like this:
-# {
-#   "/path/to/mycfc.cfc": {
-#     "accessors": true/false,
-#     "entityname": entityname,
-#     "extends": extends,
-#     "functions": metadata,
-#     "initmethod": initmethod,
-#     "persistent": true/false,
-#     "properties": metadata
-#   },
-#   ...
-# }
+# This module finds the ".cfc" files in a directory and its subfolders, or
+# takes a list of them, and parses each into its metadata with the
+# cfml_components module, keeping the metadata of files it has parsed before
+# in a cache. It assumes that all such files are component files, and does
+# not check that they define components.
 
 
-import os
-import traceback
-import sqlite3
-import json
 import hashlib
-
-from queue import Queue
-from threading import Thread
-from time import sleep
+import json
+import os
+import sqlite3
+import traceback
+from contextlib import closing
 from . import cfml_components
+from .metadata import ComponentMetadata
 
 
 CREATE_CACHE_TABLES = """
@@ -90,140 +72,142 @@ WHERE file_path = ?;
 """
 
 
-class RegExWorker(Thread):
-    def __init__(self, parse_queue, cfcs, cache_path=None):
-        Thread.__init__(self)
-        self.parse_queue = parse_queue
-        self.cfcs = cfcs
-        self.cache_path = cache_path
-
-    def run(self):
-        con = sqlite3.connect(self.cache_path) if self.cache_path else None
-
-        while True:
-            full_file_path, file_hash, file_string = self.parse_queue.get()
-            if full_file_path is None:
-                break
-            try:
-                self.cfcs[full_file_path] = cfml_components.parse_cfc_file_string(
-                    file_string
-                )
-                if con:
-                    metadata = json.dumps(self.cfcs[full_file_path])
-                    con.execute(UPSERT_METADATA, (file_hash, metadata))
-                    con.execute(UPSERT_FILE_PATH, (full_file_path, file_hash))
-            except Exception:
-                print("CFML: unable to parse file - " + full_file_path)
-                traceback.print_exc()
-            self.parse_queue.task_done()
-            sleep(0.01)
-
-        if con:
-            con.commit()
-            con.close()
+CLEAR_CACHE = """
+DELETE FROM file_hashes;
+DELETE FROM hash_metadata;
+"""
 
 
 class Parser:
-    def __init__(self, cache_path=None):
+    def __init__(self, cache_path):
         self.cache_path = cache_path
-        self.init_cache()
-        self.clean_cache()
+        try:
+            self.init_cache()
+            self.clean_cache()
+        except sqlite3.OperationalError:
+            # locked, or it cannot be opened: a new file does not help
+            raise
+        except sqlite3.DatabaseError:
+            # not a database, or a damaged one: the cache is derived data,
+            # so start it again
+            print('CFML: the component index cache was unreadable and is reset - ' + cache_path)
+            os.remove(cache_path)
+            self.init_cache()
+
+    def connect(self):
+        # a connection's own context manager only commits, so close it too
+        return closing(sqlite3.connect(self.cache_path))
 
     def init_cache(self):
-        if self.cache_path:
-            con = sqlite3.connect(self.cache_path)
+        with self.connect() as con, con:
             con.executescript(CREATE_CACHE_TABLES)
-            con.commit()
-            con.close()
 
     def clean_cache(self):
-        if not self.cache_path:
-            return
+        with self.connect() as con, con:
+            invalid_paths = [
+                (file_path,)
+                for file_path, file_hash in con.execute(SELECT_FILE_HASHES)
+                if not os.path.isfile(file_path)
+            ]
+            con.executemany(CLEAR_PATH, invalid_paths)
+            con.execute(CLEAN_CACHE)
 
-        con = sqlite3.connect(self.cache_path)
+    def clear_cache(self):
+        """Empties the cache, so that every file is parsed again."""
+        with self.connect() as con, con:
+            con.executescript(CLEAR_CACHE)
 
-        invalid_paths = []
-        for file_path, file_hash in con.execute(SELECT_FILE_HASHES):
-            if not os.path.isfile(file_path):
-                invalid_paths.append(file_path)
+    def parse_directory(self, root_path) -> dict[str, ComponentMetadata]:
+        """Returns the metadata of the component files in a folder, by path."""
+        return self.parse_files(find_component_files(root_path))
 
-        if len(invalid_paths) > 0:
-            con.executemany(CLEAR_PATH, [(path,) for path in invalid_paths])
-
-        con.execute(CLEAN_CACHE)
-
-        con.commit()
-        con.close()
-
-    def flush_cache(self):
-        pass
-
-    def parse_directory(self, root_path):
+    def parse_files(self, file_paths) -> dict[str, ComponentMetadata]:
+        """
+        Returns the metadata of the files, by path, leaving out those that
+        cannot be read or parsed.
+        """
         cfcs = {}
-        cache = {}
 
-        parse_queue = Queue()
-        regex_worker = RegExWorker(parse_queue, cfcs, self.cache_path)
-        regex_worker.start()
+        with self.connect() as con, con:
+            cache = dict(con.execute(SELECT_METADATA))
 
-        if self.cache_path:
-            con = sqlite3.connect(self.cache_path)
-            for file_hash, metadata in con.execute(SELECT_METADATA):
-                cache[file_hash] = metadata
-            con.close()
+            for full_file_path in file_paths:
+                file_string = read_file(full_file_path)
+                if file_string is None:
+                    continue
+                file_hash = get_hash(file_string)
 
-        for path, directories, filenames in os.walk(root_path):
-            for filename in filenames:
-
-                if filename.endswith(".cfc"):
-                    full_file_path = path.replace("\\", "/") + "/" + filename
-
+                if file_hash in cache:
+                    metadata = json.loads(cache[file_hash])
+                else:
                     try:
-                        with open(full_file_path, "r", encoding="utf-8") as f:
-                            file_string = f.read()
+                        metadata = cfml_components.parse_cfc_file_string(file_string)
                     except Exception:
-                        print("CFML: unable to read file - " + full_file_path)
-                    else:
-                        file_hash = hashlib.md5(file_string.encode("utf-8")).hexdigest()
+                        print('CFML: unable to parse file - ' + full_file_path)
+                        traceback.print_exc()
+                        continue
+                    con.execute(UPSERT_METADATA, (file_hash, json.dumps(metadata)))
 
-                        if file_hash in cache:
-                            cfcs[full_file_path] = json.loads(cache[file_hash])
-                            continue
-
-                        parse_queue.put((full_file_path, file_hash, file_string))
-
-        parse_queue.join()
-        parse_queue.put((None, None, None))
-        regex_worker.join()
+                # record the path on a cache hit too, or clean_cache() can
+                # drop the metadata this file now uses
+                cfcs[full_file_path] = metadata
+                con.execute(UPSERT_FILE_PATH, (full_file_path, file_hash))
 
         return cfcs
 
-    def parse_file(self, full_file_path):
-        con = sqlite3.connect(self.cache_path) if self.cache_path else None
+    def parse_file(self, full_file_path) -> ComponentMetadata | None:
+        """
+        Returns the metadata of a file, or None if it cannot be read or
+        parsed.
+        """
+        file_string = read_file(full_file_path)
+        if file_string is None:
+            return None
 
-        try:
-            with open(full_file_path, "r", encoding="utf-8") as f:
-                file_string = f.read()
-        except Exception:
-            print("CFML: unable to read file - " + full_file_path)
-            return {}
+        file_hash = get_hash(file_string)
 
-        file_hash = hashlib.md5(file_string.encode("utf-8")).hexdigest()
-
-        if con:
-            s = con.execute(SEARCH_HASH_METADATA, (file_hash,)).fetchone()
-            if s:
-                con.execute(UPSERT_FILE_PATH, (full_file_path, file_hash))
-                con.commit()
-                con.close()
-                return json.loads(s[1])
-
-        metadata = cfml_components.parse_cfc_file_string(file_string)
-
-        if con:
-            con.execute(UPSERT_METADATA, (file_hash, json.dumps(metadata)))
+        with self.connect() as con, con:
+            cached = con.execute(SEARCH_HASH_METADATA, (file_hash,)).fetchone()
+            if cached:
+                metadata = json.loads(cached[1])
+            else:
+                try:
+                    metadata = cfml_components.parse_cfc_file_string(file_string)
+                except Exception:
+                    print('CFML: unable to parse file - ' + full_file_path)
+                    traceback.print_exc()
+                    return None
+                con.execute(UPSERT_METADATA, (file_hash, json.dumps(metadata)))
             con.execute(UPSERT_FILE_PATH, (full_file_path, file_hash))
-            con.commit()
-            con.close()
 
         return metadata
+
+
+def is_component_file(file_path):
+    return file_path.endswith('.cfc')
+
+
+def find_component_files(root_path):
+    for path, _directories, filenames in os.walk(root_path):
+        for filename in filenames:
+            if is_component_file(filename):
+                yield path.replace('\\', '/') + '/' + filename
+
+
+def read_file(full_file_path):
+    try:
+        with open(full_file_path, encoding='utf-8') as f:
+            return f.read()
+    except OSError, UnicodeDecodeError:
+        print('CFML: unable to read file - ' + full_file_path)
+        return None
+
+
+# part of every cache key: change it when the parsed metadata changes, so
+# files cached by an older version are parsed again
+PARSER_VERSION = '18'
+
+
+def get_hash(file_string):
+    key = PARSER_VERSION + '\n' + file_string
+    return hashlib.md5(key.encode('utf-8'), usedforsecurity=False).hexdigest()

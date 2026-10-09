@@ -27,6 +27,24 @@
                             {
                                 "command": "cfml_edit_settings",
                                 "args": {
+                                    "file": "${packages}/{cfml_package_name}/settings/CFML.sublime-settings",
+                                    "user_file": "${packages}/User/CFML.sublime-settings",
+                                    "default": "// These settings override both User and Default settings for the CFML syntax\n{\n\t$0\n}\n"
+                                },
+                                "caption": "Syntax Settings"
+                            },
+                            {
+                                "command": "cfml_edit_settings",
+                                "args": {
+                                    "file": "${packages}/{cfml_package_name}/settings/CFScript (CFML).sublime-settings",
+                                    "user_file": "${packages}/User/CFScript (CFML).sublime-settings",
+                                    "default": "// These settings override both User and Default settings for the CFScript (CFML) syntax\n{\n\t$0\n}\n"
+                                },
+                                "caption": "Script Syntax Settings"
+                            },
+                            {
+                                "command": "cfml_edit_settings",
+                                "args": {
                                     "file": "${packages}/{cfml_package_name}/inputmaps/Default.sublime-keymap",
                                     "user_file": "${packages}/User/Default ($platform).sublime-keymap",
                                     "default": "[\n\t$0\n]\n"

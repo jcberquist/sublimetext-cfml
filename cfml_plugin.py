@@ -1,39 +1,90 @@
 import sublime
 import sublime_plugin
-from HTML import html_completions
-from .src import command_list, completions, events, utils, _plugin_loaded
+from .src import completions, utils, _plugin_loaded, _plugin_unloaded
 
-for command in command_list:
-    globals()[command.__name__] = command
+from .src.buffer_metadata import BufferMetadata
+from .src.commands import (
+    CfmlAutoInsertClosingTagCommand,
+    CfmlCloseTagCommand,
+    CfmlEditSettingsCommand,
+)
+from .src.commands.cfc_dotted_path import (
+    CfmlCfcDottedPathCommand,
+    CfmlSidebarCfcDottedPathCommand,
+)
+from .src.commands.color_scheme_styles import CfmlColorSchemeStylesCommand
+from .src.commands.controller_view_toggle import CfmlToggleControllerViewCommand
+from .src.commands.format import CfmlFormatCommand, CfmlReplaceTextCommand
+from .src.completions import CfmlUpdateCompletionDocCommand
+from .src.component_index.commands import (
+    CfmlClearIndexCacheCommand,
+    CfmlIndexProjectCommand,
+)
+from .src.component_index.navigate_to_method import CfmlNavigateToMethodCommand
+from .src.goto_cfml_file import CfmlGotoFileCommand
+from .src.inline_documentation import CfmlInlineDocumentationCommand
+from .src.method_preview import CfmlPreviewMethodCommand
+from .src.providers.components.di import CfmlDiPropertyCommand
+from .src.providers.testbox.test_runner import TestboxCommand
+from .src.providers.testbox.testbox_spec_outline import TestboxSpecOutlineCommand
+from .src.project_watcher import ProjectEventListener
+from .src.view_state import ViewState
+
+# Sublime Text registers the commands and listeners it finds in this module
+__all__ = [
+    "BufferMetadata",
+    "CfmlAutoInsertClosingTagCommand",
+    "CfmlCfcDottedPathCommand",
+    "CfmlClearIndexCacheCommand",
+    "CfmlCloseTagCommand",
+    "CfmlColorSchemeStylesCommand",
+    "CfmlDiPropertyCommand",
+    "CfmlEditSettingsCommand",
+    "CfmlFormatCommand",
+    "CfmlGotoFileCommand",
+    "CfmlIndexProjectCommand",
+    "CfmlInlineDocumentationCommand",
+    "CfmlNavigateToMethodCommand",
+    "CfmlPreviewMethodCommand",
+    "CfmlReplaceTextCommand",
+    "CfmlSidebarCfcDottedPathCommand",
+    "CfmlToggleControllerViewCommand",
+    "CfmlUpdateCompletionDocCommand",
+    "CfmlViewListener",
+    "ProjectEventListener",
+    "TestboxCommand",
+    "TestboxSpecOutlineCommand",
+    "ViewState",
+    "plugin_loaded",
+    "plugin_unloaded",
+]
 
 
 def plugin_loaded():
     _plugin_loaded()
 
 
-class CfmlEventListener(sublime_plugin.EventListener):
-    def on_load_async(self, view):
-        events.trigger("on_load_async", view)
+def plugin_unloaded():
+    _plugin_unloaded()
 
-    def on_close(self, view):
-        events.trigger("on_close", view)
 
-    def on_close_buffer(self, buffer):
-        events.trigger("on_close_buffer", buffer)
+class CfmlViewListener(sublime_plugin.ViewEventListener):
+    """
+    Completions and hover docs. Sublime Text creates one for each view with
+    the CFML syntax, so views of other syntaxes never call into the package.
+    """
 
-    def on_modified_async(self, view):
-        events.trigger("on_modified_async", view)
+    @classmethod
+    def is_applicable(cls, settings):
+        return utils.is_cfml_view(settings)
 
-    def on_post_save_async(self, view):
-        if not view.file_name():
-            print(
-                "CFML: file was saved and closed - it is not possible to determine the file path."
-            )
-            return
-        events.trigger("on_post_save_async", view)
+    @classmethod
+    def applies_to_primary_view_only(cls):
+        return False
 
-    def on_post_text_command(self, view, command_name, args):
+    def on_post_text_command(self, command_name, args):
         if command_name == "commit_completion":
+            view = self.view
             pos = view.sel()[0].begin()
 
             if view.match_selector(
@@ -58,81 +109,13 @@ class CfmlEventListener(sublime_plugin.EventListener):
             ):
                 view.run_command("auto_complete", {"api_completions_only": True})
 
-    def on_post_window_command(self, window, command_name, args):
-        events.trigger("on_post_window_command", window, command_name, args)
+    def on_query_completions(self, prefix, locations):
+        return completions.get_completions(self.view, locations[0], prefix)
 
-    def on_load_project_async(self, window):
-        events.trigger("on_load_project_async", window)
-
-    def on_new_project_async(self, window):
-        events.trigger("on_new_project_async", window)
-
-    def on_post_save_project_async(self, window):
-        events.trigger("on_post_save_project_async", window)
-
-    def on_pre_close_project(self, window):
-        events.trigger("on_pre_close_project", window)
-
-    def on_pre_close_window(self, window):
-        events.trigger("on_pre_close_window", window)
-
-    def on_query_completions(self, view, prefix, locations):
-        if not view.match_selector(locations[0], "embedding.cfml"):
-            return None
-
-        return completions.get_completions(view, locations[0], prefix)
-
-    def on_hover(self, view, point, hover_zone):
-        if hover_zone != sublime.HOVER_TEXT:
+    def on_hover(self, point, hover_zone):
+        if hover_zone != sublime.HoverZone.TEXT:
             return
 
-        if not view.match_selector(point, "embedding.cfml"):
-            return
-
-        view.run_command(
+        self.view.run_command(
             "cfml_inline_documentation", {"pt": point, "doc_type": "hover_doc"}
         )
-
-
-class CustomHtmlTagCompletions(html_completions.HtmlTagCompletions):
-    """
-    There is no text.html scope in <cffunction> bodies, so this
-    allows the HTML completions to still function there
-
-    uses Default Packages HtmlTagCompletions code
-    """
-
-    def on_query_completions(self, view, prefix, locations):
-        if not utils.get_setting("html_completions_in_tag_components"):
-            return None
-
-        # Only trigger within CFML tag component functions
-        selector = "meta.class.body.tag.cfml meta.function.body.tag.cfml -source.cfml.script -source.sql"
-        if not view.match_selector(locations[0], selector):
-            return None
-
-        pt = locations[0] - len(prefix) - 1
-        ch = view.substr(pt)
-
-        if ch == '&':
-            return self.entity_completions
-
-        if ch == '<':
-            # If the caret is within tag, complete only tag names.
-            # see: https://github.com/sublimehq/sublime_text/issues/3508
-            if view.match_selector(locations[0], "meta.tag"):
-                return self.tag_name_completions
-            return self.tag_completions
-
-        # Note: Exclude opening punctuation to enable abbreviations
-        #       if the caret is located directly in front of a html tag.
-        if view.match_selector(locations[0], "meta.function.body.tag.cfml meta.tag - meta.string - punctuation.definition.tag.begin"):
-            if ch in ' \f\n\t':
-                return self.attribute_completions(view, locations[0], prefix)
-            return None
-
-        if view.match_selector(locations[0], "meta.function.body.tag.cfml - meta.tag, meta.function.body.tag.cfml punctuation.definition.tag.begin"):
-            # Expand tag and attribute abbreviations
-            return self.expand_tag_attributes(view, locations) or self.tag_abbreviations
-
-        return None

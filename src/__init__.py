@@ -1,32 +1,21 @@
-from . import cfml_plugins
-from . import completions
+from . import cfml_providers
 from . import component_index
-from . import custom_tag_index
-from . import events
-from . import goto_cfml_file
-from . import inline_documentation
-from . import method_preview
+from . import project_watcher
 from . import utils
-from . import commands
-
-command_list = []
+from . import view_state
 
 
 def _plugin_loaded():
-    for k, v in globals().items():
-        try:
-            if "_plugin_loaded" in v.__dict__:
-                v._plugin_loaded()
-        except Exception:
-            pass
+    for module in [
+        component_index,
+        cfml_providers,
+        # last, so the indexes are set up before projects are added
+        project_watcher,
+    ]:
+        utils.call_plugin_loaded(module)
 
 
-# load commands
-for k in dir():
-    try:
-        v = globals()[k]
-        for a in dir(v):
-            if a.endswith("Command"):
-                command_list.append(v.__dict__[a])
-    except Exception:
-        pass
+def _plugin_unloaded():
+    # a doc popup or method preview left in a view would outlive the
+    # package, with links that no longer do anything
+    view_state.close_all()

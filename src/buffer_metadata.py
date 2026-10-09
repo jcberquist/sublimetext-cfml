@@ -1,11 +1,14 @@
+import sublime
+import sublime_plugin
 import timeit
+from functools import partial
 from . import utils
-from . import events
-from .component_parser import parse_cfc_file_string
+from .component_parser import ComponentMetadata, ExtendedMetadata, parse_cfc_file_string
 from .component_index import component_index
 
 
-buffer_metadata_cache = {}
+# how long a buffer must go unchanged before it is parsed again
+PARSE_DELAY_MS = 500
 
 
 def get_minimal_file_string(view):
@@ -31,12 +34,19 @@ def get_minimal_file_string(view):
             ("meta.class.declaration.cfml", " {\n"),
             ("meta.tag.property.cfml", ";\n"),
         ]
+        funct_regions = "meta.class.body.cfml comment.block.documentation.cfml, meta.function.declaration.cfml -meta.function.body.cfml"
+
+        if not view.find_by_selector("meta.class.declaration.cfml"):
+            # no component, as in a .cfs file or the script of a .cfm: every
+            # doc comment is outside a class, and goes with the function
+            # that it comes before
+            script_selectors = []
+            funct_regions = "comment.block.documentation.cfml -meta.function.body.cfml, meta.function.declaration.cfml -meta.function.body.cfml"
 
         for selector, separator in script_selectors:
             for r in view.find_by_selector(selector):
                 min_string += view.substr(r) + separator
 
-        funct_regions = "meta.class.body.cfml comment.block.documentation.cfml, meta.function.declaration.cfml -meta.function.body.cfml"
         for r in view.find_by_selector(funct_regions):
             string = view.substr(r)
             min_string += string + ("\n" if string.endswith("*/") else "{ }\n")
@@ -46,13 +56,27 @@ def get_minimal_file_string(view):
     return min_string
 
 
-def get_cached_view_metadata(view):
-    if view.buffer_id() in buffer_metadata_cache:
-        return buffer_metadata_cache[view.buffer_id()][1]
-    return get_view_metadata(view)
+def get_cached_view_metadata(view) -> ExtendedMetadata:
+    """
+    Returns the metadata of the component in a view, with what it inherits
+    resolved against the component index of the view's project. Only the
+    buffer's own declarations are cached, as the components it extends
+    and the project's mappings can change while the buffer does not.
+    """
+    buffer_metadata = sublime_plugin.find_view_event_listener(
+        view.buffer().primary_view(), BufferMetadata
+    )
+    if isinstance(buffer_metadata, BufferMetadata):
+        base_meta = buffer_metadata.get()
+    else:
+        # not a CFML view, so nothing is kept for its buffer
+        base_meta = parse_view_metadata(view)
+    file_path = utils.normalize_path(view.file_name()) if view.file_name() else ""
+    project_name = utils.get_project_name(view)
+    return component_index.extend_metadata(project_name, file_path, base_meta)
 
 
-def get_view_metadata(view):
+def parse_view_metadata(view) -> ComponentMetadata:
     start_time = timeit.default_timer()
     file_string = get_minimal_file_string(view)
     base_meta = parse_cfc_file_string(file_string)
@@ -62,69 +86,62 @@ def get_view_metadata(view):
         message = "CFML: parsed {} in {}ms"
         print(message.format(view.file_name() or "file", round(parse_time * 1000)))
 
-    extended_meta = dict(base_meta)
-    extended_meta.update(
-        {
-            "functions": {},
-            "function_file_map": {},
-            "properties": {},
-            "property_file_map": {},
-        }
-    )
+    return base_meta
 
-    file_path = utils.normalize_path(view.file_name()) if view.file_name() else ""
-    project_name = utils.get_project_name(view)
-    if project_name and base_meta["extends"]:
-        extends_file_path = component_index.resolve_path(
-            project_name, file_path, base_meta["extends"]
+
+class BufferMetadata(sublime_plugin.ViewEventListener):
+    """
+    The metadata of the component in a CFML buffer, parsed again once the
+    edits to the buffer pause. As a view event listener of the primary view
+    only, there is one for each buffer, which the clones of the view share:
+    Sublime Text creates it with the first CFML view of a buffer and drops
+    it when the buffer closes or gets another syntax.
+    """
+
+    @classmethod
+    def is_applicable(cls, settings):
+        return utils.is_cfml_view(settings)
+
+    def __init__(self, view):
+        super().__init__(view)
+        # the change count that was parsed, and the buffer's own metadata
+        self.parsed: tuple[int, ComponentMetadata] | None = None
+        # the change count that a parse is scheduled for
+        self.scheduled: int | None = None
+
+    def on_load_async(self):
+        self.parse()
+
+    def on_reload_async(self):
+        self.parse()
+
+    def on_revert_async(self):
+        self.parse()
+
+    def on_modified(self):
+        # parse once the edits pause, so the last edit is always included
+        self.scheduled = change_count = self.view.change_count()
+        sublime.set_timeout_async(
+            partial(self.parse_if_unchanged, change_count), PARSE_DELAY_MS
         )
-        root_meta = component_index.get_extended_metadata_by_file_path(
-            project_name, extends_file_path
-        )
-        if root_meta:
-            for key in [
-                "functions",
-                "function_file_map",
-                "properties",
-                "property_file_map",
-            ]:
-                extended_meta[key].update(root_meta[key])
 
-    extended_meta["functions"].update(base_meta["functions"])
-    extended_meta["function_file_map"].update(
-        {funct_key: file_path for funct_key in base_meta["functions"]}
-    )
-    extended_meta["properties"].update(base_meta["properties"])
-    extended_meta["property_file_map"].update(
-        {prop_key: file_path for prop_key in base_meta["properties"]}
-    )
+    def parse_if_unchanged(self, change_count):
+        if self.view.is_valid() and self.view.change_count() == change_count:
+            self.parse()
 
-    buffer_metadata_cache[view.buffer_id()] = timeit.default_timer(), extended_meta
+    def parse(self):
+        change_count = self.view.change_count()
+        base_meta = parse_view_metadata(self.view)
+        self.parsed = change_count, base_meta
+        return base_meta
 
-    return extended_meta
-
-
-def on_view_loaded(view):
-    if not view.match_selector(0, "embedding.cfml"):
-        return
-    get_view_metadata(view)
-
-
-def on_view_modified(view):
-    if not view.match_selector(0, "embedding.cfml"):
-        return
-
-    if view.buffer_id() in buffer_metadata_cache:
-        last_updated, meta = buffer_metadata_cache[view.buffer_id()]
-        if timeit.default_timer() - last_updated < 0.5:
-            return
-    get_view_metadata(view)
-
-
-def on_buffer_closed(buffer):
-    buffer_metadata_cache.pop(buffer.id(), None)
-
-
-events.subscribe("on_load_async", on_view_loaded)
-events.subscribe("on_modified_async", on_view_modified)
-events.subscribe("on_close_buffer", on_buffer_closed)
+    def get(self) -> ComponentMetadata:
+        """
+        Returns the buffer's own metadata. While the parse for an edit is
+        scheduled this is the metadata from before the edit; a change that
+        no parse is scheduled for is parsed at once.
+        """
+        change_count = self.view.change_count()
+        if self.parsed is None or change_count not in (self.parsed[0], self.scheduled):
+            return self.parse()
+        return self.parsed[1]

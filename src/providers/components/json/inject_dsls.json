@@ -1,0 +1,21 @@
+{
+  "coldbox": "coldbox.system.web.Controller",
+  "coldbox:asyncManager": "coldbox.system.async.AsyncManager",
+  "coldbox:dataMarshaller": "coldbox.system.core.conversion.DataMarshaller",
+  "coldbox:flash": "coldbox.system.web.flash.AbstractFlashScope",
+  "coldbox:handlerService": "coldbox.system.web.services.HandlerService",
+  "coldbox:interceptorService": "coldbox.system.web.services.InterceptorService",
+  "coldbox:loaderService": "coldbox.system.web.services.LoaderService",
+  "coldbox:moduleService": "coldbox.system.web.services.ModuleService",
+  "coldbox:renderer": "coldbox.system.web.Renderer",
+  "coldbox:requestService": "coldbox.system.web.services.RequestService",
+  "coldbox:router": "coldbox.system.web.routing.Router",
+  "coldbox:routingService": "coldbox.system.web.services.RoutingService",
+  "coldbox:schedulerService": "coldbox.system.web.services.SchedulerService",
+  "cachebox": "coldbox.system.cache.CacheFactory",
+  "logbox": "coldbox.system.logging.LogBox",
+  "logbox:logger": "coldbox.system.logging.Logger",
+  "logbox:logger:*": "coldbox.system.logging.Logger",
+  "logbox:root": "coldbox.system.logging.Logger",
+  "wirebox": "coldbox.system.ioc.Injector"
+}
