@@ -54,7 +54,7 @@
 <prefix:tag attrname="#test#">
 <!--- <- meta.tag.custom.cfml --->
  <!--- <- meta.tag.custom.cfml entity.name.tag.custom.cfml --->
-<!---  ^ meta.tag.custom.cfml entity.name.tag.custom.cfml punctuation.separator.prefix.cfml --->
+<!---  ^ meta.tag.custom.cfml entity.name.tag.custom.cfml punctuation.separator.namespace.cfml --->
 <!---   ^ meta.tag.custom.cfml entity.name.tag.custom.cfml --->
 <!---       ^ meta.tag.custom.cfml entity.other.attribute-name.cfml --->
 <!---                  ^ meta.tag.custom.cfml variable.other.readwrite.cfml --->

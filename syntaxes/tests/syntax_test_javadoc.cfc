@@ -5,15 +5,15 @@ This is a description of the component
 //                                    ^ -text.html
 * @attribute and some hint text
 // <- embedding.cfml source.cfml.script comment.block.documentation.cfml
-  // <- keyword.other.documentation.cfml punctuation.definition.keyword.cfml
-// ^ -punctuation.definition.keyword.cfml
-//          ^ -keyword.other.documentation.cfml
+  // <- entity.other.attribute-name.documentation.cfml - punctuation
+// ^^^^^^^^^ entity.other.attribute-name.documentation.cfml
+//          ^ -entity.other.attribute-name
 //           ^ text.html
 //                             ^ -text.html
 @another.attribute and some hint text
-// <- embedding.cfml source.cfml.script comment.block.documentation.cfml keyword.other.documentation.cfml punctuation.definition.keyword.cfml
- // <- -punctuation.definition.keyword.cfml
-//                ^ -keyword.other.documentation.cfml
+// <- embedding.cfml source.cfml.script comment.block.documentation.cfml entity.other.attribute-name.documentation.cfml - punctuation
+ // <- entity.other.attribute-name.documentation.cfml
+//                ^ -entity.other.attribute-name
 //                 ^ text.html
 //                                   ^ -text.html
 */

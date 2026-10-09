@@ -24,10 +24,10 @@ component {
 }
 component {
     function map(required required=true, required string name) {}
-//               ^^^^^^^^ meta.function.parameters.cfml keyword.other.required.parameter.cfml
+//               ^^^^^^^^ meta.function.parameters.cfml storage.modifier.cfml
 //                        ^^^^^^^^ meta.function.parameters.cfml variable.parameter.function.cfml
 //                                ^ meta.function.parameters.cfml keyword.operator.assignment.cfml
-//                                       ^^^^^^^^ meta.function.parameters.cfml keyword.other.required.parameter.cfml
+//                                       ^^^^^^^^ meta.function.parameters.cfml storage.modifier.cfml
 //                                                       ^^^^ meta.function.parameters.cfml variable.parameter.function.cfml
 }
 component {

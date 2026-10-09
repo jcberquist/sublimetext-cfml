@@ -118,43 +118,43 @@ variables:
     (?x)(?i)
       (?:
         abs|acos|add|addautofilter|addborder|addcolumn|addfreezepane|addimage|addinfo|addpagebreaks
-        |addrow|addrows|addsplitpane|append|asin|atn|avg|binarydecode|binaryenecode|bitand
+        |addrow|addrows|addsplitpane|append|asin|atn|avg|binarydecode|binaryencode|bitand
         |bitmaskclear|bitmaskread|bitmaskset|bitnot|bitor|bitshln|bitshrn|bitxor|blur|booleanformat
         |canonicalize|ceiling|charsetdecode|charsetencode|childpos|cjustify|clear|clearrect
         |columnarray|columncount|columndata|columnexists|columnlist|compare|comparenocase
         |contains|containsnocase|convert|convertforgrid|copy|cos|count|createodbcdate|createodbcdatetime
         |createodbctime|createsheet|crop|dateformat|datepart|datetimeformat|day|dayofweek
-        |dayofyear|days|daysinmonth|decodeforhtml|decodefromurl|decrementvalue|decrypt|delete
-        |deleteat|deletecolumn|deletecolumns|deletenocase|deleterow|deleterows|diff|drawarc
-        |drawbeveledrect|drawcubiccurve|drawline|drawlines|drawoval|drawpoint|drawquadraticcurve
+        |dayofyear|daysinmonth|daysinyear|decodeforhtml|decodefromurl|decrementvalue|decrypt
+        |delete|deleteat|deletecolumn|deletecolumns|deletenocase|deleterow|deleterows|diff
+        |drawarc|drawbeveledrect|drawcubiccurve|drawline|drawlines|drawoval|drawpoint|drawquadraticcurve
         |drawrect|drawroundrect|drawtext|duplicate|each|elemnew|encodeforcss|encodeforhtml
         |encodeforhtmlattribute|encodeforjavascript|encodeforurl|encodeforxml|encodeforxmlattribute
         |encodeforxpath|encrypt|every|exp|filter|find|findall|findallnocase|findkey|findnocase
         |findoneof|findvalue|first|firstdayofmonth|fix|flip|floor|formatbasen|formatcell
         |formatcellrange|formatcolumn|formatcolumns|formatrow|formatrows|generatesecretkey
-        |get|getblob|getbufferedimage|getcell|getcellcomment|getcellformula|getcellvalue
-        |getcolumncount|getexifmetadata|getexiftag|getheight|getiptcmetadata|getiptctag|getmetadata
-        |getnodetype|getresult|getrow|getsafehtml|gettoken|getwidth|grayscale|haschild|hash
-        |hour|htmlcodeformat|htmleditformat|incrementvalue|indexexists|info|inputbasen|insert
-        |insertat|iscasesensitive|isdefined|isempty|isordered|issafehtml|jssstringformat
-        |keyarray|keyexists|keylist|keytranslate|last|lcase|left|len|listappend|listavg|listchangedelims
-        |listcontains|listcontainsnocase|listdeleteat|listeach|listevery|listfilter|listfind
-        |listfindnocase|listfirst|listgetat|listindexexists|listinsertat|listitemtrim|listlast
-        |listlen|listmap|listprepend|listqualify|listreduce|listreduceright|listremoveduplicates
-        |listrest|listsetat|listsome|listsort|listtoarray|listvaluecount|listvaluecountnocase
-        |ljustify|log|log10|lsdateformat|lsiscurrency|lsisdate|lsisnumeric|lsparsecurrency
-        |lsparsedatetime|lsparseeurocurrency|lsparsenumber|lstimeformat|map|max|median|merge
-        |mergecells|mid|min|minute|month|negative|overlay|paragraphformat|parsedatetime|paste
-        |pop|precisionevaluate|prepend|push|quarter|randomize|randrange|readbinary|recordcount
-        |reduce|reduceright|refind|refindnocase|rematch|rematchnocase|removechars|removesheet
-        |repeatstring|replace|replacelist|replacelistnocase|replacenocase|rereplace|rereplacenocase
-        |resize|reverse|right|rjustify|rotate|rotatedrawingaxis|round|rowdata|rowswap|scaletofit
-        |search|second|set|setactivesheet|setactivesheetnumber|setantialiasing|setbackgroundcolor
+        |getblob|getbufferedimage|getcell|getcellformula|getcellvalue|getcolumncount|getexifmetadata
+        |getexiftag|getheight|getiptcmetadata|getiptctag|getmetadata|getnodetype|getresult
+        |getrow|getsafehtml|gettoken|getwidth|grayscale|haschild|hash|hour|htmlcodeformat
+        |htmleditformat|incrementvalue|indexexists|info|inputbasen|insert|insertat|iscasesensitive
+        |isdefined|isempty|isordered|issafehtml|jsstringformat|keyarray|keyexists|keylist
+        |keytranslate|last|lcase|left|len|listappend|listavg|listchangedelims|listcontains
+        |listcontainsnocase|listdeleteat|listeach|listevery|listfilter|listfind|listfindnocase
+        |listfirst|listgetat|listindexexists|listinsertat|listitemtrim|listlast|listlen|listmap
+        |listprepend|listqualify|listreduce|listreduceright|listremoveduplicates|listrest
+        |listsetat|listsome|listsort|listtoarray|listvaluecount|listvaluecountnocase|ljustify
+        |log|log10|lsdateformat|lsiscurrency|lsisdate|lsisnumeric|lsparsecurrency|lsparsedatetime
+        |lsparseeurocurrency|lsparsenumber|lstimeformat|map|max|median|merge|mergecells|mid
+        |min|minute|month|negative|overlay|paragraphformat|parsedatetime|paste|pop|precisionevaluate
+        |prepend|push|quarter|randomize|randrange|readbinary|recordcount|reduce|reduceright
+        |refind|refindnocase|rematch|rematchnocase|removechars|removesheet|repeatstring|replace
+        |replacelist|replacelistnocase|replacenocase|rereplace|rereplacenocase|resize|reverse
+        |right|rjustify|rotate|rotatedrawingaxis|round|rowdata|rowswap|rtrim|scaletofit|search
+        |second|set|setactivesheet|setactivesheetnumber|setantialiasing|setbackgroundcolor
         |setcell|setcellcomment|setcellformula|setcellvalue|setcolumnwidth|setdrawingcolor
         |setdrawingstroke|setdrawingtransparency|setfooter|setheader|setmetadata|setrow|setrowheight
         |sgn|sharpen|shear|sheardrawingaxis|shift|shiftcolumns|shiftrows|sin|slice|some|sort
         |spanexcluding|spanincluding|splice|sqr|stripcr|sum|swap|tan|timeformat|tobase64
-        |tobinary|tolist|tosorted|tostring|tostruct|transform|translate|translatedrawingaxis
+        |tobinary|tojson|tolist|tosorted|tostring|tostruct|transform|translate|translatedrawingaxis
         |trim|ucase|unshift|update|urldecode|urlencodedformat|val|valuearray|week|wrap|write
         |writebase64|xmlformat|xordrawingmode|year|yesnoformat
       )

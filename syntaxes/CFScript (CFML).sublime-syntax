@@ -28,6 +28,8 @@ variables:
   # `catch.message` (error templates), `out &= case;`, `var in = 1`.
   keyword_variable: (?i:break|case|catch|continue|do|else|finally|for|if|import|in|return|switch|try|var|void|while)\b
 
+  declaration_keyword_lookahead: (?=\s+{{attribute_name}}\b|\s*(?:[\n\{]|/[/*]))
+
   param_attributes: (?i:\b(name|default|max|maxLength|min|pattern|type)\b)
   access_modifier: (?i:\b(private|package|public|remote)\b)
   storage_modifier: (?i:\b(static|final|abstract)\b)
@@ -57,6 +59,28 @@ variables:
       {{either_function_lookahead}}
     ))
   function_call_after_lookahead: (?=\s*\()
+
+  # Word operators, split as the `binary-operators` rules match them, and
+  # `word_operator` for all of them, which `expression-statement-continuation`
+  # looks for at the start of a line. Bare `not` is a prefix operator and
+  # only appears as part of the longer forms.
+  in_operator: (?i:in)\b
+  logical_word_operator: (?i:and|or|xor|eqv|imp)\b
+  equality_word_operator: (?i:neq|is\s+not|not\s+equal|eq|is|equal)\b
+  relational_word_operator: |-
+    (?xi:
+      lte | le | less\s+than\s+or\s+equal\s+to |
+      gte | ge | greater\s+than\s+or\s+equal\s+to |
+      lt | less\s+than |
+      gt | greater\s+than
+    )\b
+  contains_operator: (?i:contains|does\s+not\s+contain)\b
+  mod_operator: (?i:mod)\b
+  word_operator: |-
+    (?x:
+      {{in_operator}} | {{logical_word_operator}} | {{equality_word_operator}} |
+      {{relational_word_operator}} | {{contains_operator}} | {{mod_operator}}
+    )
 
   block_comment_contents: (?:(?:[^*]|\*(?!/))*)
   block_comment: (?:/\*{{block_comment_contents}}\*/)
@@ -151,10 +175,9 @@ contexts:
         - match: \*/
           scope: punctuation.definition.comment.end.cfml
           pop: true
-        - match: ^\s*\*?\s*((\@)\S*)\s
+        - match: ^\s*\*?\s*(\@\S*)\s
           captures:
-            1: keyword.other.documentation.cfml
-            2: punctuation.definition.keyword.cfml
+            1: entity.other.attribute-name.documentation.cfml
           push: cfmldoc
         - match: ^\s*(\*(?!/))?\s*(?=\w)
           push: cfmldoc
@@ -207,8 +230,12 @@ contexts:
       scope: keyword.control.flow.cfml
       set: restricted-production
 
+  # `statement` is entered at the first non-space character, so these rules
+  # cannot anchor to the line start. What follows the keyword tells a
+  # declaration from a variable of the same name (`component = …`,
+  # `interface.method()`): an attribute, a `{`, a comment or the line end.
   component-declaration:
-    - match: (?i)^\s*(?:(abstract|final)\s+)?(component)\b
+    - match: (?i)\b(?:(abstract|final)\s+)?(component)\b{{declaration_keyword_lookahead}}
       captures:
         1: storage.modifier.cfml
         2: keyword.declaration.class.cfml
@@ -217,11 +244,11 @@ contexts:
         - component-attributes
     # A comment between the modifier and the keyword:
     # `abstract /* base */ component {}`.
-    - match: (?i)^\s*(abstract|final)\b(?=(?:\s|/\*.*?\*/)*component\b)
+    - match: (?i)\b(abstract|final)\b(?=(?:\s|/\*.*?\*/)*component\b)
       captures:
         1: storage.modifier.cfml
       set: component-declaration-keyword
-    - match: (?i)^\s*(interface)\b
+    - match: (?i)\b(interface)\b{{declaration_keyword_lookahead}}
       captures:
         1: keyword.declaration.interface.cfml
       set:
@@ -315,7 +342,7 @@ contexts:
 
   static-block:
     - match: (?i)\bstatic\b(?=\s*[\n\{])
-      scope: keyword.control.static.cfml
+      scope: storage.modifier.cfml
       set:
         - static-block-meta
         - block
@@ -915,7 +942,7 @@ contexts:
         (?=
           !=
         | [-+*/\\%><=&|^\[(;,.:?]
-        | (?:and|or|xor|eqv|imp|mod|in|eq|neq|is|lt|le|gt|ge|contains)\b
+        | \b{{word_operator}}
         )
       pop: 1
     - match: (?=\S)
@@ -1102,13 +1129,13 @@ contexts:
       scope: keyword.operator.arithmetic.cfml
 
   binary-operators:
-    - match: \b(?i:in)\b
+    - match: \b{{in_operator}}
       scope: keyword.operator.word.cfml
       push: expression-begin
     - match: '&&|\|\|'
       scope: keyword.operator.logical.cfml
       push: expression-begin
-    - match: \b(?i:(and|or|xor|eqv|imp))\b
+    - match: \b{{logical_word_operator}}
       scope: keyword.operator.logical.cfml
       push: expression-begin
     - match: =(?![=>])
@@ -1132,28 +1159,24 @@ contexts:
         ===  | # equality        left-to-right   both
         !==  | # equality        left-to-right   both
         ==   | # equality        left-to-right   both
-        \b(?i:neq|is\s+not|not\s+equal)\b |
-        !=   |  # equality        left-to-right   both
-        <>   |  # equality        left-to-right   both
-        \b(?i:eq|is|equal)\b
+        !=   | # equality        left-to-right   both
+        <>   | # equality        left-to-right   both
+        \b{{equality_word_operator}}
       scope: keyword.operator.comparison.cfml
       push: expression-begin
     - match: |-
         (?x)
         <=   | # relational      left-to-right   both
-        \b(?i:(lte|le|less\s+than\s+or\s+equal\s+to))\b |
         >=   | # relational      left-to-right   both
-        \b(?i:(gte|ge|greater\s+than\s+or\s+equal\s+to))\b |
         <    | # relational      left-to-right   both
-        \b(?i:(lt|less\s+than\s))\b |
         >    | # relational      left-to-right   both
-        \b(?i:(gt|greater\s+than\s))\b
+        \b{{relational_word_operator}}
       scope: keyword.operator.comparison.cfml
       push: expression-begin
-    - match: \b(?i:(contains|does\s+not\s+contain))\b
+    - match: \b{{contains_operator}}
       scope: keyword.operator.comparison.cfml
       push: expression-begin
-    - match: \b(?i:mod)\b
+    - match: \b{{mod_operator}}
       scope: keyword.operator.arithmetic.cfml
       push: expression-begin
     - match: |-
@@ -1186,9 +1209,9 @@ contexts:
 
   postfix-operators:
     - match: '--'
-      scope: keyword.operator.arithmetic.postfix.cfml
+      scope: keyword.operator.arithmetic.cfml
     - match: '\+\+'
-      scope: keyword.operator.arithmetic.postfix.cfml
+      scope: keyword.operator.arithmetic.cfml
 
   special-name:
     - match: (?i)\btrue\b
@@ -1342,10 +1365,10 @@ contexts:
         # `required` is a keyword before a type or name, and otherwise the
         # parameter's own name: `function map(required required=true)`.
         - match: (?i)\brequired\b(?=\s+[_$[:alpha:]])
-          scope: keyword.other.required.parameter.cfml
+          scope: storage.modifier.cfml
         - match: (\.\.\.)({{identifier}})
           captures:
-            1: keyword.operator.rest.cfml
+            1: keyword.operator.spread.cfml
             2: variable.parameter.function.cfml
         # A struct pattern (Adobe 2025): `function f({a, b: {c}} = {}, d)`.
         - match: (?=\{)

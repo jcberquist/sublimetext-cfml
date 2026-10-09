@@ -657,7 +657,7 @@ contexts:
       captures:
         1: punctuation.definition.tag.begin.cfml
         2: entity.name.tag.custom.cfml
-        3: entity.name.tag.custom.cfml punctuation.separator.prefix.cfml
+        3: entity.name.tag.custom.cfml punctuation.separator.namespace.cfml
         4: entity.name.tag.custom.cfml
       push:
         - meta_scope: meta.tag.custom.cfml

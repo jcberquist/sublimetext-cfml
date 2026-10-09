@@ -3,7 +3,7 @@ abstract component {
 // <- embedding.cfml source.cfml.script meta.class.declaration.cfml storage.modifier.cfml
 
   static {
-//^ meta.block.static.cfml keyword.control.static.cfml
+//^ meta.block.static.cfml storage.modifier.cfml
     staticValue = 5;
   }
 
