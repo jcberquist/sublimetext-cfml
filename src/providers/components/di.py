@@ -25,7 +25,7 @@ class CfmlDiPropertyCommand(sublime_plugin.TextCommand):
 
         pt = self.view.sel()[0].begin()
 
-        if not self.view.match_selector(pt, "source.cfml meta.class"):
+        if not self.view.match_selector(pt, 'source.cfml meta.class'):
             return
 
         if property_name:
@@ -52,7 +52,7 @@ class CfmlDiPropertyCommand(sublime_plugin.TextCommand):
             def callback(i):
                 if i > -1:
                     self.view.run_command(
-                        "cfml_di_property", {"property_name": cfc_list[i]}
+                        'cfml_di_property', {'property_name': cfc_list[i]}
                     )
 
             window.show_quick_panel(
@@ -60,24 +60,24 @@ class CfmlDiPropertyCommand(sublime_plugin.TextCommand):
             )
 
     def insert_property(self, edit, property_name):
-        di_property = utils.get_project_setting(self.view.window(), "di_property")
+        di_property = utils.get_project_setting(self.view.window(), 'di_property')
         is_script = (
-            len(self.view.find_by_selector("source.cfml.script meta.class.body.cfml"))
+            len(self.view.find_by_selector('source.cfml.script meta.class.body.cfml'))
             > 0
         )
         property_string = (
-            di_property.get("script_template", "")
+            di_property.get('script_template', '')
             if is_script
-            else di_property.get("tag_template", "")
+            else di_property.get('tag_template', '')
         )
 
-        if "{name}" not in property_string:
+        if '{name}' not in property_string:
             return
 
-        properties = self.view.find_by_selector("meta.tag.property.cfml")
+        properties = self.view.find_by_selector('meta.tag.property.cfml')
         property_names = [
             self.view.substr(r).lower()
-            for r in self.view.find_by_selector("meta.tag.property.name.cfml")
+            for r in self.view.find_by_selector('meta.tag.property.name.cfml')
         ]
 
         if property_name.lower() in property_names:
@@ -87,30 +87,30 @@ class CfmlDiPropertyCommand(sublime_plugin.TextCommand):
             indent_region = sublime.Region(
                 self.view.line(properties[-1]).begin(), properties[-1].begin()
             )
-            indent_string = "\n" + self.view.substr(indent_region)
+            indent_string = '\n' + self.view.substr(indent_region)
             injection_pt = properties[-1].end()
         else:
-            tab_size: Any = self.view.settings().get("tab_size")
+            tab_size: Any = self.view.settings().get('tab_size')
             translate_tabs_to_spaces = self.view.settings().get(
-                "translate_tabs_to_spaces"
+                'translate_tabs_to_spaces'
             )
-            indent_string = "\n\n" + (
-                " " * tab_size if translate_tabs_to_spaces else "\t"
+            indent_string = '\n\n' + (
+                ' ' * tab_size if translate_tabs_to_spaces else '\t'
             )
-            injection_pt = self.view.find_by_selector("source.cfml meta.class.body")[
+            injection_pt = self.view.find_by_selector('source.cfml meta.class.body')[
                 0
             ].begin()
 
         if is_script:
             injection_pt += 1
         property_string = indent_string + property_string.replace(
-            "{name}", property_name
+            '{name}', property_name
         )
         self.view.insert(edit, injection_pt, property_string)
 
-        if di_property.get("sort_properties", False):
-            properties = self.view.find_by_selector("meta.tag.property.cfml")
-            property_names = self.view.find_by_selector("meta.tag.property.name.cfml")
+        if di_property.get('sort_properties', False):
+            properties = self.view.find_by_selector('meta.tag.property.cfml')
+            property_names = self.view.find_by_selector('meta.tag.property.name.cfml')
 
             if len(properties) != len(property_names):
                 return

@@ -6,7 +6,7 @@ from ...project_watcher import project_watcher
 
 
 # the color of the side of the docs, a hue of the color scheme
-ACCENT: minihtml.Hue = "bluish"
+ACCENT: minihtml.Hue = 'bluish'
 
 
 def get_inline_documentation(cfml_view, reference):
@@ -18,7 +18,7 @@ def get_inline_documentation(cfml_view, reference):
     doc, callback = get_documentation(
         cfml_view.view,
         reference.file_path,
-        minihtml.span_wrap(reference.class_name, "entity.name.class"),
+        minihtml.span_wrap(reference.class_name, 'entity.name.class'),
         project_watcher.get_project_folders(cfml_view.project_name),
     )
     return Documentation(reference.regions, doc, callback, 2)
@@ -30,7 +30,7 @@ def on_navigate(view, file_path, href):
 
 def get_documentation(view, file_path, header, folders):
     cfc_doc = minihtml.Doc(
-        ACCENT, header, minihtml.path("__go_to_component", file_path, folders)
+        ACCENT, header, minihtml.path('__go_to_component', file_path, folders)
     )
 
     callback = partial(on_navigate, view, file_path)

@@ -8,7 +8,6 @@ from . import cfml_providers
 from .cfml_view import CfmlView
 
 
-
 def get_method_previews(cfml_view):
     previews = []
 
@@ -57,7 +56,7 @@ def display_previews(view, previews, pt=-1, current_index=0):
     view.add_regions(
         view_state.PREVIEW_KEY,
         utils.merge_regions(preview_regions),
-        "source",
+        'source',
         flags=sublime.RegionFlags.DRAW_NO_FILL,
     )
 

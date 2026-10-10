@@ -33,7 +33,9 @@ def outline(scope):
     return command.view.searched
 
 
-@pytest.mark.parametrize('scope', ['embedding.cfml text.html.cfml', 'source.cfml.script'])
+@pytest.mark.parametrize(
+    'scope', ['embedding.cfml text.html.cfml', 'source.cfml.script']
+)
 def test_specs_are_looked_for_in_cfml_and_cfs_files(scope):
     assert outline(scope)
 

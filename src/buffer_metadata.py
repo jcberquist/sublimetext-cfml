@@ -12,36 +12,36 @@ PARSE_DELAY_MS = 500
 
 
 def get_minimal_file_string(view):
-    min_string = ""
+    min_string = ''
 
-    tag_component_regions = view.find_by_selector("meta.class.cfml")
+    tag_component_regions = view.find_by_selector('meta.class.cfml')
 
     if len(tag_component_regions) > 0:
-        min_string += view.substr(tag_component_regions[0]) + "\n"
-        current_funct = ""
+        min_string += view.substr(tag_component_regions[0]) + '\n'
+        current_funct = ''
         for r in view.find_by_selector(
-            "meta.function.cfml, meta.function.body.tag.cfml meta.tag.argument.cfml"
+            'meta.function.cfml, meta.function.body.tag.cfml meta.tag.argument.cfml'
         ):
             text = view.substr(r)
-            if text.lower().startswith("<cff") and len(current_funct) > 0:
-                min_string += current_funct + "</cffunction>\n"
-                current_funct = ""
-            current_funct += text + "\n"
-        min_string += current_funct + "</cffunction>\n"
+            if text.lower().startswith('<cff') and len(current_funct) > 0:
+                min_string += current_funct + '</cffunction>\n'
+                current_funct = ''
+            current_funct += text + '\n'
+        min_string += current_funct + '</cffunction>\n'
     else:
         script_selectors = [
-            ("comment.block.documentation.cfml -meta.class", "\n"),
-            ("meta.class.declaration.cfml", " {\n"),
-            ("meta.tag.property.cfml", ";\n"),
+            ('comment.block.documentation.cfml -meta.class', '\n'),
+            ('meta.class.declaration.cfml', ' {\n'),
+            ('meta.tag.property.cfml', ';\n'),
         ]
-        funct_regions = "meta.class.body.cfml comment.block.documentation.cfml, meta.function.declaration.cfml -meta.function.body.cfml"
+        funct_regions = 'meta.class.body.cfml comment.block.documentation.cfml, meta.function.declaration.cfml -meta.function.body.cfml'
 
-        if not view.find_by_selector("meta.class.declaration.cfml"):
+        if not view.find_by_selector('meta.class.declaration.cfml'):
             # no component, as in a .cfs file or the script of a .cfm: every
             # doc comment is outside a class, and goes with the function
             # that it comes before
             script_selectors = []
-            funct_regions = "comment.block.documentation.cfml -meta.function.body.cfml, meta.function.declaration.cfml -meta.function.body.cfml"
+            funct_regions = 'comment.block.documentation.cfml -meta.function.body.cfml, meta.function.declaration.cfml -meta.function.body.cfml'
 
         for selector, separator in script_selectors:
             for r in view.find_by_selector(selector):
@@ -49,9 +49,9 @@ def get_minimal_file_string(view):
 
         for r in view.find_by_selector(funct_regions):
             string = view.substr(r)
-            min_string += string + ("\n" if string.endswith("*/") else "{ }\n")
+            min_string += string + ('\n' if string.endswith('*/') else '{ }\n')
 
-        min_string += "}"
+        min_string += '}'
 
     return min_string
 
@@ -71,7 +71,7 @@ def get_cached_view_metadata(view) -> ExtendedMetadata:
     else:
         # not a CFML view, so nothing is kept for its buffer
         base_meta = parse_view_metadata(view)
-    file_path = utils.normalize_path(view.file_name()) if view.file_name() else ""
+    file_path = utils.normalize_path(view.file_name()) if view.file_name() else ''
     project_name = utils.get_project_name(view)
     return component_index.extend_metadata(project_name, file_path, base_meta)
 
@@ -81,10 +81,10 @@ def parse_view_metadata(view) -> ComponentMetadata:
     file_string = get_minimal_file_string(view)
     base_meta = parse_cfc_file_string(file_string)
 
-    if utils.get_setting("cfml_log_in_file_parse_time"):
+    if utils.get_setting('cfml_log_in_file_parse_time'):
         parse_time = timeit.default_timer() - start_time
-        message = "CFML: parsed {} in {}ms"
-        print(message.format(view.file_name() or "file", round(parse_time * 1000)))
+        message = 'CFML: parsed {} in {}ms'
+        print(message.format(view.file_name() or 'file', round(parse_time * 1000)))
 
     return base_meta
 

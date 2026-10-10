@@ -2,7 +2,9 @@ import re
 import collections
 
 
-RangeDefinition = collections.namedtuple('RangeDefinition', ['start', 'end', 'child_ranges', 'pop'])
+RangeDefinition = collections.namedtuple(
+    'RangeDefinition', ['start', 'end', 'child_ranges', 'pop']
+)
 
 
 BASE_RANGES = [
@@ -15,7 +17,7 @@ BASE_RANGES = [
     'square_brackets',
     'string_double',
     'string_single',
-    'tag_comment'
+    'tag_comment',
 ]
 
 
@@ -24,7 +26,7 @@ NON_SCRIPT_RANGES = [
     'multiline_comment',
     'string_double',
     'string_single',
-    'tag_comment'
+    'tag_comment',
 ]
 
 
@@ -32,7 +34,7 @@ RangeDefinitions = {
     'attributes': RangeDefinition(r'(?=.)', r'\{', BASE_RANGES, 'first'),
     'cfscript': RangeDefinition(r'(?=.)', r'\Z', BASE_RANGES, 'first'),
     'comma': RangeDefinition(r',', r'(?=.)', [], 'first'),
-    'curly_brackets':RangeDefinition( r'\{', r'\}', BASE_RANGES, 'first'),
+    'curly_brackets': RangeDefinition(r'\{', r'\}', BASE_RANGES, 'first'),
     'escaped_double_quote': RangeDefinition(r'""', r'(?=.)', [], 'first'),
     'escaped_hash': RangeDefinition(r'##', r'(?=.)', [], 'first'),
     'escaped_single_quote': RangeDefinition(r"''", r'(?=.)', [], 'first'),
@@ -43,23 +45,29 @@ RangeDefinitions = {
     'parentheses': RangeDefinition(r'\(', r'\)', BASE_RANGES, 'first'),
     'semicolon': RangeDefinition(r';', r'(?=.)', [], 'first'),
     'square_brackets': RangeDefinition(r'\[', r'\]', BASE_RANGES, 'first'),
-    'string_double': RangeDefinition(r'"', r'"', ['escaped_hash', 'hash', 'escaped_double_quote'], 'last'),
-    'string_single': RangeDefinition(r"'", r"'", ['escaped_hash', 'hash', 'escaped_single_quote'], 'last'),
+    'string_double': RangeDefinition(
+        r'"', r'"', ['escaped_hash', 'hash', 'escaped_double_quote'], 'last'
+    ),
+    'string_single': RangeDefinition(
+        r"'", r"'", ['escaped_hash', 'hash', 'escaped_single_quote'], 'last'
+    ),
     'tag_comment': RangeDefinition(r'<!---', r'--->', [], 'first'),
     # a file read as tags: the text between tags is not script, so the
     # apostrophe in `<cfmail>Don't reply</cfmail>` does not open a string,
     # and only a cfscript block has the strings and comments of script
-    'tag_text': RangeDefinition(r'(?=.)', r'\Z', ['tag_comment', 'cfscript_tag'], 'first'),
-    'cfscript_tag': RangeDefinition(r'(?i:<cfscript>)', r'(?i:</cfscript>)', NON_SCRIPT_RANGES, 'first'),
+    'tag_text': RangeDefinition(
+        r'(?=.)', r'\Z', ['tag_comment', 'cfscript_tag'], 'first'
+    ),
+    'cfscript_tag': RangeDefinition(
+        r'(?i:<cfscript>)', r'(?i:</cfscript>)', NON_SCRIPT_RANGES, 'first'
+    ),
 }
 
 
 RangeRegex = {}
 
 for name, rd in RangeDefinitions.items():
-    RangeRegex[name] = {
-        'start': re.compile(rd.start, re.S)
-    }
+    RangeRegex[name] = {'start': re.compile(rd.start, re.S)}
 
     patterns = []
     for cr in rd.child_ranges:
@@ -69,11 +77,12 @@ for name, rd in RangeDefinitions.items():
         patterns.insert(0, ('pop', rd.end))
     else:
         patterns.append(('pop', rd.end))
-    RangeRegex[name]['end'] = re.compile('|'.join('(?P<{}>{})'.format(*p) for p in patterns), re.S)
+    RangeRegex[name]['end'] = re.compile(
+        '|'.join('(?P<{}>{})'.format(*p) for p in patterns), re.S
+    )
 
 
 class Range:
-
     def __init__(self, name, start=None, end=None):
         self.name = name
         self.start = start
@@ -176,7 +185,6 @@ class Range:
 
 
 class RangeWalker:
-
     def __init__(self, src_txt, pos=0, name='cfscript'):
         self.src_txt = src_txt
         self.pos = pos

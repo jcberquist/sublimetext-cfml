@@ -13,11 +13,11 @@ from .custom_tag_index import (
 def generate_tag_map(custom_tag_folders, index, base_dir):
     tag_map = {}
     for tag_folder in custom_tag_folders:
-        root_path = utils.normalize_path(tag_folder["path"], base_dir)
+        root_path = utils.normalize_path(tag_folder['path'], base_dir)
         for file_path in index:
-            if file_path.startswith(root_path + "/"):
-                prefix = tag_folder["prefix"] + ":" if "prefix" in tag_folder else "cf_"
-                tag_map[prefix + index[file_path]["tag_name"]] = file_path
+            if file_path.startswith(root_path + '/'):
+                prefix = tag_folder['prefix'] + ':' if 'prefix' in tag_folder else 'cf_'
+                tag_map[prefix + index[file_path]['tag_name']] = file_path
     return tag_map
 
 
@@ -28,28 +28,28 @@ def generate_completions_and_closing_tags(custom_tag_folders, index, base_dir):
     closing_tags = []
 
     for tag_folder in custom_tag_folders:
-        root_path = utils.normalize_path(tag_folder["path"], base_dir)
-        if "prefix" in tag_folder:
+        root_path = utils.normalize_path(tag_folder['path'], base_dir)
+        if 'prefix' in tag_folder:
             prefixes.append(
                 sublime.CompletionItem(
-                    tag_folder["prefix"],
-                    "custom tag prefix (cfml)",
-                    tag_folder["prefix"] + ":",
+                    tag_folder['prefix'],
+                    'custom tag prefix (cfml)',
+                    tag_folder['prefix'] + ':',
                     kind=kinds.CUSTOM_TAG_PREFIX,
                 )
             )
         for file_path in index:
-            if file_path.startswith(root_path + "/"):
-                prefix = tag_folder["prefix"] if "prefix" in tag_folder else "cf_"
+            if file_path.startswith(root_path + '/'):
+                prefix = tag_folder['prefix'] if 'prefix' in tag_folder else 'cf_'
                 if prefix not in tags:
                     tags[prefix] = []
                 key = (
                     prefix
-                    + (":" if "prefix" in tag_folder else "")
-                    + index[file_path]["tag_name"]
+                    + (':' if 'prefix' in tag_folder else '')
+                    + index[file_path]['tag_name']
                 )
                 tags[prefix].append(
-                    make_tag_completion(prefix, index[file_path]["tag_name"])
+                    make_tag_completion(prefix, index[file_path]['tag_name'])
                 )
                 attributes[key] = [
                     sublime.CompletionItem(
@@ -59,20 +59,20 @@ def generate_completions_and_closing_tags(custom_tag_folders, index, base_dir):
                         sublime.CompletionFormat.SNIPPET,
                         kind=kinds.ATTRIBUTE,
                     )
-                    for a in index[file_path]["attributes"]
+                    for a in index[file_path]['attributes']
                 ]
-                if index[file_path]["has_end_tag"]:
+                if index[file_path]['has_end_tag']:
                     closing_tags.append(key)
 
-    return {"prefixes": prefixes, "tags": tags, "attributes": attributes}, closing_tags
+    return {'prefixes': prefixes, 'tags': tags, 'attributes': attributes}, closing_tags
 
 
 def make_tag_completion(prefix, tag):
-    suffix = " (" + prefix + ")" if prefix != "cf_" else ""
-    comp_prefix = "cf_" if prefix == "cf_" else ""
+    suffix = ' (' + prefix + ')' if prefix != 'cf_' else ''
+    comp_prefix = 'cf_' if prefix == 'cf_' else ''
     return sublime.CompletionItem(
         comp_prefix + tag,
-        "custom tag" + suffix,
+        'custom tag' + suffix,
         kind=kinds.CUSTOM_TAG,
     )
 
@@ -91,11 +91,10 @@ class CustomTagProjectData(TypedDict):
 
 
 class CustomTags(ProjectIndex[CustomTagProjectData]):
-
-    label = "custom tags"
+    label = 'custom tags'
 
     def __init__(self):
-        super().__init__("custom_tag_folders")
+        super().__init__('custom_tag_folders')
 
     def accepts_file(self, file_path):
         return is_custom_tag_file(file_path)
@@ -118,10 +117,10 @@ class CustomTags(ProjectIndex[CustomTagProjectData]):
         )
 
         return {
-            "index": index,
-            "tags": tags,
-            "completions": completions,
-            "closing_tags": closing_tags,
+            'index': index,
+            'tags': tags,
+            'completions': completions,
+            'closing_tags': closing_tags,
         }
 
     # each getter reads a project's data once, as a rebuild replaces it
@@ -130,9 +129,9 @@ class CustomTags(ProjectIndex[CustomTagProjectData]):
         completions = []
         project_data = self.data.get(project_name)
         if project_data:
-            completions.extend(project_data["completions"]["prefixes"])
-            if "cf_" in project_data["completions"]["tags"]:
-                completions.extend(project_data["completions"]["tags"]["cf_"])
+            completions.extend(project_data['completions']['prefixes'])
+            if 'cf_' in project_data['completions']['tags']:
+                completions.extend(project_data['completions']['tags']['cf_'])
             if len(completions) > 0:
                 return completions
         return None
@@ -140,27 +139,27 @@ class CustomTags(ProjectIndex[CustomTagProjectData]):
     def get_tag_completions(self, project_name, prefix):
         project_data = self.data.get(project_name)
         if project_data:
-            if prefix in project_data["completions"]["tags"]:
-                return project_data["completions"]["tags"][prefix]
+            if prefix in project_data['completions']['tags']:
+                return project_data['completions']['tags'][prefix]
         return None
 
     def get_tag_attribute_completions(self, project_name, tag_name):
         project_data = self.data.get(project_name)
         if project_data:
-            if tag_name in project_data["completions"]["attributes"]:
-                return project_data["completions"]["attributes"][tag_name]
+            if tag_name in project_data['completions']['attributes']:
+                return project_data['completions']['attributes'][tag_name]
         return None
 
     def get_index_by_tag_name(self, project_name, tag_name):
         project_data = self.data.get(project_name)
         if project_data:
-            if tag_name in project_data["tags"]:
-                file_path = project_data["tags"][tag_name]
-                return file_path, project_data["index"][file_path]
+            if tag_name in project_data['tags']:
+                file_path = project_data['tags'][tag_name]
+                return file_path, project_data['index'][file_path]
         return None, None
 
     def get_closing_custom_tags(self, project_name):
         project_data = self.data.get(project_name)
         if project_data:
-            return project_data["closing_tags"]
+            return project_data['closing_tags']
         return []

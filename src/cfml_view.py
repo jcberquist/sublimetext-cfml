@@ -14,10 +14,10 @@ from .component_parser import ExtendedMetadata
 class ContextType(StrEnum):
     """Where the position of a CfmlView is, which decides what providers offer."""
 
-    TAG = "tag"
-    TAG_ATTRIBUTES = "tag_attributes"
-    DOT = "dot"
-    SCRIPT = "script"
+    TAG = 'tag'
+    TAG_ATTRIBUTES = 'tag_attributes'
+    DOT = 'dot'
+    SCRIPT = 'script'
 
 
 # what the providers return, besides lists of completion items
@@ -65,8 +65,7 @@ class GotoCfmlFile(NamedTuple):
 
 
 class CfmlFunctionCallParams:
-
-    param_regex = re.compile(r"^(?:([\w]+)\s*=\s*)?(.*)$", re.M | re.S)
+    param_regex = re.compile(r'^(?:([\w]+)\s*=\s*)?(.*)$', re.M | re.S)
 
     def __init__(self, cfml_view, position):
         self.support = False
@@ -76,21 +75,21 @@ class CfmlFunctionCallParams:
         self.current_index = None
         self.params = []
 
-        self.function_name, self.function_region, self.params_region = cfml_view.get_function_call(
-            position
+        self.function_name, self.function_region, self.params_region = (
+            cfml_view.get_function_call(position)
         )
 
         if (
-            "support"
+            'support'
             in cfml_view.view.scope_name(self.function_region.begin())
             .strip()
-            .split(" ")[-1]
+            .split(' ')[-1]
         ):
             self.support = True
 
         prev_pt = self.function_region.begin() - 1
         if cfml_view.view.match_selector(
-            prev_pt, "source.cfml.script punctuation.accessor.cfml"
+            prev_pt, 'source.cfml.script punctuation.accessor.cfml'
         ):
             self.method = True
             self.dot_context = cfml_view.dot_context = cfml_view.get_dot_context(
@@ -100,9 +99,11 @@ class CfmlFunctionCallParams:
         start_scope_list = (
             cfml_view.view.scope_name(self.params_region.begin())
             .strip()
-            .split(" ")[:-1]
+            .split(' ')[:-1]
         )
-        separator_scope = " ".join(start_scope_list) + " punctuation.separator.comma.cfml"
+        separator_scope = (
+            ' '.join(start_scope_list) + ' punctuation.separator.comma.cfml'
+        )
 
         # walk the tokens rather than every point; a comma at this call's
         # level has exactly the call's scope plus the separator
@@ -158,7 +159,7 @@ class CfmlFunctionCallParams:
 
 
 class CfmlView:
-    def __init__(self, view, position, prefix=""):
+    def __init__(self, view, position, prefix=''):
         self.view = view
         self.prefix = prefix
         self.position = position
@@ -189,7 +190,7 @@ class CfmlView:
     def set_base_info(self):
         self.file_path = utils.normalize_path(self.view.file_name())
         self.file_name = (
-            self.file_path.split("/").pop().lower() if self.file_path else None
+            self.file_path.split('/').pop().lower() if self.file_path else None
         )
         self.project_name = utils.get_project_name(self.view)
         self.previous_char = self.view.substr(self.prefix_start - 1)
@@ -197,9 +198,12 @@ class CfmlView:
     def determine_type(self):
         # script is source.cfml.script, inside CFML files (embedding.cfml)
         # and as the whole of a .cfs file
-        base_script_scope = "source.cfml.script"
+        base_script_scope = 'source.cfml.script'
         script_tag_scope = (
-            base_script_scope + " meta.tag, " + base_script_scope + " meta.class.declaration"
+            base_script_scope
+            + ' meta.tag, '
+            + base_script_scope
+            + ' meta.class.declaration'
         )
         self.type: ContextType | None = None
 
@@ -207,7 +211,7 @@ class CfmlView:
         # by the dot before the prefix, as what follows the caret may be the
         # end of the tag (`<cfset x = y.|>`)
         if self.view.match_selector(
-            self.prefix_start - 1, base_script_scope + " punctuation.accessor.cfml"
+            self.prefix_start - 1, base_script_scope + ' punctuation.accessor.cfml'
         ):
             self.type = ContextType.DOT
             self.set_dot_context()
@@ -215,7 +219,7 @@ class CfmlView:
 
         # tag completions
         elif self.view.match_selector(
-            self.prefix_start, "embedding.cfml - source.cfml.script"
+            self.prefix_start, 'embedding.cfml - source.cfml.script'
         ):
             self.type = ContextType.TAG
             self.set_tag_info()
@@ -226,7 +230,7 @@ class CfmlView:
         elif self.view.match_selector(
             self.prefix_start, script_tag_scope
         ) or self.view.match_selector(
-            self.prefix_start - 1, "(" + script_tag_scope + ") - string"
+            self.prefix_start - 1, '(' + script_tag_scope + ') - string'
         ):
             self.type = ContextType.TAG_ATTRIBUTES
             self.set_tag_info(True)
@@ -242,43 +246,47 @@ class CfmlView:
     def set_tag_info(self, tag_in_script=False):
         self.tag_in_script = tag_in_script
 
-        tag_scope = "meta.tag - punctuation.definition.tag.begin, meta.class.declaration.cfml"
+        tag_scope = (
+            'meta.tag - punctuation.definition.tag.begin, meta.class.declaration.cfml'
+        )
         # the point in the tag: the caret, or the space before it when what
         # follows the caret ends the tag's statement (`http url="x" |;`)
         tag_pt = self.prefix_start
         if (
             not self.view.match_selector(tag_pt, tag_scope)
             and tag_pt > 0
-            and self.view.match_selector(tag_pt - 1, "(" + tag_scope + ") - string")
+            and self.view.match_selector(tag_pt - 1, '(' + tag_scope + ') - string')
         ):
             tag_pt = tag_pt - 1
 
         if self.view.match_selector(tag_pt, tag_scope):
             if self.view.match_selector(
                 self.prefix_start - 1,
-                "punctuation.definition.tag.begin, entity.name.tag",
+                'punctuation.definition.tag.begin, entity.name.tag',
             ):
-                self.tag_location = "tag_name"
+                self.tag_location = 'tag_name'
             elif self.view.match_selector(
-                self.prefix_start, "entity.other.attribute-name.cfml"
+                self.prefix_start, 'entity.other.attribute-name.cfml'
             ):
-                self.tag_location = "tag_attribute_name"
+                self.tag_location = 'tag_attribute_name'
             else:
-                self.tag_location = "tag_attributes"
+                self.tag_location = 'tag_attributes'
 
-            if self.view.match_selector(tag_pt, "source.cfml.script meta.class.declaration"):
-                self.tag_name = "component"
+            if self.view.match_selector(
+                tag_pt, 'source.cfml.script meta.class.declaration'
+            ):
+                self.tag_name = 'component'
             else:
                 self.tag_name = utils.get_tag_name(self.view, tag_pt)
 
             if (
                 self.tag_in_script
                 and self.tag_name
-                and not self.tag_name.startswith("cf")
+                and not self.tag_name.startswith('cf')
             ):
-                self.tag_name = "cf" + self.tag_name
+                self.tag_name = 'cf' + self.tag_name
 
-            if self.tag_location != "tag_name":
+            if self.tag_location != 'tag_name':
                 self.tag_attribute_name = utils.get_tag_attribute_name(
                     self.view, tag_pt
                 )
@@ -286,43 +294,43 @@ class CfmlView:
                 self.type = ContextType.TAG_ATTRIBUTES
 
     def get_dot_context(self, pt, cachable=True):
-        if not cachable or pt not in self._cache["get_dot_context"]:
-            self._cache["get_dot_context"][pt] = utils.get_dot_context(self.view, pt)
+        if not cachable or pt not in self._cache['get_dot_context']:
+            self._cache['get_dot_context'][pt] = utils.get_dot_context(self.view, pt)
 
-        return self._cache["get_dot_context"][pt]
+        return self._cache['get_dot_context'][pt]
 
     def get_struct_context(self, pt, cachable=True):
-        if not cachable or pt not in self._cache["get_struct_context"]:
-            self._cache["get_struct_context"][pt] = utils.get_struct_context(
+        if not cachable or pt not in self._cache['get_struct_context']:
+            self._cache['get_struct_context'][pt] = utils.get_struct_context(
                 self.view, pt
             )
 
-        return self._cache["get_struct_context"][pt]
+        return self._cache['get_struct_context'][pt]
 
     def get_struct_var_assignment(self, pt):
         struct_context = self.get_struct_context(pt)
-        variable_name = ".".join([symbol.name for symbol in reversed(struct_context)])
+        variable_name = '.'.join([symbol.name for symbol in reversed(struct_context)])
         return variable_name
 
     def get_function(self, pt, cachable=True):
-        if not cachable or pt not in self._cache["get_function"]:
-            self._cache["get_function"][pt] = utils.get_function(self.view, pt)
+        if not cachable or pt not in self._cache['get_function']:
+            self._cache['get_function'][pt] = utils.get_function(self.view, pt)
 
-        return self._cache["get_function"][pt]
+        return self._cache['get_function'][pt]
 
     def get_function_call(self, pt, support=False, cachable=True):
         cache_key = (pt, support)
 
-        if not cachable or cache_key not in self._cache["get_function_call"]:
-            self._cache["get_function_call"][cache_key] = utils.get_function_call(
+        if not cachable or cache_key not in self._cache['get_function_call']:
+            self._cache['get_function_call'][cache_key] = utils.get_function_call(
                 self.view, pt, support
             )
 
-        return self._cache["get_function_call"][cache_key]
+        return self._cache['get_function_call'][cache_key]
 
     def get_function_call_params(self, pt):
         if self.view.match_selector(
-            pt, "source.cfml.script meta.function-call.arguments"
+            pt, 'source.cfml.script meta.function-call.arguments'
         ):
             return CfmlFunctionCallParams(self, pt)
         return None
@@ -333,10 +341,10 @@ class CfmlView:
     def find_variable_assignment(self, position, variable_name, cachable=True):
         cache_key = (position, variable_name)
 
-        if not cachable or cache_key not in self._cache["find_variable_assignment"]:
+        if not cachable or cache_key not in self._cache['find_variable_assignment']:
             var_assignment = utils.find_variable_assignment(
                 self.view, position, variable_name
             )
-            self._cache["find_variable_assignment"][cache_key] = var_assignment
+            self._cache['find_variable_assignment'][cache_key] = var_assignment
 
-        return self._cache["find_variable_assignment"][cache_key]
+        return self._cache['find_variable_assignment'][cache_key]

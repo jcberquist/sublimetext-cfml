@@ -24,29 +24,31 @@ class CfcInfo(NamedTuple):
 projects: dict[str, dict[str, list[CfcInfo]]] = {}
 
 # the cfml_auto_variable_names setting when it is not a list
-DEFAULT_AUTO_VARIABLE_NAMES = ["{cfc}", "{cfc}{cfc_folder_singularized}"]
+DEFAULT_AUTO_VARIABLE_NAMES = ['{cfc}', '{cfc}{cfc_folder_singularized}']
 
 # what a variable name template can hold
-PLACEHOLDER = re.compile(r"(\{(?:cfc|entity_name|cfc_folder|cfc_folder_singularized)\})")
+PLACEHOLDER = re.compile(
+    r'(\{(?:cfc|entity_name|cfc_folder|cfc_folder_singularized)\})'
+)
 
 # the scopes of CFML: `application.` is not a call on Application.cfc
 SCOPE_NAMES = frozenset(
     [
-        "application",
-        "arguments",
-        "cgi",
-        "client",
-        "cookie",
-        "form",
-        "local",
-        "request",
-        "server",
-        "session",
-        "super",
-        "this",
-        "thread",
-        "url",
-        "variables",
+        'application',
+        'arguments',
+        'cgi',
+        'client',
+        'cookie',
+        'form',
+        'local',
+        'request',
+        'server',
+        'session',
+        'super',
+        'this',
+        'thread',
+        'url',
+        'variables',
     ]
 )
 
@@ -56,27 +58,27 @@ def build_project_cfcs(project_name, project_data):
         projects.pop(project_name, None)
         return
 
-    if project_data["automatic"]:
+    if project_data['automatic']:
         templates = get_auto_variable_names(project_name)
-        projects[project_name] = build_auto_cfcs(templates, project_data["index"])
+        projects[project_name] = build_auto_cfcs(templates, project_data['index'])
         return
 
     cfc_index: dict[str, list[CfcInfo]] = {}
-    cfc_folders = component_index.get_project_data(project_name).get("cfc_folders", [])
+    cfc_folders = component_index.get_project_data(project_name).get('cfc_folders', [])
     base_dir = component_index.get_base_dir(project_name)
     for cfc_folder in cfc_folders:
-        variable_names = cfc_folder.get("variable_names", [])
+        variable_names = cfc_folder.get('variable_names', [])
         if variable_names:
-            accessors = cfc_folder.get("accessors", True)
+            accessors = cfc_folder.get('accessors', True)
             if not isinstance(accessors, bool):
                 accessors = True
             build_cfcs(
                 cfc_index,
-                cfc_folder["path"],
+                cfc_folder['path'],
                 variable_names,
                 accessors,
                 base_dir,
-                project_data["index"],
+                project_data['index'],
             )
     projects[project_name] = cfc_index
 
@@ -86,7 +88,7 @@ def build_cfcs(cfc_index, root_path, cfc_names, accessors, base_dir, index):
     root_dir = utils.normalize_path(root_path, base_dir)
     templates = compile_templates(cfc_names)
     for file_path, metadata in index.items():
-        if not file_path.startswith(root_dir + "/"):
+        if not file_path.startswith(root_dir + '/'):
             continue
         for cfc_name in get_cfc_names(root_dir, templates, file_path, metadata):
             add_cfc(cfc_index, CfcInfo(cfc_name, file_path, accessors, False))
@@ -98,11 +100,13 @@ def get_auto_variable_names(project_name):
     automatic mode are given, which its project file can set.
     """
     templates = utils.get_project_data_setting(
-        component_index.get_project_data(project_name), "cfml_auto_variable_names"
+        component_index.get_project_data(project_name), 'cfml_auto_variable_names'
     )
     if not isinstance(templates, list):
         templates = DEFAULT_AUTO_VARIABLE_NAMES
-    return [template for template in templates if isinstance(template, str) and template]
+    return [
+        template for template in templates if isinstance(template, str) and template
+    ]
 
 
 def build_auto_cfcs(templates, index) -> dict[str, list[CfcInfo]]:
@@ -117,8 +121,8 @@ def build_auto_cfcs(templates, index) -> dict[str, list[CfcInfo]]:
         return cfc_index
     # this runs at each publication of the index, so it is kept lean
     for file_path, metadata in index.items():
-        folder_end = file_path.rfind("/")
-        folder_start = file_path.rfind("/", 0, folder_end)
+        folder_end = file_path.rfind('/')
+        folder_start = file_path.rfind('/', 0, folder_end)
         # every component file ends in .cfc
         cfc = file_path[folder_end + 1 : -4]
         folder = file_path[folder_start + 1 : folder_end]
@@ -146,8 +150,8 @@ def add_cfc(cfc_index, cfc_info: CfcInfo):
 def get_cfc_names(root_dir, templates, file_path, metadata):
     # the folder is the one the file is in below the cfc folder, if any
     cfc_path, file_ext = os.path.splitext(file_path)
-    cfc_path_parts = cfc_path.replace(root_dir, "").split("/")
-    folder = cfc_path_parts[-2] if len(cfc_path_parts) > 1 else ""
+    cfc_path_parts = cfc_path.replace(root_dir, '').split('/')
+    folder = cfc_path_parts[-2] if len(cfc_path_parts) > 1 else ''
     return make_names(templates, cfc_path_parts[-1], folder, metadata)
 
 
@@ -157,8 +161,8 @@ def compile_templates(templates):
     the placeholders are fields.
     """
     return [
-        "".join(
-            part if i % 2 else part.replace("{", "{{").replace("}", "}}")
+        ''.join(
+            part if i % 2 else part.replace('{', '{{').replace('}', '}}')
             for i, part in enumerate(PLACEHOLDER.split(template))
         )
         for template in templates
@@ -168,11 +172,11 @@ def compile_templates(templates):
 def make_names(templates, cfc, folder, metadata):
     cfc_folder = uppercase(folder)
     path_keys = {
-        "cfc": cfc,
-        "entity_name": metadata["entityname"] or cfc,
-        "cfc_folder": cfc_folder,
-        "cfc_folder_singularized": (
-            cfc_folder[:-1] if cfc_folder.endswith("s") else cfc_folder
+        'cfc': cfc,
+        'entity_name': metadata['entityname'] or cfc,
+        'cfc_folder': cfc_folder,
+        'cfc_folder_singularized': (
+            cfc_folder[:-1] if cfc_folder.endswith('s') else cfc_folder
         ),
     }
     return [template.format_map(path_keys) for template in templates]
@@ -216,7 +220,7 @@ def search_dot_context_for_cfc(project_name, dot_context):
         stack.reverse()
         regions.reverse()
         for i in range(len(stack)):
-            cfc_name = ".".join(stack[i:])
+            cfc_name = '.'.join(stack[i:])
             if has_cfc(project_name, cfc_name):
                 return cfc_name, sublime.Region(regions[i].begin(), regions[-1].end())
     return None
@@ -235,7 +239,7 @@ def find_cfc_in_dot_context(project_name, dot_context):
         symbol = dot_context[-1]
         if (
             symbol.is_function
-            and symbol.name.startswith("get")
+            and symbol.name.startswith('get')
             and has_cfc(project_name, symbol.name[3:])
         ):
             return symbol.name[3:], symbol.name_region
@@ -243,7 +247,9 @@ def find_cfc_in_dot_context(project_name, dot_context):
     return None
 
 
-def lookup(project_name, cfc_names, from_file=None, function_name=None) -> list[CfcInfo]:
+def lookup(
+    project_name, cfc_names, from_file=None, function_name=None
+) -> list[CfcInfo]:
     """
     Returns the components that variable names are given to, best first:
     those of the first name, then those of the next that are not already
@@ -263,8 +269,8 @@ def lookup(project_name, cfc_names, from_file=None, function_name=None) -> list[
         if project_data and len(file_paths) > 1:
             file_paths = candidates.rank(
                 file_paths,
-                project_data["index"],
-                project_data["install_paths"],
+                project_data['index'],
+                project_data['install_paths'],
                 from_file,
             )
         for file_path in file_paths:
@@ -285,7 +291,7 @@ def lookup_class(project_name, dot_path, function_name=None) -> list[CfcInfo]:
     if resolution.guessed:
         return []
     cfc_infos = [
-        CfcInfo(file_path[file_path.rfind("/") + 1 : -4], file_path, True, False)
+        CfcInfo(file_path[file_path.rfind('/') + 1 : -4], file_path, True, False)
         for file_path in resolution.file_paths
     ]
     return narrow(project_name, cfc_infos, function_name)
@@ -311,7 +317,7 @@ def has_method(project_name, file_path, function_name):
     metadata = component_index.get_extended_metadata_by_file_path(
         project_name, file_path
     )
-    return metadata is not None and function_name.lower() in metadata["functions"]
+    return metadata is not None and function_name.lower() in metadata['functions']
 
 
 def get_completions(project_name, found: list[CfcInfo]):
@@ -335,7 +341,7 @@ def get_completions(project_name, found: list[CfcInfo]):
         # setting is not a completion type
         if cfc_completions is None:
             continue
-        for completion in cfc_completions["functions"]:
+        for completion in cfc_completions['functions']:
             if not completion.private and (
                 cfc_info.accessors or not completion.accessor
             ):
@@ -348,9 +354,9 @@ def tell_apart(file_paths):
     Returns the end of each component file's path that tells it from the
     others: its folder and name, and as few more folders as it takes.
     """
-    parts = [file_path[:-4].split("/") for file_path in file_paths]
+    parts = [file_path[:-4].split('/') for file_path in file_paths]
     for count in range(2, max(len(p) for p in parts)):
-        ends = ["/".join(p[-count:]) for p in parts]
+        ends = ['/'.join(p[-count:]) for p in parts]
         if len({end.lower() for end in ends}) == len(ends):
             return ends
     return [file_path[:-4] for file_path in file_paths]
@@ -358,5 +364,5 @@ def tell_apart(file_paths):
 
 def uppercase(string):
     if len(string) == 0:
-        return ""
+        return ''
     return string[0].upper() + string[1:]

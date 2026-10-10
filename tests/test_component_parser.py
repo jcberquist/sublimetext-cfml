@@ -260,7 +260,11 @@ def test_script_parameter_default_with_nested_brackets():
     ]
     assert meta['f']['parameters'][0]['hint'] == 'the options'
     assert set(meta['f']['parameters'][0]) == {
-        'name', 'required', 'type', 'default', 'hint'
+        'name',
+        'required',
+        'type',
+        'default',
+        'hint',
     }
 
 
@@ -422,7 +426,9 @@ def test_banner_comment_is_not_a_docblock():
     assert 'hint' not in meta['other']
     assert meta['last']['hint'] == 'Still a doc comment'
 
-    meta = parse_cfc_file_string('/**************** A banner ****************/\ncomponent {}')
+    meta = parse_cfc_file_string(
+        '/**************** A banner ****************/\ncomponent {}'
+    )
     assert 'hint' not in meta
 
 
@@ -462,7 +468,9 @@ def test_tags_without_text_set_no_hint():
         '     */\n'
         '    function bare() {}'
     )
-    assert meta['from']['hint'] == 'Obtains an instance of Duration from another duration'
+    assert (
+        meta['from']['hint'] == 'Obtains an instance of Duration from another duration'
+    )
     for param in meta['from']['parameters']:
         assert 'hint' not in param
     # a tag that means something without text is kept
@@ -739,11 +747,23 @@ def test_rest_parameters():
         '    function h(required numeric a, ...users hint="the users") {}'
     )
     assert meta['f']['parameters'] == [
-        {'name': 'names', 'required': False, 'type': None, 'default': None, 'rest': True}
+        {
+            'name': 'names',
+            'required': False,
+            'type': None,
+            'default': None,
+            'rest': True,
+        }
     ]
     a, b, many = meta['g']['parameters']
     assert 'rest' not in a and 'rest' not in b
-    assert many == {'name': 'manyMoreArgs', 'required': False, 'type': None, 'default': None, 'rest': True}
+    assert many == {
+        'name': 'manyMoreArgs',
+        'required': False,
+        'type': None,
+        'default': None,
+        'rest': True,
+    }
     a, users = meta['h']['parameters']
     assert 'rest' not in a
     assert users == {
@@ -758,8 +778,14 @@ def test_rest_parameters():
     assert completions.make_arguments_string(meta['h']['parameters'], 'full') == (
         '${1:required numeric a}${2:, ${3:...users}}'
     )
-    assert completions.make_arguments_string(meta['f']['parameters'], 'full') == '${1:...names}'
-    assert completions.make_arguments_string(meta['f']['parameters'], 'required') == '${1:...names}'
+    assert (
+        completions.make_arguments_string(meta['f']['parameters'], 'full')
+        == '${1:...names}'
+    )
+    assert (
+        completions.make_arguments_string(meta['f']['parameters'], 'required')
+        == '${1:...names}'
+    )
 
 
 def test_implicit_accessors():

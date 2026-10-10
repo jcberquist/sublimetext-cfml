@@ -39,5 +39,5 @@ def _plugin_loaded():
     for module in modules:
         if module.provider.load:
             utils.call_reporting_failure(
-                module.__name__ + ".provider.load()", module.provider.load
+                module.__name__ + '.provider.load()', module.provider.load
             )

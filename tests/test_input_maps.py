@@ -40,7 +40,9 @@ KEY_BINDINGS = load_json_with_comments('inputmaps/Default.sublime-keymap')
 @pytest.mark.parametrize('binding', KEY_BINDINGS, ids=binding_ids(KEY_BINDINGS))
 def test_key_bindings_of_script_apply_in_cfs_files(binding):
     for scope in SCRIPT_SCOPES:
-        assert applies(binding, CFML_SCRIPT + scope) == applies(binding, CFS_SCRIPT + scope)
+        assert applies(binding, CFML_SCRIPT + scope) == applies(
+            binding, CFS_SCRIPT + scope
+        )
 
 
 def test_doc_and_toggle_key_bindings_apply_in_cfs_files():
@@ -63,7 +65,9 @@ MOUSE_BINDINGS = load_json_with_comments('inputmaps/Default.sublime-mousemap')
 @pytest.mark.parametrize('binding', MOUSE_BINDINGS, ids=binding_ids(MOUSE_BINDINGS))
 def test_mouse_bindings_of_script_apply_in_cfs_files(binding):
     for scope in SCRIPT_SCOPES:
-        assert applies(binding, CFML_SCRIPT + scope) == applies(binding, CFS_SCRIPT + scope)
+        assert applies(binding, CFML_SCRIPT + scope) == applies(
+            binding, CFS_SCRIPT + scope
+        )
     assert applies(binding, CFS_SCRIPT + 'meta.string.cfml string.quoted.double.cfml')
 
 

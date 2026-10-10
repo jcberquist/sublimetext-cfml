@@ -5,10 +5,10 @@ from ... import cfdocs_store
 from ...cfml_view import CompletionDoc, Documentation, GotoCfmlFile
 
 # the color of the side of the docs, a hue of the color scheme
-ACCENT: minihtml.Hue = "cyanish"
-ERROR_ACCENT: minihtml.Hue = "redish"
+ACCENT: minihtml.Hue = 'cyanish'
+ERROR_ACCENT: minihtml.Hue = 'redish'
 
-CFDOCS_ENGINES = {"coldfusion": "ColdFusion", "lucee": "Lucee", "openbd": "OpenBD"}
+CFDOCS_ENGINES = {'coldfusion': 'ColdFusion', 'lucee': 'Lucee', 'openbd': 'OpenBD'}
 
 
 def get_inline_documentation(cfml_view, doc_type):
@@ -17,7 +17,7 @@ def get_inline_documentation(cfml_view, doc_type):
     doc_regions = None
     doc_priority = 0
 
-    if not utils.get_setting("cfdocs_enabled"):
+    if not utils.get_setting('cfdocs_enabled'):
         return None
 
     # tags
@@ -26,18 +26,18 @@ def get_inline_documentation(cfml_view, doc_type):
         doc_attr_or_arg = cfml_view.tag_attribute_name
 
         if (
-            doc_type == "hover_doc"
-            and doc_name in ["cfcomponent", "cfinterface", "cffunction"]
-            and cfml_view.view.match_selector(cfml_view.position, "source.cfml.script")
+            doc_type == 'hover_doc'
+            and doc_name in ['cfcomponent', 'cfinterface', 'cffunction']
+            and cfml_view.view.match_selector(cfml_view.position, 'source.cfml.script')
         ):
             return None
 
     # functions
     elif cfml_view.view.match_selector(
-        cfml_view.position, "meta.function-call.support.cfml"
+        cfml_view.position, 'meta.function-call.support.cfml'
     ):
-        doc_name, function_name_region, function_args_region = cfml_view.get_function_call(
-            cfml_view.position, True
+        doc_name, function_name_region, function_args_region = (
+            cfml_view.get_function_call(cfml_view.position, True)
         )
         doc_regions = [
             sublime.Region(function_name_region.begin(), function_args_region.end())
@@ -64,22 +64,21 @@ def get_inline_documentation(cfml_view, doc_type):
 
 
 def get_completion_docs(cfml_view):
-    if not utils.get_setting("cfdocs_enabled"):
+    if not utils.get_setting('cfdocs_enabled'):
         return None
 
     if (
         cfml_view.tag_name
         and cfml_view.tag_attribute_name
-        and cfml_view.tag_location == "tag_attributes"
+        and cfml_view.tag_location == 'tag_attributes'
     ):
         result = cfdocs_store.get_cfdoc(cfml_view.tag_name, cfml_view.on_data_loaded)
         if result is None:
             return None
         data, success = result
         if success:
-            for param in data["params"]:
-                if param["name"].lower() == cfml_view.tag_attribute_name.lower():
-
+            for param in data['params']:
+                if param['name'].lower() == cfml_view.tag_attribute_name.lower():
                     return CompletionDoc(
                         None, build_tag_completion_doc(data, param), None, 0
                     )
@@ -110,26 +109,26 @@ def get_completion_docs(cfml_view):
 def get_goto_cfml_file(cfml_view):
     # functions
     if cfml_view.view.match_selector(
-        cfml_view.position, "meta.function-call.support.cfml"
+        cfml_view.position, 'meta.function-call.support.cfml'
     ):
-        doc_name, function_name_region, function_args_region = cfml_view.get_function_call(
-            cfml_view.position, True
+        doc_name, function_name_region, function_args_region = (
+            cfml_view.get_function_call(cfml_view.position, True)
         )
 
     # tags
     elif cfml_view.view.match_selector(
-        cfml_view.position, "meta.tag.cfml,meta.tag.script.cfml,meta.tag.script.cf.cfml"
+        cfml_view.position, 'meta.tag.cfml,meta.tag.script.cfml,meta.tag.script.cf.cfml'
     ):
         doc_name = utils.get_tag_name(cfml_view.view, cfml_view.position)
-        if doc_name and doc_name[:2] != "cf":
+        if doc_name and doc_name[:2] != 'cf':
             # tag in script
-            doc_name = "cf" + doc_name
+            doc_name = 'cf' + doc_name
 
     else:
         return None
 
     if doc_name:
-        return GotoCfmlFile("https://cfdocs.org/" + doc_name, None, 0)
+        return GotoCfmlFile('https://cfdocs.org/' + doc_name, None, 0)
 
     return None
 
@@ -137,44 +136,42 @@ def get_goto_cfml_file(cfml_view):
 def build_engine_badge(engine, minimum_version):
     text = CFDOCS_ENGINES[engine]
     if len(minimum_version) > 0:
-        text += " " + minimum_version + "+"
-    return minihtml.badge(text, "engine")
+        text += ' ' + minimum_version + '+'
+    return minihtml.badge(text, 'engine')
 
 
 def build_cfdoc(function_or_tag, attr_or_arg, data):
     cfdoc = minihtml.Doc(ACCENT, build_cfdoc_header(data, attr_or_arg))
     cfdoc.links = [
         {
-            "href": "https://cfdocs.org" + "/" + function_or_tag,
-            "text": "cfdocs.org" + "/" + function_or_tag,
+            'href': 'https://cfdocs.org' + '/' + function_or_tag,
+            'text': 'cfdocs.org' + '/' + function_or_tag,
         }
     ]
 
     cfdoc.body = minihtml.badges(
-        build_engine_badge(engine, data["engines"][engine]["minimum_version"])
+        build_engine_badge(engine, data['engines'][engine]['minimum_version'])
         for engine in sorted(CFDOCS_ENGINES)
-        if engine in data["engines"]
+        if engine in data['engines']
     )
 
-    for param in data["params"]:
-        if attr_or_arg and param["name"].lower() == attr_or_arg.lower():
+    for param in data['params']:
+        if attr_or_arg and param['name'].lower() == attr_or_arg.lower():
             header, body = build_attr_doc(param)
             cfdoc.body += minihtml.card(header, body)
-            cfdoc.body += "\n"
+            cfdoc.body += '\n'
             break
     else:
-        cfdoc.body += minihtml.card(body=minihtml.clean_html(data["description"]))
+        cfdoc.body += minihtml.card(body=minihtml.clean_html(data['description']))
 
-        if len(data["params"]) > 0:
+        if len(data['params']) > 0:
             cfdoc.body += minihtml.section(
-                "Arguments"
-                if data["type"] == "function"
-                else "Attributes"
+                'Arguments' if data['type'] == 'function' else 'Attributes'
             )
-            for param in data["params"]:
+            for param in data['params']:
                 header, body = build_attr_doc(param)
                 cfdoc.body += minihtml.card(header, body)
-                cfdoc.body += "\n"
+                cfdoc.body += '\n'
 
     cfdoc.body = minihtml.code_spans(cfdoc.body)
 
@@ -182,89 +179,83 @@ def build_cfdoc(function_or_tag, attr_or_arg, data):
 
 
 def format_values(values):
-    return ", ".join(minihtml.clean_html(str(value)) for value in values)
+    return ', '.join(minihtml.clean_html(str(value)) for value in values)
 
 
 def build_attr_doc(param):
     # cfdocs text is mostly plain, so tags it mentions (<cfoutput>) and
     # literal values (<b> as a default) are escaped; entities are kept
     header = minihtml.param_header(param)
-    body = ""
-    if "default" in param and len(str(param["default"])):
+    body = ''
+    if 'default' in param and len(str(param['default'])):
         body += minihtml.paragraph(
             minihtml.labeled(
-                "Default", minihtml.code(minihtml.clean_html(str(param["default"])))
+                'Default', minihtml.code(minihtml.clean_html(str(param['default'])))
             )
         )
-    description = minihtml.clean_html(param["description"]).strip()
+    description = minihtml.clean_html(param['description']).strip()
     if len(description) > 0:
         body += minihtml.paragraph(description)
-    if "values" in param and len(param["values"]):
+    if 'values' in param and len(param['values']):
         body += minihtml.paragraph(
-            minihtml.labeled("Values", format_values(param["values"]))
+            minihtml.labeled('Values', format_values(param['values']))
         )
 
     return header, body
 
 
 def build_cfdoc_header(data, attr_or_arg=None, include_params=True):
-    if data["type"] != "function":
-        header = "&lt;" + minihtml.span_wrap(
-            data["name"], "entity.name.tag.cfml"
-        )
-        for param in data["params"]:
+    if data['type'] != 'function':
+        header = '&lt;' + minihtml.span_wrap(data['name'], 'entity.name.tag.cfml')
+        for param in data['params']:
             if attr_or_arg:
-                if attr_or_arg.lower() != param["name"].lower():
+                if attr_or_arg.lower() != param['name'].lower():
                     continue
-            elif not include_params or "required" not in param or not param["required"]:
+            elif not include_params or 'required' not in param or not param['required']:
                 continue
             header += (
-                " "
-                + minihtml.span_wrap(
-                    param["name"], "entity.other.attribute-name"
-                )
+                ' '
+                + minihtml.span_wrap(param['name'], 'entity.other.attribute-name')
                 + '=""'
             )
 
-        header += "&gt;"
+        header += '&gt;'
         return header
 
-    header = minihtml.span_wrap(data["name"], "entity.name.function")
-    header += "("
+    header = minihtml.span_wrap(data['name'], 'entity.name.function')
+    header += '('
 
-    param_base = ""
+    param_base = ''
     if include_params:
-        for param in data["params"]:
+        for param in data['params']:
             span_html = param_base + minihtml.span_wrap(
-                param["name"], "variable.parameter.function"
+                param['name'], 'variable.parameter.function'
             )
 
-            if "required" not in param or not param["required"]:
-                span_html = "[" + span_html + "]"
+            if 'required' not in param or not param['required']:
+                span_html = '[' + span_html + ']'
 
-            param_base = ", "
+            param_base = ', '
             header += span_html
     else:
-        header += "..." if len(data["params"]) > 0 else ""
+        header += '...' if len(data['params']) > 0 else ''
 
-    header += ")"
+    header += ')'
 
-    if len(data["returns"]) > 0:
-        header += ": " + minihtml.span_wrap(
-            data["returns"], "storage.type"
-        )
+    if len(data['returns']) > 0:
+        header += ': ' + minihtml.span_wrap(data['returns'], 'storage.type')
 
     return header
 
 
 def build_cfdoc_error(function_or_tag, data):
     # the message is text, in paragraphs
-    paragraphs = data["error_message"].split("\n\n")
+    paragraphs = data['error_message'].split('\n\n')
     return minihtml.Doc(
         ERROR_ACCENT,
-        "Uh oh!",
-        "I tried to load that doc for you but got this instead:"
-        + "".join(minihtml.paragraph(minihtml.escape_text(p)) for p in paragraphs),
+        'Uh oh!',
+        'I tried to load that doc for you but got this instead:'
+        + ''.join(minihtml.paragraph(minihtml.escape_text(p)) for p in paragraphs),
     )
 
 
@@ -272,29 +263,28 @@ def build_function_completion_doc(function_call_params, data):
     cfdoc = minihtml.Doc(ACCENT, build_cfdoc_header(data, include_params=False))
 
     arguments = []
-    for index, param in enumerate(data["params"]):
+    for index, param in enumerate(data['params']):
         if function_call_params.named_params:
             active_name = (
-                function_call_params.params[function_call_params.current_index][0]
-                or ""
+                function_call_params.params[function_call_params.current_index][0] or ''
             )
-            is_active = active_name.lower() == param["name"].lower()
+            is_active = active_name.lower() == param['name'].lower()
         else:
             is_active = index == function_call_params.current_index
 
         if is_active:
-            description = minihtml.clean_html(param["description"])
-            values = ""
-            if "values" in param and len(param["values"]):
-                values = minihtml.labeled("Values", format_values(param["values"]))
-            cfdoc.body = "".join(
+            description = minihtml.clean_html(param['description'])
+            values = ''
+            if 'values' in param and len(param['values']):
+                values = minihtml.labeled('Values', format_values(param['values']))
+            cfdoc.body = ''.join(
                 minihtml.paragraph(markup) for markup in [description, values] if markup
             )
-            arguments.append((param["name"], "active"))
-        elif param["required"]:
-            arguments.append((param["name"], "required"))
+            arguments.append((param['name'], 'active'))
+        elif param['required']:
+            arguments.append((param['name'], 'required'))
         else:
-            arguments.append((param["name"], "optional"))
+            arguments.append((param['name'], 'optional'))
 
     if arguments:
         cfdoc.arguments = minihtml.argument_list(arguments)

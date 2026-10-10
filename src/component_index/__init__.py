@@ -4,10 +4,10 @@ from .completions import build_file_completions, to_completion_item
 
 
 __all__ = [
-    "build_file_completions",
-    "component_index",
-    "documentation",
-    "to_completion_item",
+    'build_file_completions',
+    'component_index',
+    'documentation',
+    'to_completion_item',
 ]
 
 

@@ -57,7 +57,7 @@ def generate_documentation(view, docs, current_index, doc_type):
     doc = docs[current_index]
     build_page = (
         minihtml.completion_doc_page
-        if doc_type == "completion_doc"
+        if doc_type == 'completion_doc'
         else minihtml.doc_page
     )
     return build_page(view, doc.content, current_index, len(docs)), doc.doc_regions
@@ -68,9 +68,9 @@ def display_documentation(view, docs, doc_type, pt=-1, current_index=0):
     doc_region_id = str(uuid.uuid4())
     doc_html, doc_regions = generate_documentation(view, docs, current_index, doc_type)
 
-    if doc_type == "completion_doc":
+    if doc_type == 'completion_doc':
         popup = state.doc_popup
-        if popup and popup.doc_type == "completion_doc" and view.is_popup_visible():
+        if popup and popup.doc_type == 'completion_doc' and view.is_popup_visible():
             state.doc_popup = DocPopup(popup.id, doc_type, docs, current_index, pt)
             view.update_popup(doc_html)
         else:
@@ -83,17 +83,17 @@ def display_documentation(view, docs, doc_type, pt=-1, current_index=0):
                 on_hide=lambda: on_hide(view, doc_region_id),
             )
     else:
-        if doc_regions and utils.get_setting("inline_doc_regions_highlight"):
+        if doc_regions and utils.get_setting('inline_doc_regions_highlight'):
             view.add_regions(
                 doc_region_id,
                 utils.merge_regions(doc_regions),
-                "source",
+                'source',
                 flags=sublime.RegionFlags.DRAW_NO_FILL,
             )
         state.doc_popup = DocPopup(doc_region_id, doc_type, docs, current_index, pt)
         flags = (
             sublime.PopupFlags.HIDE_ON_MOUSE_MOVE_AWAY
-            if doc_type == "hover_doc"
+            if doc_type == 'hover_doc'
             else sublime.PopupFlags.NONE
         )
         view.show_popup(
@@ -129,7 +129,7 @@ def show_inline_documentation(view, position, doc_type, can_refresh=True):
 def refresh_inline_documentation(view, position, doc_type, request, requested_at):
     if not view.is_valid() or request != view_state.get(view).doc_request:
         return
-    if doc_type == "hover_doc":
+    if doc_type == 'hover_doc':
         if time.time() - requested_at > HOVER_REFRESH_SECONDS:
             return
     elif len(view.sel()) == 0 or view.sel()[0].begin() != position:
@@ -138,9 +138,9 @@ def refresh_inline_documentation(view, position, doc_type, request, requested_at
 
 
 class CfmlInlineDocumentationCommand(sublime_plugin.TextCommand):
-    def run(self, edit, doc_type="inline_doc", pt=None):
-        if doc_type == "hover_doc":
-            if not utils.get_setting("cfml_hover_docs"):
+    def run(self, edit, doc_type='inline_doc', pt=None):
+        if doc_type == 'hover_doc':
+            if not utils.get_setting('cfml_hover_docs'):
                 return
             if view_state.get(self.view).preview:
                 return
@@ -149,9 +149,7 @@ class CfmlInlineDocumentationCommand(sublime_plugin.TextCommand):
         position = pt if pt else self.view.sel()[0].begin()
         show_inline_documentation(self.view, position, doc_type)
         diff = time.time() - tick
-        if utils.get_setting("cfml_log_doc_time"):
+        if utils.get_setting('cfml_log_doc_time'):
             print(
-                "CFML: inline documentation completed in "
-                + f"{diff * 1000:.0f}"
-                + "ms"
+                'CFML: inline documentation completed in ' + f'{diff * 1000:.0f}' + 'ms'
             )

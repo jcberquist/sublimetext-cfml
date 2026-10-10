@@ -16,5 +16,7 @@ def test_selectors_match_as_in_sublime_text():
         scope,
         '(meta.tag.cfml, meta.tag.custom.cfml) - comment - (meta.tag.cfml comment)',
     )
-    assert not matches(scope, '(meta.tag.cfml, meta.tag.custom.cfml) - (meta.tag.cfml string)')
+    assert not matches(
+        scope, '(meta.tag.cfml, meta.tag.custom.cfml) - (meta.tag.cfml string)'
+    )
     assert matches('source.cfml.script meta.function-call.cfml', 'meta.function-call')

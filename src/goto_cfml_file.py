@@ -33,7 +33,7 @@ def open_file_at_symbol(view, file_path, symbol):
 def open_cfml_file(view, file_path, symbol):
     if symbol:
         open_file_at_symbol(view, file_path, symbol)
-    elif file_path.startswith("http"):
+    elif file_path.startswith('http'):
         webbrowser.open_new_tab(file_path)
     else:
         view.window().open_file(file_path)
@@ -64,7 +64,7 @@ def goto(view, cfml_file):
 
 class CfmlGotoFileCommand(sublime_plugin.TextCommand):
     def run(self, edit, event):
-        pt = self.view.window_to_text((event["x"], event["y"]))
+        pt = self.view.window_to_text((event['x'], event['y']))
         cfml_view = CfmlView(self.view, pt)
         cfml_files = get_cfml_files(cfml_view)
         if len(cfml_files) > 0:

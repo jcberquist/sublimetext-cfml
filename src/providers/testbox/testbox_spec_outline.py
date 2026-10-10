@@ -2,25 +2,25 @@ import sublime_plugin
 from ... import utils
 
 testbox_function_names = [
-    "describe",
-    "it",
-    "feature",
-    "scenario",
-    "story",
-    "given",
-    "when",
-    "then",
+    'describe',
+    'it',
+    'feature',
+    'scenario',
+    'story',
+    'given',
+    'when',
+    'then',
 ]
-func_call_scope = "meta.function-call.cfml variable.function.cfml"
-string_scope = "meta.function-call.cfml meta.function-call.arguments.cfml meta.string"
-func_param_name_scope = "meta.function-call.cfml meta.function-call.arguments.cfml entity.other.function-parameter.cfml"
+func_call_scope = 'meta.function-call.cfml variable.function.cfml'
+string_scope = 'meta.function-call.cfml meta.function-call.arguments.cfml meta.string'
+func_param_name_scope = 'meta.function-call.cfml meta.function-call.arguments.cfml entity.other.function-parameter.cfml'
 
 
 class TestboxSpecOutlineCommand(sublime_plugin.TextCommand):
     def run(self, edit):
 
         # sanity check
-        if not self.view.match_selector(0, "embedding.cfml, source.cfml.script"):
+        if not self.view.match_selector(0, 'embedding.cfml, source.cfml.script'):
             return
 
         self.outline = []
@@ -32,7 +32,7 @@ class TestboxSpecOutlineCommand(sublime_plugin.TextCommand):
         # collect title parameters
         title_params = {}
         for r in self.view.find_by_selector(func_param_name_scope):
-            if self.view.substr(r).lower() == "title":
+            if self.view.substr(r).lower() == 'title':
                 title_params[r.begin()] = r
 
         # collect strings
@@ -67,11 +67,11 @@ class TestboxSpecOutlineCommand(sublime_plugin.TextCommand):
                 # looks like a something we care about
                 string_region = string_descriptions[next_pt]
                 depth = (
-                    self.view.scope_name(r.begin()).count("meta.function.body.cfml") - 1
+                    self.view.scope_name(r.begin()).count('meta.function.body.cfml') - 1
                 )
-                indent = "    " * depth
+                indent = '    ' * depth
                 self.outline.append(
-                    indent + func_name + ": " + self.view.substr(string_region)[1:-1]
+                    indent + func_name + ': ' + self.view.substr(string_region)[1:-1]
                 )
                 self.outline_regions.append(string_region)
 

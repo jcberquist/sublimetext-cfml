@@ -7,23 +7,26 @@ from collections import namedtuple
 from typing import Any, cast, overload
 
 Symbol = namedtuple(
-    "Symbol", "name is_function function_region args_region name_region"
+    'Symbol', 'name is_function function_region args_region name_region'
 )
 
 
 def get_plugin_name():
     # the first part of this module's name is the package in Packages/
-    return __name__.split(".")[0]
+    return __name__.split('.')[0]
 
 
 def package_resource_path(relative_path):
-    return "Packages/" + get_plugin_name() + "/" + relative_path
+    return 'Packages/' + get_plugin_name() + '/' + relative_path
 
 
 # the package's top-level syntaxes: CFML for components and templates
 # (scope embedding.cfml), CFScript (CFML) for .cfs script files (scope
 # source.cfml.script, the scope of the script inside CFML files)
-CFML_SYNTAXES = ("syntaxes/CFML.sublime-syntax", "syntaxes/CFScript (CFML).sublime-syntax")
+CFML_SYNTAXES = (
+    'syntaxes/CFML.sublime-syntax',
+    'syntaxes/CFScript (CFML).sublime-syntax',
+)
 
 
 def is_cfml_view(settings):
@@ -32,7 +35,7 @@ def is_cfml_view(settings):
     package's top-level syntaxes: what a ViewEventListener is given to
     decide whether it applies to a view.
     """
-    syntax = settings.get("syntax")
+    syntax = settings.get('syntax')
     return any(syntax == package_resource_path(path) for path in CFML_SYNTAXES)
 
 
@@ -47,12 +50,14 @@ def load_json_resource(relative_path):
 
 @functools.cache
 def load_template(relative_path):
-    template = sublime.load_resource(package_resource_path("templates/" + relative_path))
-    return template.replace("\r", "")
+    template = sublime.load_resource(
+        package_resource_path('templates/' + relative_path)
+    )
+    return template.replace('\r', '')
 
 
 def call_plugin_loaded(module):
-    call_reporting_failure(module.__name__ + "._plugin_loaded()", module._plugin_loaded)
+    call_reporting_failure(module.__name__ + '._plugin_loaded()', module._plugin_loaded)
 
 
 def call_reporting_failure(label, callback):
@@ -60,7 +65,7 @@ def call_reporting_failure(label, callback):
     try:
         callback()
     except Exception:
-        print("CFML: " + label + " failed")
+        print('CFML: ' + label + ' failed')
         traceback.print_exc()
 
 
@@ -87,7 +92,7 @@ def get_project_name_from_window(window):
         return normalize_path(project_file_name)
     folders = get_window_folders(window)
     if folders:
-        return "folders:" + "|".join(folders)
+        return 'folders:' + '|'.join(folders)
     return None
 
 
@@ -104,21 +109,21 @@ def normalize_path(path, root_path=None):
         return None
     if not os.path.isabs(path) and root_path is not None:
         path = os.path.normpath(os.path.join(root_path, path))
-    normalized_path = path.replace("\\", "/")
-    if len(normalized_path) > 0 and normalized_path[-1] == "/":
+    normalized_path = path.replace('\\', '/')
+    if len(normalized_path) > 0 and normalized_path[-1] == '/':
         normalized_path = normalized_path[:-1]
     return normalized_path
 
 
 def normalize_mapping(mapping, root_path=None):
     normalized_mapping = {}
-    normalized_mapping["path"] = normalize_path(mapping["path"], root_path)
-    normalized_mapping_path = mapping["mapping"].replace("\\", "/")
-    if normalized_mapping_path[0] != "/":
-        normalized_mapping_path = "/" + normalized_mapping_path
-    if normalized_mapping_path[-1] == "/":
+    normalized_mapping['path'] = normalize_path(mapping['path'], root_path)
+    normalized_mapping_path = mapping['mapping'].replace('\\', '/')
+    if normalized_mapping_path[0] != '/':
+        normalized_mapping_path = '/' + normalized_mapping_path
+    if normalized_mapping_path[-1] == '/':
         normalized_mapping_path = normalized_mapping_path[:-1]
-    normalized_mapping["mapping"] = normalized_mapping_path
+    normalized_mapping['mapping'] = normalized_mapping_path
     return normalized_mapping
 
 
@@ -128,10 +133,10 @@ def get_mapped_path_parts(file_path, mapping):
     so with /site/model mapped to /model, /site/model/user.cfc gives
     ["model", "user.cfc"]. Returns None for a file outside the mapped folder.
     """
-    if not file_path.startswith(mapping["path"] + "/"):
+    if not file_path.startswith(mapping['path'] + '/'):
         return None
-    mapped_path = mapping["mapping"] + file_path[len(mapping["path"]) :]
-    return mapped_path.split("/")[1:]
+    mapped_path = mapping['mapping'] + file_path[len(mapping['path']) :]
+    return mapped_path.split('/')[1:]
 
 
 def find_symbol_location(window, symbol, file_path):
@@ -154,13 +159,13 @@ WORD_OR_PUNCTUATION_START = (
 
 
 def get_previous_character(view, position):
-    if view.substr(position - 1) in [" ", "\t", "\n"]:
+    if view.substr(position - 1) in [' ', '\t', '\n']:
         position = view.find_by_class(position, False, WORD_OR_PUNCTUATION_END)
     return position - 1
 
 
 def get_next_character(view, position):
-    if view.substr(position) in [" ", "\t", "\n"]:
+    if view.substr(position) in [' ', '\t', '\n']:
         position = view.find_by_class(position, True, WORD_OR_PUNCTUATION_START)
     return position
 
@@ -186,13 +191,13 @@ def merge_regions(regions):
 
 def get_scope_region_containing_point(view, pt, scope):
     scope_count = view.scope_name(pt).count(scope) - view.scope_name(pt).count(
-        "." + scope
+        '.' + scope
     )
     if scope_count == 0:
         return None
     # expand_to_scope() returns the outermost match, so repeat the scope to
     # the depth at pt to get the innermost region instead
-    return view.expand_to_scope(pt, " ".join([scope] * scope_count))
+    return view.expand_to_scope(pt, ' '.join([scope] * scope_count))
 
 
 def get_char_point_before_scope(view, pt, scope):
@@ -206,14 +211,14 @@ def get_char_point_before_scope(view, pt, scope):
 def get_dot_context(view, dot_position):
     context = []
 
-    if view.substr(dot_position) != ".":
+    if view.substr(dot_position) != '.':
         return context
 
-    if view.substr(dot_position - 1) in [" ", "\t", "\n"]:
+    if view.substr(dot_position - 1) in [' ', '\t', '\n']:
         dot_position = view.find_by_class(dot_position, False, WORD_OR_PUNCTUATION_END)
 
-    base_scope_count = view.scope_name(dot_position).count("meta.function-call")
-    scope_to_find = " ".join(["meta.function-call"] * (base_scope_count + 1))
+    base_scope_count = view.scope_name(dot_position).count('meta.function-call')
+    scope_to_find = ' '.join(['meta.function-call'] * (base_scope_count + 1))
     function_call = None
     if view.match_selector(dot_position - 1, scope_to_find):
         function_call = get_function_call(view, dot_position - 1)
@@ -222,9 +227,7 @@ def get_dot_context(view, dot_position):
         context.append(
             Symbol(function_name, True, name_region, function_args_region, name_region)
         )
-    elif view.match_selector(
-        dot_position - 1, "variable, meta.instance.constructor"
-    ):
+    elif view.match_selector(dot_position - 1, 'variable, meta.instance.constructor'):
         name_region = view.word(dot_position)
         context.append(
             Symbol(view.substr(name_region).lower(), False, None, None, name_region)
@@ -239,23 +242,21 @@ def get_dot_context(view, dot_position):
 def get_struct_context(view, position):
     context = []
 
-    if not view.match_selector(position, "meta.mapping.cfml"):
+    if not view.match_selector(position, 'meta.mapping.cfml'):
         return context
 
     previous_char_point = get_char_point_before_scope(
-        view, position, "meta.mapping.cfml"
+        view, position, 'meta.mapping.cfml'
     )
     if not view.match_selector(
         previous_char_point,
-        "keyword.operator.assignment.cfml,punctuation.separator.key-value.cfml",
+        'keyword.operator.assignment.cfml,punctuation.separator.key-value.cfml',
     ):
         return context
 
     previous_char_point = get_previous_character(view, previous_char_point)
 
-    if not view.match_selector(
-        previous_char_point, "variable,meta.mapping.key.cfml"
-    ):
+    if not view.match_selector(previous_char_point, 'variable,meta.mapping.key.cfml'):
         return context
 
     name_region = view.word(previous_char_point)
@@ -263,7 +264,7 @@ def get_struct_context(view, position):
         Symbol(view.substr(name_region).lower(), False, None, None, name_region)
     )
 
-    if view.match_selector(previous_char_point, "variable.other.member"):
+    if view.match_selector(previous_char_point, 'variable.other.member'):
         context.extend(get_dot_context(view, name_region.begin() - 1))
     else:
         context.extend(get_struct_context(view, name_region.begin()))
@@ -272,7 +273,7 @@ def get_struct_context(view, position):
 
 
 def get_setting(setting_key) -> Any:
-    cfml_settings = sublime.load_settings("cfml_package.sublime-settings")
+    cfml_settings = sublime.load_settings('cfml_package.sublime-settings')
     return cfml_settings.get(setting_key)
 
 
@@ -299,11 +300,11 @@ def get_project_data_setting(project_data, setting_key) -> Any:
 
 
 def get_tag_end(view, pos, is_cfml):
-    tag_end = view.find("/?>", pos)
+    tag_end = view.find('/?>', pos)
     if tag_end:
-        if view.match_selector(tag_end.begin(), "punctuation.definition.tag"):
+        if view.match_selector(tag_end.begin(), 'punctuation.definition.tag'):
             tag_end_is_cfml = view.match_selector(
-                tag_end.begin(), "punctuation.definition.tag.end.cfml"
+                tag_end.begin(), 'punctuation.definition.tag.end.cfml'
             )
             if is_cfml == tag_end_is_cfml:
                 return tag_end
@@ -313,13 +314,13 @@ def get_tag_end(view, pos, is_cfml):
 
 def get_last_open_tag(view, pos, cfml_only, custom_tag_index):
     tag_selector = (
-        "entity.name.tag.cfml, entity.name.tag.custom.cfml"
+        'entity.name.tag.cfml, entity.name.tag.custom.cfml'
         if cfml_only
-        else "entity.name.tag"
+        else 'entity.name.tag'
     )
     closed_tags = []
-    cfml_non_closing_tags = get_setting("cfml_non_closing_tags")
-    html_non_closing_tags = get_setting("html_non_closing_tags")
+    cfml_non_closing_tags = get_setting('cfml_non_closing_tags')
+    html_non_closing_tags = get_setting('html_non_closing_tags')
 
     tag_name_regions = reversed(
         [r for r in view.find_by_selector(tag_selector) if r.end() <= pos]
@@ -327,13 +328,13 @@ def get_last_open_tag(view, pos, cfml_only, custom_tag_index):
 
     for tag_name_region in tag_name_regions:
         # check for closing tag
-        if view.substr(tag_name_region.begin() - 1) == "/":
+        if view.substr(tag_name_region.begin() - 1) == '/':
             closed_tags.append(view.substr(tag_name_region))
             continue
 
         # this is an opening tag
         is_cfml = view.match_selector(
-            tag_name_region.begin(), "entity.name.tag.cfml, entity.name.tag.custom.cfml"
+            tag_name_region.begin(), 'entity.name.tag.cfml, entity.name.tag.custom.cfml'
         )
         tag_end = get_tag_end(view, tag_name_region.end(), is_cfml)
 
@@ -363,7 +364,7 @@ def get_last_open_tag(view, pos, cfml_only, custom_tag_index):
             continue
         # check for custom tags that should not be closed
         if view.match_selector(
-            tag_name_region.begin(), "meta.tag.custom.cfml"
+            tag_name_region.begin(), 'meta.tag.custom.cfml'
         ) and tag_name not in custom_tag_index.get_closing_custom_tags(
             get_project_name(view)
         ):
@@ -375,9 +376,9 @@ def get_last_open_tag(view, pos, cfml_only, custom_tag_index):
 
 
 def get_tag_name(view, pos):
-    tag_scope = "meta.tag.cfml - punctuation.definition.tag.begin, meta.tag.custom.cfml - punctuation.definition.tag.begin, meta.tag.script.cfml, meta.tag.script.cf.cfml"
+    tag_scope = 'meta.tag.cfml - punctuation.definition.tag.begin, meta.tag.custom.cfml - punctuation.definition.tag.begin, meta.tag.script.cfml, meta.tag.script.cf.cfml'
     tag_name_scope = (
-        "entity.name.tag.cfml, entity.name.tag.custom.cfml, entity.name.tag.script.cfml"
+        'entity.name.tag.cfml, entity.name.tag.custom.cfml, entity.name.tag.script.cfml'
     )
     # pos may also sit just after the end of a tag, or at the end of the
     # buffer with the tag still open, where there is no scope to expand
@@ -409,21 +410,21 @@ def get_tag_name(view, pos):
 def get_tag_attribute_name(view, pos):
     if view.match_selector(
         pos,
-        "meta.tag entity.other.attribute-name.cfml, meta.class.declaration.cfml entity.other.attribute-name.cfml",
+        'meta.tag entity.other.attribute-name.cfml, meta.class.declaration.cfml entity.other.attribute-name.cfml',
     ):
         return view.substr(view.word(pos)).lower()
 
-    for scope in ["string.quoted", "string.unquoted"]:
+    for scope in ['string.quoted', 'string.unquoted']:
         full_scope = (
-            "meta.tag.cfml "
+            'meta.tag.cfml '
             + scope
-            + ", meta.tag.custom.cfml "
+            + ', meta.tag.custom.cfml '
             + scope
-            + ", meta.tag.script.cfml "
+            + ', meta.tag.script.cfml '
             + scope
-            + ", meta.tag.script.cf.cfml "
+            + ', meta.tag.script.cf.cfml '
             + scope
-            + ", meta.class.declaration.cfml "
+            + ', meta.class.declaration.cfml '
             + scope
         )
         if view.match_selector(pos, full_scope):
@@ -431,25 +432,25 @@ def get_tag_attribute_name(view, pos):
             break
 
     full_scope = [
-        "meta.tag.cfml punctuation.separator.key-value",
-        "meta.tag.custom.cfml punctuation.separator.key-value",
-        "meta.tag.script.cfml punctuation.separator.key-value",
-        "meta.tag.script.cf.cfml punctuation.separator.key-value",
-        "meta.class.declaration.cfml punctuation.separator.key-value",
+        'meta.tag.cfml punctuation.separator.key-value',
+        'meta.tag.custom.cfml punctuation.separator.key-value',
+        'meta.tag.script.cfml punctuation.separator.key-value',
+        'meta.tag.script.cf.cfml punctuation.separator.key-value',
+        'meta.class.declaration.cfml punctuation.separator.key-value',
     ]
-    if view.match_selector(pos, ",".join(full_scope)):
+    if view.match_selector(pos, ','.join(full_scope)):
         return get_previous_word(view, pos)
 
     return None
 
 
 def get_function(view, pt):
-    if view.match_selector(pt, "meta.function.cfml"):
-        function_scope = "meta.function.cfml"
+    if view.match_selector(pt, 'meta.function.cfml'):
+        function_scope = 'meta.function.cfml'
     else:
-        function_scope = "meta.function.declaration.cfml"
+        function_scope = 'meta.function.declaration.cfml'
 
-    function_name_scope = "entity.name.function.cfml"
+    function_name_scope = 'entity.name.function.cfml'
     function_region = get_scope_region_containing_point(view, pt, function_scope)
     if function_region:
         function_name_regions = view.find_by_selector(function_name_scope)
@@ -464,9 +465,9 @@ def get_function(view, pt):
 
 
 def get_function_call(view, pt, support=False):
-    function_call_scope = "meta.function-call"
+    function_call_scope = 'meta.function-call'
     if support:
-        function_call_scope += ".support"
+        function_call_scope += '.support'
     function_region = get_scope_region_containing_point(view, pt, function_call_scope)
     if function_region:
         function_name_region = view.word(function_region.begin())
@@ -482,18 +483,18 @@ def get_function_call(view, pt, support=False):
 
 
 def get_current_function_body(view, pt):
-    return get_scope_region_containing_point(view, pt, "meta.function.body")
+    return get_scope_region_containing_point(view, pt, 'meta.function.body')
 
 
 def find_variable_assignment(view, position, variable_name):
-    regex_prefix = r"(\bvariables\.|\s|\bvar\s+)"
-    regex = regex_prefix + variable_name + r"\b\s*=\s*"
+    regex_prefix = r'(\bvariables\.|\s|\bvar\s+)'
+    regex = regex_prefix + variable_name + r'\b\s*=\s*'
     assignments = view.find_all(regex, sublime.FindFlags.IGNORECASE)
     for r in reversed(assignments):
         if r.begin() < position:
             # check for local var assignment
             # and ensure it is in the same function body
-            if view.substr(r).lower().startswith("var "):
+            if view.substr(r).lower().startswith('var '):
                 function_region = get_current_function_body(view, r.end())
                 if not function_region or not function_region.contains(position):
                     continue
@@ -509,18 +510,18 @@ def get_verified_path(root_path, rel_path):
     returns a tuple of (rel_path, exists)
     """
     normalized_root_path = normalize_path(root_path)
-    rel_path_elements = normalize_path(rel_path).split("/")
+    rel_path_elements = normalize_path(rel_path).split('/')
     verified_path_elements = []
 
     for elem in rel_path_elements:
         dir_map = {
             f.lower(): f
             for f in os.listdir(
-                normalized_root_path + "/" + "/".join(verified_path_elements)
+                normalized_root_path + '/' + '/'.join(verified_path_elements)
             )
         }
         if elem.lower() not in dir_map:
             return rel_path, False
         verified_path_elements.append(dir_map[elem.lower()])
 
-    return "/".join(verified_path_elements), True
+    return '/'.join(verified_path_elements), True

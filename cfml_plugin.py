@@ -32,31 +32,31 @@ from .src.view_state import ViewState
 
 # Sublime Text registers the commands and listeners it finds in this module
 __all__ = [
-    "BufferMetadata",
-    "CfmlAutoInsertClosingTagCommand",
-    "CfmlCfcDottedPathCommand",
-    "CfmlClearIndexCacheCommand",
-    "CfmlCloseTagCommand",
-    "CfmlColorSchemeStylesCommand",
-    "CfmlDiPropertyCommand",
-    "CfmlEditSettingsCommand",
-    "CfmlFormatCommand",
-    "CfmlGotoFileCommand",
-    "CfmlIndexProjectCommand",
-    "CfmlInlineDocumentationCommand",
-    "CfmlNavigateToMethodCommand",
-    "CfmlPreviewMethodCommand",
-    "CfmlReplaceTextCommand",
-    "CfmlSidebarCfcDottedPathCommand",
-    "CfmlToggleControllerViewCommand",
-    "CfmlUpdateCompletionDocCommand",
-    "CfmlViewListener",
-    "ProjectEventListener",
-    "TestboxCommand",
-    "TestboxSpecOutlineCommand",
-    "ViewState",
-    "plugin_loaded",
-    "plugin_unloaded",
+    'BufferMetadata',
+    'CfmlAutoInsertClosingTagCommand',
+    'CfmlCfcDottedPathCommand',
+    'CfmlClearIndexCacheCommand',
+    'CfmlCloseTagCommand',
+    'CfmlColorSchemeStylesCommand',
+    'CfmlDiPropertyCommand',
+    'CfmlEditSettingsCommand',
+    'CfmlFormatCommand',
+    'CfmlGotoFileCommand',
+    'CfmlIndexProjectCommand',
+    'CfmlInlineDocumentationCommand',
+    'CfmlNavigateToMethodCommand',
+    'CfmlPreviewMethodCommand',
+    'CfmlReplaceTextCommand',
+    'CfmlSidebarCfcDottedPathCommand',
+    'CfmlToggleControllerViewCommand',
+    'CfmlUpdateCompletionDocCommand',
+    'CfmlViewListener',
+    'ProjectEventListener',
+    'TestboxCommand',
+    'TestboxSpecOutlineCommand',
+    'ViewState',
+    'plugin_loaded',
+    'plugin_unloaded',
 ]
 
 
@@ -83,31 +83,31 @@ class CfmlViewListener(sublime_plugin.ViewEventListener):
         return False
 
     def on_post_text_command(self, command_name, args):
-        if command_name == "commit_completion":
+        if command_name == 'commit_completion':
             view = self.view
             pos = view.sel()[0].begin()
 
             if view.match_selector(
                 pos,
-                "meta.tag.cfml -source.cfml.script, meta.tag.script.cfml, meta.tag.script.cf.cfml, meta.class.declaration.cfml -meta.class.inheritance.cfml",
+                'meta.tag.cfml -source.cfml.script, meta.tag.script.cfml, meta.tag.script.cf.cfml, meta.class.declaration.cfml -meta.class.inheritance.cfml',
             ):
-                if view.substr(pos - 1) in [" ", '"', "'", "="]:
-                    view.run_command("auto_complete", {"api_completions_only": True})
+                if view.substr(pos - 1) in [' ', '"', "'", '=']:
+                    view.run_command('auto_complete', {'api_completions_only': True})
                 elif view.substr(pos) == '"':
                     # an attribute completion was most likely just inserted
                     # advance cursor past double quote character
-                    view.run_command("move", {"by": "characters", "forward": True})
+                    view.run_command('move', {'by': 'characters', 'forward': True})
 
-            if view.substr(pos - 1) == ":" and view.match_selector(
-                pos - 1, "meta.tag.custom.cfml -source.cfml.script"
+            if view.substr(pos - 1) == ':' and view.match_selector(
+                pos - 1, 'meta.tag.custom.cfml -source.cfml.script'
             ):
-                view.run_command("auto_complete", {"api_completions_only": True})
+                view.run_command('auto_complete', {'api_completions_only': True})
 
-            if view.substr(pos - 1) == "." and view.match_selector(
+            if view.substr(pos - 1) == '.' and view.match_selector(
                 pos - 1,
-                "meta.function-call.support.createcomponent.cfml string.quoted, entity.other.inherited-class.cfml, meta.instance.constructor.cfml",
+                'meta.function-call.support.createcomponent.cfml string.quoted, entity.other.inherited-class.cfml, meta.instance.constructor.cfml',
             ):
-                view.run_command("auto_complete", {"api_completions_only": True})
+                view.run_command('auto_complete', {'api_completions_only': True})
 
     def on_query_completions(self, prefix, locations):
         return completions.get_completions(self.view, locations[0], prefix)
@@ -117,5 +117,5 @@ class CfmlViewListener(sublime_plugin.ViewEventListener):
             return
 
         self.view.run_command(
-            "cfml_inline_documentation", {"pt": point, "doc_type": "hover_doc"}
+            'cfml_inline_documentation', {'pt': point, 'doc_type': 'hover_doc'}
         )

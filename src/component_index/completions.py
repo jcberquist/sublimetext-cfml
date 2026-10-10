@@ -1,7 +1,12 @@
 import sublime
 from typing import NamedTuple, TypedDict
 from .. import kinds
-from ..component_parser.metadata import ExtendedMetadata, Function, Parameter, parameter_label
+from ..component_parser.metadata import (
+    ExtendedMetadata,
+    Function,
+    Parameter,
+    parameter_label,
+)
 
 
 class CfcCompletion(NamedTuple):
@@ -49,58 +54,82 @@ def build(file_paths, get_extended_metadata) -> dict[str, FileCompletions]:
     return completions
 
 
-def build_file_completions(extended_metadata: ExtendedMetadata, cache: CompletionCache | None = None) -> FileCompletions:
+def build_file_completions(
+    extended_metadata: ExtendedMetadata, cache: CompletionCache | None = None
+) -> FileCompletions:
     """
     Returns the completions of a component. A cache is shared by components
     of one index, where a method of a file is the same in each of them.
     """
     file_completions = {}
-    constructor = (extended_metadata["initmethod"] or "init").lower()
-    for completion_type in ["basic", "required", "full"]:
+    constructor = (extended_metadata['initmethod'] or 'init').lower()
+    for completion_type in ['basic', 'required', 'full']:
         comps: TypeCompletions = {
-            "constructor": None,
-            "functions": make_completions(extended_metadata["functions"], extended_metadata["function_file_map"], completion_type, cache),
+            'constructor': None,
+            'functions': make_completions(
+                extended_metadata['functions'],
+                extended_metadata['function_file_map'],
+                completion_type,
+                cache,
+            ),
         }
 
-        if constructor in extended_metadata["functions"]:
-            constructor_meta = extended_metadata["functions"][constructor]
-            constructor_loc = extended_metadata["function_file_map"][constructor]
-            comps["constructor"] = make_completion(constructor_meta, constructor_loc, completion_type)
+        if constructor in extended_metadata['functions']:
+            constructor_meta = extended_metadata['functions'][constructor]
+            constructor_loc = extended_metadata['function_file_map'][constructor]
+            comps['constructor'] = make_completion(
+                constructor_meta, constructor_loc, completion_type
+            )
 
         file_completions[completion_type] = comps
 
     return file_completions
 
 
-def make_completions(funct_meta: dict[str, Function], funct_cfcs: dict[str, str], completion_type, cache: CompletionCache | None = None):
+def make_completions(
+    funct_meta: dict[str, Function],
+    funct_cfcs: dict[str, str],
+    completion_type,
+    cache: CompletionCache | None = None,
+):
     if cache is None:
-        return [make_completion(funct_meta[funct_key], funct_cfcs[funct_key], completion_type) for funct_key in sorted(funct_meta)]
+        return [
+            make_completion(
+                funct_meta[funct_key], funct_cfcs[funct_key], completion_type
+            )
+            for funct_key in sorted(funct_meta)
+        ]
 
     completions = []
     for funct_key in sorted(funct_meta):
         key = (funct_cfcs[funct_key], funct_key, completion_type)
         completion = cache.get(key)
         if completion is None:
-            completion = cache[key] = make_completion(funct_meta[funct_key], funct_cfcs[funct_key], completion_type)
+            completion = cache[key] = make_completion(
+                funct_meta[funct_key], funct_cfcs[funct_key], completion_type
+            )
         completions.append(completion)
     return completions
 
 
 def make_completion(funct: Function, cfc_file_path, completion_type):
     return CfcCompletion(
-        funct["name"],
-        funct["meta"]["returntype"] or "",
-        escape_snippet_text(funct["name"]) + "(" + make_arguments_string(funct["meta"]["parameters"], completion_type) + ")",
+        funct['name'],
+        funct['meta']['returntype'] or '',
+        escape_snippet_text(funct['name'])
+        + '('
+        + make_arguments_string(funct['meta']['parameters'], completion_type)
+        + ')',
         cfc_file_path,
-        funct["implicit"],
-        funct["meta"]["access"] == "private"
+        funct['implicit'],
+        funct['meta']['access'] == 'private',
     )
 
 
 def escape_snippet_text(text):
     # outside a snippet field only \ and $ are special: a method named
     # $fixNumber was read as a snippet variable
-    return text.replace("\\", "\\\\").replace("$", "\\$")
+    return text.replace('\\', '\\\\').replace('$', '\\$')
 
 
 def to_completion_item(completion: CfcCompletion, annotation: str | None = None):
@@ -112,46 +141,61 @@ def to_completion_item(completion: CfcCompletion, annotation: str | None = None)
         completion.content,
         sublime.CompletionFormat.SNIPPET,
         kind=kinds.METHOD,
-        details=completion.file_path.split("/").pop().split(".")[0],
+        details=completion.file_path.split('/').pop().split('.')[0],
     )
 
 
 def make_arguments_string(parameters: list[Parameter], completion_type):
     index = 1
-    delim = ""
-    arguments_string = ""
+    delim = ''
+    arguments_string = ''
 
-    if completion_type == "basic":
+    if completion_type == 'basic':
         return arguments_string
 
     for argument_params in parameters:
         if not argument_params:
             continue
-        if argument_params["required"] or index == 1:
-            arguments_string += delim + "${" + str(index) + ":" + make_argument_string(argument_params, completion_type) + "}"
+        if argument_params['required'] or index == 1:
+            arguments_string += (
+                delim
+                + '${'
+                + str(index)
+                + ':'
+                + make_argument_string(argument_params, completion_type)
+                + '}'
+            )
             index += 1
-        elif completion_type == "required":
+        elif completion_type == 'required':
             break
         else:
-            arguments_string += "${" + str(index) + ":, ${" + str(index + 1) + ":" + make_argument_string(argument_params, completion_type) + "}}"
+            arguments_string += (
+                '${'
+                + str(index)
+                + ':, ${'
+                + str(index + 1)
+                + ':'
+                + make_argument_string(argument_params, completion_type)
+                + '}}'
+            )
             index += 2
         delim = ', '
     return arguments_string
 
 
 def make_argument_string(argument_params: Parameter, completion_type):
-    if completion_type == "required":
+    if completion_type == 'required':
         argument_string = parameter_label(argument_params)
     else:
-        argument_string = "required " if argument_params["required"] else ""
-        if argument_params["type"]:
-            argument_string += argument_params["type"] + " "
+        argument_string = 'required ' if argument_params['required'] else ''
+        if argument_params['type']:
+            argument_string += argument_params['type'] + ' '
         argument_string += parameter_label(argument_params)
-        if argument_params["default"]:
-            argument_string += "=" + argument_params["default"]
+        if argument_params['default']:
+            argument_string += '=' + argument_params['default']
 
     # the string fills a snippet field, where \, $ and } are special: a
     # struct default, {a: 1}, or a $ in a name or default broke the snippet
-    for char in "\\$}":
-        argument_string = argument_string.replace(char, "\\" + char)
+    for char in '\\$}':
+        argument_string = argument_string.replace(char, '\\' + char)
     return argument_string

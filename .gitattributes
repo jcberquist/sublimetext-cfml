@@ -9,6 +9,5 @@ pytest.ini export-ignore
 ruff.toml export-ignore
 scripts export-ignore
 syntaxes/tests export-ignore
-unittesting.json export-ignore
 tests export-ignore
 unittesting.json export-ignore

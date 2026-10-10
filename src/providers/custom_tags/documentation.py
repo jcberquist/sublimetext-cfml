@@ -6,14 +6,14 @@ from ...project_watcher import project_watcher
 
 
 # the color of the side of the docs, a hue of the color scheme
-ACCENT: minihtml.Hue = "orangish"
+ACCENT: minihtml.Hue = 'orangish'
 
 
 def get_inline_documentation(cfml_view, doc_type):
     if not cfml_view.project_name:
         return None
 
-    if cfml_view.view.match_selector(cfml_view.position, "meta.tag.custom.cfml"):
+    if cfml_view.view.match_selector(cfml_view.position, 'meta.tag.custom.cfml'):
         tag_name = utils.get_tag_name(cfml_view.view, cfml_view.position)
 
         file_path, tag_info = custom_tag_index.get_index_by_tag_name(
@@ -34,20 +34,20 @@ def get_inline_documentation(cfml_view, doc_type):
 
 def get_documentation(view, tag_name, file_path, tag_info, folders):
     custom_tag_doc = minihtml.Doc(ACCENT, minihtml.escape_text(tag_name))
-    custom_tag_doc.body = minihtml.path("__go_to_customtag", file_path, folders)
+    custom_tag_doc.body = minihtml.path('__go_to_customtag', file_path, folders)
     custom_tag_doc.body += minihtml.card(
         minihtml.header(
-            "closing tag",
-            "true" if tag_info["has_end_tag"] else "false",
-            "constant.language",
+            'closing tag',
+            'true' if tag_info['has_end_tag'] else 'false',
+            'constant.language',
         )
     )
-    if tag_info["attributes"]:
+    if tag_info['attributes']:
         custom_tag_doc.body += minihtml.card(
             minihtml.header(
-                "attributes",
-                ", ".join(tag_info["attributes"]),
-                "entity.other.attribute-name",
+                'attributes',
+                ', '.join(tag_info['attributes']),
+                'entity.other.attribute-name',
             )
         )
 

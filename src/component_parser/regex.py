@@ -32,7 +32,7 @@ script_function = r"""
 script_function = re.compile(script_function, re.I | re.X | re.S)
 ScriptFunction = namedtuple(
     'ScriptFunction',
-    'docblock modifiers_before returntype modifiers_after name parameters attributes'
+    'docblock modifiers_before returntype modifiers_after name parameters attributes',
 )
 
 
@@ -50,8 +50,7 @@ script_parameter = r"""
 """
 script_parameter = re.compile(script_parameter, re.I | re.S | re.X)
 ScriptParameter = namedtuple(
-    'ScriptParameter',
-    'required rest type name default attributes'
+    'ScriptParameter', 'required rest type name default attributes'
 )
 
 

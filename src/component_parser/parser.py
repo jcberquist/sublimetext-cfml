@@ -90,7 +90,10 @@ class Parser:
         except sqlite3.DatabaseError:
             # not a database, or a damaged one: the cache is derived data,
             # so start it again
-            print('CFML: the component index cache was unreadable and is reset - ' + cache_path)
+            print(
+                'CFML: the component index cache was unreadable and is reset - '
+                + cache_path
+            )
             os.remove(cache_path)
             self.init_cache()
 

@@ -1,10 +1,6 @@
 from ..provider import Provider
 
-from .cfdocs import (
-    get_inline_documentation,
-    get_completion_docs,
-    get_goto_cfml_file
-)
+from .cfdocs import get_inline_documentation, get_completion_docs, get_goto_cfml_file
 
 
 provider = Provider(

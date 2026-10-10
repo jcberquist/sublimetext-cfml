@@ -24,7 +24,7 @@ def refresh_completion_docs(view, position, prefix):
         return
     docs = get_completion_docs(CfmlView(view, position, prefix))
     if len(docs) > 0:
-        inline_documentation.display_documentation(view, docs, "completion_doc", 0)
+        inline_documentation.display_documentation(view, docs, 'completion_doc', 0)
 
 
 def get_completions(view, position, prefix):
@@ -41,29 +41,29 @@ def get_completions(view, position, prefix):
         if provider_completions:
             completions.extend(provider_completions)
 
-    if utils.get_setting("cfml_completion_docs"):
+    if utils.get_setting('cfml_completion_docs'):
         docs = get_completion_docs(cfml_view)
 
     if len(docs) > 0:
-        inline_documentation.display_documentation(view, docs, "completion_doc", 0)
+        inline_documentation.display_documentation(view, docs, 'completion_doc', 0)
     return completions
 
 
 class CfmlUpdateCompletionDocCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        self.view.run_command("insert_snippet", {"contents": ","})
+        self.view.run_command('insert_snippet', {'contents': ','})
         popup = view_state.get(self.view).doc_popup
-        if popup and popup.doc_type == "completion_doc":
+        if popup and popup.doc_type == 'completion_doc':
             position = self.view.sel()[0].begin()
             cfml_view = CfmlView(self.view, position)
             cfml_view.on_data_loaded = partial(
-                refresh_completion_docs, self.view, position, ""
+                refresh_completion_docs, self.view, position, ''
             )
             docs = get_completion_docs(cfml_view)
 
             if len(docs) > 0:
                 inline_documentation.display_documentation(
-                    self.view, docs, "completion_doc", 0
+                    self.view, docs, 'completion_doc', 0
                 )
             else:
                 self.view.hide_popup()

@@ -14,11 +14,11 @@ def build_project_entities(project_name, project_data):
 
     projects[project_name] = [
         sublime.CompletionItem(
-            entity["entity_name"],
-            "entity",
+            entity['entity_name'],
+            'entity',
             kind=kinds.ENTITY,
         )
-        for entity in project_data["entities"].values()
+        for entity in project_data['entities'].values()
     ]
 
 
@@ -28,7 +28,7 @@ def get_script_completions(cfml_view):
 
     if cfml_view.view.match_selector(
         cfml_view.position,
-        "meta.function-call.support.entity.cfml meta.function-call.arguments.support.cfml string.quoted",
+        'meta.function-call.support.entity.cfml meta.function-call.arguments.support.cfml string.quoted',
     ):
         if is_entityname_param(cfml_view.function_call_params):
             completions = projects[cfml_view.project_name]
@@ -42,8 +42,8 @@ def get_dot_completions(cfml_view):
     if not cfml_view.project_name or len(cfml_view.dot_context) == 0:
         return None
 
-    entity_selector = "meta.function-call.support.entity.cfml"
-    entity_methods = ["entitynew", "entityload", "entityloadbypk"]
+    entity_selector = 'meta.function-call.support.entity.cfml'
+    entity_methods = ['entitynew', 'entityload', 'entityloadbypk']
     entity_name = None
 
     if cfml_view.dot_context[
@@ -76,9 +76,9 @@ def get_dot_completions(cfml_view):
 def is_entityname_param(function_call_params):
     if function_call_params.named_params:
         active_name = (
-            function_call_params.params[function_call_params.current_index][0] or ""
+            function_call_params.params[function_call_params.current_index][0] or ''
         )
-        return active_name.lower() == "entityname"
+        return active_name.lower() == 'entityname'
 
     return function_call_params.current_index == 0
 
@@ -88,7 +88,7 @@ def get_completions_by_entity_name(project_name, entity_name):
 
     if comp:
         filtered_completions = []
-        for completion in comp["functions"]:
+        for completion in comp['functions']:
             if not completion.private:
                 filtered_completions.append(to_completion_item(completion))
         return filtered_completions

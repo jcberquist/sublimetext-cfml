@@ -9,21 +9,21 @@ import certifi
 from collections import deque
 from . import utils
 
-CFDOCS_BASE_URL = "https://raw.githubusercontent.com/foundeo/cfdocs/master/data/en/"
+CFDOCS_BASE_URL = 'https://raw.githubusercontent.com/foundeo/cfdocs/master/data/en/'
 CFDOCS_SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 CFDOCS_TIMEOUT = 10
 # error messages are text, with a blank line between paragraphs
 CFDOCS_HTTP_ERROR_MESSAGE = (
-    "HTTP requests to GitHub seem to be failing at the moment. This means that"
-    " cfdocs.org documentation is not currently available."
-    "\n\n"
-    "To avoid seeing this error message on mouse hover you can set the"
-    " `cfml_hover_docs` setting to false in your user package settings."
-    "\n\n"
-    "Please note that it is possible to load cfdocs.org data from a local drive"
-    " by cloning or downloading the cfdocs.org repo"
-    " (https://github.com/foundeo/cfdocs) and using the `cfdocs_path` package"
-    " setting to point to the data folder of the repository."
+    'HTTP requests to GitHub seem to be failing at the moment. This means that'
+    ' cfdocs.org documentation is not currently available.'
+    '\n\n'
+    'To avoid seeing this error message on mouse hover you can set the'
+    ' `cfml_hover_docs` setting to false in your user package settings.'
+    '\n\n'
+    'Please note that it is possible to load cfdocs.org data from a local drive'
+    ' by cloning or downloading the cfdocs.org repo'
+    ' (https://github.com/foundeo/cfdocs) and using the `cfdocs_path` package'
+    ' setting to point to the data folder of the repository.'
 )
 
 cfdocs_cache = {}
@@ -41,31 +41,31 @@ def get_cfdoc(function_or_tag, on_loaded=None) -> tuple[dict[str, Any], bool] | 
     fetched from GitHub. In that case on_loaded, if given, is called on the
     main thread once the fetch has finished.
     """
-    if utils.get_setting("cfdocs_path"):
+    if utils.get_setting('cfdocs_path'):
         return load_cfdoc(function_or_tag)
     return fetch_cfdoc(function_or_tag, on_loaded)
 
 
 def load_cfdoc(function_or_tag) -> tuple[dict[str, Any], bool]:
     global cfdocs_cache
-    file_path = function_or_tag + ".json"
+    file_path = function_or_tag + '.json'
     if file_path not in cfdocs_cache:
         full_file_path = (
-            utils.normalize_path(utils.get_setting("cfdocs_path")) + "/" + file_path
+            utils.normalize_path(utils.get_setting('cfdocs_path')) + '/' + file_path
         )
         try:
-            with open(full_file_path, encoding="utf-8") as f:
+            with open(full_file_path, encoding='utf-8') as f:
                 json_string = f.read()
         except Exception:
-            data = {"error_message": "Unable to read " + function_or_tag + ".json"}
+            data = {'error_message': 'Unable to read ' + function_or_tag + '.json'}
             return data, False
         try:
             data = json.loads(json_string)
         except ValueError as e:
             data = {
-                "error_message": "Unable to decode "
+                'error_message': 'Unable to decode '
                 + function_or_tag
-                + ".json\nValueError: "
+                + '.json\nValueError: '
                 + str(e)
             }
             return data, False
@@ -76,7 +76,7 @@ def load_cfdoc(function_or_tag) -> tuple[dict[str, Any], bool]:
 
 
 def fetch_cfdoc(function_or_tag, on_loaded=None) -> tuple[dict[str, Any], bool] | None:
-    file_path = function_or_tag + ".json"
+    file_path = function_or_tag + '.json'
 
     with cfdocs_lock:
         if file_path in cfdocs_cache:
@@ -92,7 +92,7 @@ def fetch_cfdoc(function_or_tag, on_loaded=None) -> tuple[dict[str, Any], bool] 
             cfdocs_failed_requests.popleft()
 
         if len(cfdocs_failed_requests) > 2:
-            data = {"error_message": CFDOCS_HTTP_ERROR_MESSAGE}
+            data = {'error_message': CFDOCS_HTTP_ERROR_MESSAGE}
             return data, False
 
         if file_path not in cfdocs_pending:
@@ -108,7 +108,7 @@ def fetch_cfdoc(function_or_tag, on_loaded=None) -> tuple[dict[str, Any], bool] 
 
 
 def fetch_in_background(function_or_tag):
-    file_path = function_or_tag + ".json"
+    file_path = function_or_tag + '.json'
     data, success = request_cfdoc(function_or_tag)
 
     with cfdocs_lock:
@@ -124,18 +124,18 @@ def fetch_in_background(function_or_tag):
 
 
 def request_cfdoc(function_or_tag):
-    full_url = CFDOCS_BASE_URL + function_or_tag + ".json"
+    full_url = CFDOCS_BASE_URL + function_or_tag + '.json'
     try:
         with urllib.request.urlopen(
             full_url, timeout=CFDOCS_TIMEOUT, context=CFDOCS_SSL_CONTEXT
         ) as response:
-            json_string = response.read().decode("utf-8")
+            json_string = response.read().decode('utf-8')
     # URLError, HTTPError and timeouts are all OSErrors
     except OSError as e:
         with cfdocs_lock:
             cfdocs_failed_requests.append(time.time())
         data = {
-            "error_message": "Unable to fetch " + function_or_tag + ".json\n" + str(e)
+            'error_message': 'Unable to fetch ' + function_or_tag + '.json\n' + str(e)
         }
         return data, False
 
@@ -143,9 +143,9 @@ def request_cfdoc(function_or_tag):
         return json.loads(json_string), True
     except ValueError as e:
         data = {
-            "error_message": "Unable to decode "
+            'error_message': 'Unable to decode '
             + function_or_tag
-            + ".json\nValueError: "
+            + '.json\nValueError: '
             + str(e)
         }
         return data, False

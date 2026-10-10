@@ -67,7 +67,7 @@ def find_injected_property(cfml_view, dot_context):
     """
     if not 0 < len(dot_context) <= 2 or any(s.is_function for s in dot_context):
         return None
-    if len(dot_context) == 2 and dot_context[1].name.lower() != "variables":
+    if len(dot_context) == 2 and dot_context[1].name.lower() != 'variables':
         return None
     prop = get_injected_property(cfml_view, dot_context[0].name)
     if prop:
@@ -76,8 +76,8 @@ def find_injected_property(cfml_view, dot_context):
 
 
 def get_injected_property(cfml_view, name):
-    prop = cfml_view.view_metadata["properties"].get(name.lower())
-    if prop and prop["meta"].get("inject") is not None:
+    prop = cfml_view.view_metadata['properties'].get(name.lower())
+    if prop and prop['meta'].get('inject') is not None:
         return prop
     return None
 
@@ -93,11 +93,11 @@ def lookup_injected(
     of the property is not looked up, as `log` would find a handler named
     Log. What a method of a bean returns is not known.
     """
-    injection = inject.parse(prop["meta"]["inject"], prop["name"])
+    injection = inject.parse(prop['meta']['inject'], prop['name'])
     if injection.bean_name:
         return cfcs.lookup(
             project_name,
-            [injection.bean_name, prop["name"]],
+            [injection.bean_name, prop['name']],
             from_file,
             function_name,
         )
@@ -110,7 +110,7 @@ def lookup_injected(
 
 def get_file_path(cfml_view):
     # the file the name is written in, which candidates are ranked from
-    return getattr(cfml_view, "file_path", None)
+    return getattr(cfml_view, 'file_path', None)
 
 
 def get_reference(cfc_infos, function_name, regions):
@@ -141,14 +141,14 @@ def find_cfc(cfml_view):
     if not project_name:
         return None
 
-    if cfml_view.view.match_selector(cfml_view.position, "meta.function-call.method"):
-        function_name, function_name_region, function_args_region = cfml_view.get_function_call(
-            cfml_view.position
+    if cfml_view.view.match_selector(cfml_view.position, 'meta.function-call.method'):
+        function_name, function_name_region, function_args_region = (
+            cfml_view.get_function_call(cfml_view.position)
         )
         region = sublime.Region(
             function_name_region.begin(), function_args_region.end()
         )
-        if cfml_view.view.substr(function_name_region.begin() - 1) == ".":
+        if cfml_view.view.substr(function_name_region.begin() - 1) == '.':
             dot_context = cfml_view.get_dot_context(function_name_region.begin() - 1)
             # the components that have the method, if any has it
             found = find_receiver(cfml_view, dot_context, function_name)
@@ -165,22 +165,22 @@ def find_cfc(cfml_view):
     cfc_name = None
     cfc_name_region = None
     check_position = cfml_view.position
-    if cfml_view.view.match_selector(cfml_view.position, "punctuation.accessor.cfml"):
+    if cfml_view.view.match_selector(cfml_view.position, 'punctuation.accessor.cfml'):
         check_position = cfml_view.position + 1
-    if cfml_view.view.match_selector(
-        check_position, "variable.other"
-    ):
+    if cfml_view.view.match_selector(check_position, 'variable.other'):
         # we need to find the whole dot context now in order to search for variable names that contain dots
         dot_context = get_dot_context(cfml_view, check_position)
         injected = find_injected_property(cfml_view, dot_context)
         if injected and injected[1].contains(cfml_view.position):
-            cfc_infos = lookup_injected(project_name, injected[0], get_file_path(cfml_view))
+            cfc_infos = lookup_injected(
+                project_name, injected[0], get_file_path(cfml_view)
+            )
             return get_reference(cfc_infos, None, [injected[1]])
         found = cfcs.search_dot_context_for_cfc(project_name, dot_context)
         if found and found[1].contains(cfml_view.position):
             cfc_name, cfc_name_region = found
     elif cfml_view.view.match_selector(
-        cfml_view.position, "meta.tag.property.name.cfml"
+        cfml_view.position, 'meta.tag.property.name.cfml'
     ):
         cfc_name_region = cfml_view.view.word(cfml_view.position)
         cfc_name = cfml_view.view.substr(cfc_name_region).lower()
@@ -190,11 +190,11 @@ def find_cfc(cfml_view):
             cfc_infos = lookup_injected(project_name, prop, get_file_path(cfml_view))
             return get_reference(cfc_infos, None, [cfc_name_region])
     elif cfml_view.view.match_selector(
-        cfml_view.position, "meta.function-call.cfml variable.function.cfml"
+        cfml_view.position, 'meta.function-call.cfml variable.function.cfml'
     ):
         cfc_name_region = cfml_view.view.word(cfml_view.position)
         var_name = cfml_view.view.substr(cfc_name_region).lower()
-        if var_name.startswith("get"):
+        if var_name.startswith('get'):
             cfc_name = var_name[3:]
 
     if cfc_name and cfc_name_region:
@@ -209,10 +209,8 @@ def get_dot_context(cfml_view, position):
     next_pt = utils.get_next_character(cfml_view.view, current_element.end())
 
     if cfml_view.view.match_selector(
-        next_pt, "punctuation.accessor.cfml"
-    ) and cfml_view.view.match_selector(
-        next_pt + 1, "variable.other"
-    ):
+        next_pt, 'punctuation.accessor.cfml'
+    ) and cfml_view.view.match_selector(next_pt + 1, 'variable.other'):
         return get_dot_context(cfml_view, next_pt + 1)
 
     dot_context = [

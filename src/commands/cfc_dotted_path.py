@@ -6,7 +6,7 @@ from .. import utils
 
 def cfc_files(files):
     return [
-        file_path for file_path in files if file_path.split(".")[-1].lower() == "cfc"
+        file_path for file_path in files if file_path.split('.')[-1].lower() == 'cfc'
     ]
 
 
@@ -24,23 +24,25 @@ def get_dotted_paths(window, file_path):
     normalized_path = utils.normalize_path(file_path)
     project_data, project_path = get_project_info(window)
 
-    if "mappings" in project_data:
-        for mapping in project_data["mappings"]:
+    if 'mappings' in project_data:
+        for mapping in project_data['mappings']:
             normalized_mapping = utils.normalize_mapping(mapping, project_path)
-            path_parts = utils.get_mapped_path_parts(normalized_path, normalized_mapping)
+            path_parts = utils.get_mapped_path_parts(
+                normalized_path, normalized_mapping
+            )
             if path_parts:
-                dotted_paths.append(".".join(path_parts)[:-4])
+                dotted_paths.append('.'.join(path_parts)[:-4])
 
     # fall back to folders if no mappings matched
     if len(dotted_paths) == 0:
-        for folder in project_data.get("folders", []):
+        for folder in project_data.get('folders', []):
             folder_mapping = {
-                "path": utils.normalize_path(folder["path"], project_path),
-                "mapping": "",
+                'path': utils.normalize_path(folder['path'], project_path),
+                'mapping': '',
             }
             path_parts = utils.get_mapped_path_parts(normalized_path, folder_mapping)
             if path_parts:
-                dotted_paths.append(".".join(path_parts)[:-4])
+                dotted_paths.append('.'.join(path_parts)[:-4])
 
     return dotted_paths
 
@@ -49,12 +51,12 @@ def copy_path(window, files):
     def on_done(i):
         if i != -1:
             sublime.set_clipboard(dotted_paths[i])
-            sublime.status_message("CFML: copied cfc dotted path")
+            sublime.status_message('CFML: copied cfc dotted path')
 
     dotted_paths = get_dotted_paths(window, cfc_files(files)[0])
 
     if len(dotted_paths) == 0:
-        sublime.status_message("CFML: the cfc is not in a project folder or mapping")
+        sublime.status_message('CFML: the cfc is not in a project folder or mapping')
     elif len(dotted_paths) > 1:
         window.show_quick_panel(dotted_paths, on_done)
     else:

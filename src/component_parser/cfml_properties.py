@@ -16,7 +16,6 @@ import re
 from . import cfml_functions, regex, ranges
 
 
-
 def index(file_string, cfscript_range=None, hidden_tags=None):
     if cfscript_range is None:
         cfscript_range = ranges.RangeWalker(file_string, 0, 'cfscript').walk()
@@ -50,32 +49,32 @@ def index(file_string, cfscript_range=None, hidden_tags=None):
         # search for 'property type name;' syntax
         type_name_search = re.search(regex.property_type_name, property_string)
         if type_name_search:
-            property_string = property_string.replace(type_name_search.group(0), "")
+            property_string = property_string.replace(type_name_search.group(0), '')
 
         attributes = find_property_attributes(property_string)
 
         if type_name_search:
-            attributes["name"] = type_name_search.group(2)
+            attributes['name'] = type_name_search.group(2)
         if type_name_search and type_name_search.group(1):
-            attributes["type"] = type_name_search.group(1)
+            attributes['type'] = type_name_search.group(1)
 
         # an empty name, as `property name=""` has while it is typed, is
         # not a property
-        if attributes.get("name"):
-            property_name = attributes["name"]
-            del attributes["name"]
+        if attributes.get('name'):
+            property_name = attributes['name']
+            del attributes['name']
             properties[property_name] = attributes
     return properties
 
 
 def find_property_attributes(property_string):
-    attributes = {"type": "any", "getter": None, "setter": None}
+    attributes = {'type': 'any', 'getter': None, 'setter': None}
     attributes.update(cfml_functions.parse_attributes(property_string))
 
-    for key in ["getter", "setter"]:
-        if attributes[key] in ["true", "yes"]:
+    for key in ['getter', 'setter']:
+        if attributes[key] in ['true', 'yes']:
             attributes[key] = True
-        elif attributes[key] in ["false", "no"]:
+        elif attributes[key] in ['false', 'no']:
             attributes[key] = False
 
     return attributes
