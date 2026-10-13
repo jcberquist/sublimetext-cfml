@@ -1,0 +1,93 @@
+CFML v0.32.0 Changelog:
+
+- This release requires Sublime Text build 4213 or later. The package now runs
+  on Sublime Text's Python 3.14 plugin host, and embedded JavaScript uses a
+  plain variant that only ships in the latest builds.
+
+- Components are now indexed without requiring a project file for
+  configuration (though that is still supported). When you open a folder, the
+  package indexes the components found in it: in a git work tree, the `.cfc`
+  files git does not ignore, plus the folders that `box.json` installs
+  dependencies into. A folder without git is indexed when it looks like a
+  CFML project, with a file such as `box.json` or `Application.cfc` at its
+  root.
+
+  Each component indexed in this fashion is linked to variables that match its
+  name and its name followed by its folder name with a trailing "s"
+  removed (`user` and `userService` for `services/User.cfc`). This is
+  configurable in the package settings.
+
+  Dot paths in `new`, `createObject`, `extends` and `implements` need no
+  mappings to resolve: relative to the file, from the root of each folder, or
+  by a folder of that name anywhere in the index. `new models.` offers the
+  components of every `models` folder. A project's mappings are still used
+  when they are set. When a name could be several components, completions
+  offer the methods of each and say which component they are from, and goto
+  lets you choose. The doc popup says "matched by name" when a match is a
+  guess, and "also:" when there are other candidates. A file opened on its
+  own finds the components next to it.
+
+  A project file with `cfc_folders` still indexes only those folders. A
+  variable name given to two components now offers both.
+
+  New settings: `cfml_auto_index`, `cfml_auto_variable_names` and
+  `cfml_index_max_files`. See the readme.
+
+- The CFScript formatter has been removed, along with its settings and its key
+  binding. Files can be formatted by
+  `cfformat` (https://github.com/jcberquist/cfformat), which needs to be
+  installed separately: the `cfml_format` command (`CFML: Format File` in the
+  command palette) now formats the whole file with it, tags as well as
+  script. The `cfformat` binary is looked for on your PATH, or at the path in
+  the new `cfformat_path` package setting. See the readme for how to bind a
+  key to the command.
+
+- Syntax highlighting has many grammar fixes, along with code folding and
+  better indentation. Scope names now follow Sublime Text's current scope
+  naming guidelines, so CFML looks more like other languages in your color
+  scheme. If you have color scheme rules aimed at CFML-specific scopes, some
+  may need updating.
+
+- Completions now use Sublime Text 4's completion kinds: each completion shows
+  a badge, and method completions show their return type and where they come
+  from. After a dot, the methods of a known component are listed before the
+  built-in member functions. Built-in function and tag data is updated from
+  cfdocs. Member function completions are listed once per name and insert the
+  name with empty parentheses.
+
+- Removed the `cfc_completion_names` setting. Component method completions
+  always use the method name, with the return type shown beside it.
+
+- Removed the `cfml_between_tag_pair` setting. Pressing enter between a CFML
+  tag pair now uses Sublime's own tag indenting, the same as HTML tags.
+
+- Removed the `html_completions_in_tag_components` setting. Sublime's own HTML
+  completions now work in the functions of a tag component. To turn them off,
+  use the HTML package's `default_completions_selector` setting.
+
+- `CFML: Toggle Color Scheme Styles` now styles both the light and dark color
+  schemes when `color_scheme` is "auto", also colors custom and CFX tags, and
+  only removes the rules it added. `cfml_tag_style` and
+  `cfml_tag_attribute_style` take separate "light" and "dark" styles (the old
+  single style still works and is used for both).
+
+- The TestBox results panel and the doc popups follow your color scheme. Hints
+  from docblocks and `hint` attributes are shown as plain text, so HTML in a
+  hint is displayed as written.
+
+- The `testbox.runner` setting is now empty by default, so set it in your
+  project, `box.json` or user package settings (it used to default to a
+  runner at localhost:8888).
+
+- `.cfs` script files now get what the script in a component or template gets:
+  completions, inline documentation, the method preview, the key bindings and
+  ctrl+alt+click, the build system, and folding. They have their own syntax,
+  CFScript (CFML).
+
+- The `close_cfml_tag` command is renamed `cfml_close_tag`. Update any key
+  binding of your own that uses the old name.
+
+- New "CFML: Clear Index Cache and Reindex" command: empties the component
+  index cache, so that the components of every open project are read again.
+
+PLEASE RESTART SUBLIME TEXT TO ENSURE THESE CHANGES ARE LOADED CORRECTLY, THANKS!
