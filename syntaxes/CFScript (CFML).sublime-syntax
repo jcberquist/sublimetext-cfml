@@ -1099,11 +1099,18 @@ contexts:
     - include: else-pop
 
   constructor-body-expect-entity-name:
-    # `new component.path.Thing()` is a dot path.
+    # Lucee 6.2: `new java:Thing()` / `new cfml:Thing()` pick the class or
+    # the component when both share a name.
+    - match: (?i:(java|cfml))(:)
+      captures:
+        1: storage.modifier.cfml
+        2: punctuation.separator.namespace.cfml
+      set: constructor-body-expect-class-name
+    # `new component.path.Thing()` and `new java.lang.Thing()` are dot paths.
     - match: (?i:component)\b(?!\.)
       scope: storage.type.class.cfml
       pop: 1
-    - match: (?i:java)\b
+    - match: (?i:java)\b(?!\.)
       scope: variable.type.cfml
       pop: 1
     - match: '{{dot_path_identifier}}'
@@ -1112,6 +1119,12 @@ contexts:
     # `new "com.foo"(…)` / `new '#path#'(…)`: `string` sets, so the string
     # replaces this context and returns to `constructor-body-expect-arguments`.
     - include: string
+    - include: else-pop
+
+  constructor-body-expect-class-name:
+    - match: '{{dot_path_identifier}}'
+      scope: entity.name.class.cfml
+      pop: 1
     - include: else-pop
 
   prefix-operators:

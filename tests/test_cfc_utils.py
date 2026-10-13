@@ -1,4 +1,5 @@
 import json
+import re
 import types
 
 import pytest
@@ -219,3 +220,86 @@ def test_a_reference_has_the_other_candidates_and_says_it_is_a_guess(site, index
     assert reference.class_name == 'cbauth.models.User'
     assert reference.candidates == ()
     assert reference.guessed is False
+
+
+@pytest.mark.parametrize(
+    'text, path',
+    [
+        ('new User()', 'User'),
+        ('new cbauth.models.User(1, new Role())', 'cbauth.models.User'),
+        ('new\n\tUser ()', 'User'),
+        ('new User', 'User'),
+        ('new CFML:models.User()', 'models.User'),
+        # Lucee leaves an unprefixed name to the component or the class
+        ('new java.util.HashMap()', 'java.util.HashMap'),
+        ('new java:User()', None),
+        ('new JAVA:java.util.HashMap()', None),
+        # typed up to the cursor
+        ('new ', ''),
+        ('new models.', 'models.'),
+        ('new cfml:', ''),
+        ('new java:', None),
+        ('new "../models/User"()', None),
+        ('new component extends="Base" {', None),
+    ],
+)
+def test_the_path_of_a_constructor(text, path):
+    assert cfc_utils.get_constructor_path(text) == path
+
+
+def test_a_cfml_prefix_is_not_part_of_the_reference(site, index):
+    project_name = add_project([site])
+    main = (site / 'handlers' / 'Main.cfc').as_posix()
+    source = 'component { function f() { return new cfml:cbauth.models.User(); } }'
+    view = constructor_view(project_name, main, source, 'new cfml:cbauth.models.User()')
+
+    reference = cfc_utils.find_reference(view, view.position)
+    assert reference is not None
+    assert reference.class_name == 'cbauth.models.User'
+    assert reference.guessed is False
+
+
+def test_a_java_class_is_not_a_component(site, index):
+    project_name = add_project([site])
+    main = (site / 'handlers' / 'Main.cfc').as_posix()
+    source = 'component { function f() { return new java:User(); } }'
+    view = constructor_view(project_name, main, source, 'new java:User()')
+
+    assert cfc_utils.find_reference(view, view.position) is None
+
+
+def dot_view(project_name, file_path, source, constructor):
+    """A cfml_view after the last dot of the source."""
+    cfml_view = constructor_view(project_name, file_path, source, constructor)
+    cfml_view.prefix_start = source.rindex('.') + 1
+    name = re.search(r'(\w*)\W*$', source[: cfml_view.prefix_start - 1]).group(1)
+    cfml_view.dot_context = [types.SimpleNamespace(name=name, is_function=False)]
+    return cfml_view
+
+
+def test_a_method_after_a_constructor_is_of_its_component(site, index, monkeypatch):
+    from CFML.src.providers.components import dot_path_completions
+
+    monkeypatch.setattr(dot_path_completions, 'component_index', index)
+    project_name = add_project([site])
+    main = (site / 'handlers' / 'Main.cfc').as_posix()
+
+    def triggers(source, constructor):
+        view = dot_view(project_name, main, source, constructor)
+        completions = dot_path_completions.get_dot_completions(view)
+        return completions and [args[0] for args, kwargs in completions]
+
+    assert triggers('new cfml:models.User().', 'new cfml:models.User()') == ['user']
+    assert triggers('new java:User().', 'new java:User()') is None
+
+    # nor a dot in its dot path or its arguments, which is not looked up
+    # as a variable either
+    assignments = []
+    monkeypatch.setattr(
+        cfc_utils,
+        'find_cfc_by_var_assignment',
+        lambda view, pt, name: assignments.append(name) or (None,) * 5,
+    )
+    assert triggers('new models.', 'new models.') is None
+    assert triggers('new models.User(user.)', 'new models.User(user.)') is None
+    assert assignments == []

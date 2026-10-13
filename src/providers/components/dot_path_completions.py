@@ -207,9 +207,11 @@ def get_script_completions(cfml_view):
         if r is None:
             return None
         r = sublime.Region(r.begin(), cfml_view.position - len(cfml_view.prefix))
-        cfc_path = '.'.join(cfml_view.view.substr(r)[4:].split('.')[:-1])
+        cfc_path = cfc_utils.get_constructor_path(cfml_view.view.substr(r))
+        if cfc_path is None:
+            return None
         completions = get_path_completions(
-            cfml_view, cfc_path, 'constructor_completions'
+            cfml_view, '.'.join(cfc_path.split('.')[:-1]), 'constructor_completions'
         )
         if len(completions) > 0:
             return completions
@@ -224,6 +226,9 @@ def get_dot_completions(cfml_view):
     component_selector = 'meta.function-call.support.createcomponent.cfml'
     constructor_selector = 'meta.instance.constructor.cfml'
     component_name = None
+    constructor_region = utils.get_scope_region_containing_point(
+        cfml_view.view, cfml_view.prefix_start - 2, constructor_selector
+    )
 
     if cfml_view.dot_context[
         0
@@ -233,10 +238,13 @@ def get_dot_completions(cfml_view):
         component_name = cfc_utils.get_component_name(
             cfml_view.view.substr(cfml_view.dot_context[0].args_region)
         )
-    elif cfml_view.view.match_selector(
-        cfml_view.prefix_start - 2, constructor_selector
-    ):
-        component_name = '.'.join([s.name for s in reversed(cfml_view.dot_context)])
+    elif constructor_region:
+        # only a dot right after the constructor, not in its dot path or
+        # its arguments
+        if constructor_region.end() == cfml_view.prefix_start - 1:
+            component_name = cfc_utils.get_constructor_path(
+                cfml_view.view.substr(constructor_region)
+            )
     elif cfc_utils.is_possible_cfc_instance(cfml_view.dot_context):
         # look for variable assignment, it might be an instantiated component
         component_tuple = cfc_utils.find_cfc_by_var_assignment(

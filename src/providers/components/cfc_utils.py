@@ -12,6 +12,9 @@ component_name_re = r"""
 component_name_re = re.compile(component_name_re, re.I | re.X)
 
 cfc_dot_path_re = re.compile(r'^[\w\-_][\w.\-_]+$')
+# `new Foo(…)`, `new cfml:Foo(…)` or `new java:Foo(…)`, and the text of one
+# typed up to the cursor; not `new "path"(…)` or an inline component
+constructor_path_re = re.compile(r'new\s+(?:(java|cfml):)?([$\w.]*)\s*(?:\(|$)', re.I)
 component_selector = 'meta.function-call.support.createcomponent.cfml'
 constructor_selector = 'meta.instance.constructor.cfml'
 
@@ -21,6 +24,18 @@ def get_component_name(source_string):
     if cn:
         return cn.group(1)
     return None
+
+
+def get_constructor_path(source_string):
+    """
+    Returns the dot path that the text of a constructor names, empty when
+    nothing is typed after `new`, or None: a `java:` prefix names a Java
+    class, and a `cfml:` prefix is dropped.
+    """
+    cp = constructor_path_re.match(source_string)
+    if cp is None or (cp.group(1) or '').lower() == 'java':
+        return None
+    return cp.group(2)
 
 
 def is_cfc_dot_path(source_string):
@@ -117,7 +132,7 @@ def find_cfc(cfml_view, position):
         r = utils.get_scope_region_containing_point(
             cfml_view.view, position, constructor_selector
         )
-        cfc_path = cfml_view.view.substr(r)[4:].split('(')[0]
+        cfc_path = get_constructor_path(cfml_view.view.substr(r))
         file_path, dot_path = get_cfc_file_info(cfml_view, cfc_path)
         return cfc_path, file_path, dot_path, None, [r]
 
@@ -152,7 +167,7 @@ def find_cfc(cfml_view, position):
                         dot_context[-1].name_region.begin(),
                         'meta.instance.constructor.cfml',
                     )
-                    cfc_path = cfml_view.view.substr(r)[4:].split('(')[0]
+                    cfc_path = get_constructor_path(cfml_view.view.substr(r))
                     file_path, dot_path = get_cfc_file_info(cfml_view, cfc_path)
                     return (
                         cfc_path,

@@ -303,6 +303,21 @@ def test_new_offers_the_components_of_every_folder_of_that_name(site):
     ]
 
 
+def test_new_with_a_cfml_prefix_offers_components_and_java_does_not(site):
+    project_name = add_project([site])
+    main = (site / 'handlers' / 'Main.cfc').as_posix()
+
+    def triggers(text):
+        view = cfml_view(
+            project_name, main, text, 'meta.instance.constructor.cfml', 'Us'
+        )
+        completions = dot_path_completions.get_script_completions(view)
+        return completions and [args[2] for args, kwargs in completions]
+
+    assert triggers('new cfml:models.Us') == triggers('new models.Us')
+    assert triggers('new java:models.Us') is None
+
+
 def test_a_component_added_is_offered(site, index):
     project_name = add_project([site])
     main = view_of(project_name, (site / 'handlers' / 'Main.cfc').as_posix())

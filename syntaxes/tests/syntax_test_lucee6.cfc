@@ -46,5 +46,22 @@ component name="Sub" {
 //                              ^ keyword.operator.arithmetic.cfml - meta.instance
         var e = new component.path.Thing();
 //                  ^^^^^^^^^^^^^^^^^^^^ meta.instance.constructor.cfml entity.name.class.cfml - storage
+        var sb = new java.lang.StringBuilder("Susi");
+//                   ^^^^^^^^^^^^^^^^^^^^^^^ meta.instance.constructor.cfml entity.name.class.cfml - variable
+//                                          ^^^^^^^^ meta.instance.constructor.cfml meta.function-call.arguments.method.cfml
+        var j = new java(foo);
+//                  ^^^^ meta.instance.constructor.cfml variable.type.cfml
+        var q = new java:Quartz();
+//                  ^^^^ meta.instance.constructor.cfml storage.modifier.cfml
+//                      ^ meta.instance.constructor.cfml punctuation.separator.namespace.cfml
+//                       ^^^^^^ meta.instance.constructor.cfml entity.name.class.cfml
+//                             ^^ meta.instance.constructor.cfml meta.function-call.arguments.method.cfml
+        var r = new CFML:org.lucee.Quartz() + 1;
+//                  ^^^^ meta.instance.constructor.cfml storage.modifier.cfml
+//                      ^ meta.instance.constructor.cfml punctuation.separator.namespace.cfml
+//                       ^^^^^^^^^^^^^^^^ meta.instance.constructor.cfml entity.name.class.cfml
+//                                          ^ keyword.operator.arithmetic.cfml - meta.instance
+        var s = new java:java.lang.StringBuilder("Susi");
+//                       ^^^^^^^^^^^^^^^^^^^^^^^ meta.instance.constructor.cfml entity.name.class.cfml - variable
     }
 }
